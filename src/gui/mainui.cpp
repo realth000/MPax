@@ -1,18 +1,15 @@
 ﻿#include "mainui.h"
 #include "./ui_mainui.h"
 
-#include <QtMultimedia/QMediaPlayer>
-#include <QtMultimedia/QMediaPlaylist>
-#include <QtDebug>
+#include <QtCore/QtDebug>
 
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainUI)
+      ui(new Ui::MainUI),
+      m_corePlayer(new CorePlayer)
 {
     ui->setupUi(this);
-
-    // test
-    connect(ui->testButton, &QPushButton::clicked, this, &MainUI::Play);
+    InitConnections();
 }
 
 MainUI::~MainUI()
@@ -20,14 +17,15 @@ MainUI::~MainUI()
     delete ui;
 }
 
+void MainUI::InitConnections()
+{
+    connect(ui->testButton, &QPushButton::clicked, this, &MainUI::Play);
+}
+
 void MainUI::Play()
 {
-    QMediaPlayer *p = new QMediaPlayer;
-    QMediaPlaylist *l = new QMediaPlaylist;
-    l->addMedia(QMediaContent(QUrl("c:/QtProjects/MPax/Aoibridge.mp3")));
-    l->setCurrentIndex(0);
-    p->setPlaylist(l);
-    p->play();
-    qDebug() << "finish";
+    m_currentContentPath.setScheme("file");
+    m_currentContentPath.setPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
+    m_corePlayer->Play(m_currentContentPath);
 }
 

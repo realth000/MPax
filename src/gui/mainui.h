@@ -1,7 +1,9 @@
 ﻿#ifndef MAINUI_H
 #define MAINUI_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
+
+#include "core/coreplayer.h"
 
 QT_BEGIN_NAMESPACE
     namespace Ui { class MainUI; }
@@ -16,6 +18,10 @@ public:
 
 private:
     Ui::MainUI *ui;
+    CorePlayer *m_corePlayer;
+    QUrl m_currentContentPath;
+
+    void InitConnections();
     void Play();
 };
 #endif // MAINUI_H
