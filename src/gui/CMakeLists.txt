@@ -1,0 +1,1 @@
+target_sources(MPax PRIVATE mainui.h mainui.cpp mainui.ui)
