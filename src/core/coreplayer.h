@@ -11,15 +11,23 @@ class CorePlayer : public QObject
 public:
     explicit CorePlayer(QObject *parent = nullptr);
 
+    QMediaPlayer::State PlayState();
 signals:
-
+    void playStateChanged(QMediaPlayer::State);
 
 public slots:
-    void Play(const QUrl &mediaContentUrl);
+    void play(const QUrl &contentUrl = QUrl());
+    void pause();
+    void stop();
+    void setVolMute(const bool &muted);
+    void setVol(const int &vol);
 
 private:
     QMediaPlayer *m_player;
     QMediaPlaylist *m_playlist;
+    QUrl m_currentContent;
+
+    void InitConnections();
 };
 
 #endif // COREPLAYER_H
