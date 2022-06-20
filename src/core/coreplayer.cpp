@@ -123,3 +123,7 @@ void CorePlayer::setVol(const int &vol)
     m_player->setVolume(vol);
 }
 
+void CorePlayer::setPlayPosition(const qint64 &position)
+{
+    m_player->setPosition(position);
+}

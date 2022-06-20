@@ -41,5 +41,6 @@ private slots:
     void updatePlayPosition(const qint64 &position);
     void updatePlayDuration(const qint64 &duration);
     void updatePlayContent(const PlayContent *content);
+    void setPlayPosition();
 };
 #endif // MAINUI_H

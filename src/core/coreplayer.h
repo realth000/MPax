@@ -45,6 +45,7 @@ public slots:
     void stop();
     void setVolMute(const bool &muted);
     void setVol(const int &vol);
+    void setPlayPosition(const qint64 &position);
 
 private:
     QMediaPlayer *m_player;

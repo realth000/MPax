@@ -40,6 +40,7 @@ void MainUI::InitConnections()
     connect(ui->stopButton, &QPushButton::clicked, this, &MainUI::stopPlay);
     connect(ui->muteButton, &QPushButton::clicked, this, &MainUI::updateMute);
     connect(ui->volumeSlider, &QSlider::valueChanged, this, &MainUI::updateVolume);
+    connect(ui->playPosSlider, &QSlider::sliderReleased, this, &MainUI::setPlayPosition);
 
     connect(m_corePlayer, &CorePlayer::playStateChanged, this, &MainUI::updatePlayerState);
     connect(m_corePlayer, &CorePlayer::playPositionChanged, this, &MainUI::updatePlayPosition);
@@ -116,8 +117,11 @@ void MainUI::updateVolume(const int &vol)
 
 void MainUI::updatePlayPosition(const qint64 &position)
 {
-    ui->playPosSlider->setValue(position);
     ui->timePostLabel->setText(MiliSecondToString(position));
+    if (ui->playPosSlider->isSliderDown()) {
+        return;
+    }
+    ui->playPosSlider->setValue(position);
 }
 
 void MainUI::updatePlayDuration(const qint64 &duration)
@@ -131,4 +135,10 @@ void MainUI::updatePlayContent(const PlayContent *content)
     if (content->duration != 0) {
         updatePlayDuration(content->duration);
     }
+}
+
+void MainUI::setPlayPosition()
+{
+    qDebug() << "setPlayPosition" << ui->playPosSlider->value();
+    m_corePlayer->setPlayPosition(ui->playPosSlider->value());
 }
