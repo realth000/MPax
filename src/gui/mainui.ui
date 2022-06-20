@@ -159,7 +159,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="playTimeSlider">
+       <widget class="QSlider" name="playPosSlider">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>

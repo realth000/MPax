@@ -29,6 +29,7 @@ private:
     void InitConfig();
     void InitConnections();
     void UpdateCurrentUrl();
+    QString MiliSecondToString(const qint64 &ms);
 
 private slots:
     void updatePlay();
@@ -37,5 +38,8 @@ private slots:
     void updateMute();
     void updateMuteWithValue(const bool &muted);
     void updateVolume(const int &vol);
+    void updatePlayPosition(const qint64 &position);
+    void updatePlayDuration(const qint64 &duration);
+    void updatePlayContent(const PlayContent *content);
 };
 #endif // MAINUI_H

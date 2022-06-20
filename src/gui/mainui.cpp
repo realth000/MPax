@@ -23,6 +23,7 @@ MainUI::~MainUI()
 
 void MainUI::InitConfig()
 {
+    this->setMinimumSize(800, 600);
     ui->volumeSlider->setMaximum(100);
     ui->volumeSlider->setMinimum(0);
     ui->volumeSlider->setValue(m_vol);
@@ -41,12 +42,23 @@ void MainUI::InitConnections()
     connect(ui->volumeSlider, &QSlider::valueChanged, this, &MainUI::updateVolume);
 
     connect(m_corePlayer, &CorePlayer::playStateChanged, this, &MainUI::updatePlayerState);
+    connect(m_corePlayer, &CorePlayer::playPositionChanged, this, &MainUI::updatePlayPosition);
+    connect(m_corePlayer, &CorePlayer::playContentChanged, this, &MainUI::updatePlayContent);
+    connect(m_corePlayer, &CorePlayer::playDurationChanged, this, &MainUI::updatePlayDuration);
 }
 
 void MainUI::UpdateCurrentUrl()
 {
     m_currentContentUrl.setScheme("file");
     m_currentContentUrl.setPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
+}
+
+QString MainUI::MiliSecondToString(const qint64 &ms)
+{
+    int hh = std::chrono::duration_cast<std::chrono::hours>(std::chrono::milliseconds(ms)).count();
+    int mm = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::milliseconds(ms)).count() % 60;
+    int ss = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::milliseconds(ms)).count() % 60;
+    return QString("%1:%2:%3").arg(hh, 2, 10, QLatin1Char('0')).arg(mm, 2, 10, QLatin1Char('0')).arg(ss, 2, 10, QLatin1Char('0'));
 }
 
 void MainUI::updatePlay()
@@ -100,4 +112,23 @@ void MainUI::updateVolume(const int &vol)
         updateMuteWithValue(false);
     }
     m_corePlayer->setVol(vol);
+}
+
+void MainUI::updatePlayPosition(const qint64 &position)
+{
+    ui->playPosSlider->setValue(position);
+    ui->timePostLabel->setText(MiliSecondToString(position));
+}
+
+void MainUI::updatePlayDuration(const qint64 &duration)
+{
+    ui->playPosSlider->setMaximum(duration);
+    ui->timeTotalLabel->setText(MiliSecondToString(duration));
+}
+
+void MainUI::updatePlayContent(const PlayContent *content)
+{
+    if (content->duration != 0) {
+        updatePlayDuration(content->duration);
+    }
 }
