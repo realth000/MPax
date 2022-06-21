@@ -59,7 +59,7 @@ QString PlaylistModelHeader::usedHeader(const int &index) const
 
 QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList()
 {
-    return QList<PlaylistHeaderItem>{PlaylistHeaderItem("a", false)};
+    return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true),PlaylistHeaderItem("ContentName", true)};
 }
 
 PlaylistModel::PlaylistModel(QList<QPair<QString, bool>> headerList, QObject *parent)
