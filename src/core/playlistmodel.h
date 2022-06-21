@@ -19,6 +19,7 @@ public:
     bool setHeaderUsed(const PlaylistHeaderItem &headerItem);
     QString header(const int &index) const;
     QString usedHeader(const int &index) const;
+    static QList<PlaylistHeaderItem> defaultHeaderList();
 
 private:
     QList<QPair<QString, bool>> m_header;
@@ -28,6 +29,8 @@ class PlaylistModel : public QAbstractItemModel
 {
 public:
     explicit PlaylistModel(QList<PlaylistHeaderItem> = QList<PlaylistHeaderItem>{}, QObject *parent = nullptr);
+    QModelIndex parent(const QModelIndex &index) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

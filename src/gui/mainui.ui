@@ -18,7 +18,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QWidget" name="listTabWidget" native="true">
+       <widget class="ListTabWidget" name="listTabWidget" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -40,7 +40,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="playlistWidget" native="true">
+       <widget class="PlaylistWidget" name="playlistWidget" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -104,6 +104,18 @@
    <class>PlayControlWidget</class>
    <extends>QWidget</extends>
    <header>src/gui/playcontrolwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ListTabWidget</class>
+   <extends>QWidget</extends>
+   <header>src/gui/listtabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistWidget</class>
+   <extends>QWidget</extends>
+   <header>src/gui/playlistwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

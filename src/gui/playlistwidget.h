@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QWidget>
 
+#include "core/playlistmodel.h"
+
 namespace Ui {
 class PlaylistWidget;
 }
@@ -14,6 +16,9 @@ class PlaylistWidget : public QWidget
 public:
     explicit PlaylistWidget(QWidget *parent = nullptr);
     ~PlaylistWidget();
+
+public slots:
+    void setModel(PlaylistModel *playlistModel);
 
 private:
     Ui::PlaylistWidget *ui;

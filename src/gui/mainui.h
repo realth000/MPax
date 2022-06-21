@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 
 #include "core/coreplayer.h"
+#include "core/playlistmodel.h"
 
 QT_BEGIN_NAMESPACE
     namespace Ui { class MainUI; }
@@ -18,5 +19,6 @@ public:
 
 private:
     Ui::MainUI *ui;
+    PlaylistModel *m_playlistModel;
 };
 #endif // MAINUI_H

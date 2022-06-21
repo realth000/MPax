@@ -57,11 +57,31 @@ QString PlaylistModelHeader::usedHeader(const int &index) const
     return QString();
 }
 
+QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList()
+{
+    return QList<PlaylistHeaderItem>{PlaylistHeaderItem("a", false)};
+}
+
 PlaylistModel::PlaylistModel(QList<QPair<QString, bool>> headerList, QObject *parent)
     : QAbstractItemModel{parent},
       m_header(headerList)
 {
 
+}
+
+QModelIndex PlaylistModel::parent(const QModelIndex &index) const
+{
+    // TODO: Check if incorrent.
+    return QModelIndex();
+}
+
+QModelIndex PlaylistModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (row < 0 || column < 0 || row >= rowCount(parent) || column >= columnCount(parent)) {
+         return QModelIndex();
+    }
+    // TODO: Check if incorrent.
+    return createIndex(row, column);
 }
 
 int PlaylistModel::rowCount(const QModelIndex &parent) const
