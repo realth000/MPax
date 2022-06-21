@@ -21,8 +21,16 @@ PlayControlWidget::~PlayControlWidget()
     delete ui;
 }
 
+void PlayControlWidget::setContentPath(const QString &contentPath)
+{
+    m_currentContentUrl.setPath(contentPath);
+    m_corePlayer->stop();
+    updatePlay();
+}
+
 void PlayControlWidget::InitConfig()
 {
+    m_currentContentUrl.setScheme("file");
     ui->volumeSlider->setMaximum(100);
     ui->volumeSlider->setMinimum(0);
     ui->volumeSlider->setValue(m_vol);
@@ -47,12 +55,6 @@ void PlayControlWidget::InitConnections()
     connect(m_corePlayer, &CorePlayer::playDurationChanged, this, &PlayControlWidget::updatePlayDuration);
 }
 
-void PlayControlWidget::UpdateCurrentUrl()
-{
-    m_currentContentUrl.setScheme("file");
-    m_currentContentUrl.setPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
-}
-
 QString PlayControlWidget::MiliSecondToString(const qint64 &ms)
 {
     int hh = std::chrono::duration_cast<std::chrono::hours>(std::chrono::milliseconds(ms)).count();
@@ -71,7 +73,6 @@ void PlayControlWidget::updatePlay()
         m_corePlayer->play();
         break;
     case QMediaPlayer::StoppedState:
-        UpdateCurrentUrl();
         m_corePlayer->play(m_currentContentUrl);
         break;
     default:
@@ -134,6 +135,7 @@ void PlayControlWidget::updatePlayContent(const PlayContent *content)
     if (content->duration != 0) {
         updatePlayDuration(content->duration);
     }
+    emit contentChanged(content);
 }
 
 void PlayControlWidget::setPlayPosition()

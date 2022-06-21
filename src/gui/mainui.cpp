@@ -16,10 +16,32 @@ MainUI::MainUI(QWidget *parent)
 
     // Bind playlist view and model.
 
-    ui->playlistWidget->setModel(m_playlistModel);
+    // This one not works.
+    // ui->playlistWidget->setModel(m_playlistModel);
+    InitConnections();
 }
 
 MainUI::~MainUI()
 {
     delete ui;
+}
+
+void MainUI::InitConnections()
+{
+    connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
+    connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncommingContent);
+}
+
+void MainUI::openAudio()
+{
+    ui->playControlWidget->setContentPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
+
+}
+
+void MainUI::checkIncommingContent(const PlayContent *content)
+{
+    qDebug() << "add content11111111";
+    // TODO: Some check if content already in current playlist.
+    m_playlistModel->addContent(*content);
+    ui->playlistWidget->setModel(m_playlistModel);
 }

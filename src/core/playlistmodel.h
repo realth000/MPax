@@ -36,6 +36,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+    void addContent(const PlayContent &content);
+
 private:
 /* Something contains data, data is a list of music information
  * Music information contains meta datas

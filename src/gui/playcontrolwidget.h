@@ -17,6 +17,16 @@ public:
     explicit PlayControlWidget(QWidget *parent = nullptr);
     ~PlayControlWidget();
 
+signals:
+    // FIXME: New content should be created by something but CorePlayer,
+    // and after that the content is passed to CorePlayer and PlaylistModel.
+    // But remember, there may still should be a check of the existence of current content
+    // if current content changed.
+    void contentChanged(const PlayContent *content);
+
+public slots:
+    void setContentPath(const QString &contentPath);
+
 private:
     Ui::PlayControlWidget *ui;
     CorePlayer *m_corePlayer;

@@ -96,8 +96,20 @@
      <height>27</height>
     </rect>
    </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>FIle</string>
+    </property>
+    <addaction name="openAudioAction"/>
+   </widget>
+   <addaction name="fileMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="openAudioAction">
+   <property name="text">
+    <string>Open audio</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

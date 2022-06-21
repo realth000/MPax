@@ -16,9 +16,14 @@ class MainUI : public QMainWindow
 public:
     MainUI(QWidget *parent = nullptr);
     ~MainUI();
+    void InitConnections();
 
 private:
     Ui::MainUI *ui;
     PlaylistModel *m_playlistModel;
+
+private slots:
+    void openAudio();
+    void checkIncommingContent(const PlayContent *content);
 };
 #endif // MAINUI_H

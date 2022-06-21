@@ -151,4 +151,9 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 //        return returnValue;
 }
 
+void PlaylistModel::addContent(const PlayContent &content)
+{
+    m_content.append(content);
+}
+
 
