@@ -1,7 +1,7 @@
 #ifndef LISTTABWIDGET_H
 #define LISTTABWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class ListTabWidget;

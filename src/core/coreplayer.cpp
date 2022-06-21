@@ -45,7 +45,7 @@ PlayContent* CorePlayer::GetCurrentPlayContent()
     c->albumArtist = m_player->metaData(QStringLiteral("AlbumArtist")).toString();
     c->albumTitle = m_player->metaData(QStringLiteral("AlbumTitle")).toString();
     c->albumTrackCount= m_player->metaData(QStringLiteral("TrackCount")).toInt();
-    c->albumCover = m_player->metaData(QStringLiteral("Author")).value<QImage>();
+    c->albumCover = m_player->metaData(QStringLiteral("ThumbnailImage")).value<QImage>();
     c->albumYear = m_player->metaData(QStringLiteral("Year")).toInt();
     c->albumDate = m_player->metaData(QStringLiteral("Date")).toDate();
     return c;

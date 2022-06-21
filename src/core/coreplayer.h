@@ -7,24 +7,7 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QMediaPlaylist>
 
-struct PlayContent{
-    QString contentPath;
-    QString contentName;
-    QString authorName;
-    QString title;
-    qint64 duration;
-    qint64 size;
-    int trackNumber;
-    int audioBitRate;
-    QString audioCodec;
-    int sampleRate;
-    QString albumArtist;
-    QString albumTitle;
-    QImage albumCover;
-    int albumYear;
-    QDate albumDate;
-    int albumTrackCount;
-};
+#include "core/playcontent.h"
 
 class CorePlayer : public QObject
 {

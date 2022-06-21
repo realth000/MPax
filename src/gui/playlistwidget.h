@@ -1,7 +1,7 @@
 #ifndef PLAYLISTWIDGET_H
 #define PLAYLISTWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class PlaylistWidget;

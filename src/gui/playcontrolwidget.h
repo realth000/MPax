@@ -1,7 +1,7 @@
 #ifndef PLAYCONTROLWIDGET_H
 #define PLAYCONTROLWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 #include "core/coreplayer.h"
 
