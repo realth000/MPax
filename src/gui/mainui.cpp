@@ -50,7 +50,6 @@ void MainUI::openAudio()
 
 void MainUI::checkIncommingContent(const PlayContent *content)
 {
-    qDebug() << "add content11111111";
     // TODO: Some check if content already in current playlist.
     m_playlistModel->addContent(*content);
 }

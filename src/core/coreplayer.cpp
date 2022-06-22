@@ -9,6 +9,7 @@ CorePlayer::CorePlayer(QObject *parent)
       m_currentContent(nullptr)
 {
     InitConnections();
+    m_player->setPlaylist(m_playlist);
 }
 
 void CorePlayer::InitConnections()
@@ -20,9 +21,8 @@ void CorePlayer::InitConnections()
 void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl)
 {
     m_currentContentUrl = contentUrl;
-    m_playlist->addMedia(m_currentContentUrl);
-    m_playlist->setCurrentIndex(0);
-    m_player->setPlaylist(m_playlist);
+    m_playlist->clear();
+    m_playlist->addMedia(QMediaContent(m_currentContentUrl));
 }
 
 void CorePlayer::updatePlayState(const QMediaPlayer::State &state)
@@ -50,6 +50,7 @@ void CorePlayer::play(const QUrl &contentUrl)
         m_player->play();
         return;
     }
+    qDebug() << "play" << contentUrl;
     UpdateCurrentContent(contentUrl);
     m_player->play();
 }

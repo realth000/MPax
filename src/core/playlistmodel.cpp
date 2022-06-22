@@ -130,28 +130,6 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
         return QAbstractItemModel::headerData(section, orientation, role);
     }
     return m_header.usedHeader(section);
-//        QString returnValue;
-//        switch (section) {
-//        case 0: returnValue = tr("Name");
-//                break;
-//        case 1: returnValue = tr("Size");
-//                break;
-//        case 2: returnValue =
-//    #ifdef Q_OS_MAC
-//                       tr("Kind", "Match OS X Finder");
-//    #else
-//                       tr("Type", "All other platforms");
-//    #endif
-//               break;
-//        // Windows   - Type
-//        // OS X      - Kind
-//        // Konqueror - File Type
-//        // Nautilus  - Type
-//        case 3: returnValue = tr("Date Modified");
-//                break;
-//        default: return QVariant();
-//        }
-    //        return returnValue;
 }
 
 int PlaylistModel::count() const
