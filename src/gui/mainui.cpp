@@ -2,6 +2,7 @@
 #include "./ui_mainui.h"
 
 #include <QtCore/QtDebug>
+#include <QtWidgets/QFileDialog>
 
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
@@ -33,13 +34,17 @@ void MainUI::InitConnections()
 
 void MainUI::openAudio()
 {
+    const QString filePath = QFileDialog::getOpenFileName(this, "Open audio", QCoreApplication::applicationFilePath(), "MP3(*.mp3)");
+    if (filePath.isEmpty()) {
+        return;
+    }
+    QFileInfo fileInfo(filePath);
     PlayContent *t = new PlayContent;
-    t->contentPath = "123";
-    t->contentName = "456";
+    t->contentPath = fileInfo.absoluteFilePath();
+    t->contentName = fileInfo.fileName();
     m_playlistModel->addContent(*t);
     ui->playlistWidget->setModel(m_playlistModel);
-    qDebug() << "all data count" << m_playlistModel->count();
-    ui->playControlWidget->setContentPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
+    ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
 }
 
 void MainUI::checkIncommingContent(const PlayContent *content)
