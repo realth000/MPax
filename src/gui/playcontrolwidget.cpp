@@ -51,8 +51,6 @@ void PlayControlWidget::InitConnections()
 
     connect(m_corePlayer, &CorePlayer::playStateChanged, this, &PlayControlWidget::updatePlayerState);
     connect(m_corePlayer, &CorePlayer::playPositionChanged, this, &PlayControlWidget::updatePlayPosition);
-    connect(m_corePlayer, &CorePlayer::playContentChanged, this, &PlayControlWidget::updatePlayContent);
-    connect(m_corePlayer, &CorePlayer::playDurationChanged, this, &PlayControlWidget::updatePlayDuration);
 }
 
 QString PlayControlWidget::MiliSecondToString(const qint64 &ms)
@@ -126,20 +124,6 @@ void PlayControlWidget::updatePlayPosition(const qint64 &position)
         return;
     }
     ui->playPosSlider->setValue(position);
-}
-
-void PlayControlWidget::updatePlayDuration(const qint64 &duration)
-{
-    ui->playPosSlider->setMaximum(duration);
-    ui->timeTotalLabel->setText(MiliSecondToString(duration));
-}
-
-void PlayControlWidget::updatePlayContent(const PlayContent *content)
-{
-    if (content->duration != 0) {
-        updatePlayDuration(content->duration);
-    }
-    emit contentChanged(content);
 }
 
 void PlayControlWidget::setPlayPosition()

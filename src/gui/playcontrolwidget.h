@@ -39,7 +39,6 @@ private:
 
     void InitConfig();
     void InitConnections();
-    void UpdateCurrentUrl();
     QString MiliSecondToString(const qint64 &ms);
 
 private slots:
@@ -50,8 +49,6 @@ private slots:
     void updateMuteWithValue(const bool &muted);
     void updateVolume(const int &vol);
     void updatePlayPosition(const qint64 &position);
-    void updatePlayDuration(const qint64 &duration);
-    void updatePlayContent(const PlayContent *content);
     void setPlayPosition();
 };
 

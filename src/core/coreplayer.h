@@ -17,10 +17,8 @@ public:
 
     QMediaPlayer::State PlayState();
 signals:
-    void playContentChanged(const PlayContent *content);
     void playStateChanged(QMediaPlayer::State);
     void playPositionChanged(const qint64 &position);
-    void playDurationChanged(const qint64 &duration);
 
 public slots:
     void play(const QUrl &contentUrl = QUrl());
@@ -38,11 +36,9 @@ private:
 
     void InitConnections();
     void UpdateCurrentContent(const QUrl &contentUrl);
-    PlayContent* GetCurrentPlayContent();
 
 private slots:
     void updatePlayState(const QMediaPlayer::State &state);
-    void updateMetaData(bool available);
 };
 
 #endif // COREPLAYER_H
