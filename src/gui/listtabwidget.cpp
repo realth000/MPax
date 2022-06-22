@@ -12,3 +12,8 @@ ListTabWidget::~ListTabWidget()
 {
     delete ui;
 }
+
+void ListTabWidget::setModel(ListTabModel *listTabModel)
+{
+    ui->listView->setModel(listTabModel);
+}

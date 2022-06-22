@@ -28,7 +28,7 @@ private:
 class PlaylistModel : public QAbstractItemModel
 {
 public:
-    explicit PlaylistModel(QList<PlaylistHeaderItem> = QList<PlaylistHeaderItem>{}, QObject *parent = nullptr);
+    explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem> = QList<PlaylistHeaderItem>{}, QObject *parent = nullptr);
     QModelIndex parent(const QModelIndex &index) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -38,6 +38,8 @@ public:
 
     int count() const;
     void addContent(const PlayContent &content);
+    void setPlaylistName(const QString &name);
+    QString playlistName() const;
 
 private:
 /* Something contains data, data is a list of music information
@@ -45,6 +47,7 @@ private:
  */
     QList<PlayContent> m_content;
     PlaylistModelHeader m_header;
+    QString m_playlistName;
 };
 
 #endif // PLAYLISTMODEL_H

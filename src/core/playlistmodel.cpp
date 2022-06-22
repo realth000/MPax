@@ -64,9 +64,10 @@ QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList()
     return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true)};
 }
 
-PlaylistModel::PlaylistModel(QList<QPair<QString, bool>> headerList, QObject *parent)
+PlaylistModel::PlaylistModel(const QString &playlistName, QList<QPair<QString, bool>> headerList, QObject *parent)
     : QAbstractItemModel{parent},
-      m_header(headerList)
+      m_header(headerList),
+      m_playlistName(playlistName)
 {
 
 }
@@ -163,6 +164,16 @@ void PlaylistModel::addContent(const PlayContent &content)
     beginResetModel();
     m_content.append(content);
     endResetModel();
+}
+
+void PlaylistModel::setPlaylistName(const QString &name)
+{
+    m_playlistName = name;
+}
+
+QString PlaylistModel::playlistName() const
+{
+    return m_playlistName;
 }
 
 

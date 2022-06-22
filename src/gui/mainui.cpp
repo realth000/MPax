@@ -7,7 +7,8 @@
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainUI),
-      m_playlistModel(new PlaylistModel(PlaylistModelHeader::defaultHeaderList()))
+      m_playlistModel(new PlaylistModel("default", PlaylistModelHeader::defaultHeaderList())),
+      m_listTabModel(new ListTabModel)
 {
     ui->setupUi(this);
     if (ui->playControlWidget == nullptr) {
@@ -16,8 +17,9 @@ MainUI::MainUI(QWidget *parent)
     this->setMinimumSize(800, 600);
     // Bind playlist view and model.
 
-    // This one not works.
-    // ui->playlistWidget->setModel(m_playlistModel);
+    ui->playlistWidget->setModel(m_playlistModel);
+    m_listTabModel->addPlaylist(m_playlistModel);
+    ui->listTabWidget->setModel(m_listTabModel);
     InitConnections();
 }
 
@@ -43,7 +45,6 @@ void MainUI::openAudio()
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
     m_playlistModel->addContent(*t);
-    ui->playlistWidget->setModel(m_playlistModel);
     ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
 }
 
@@ -52,5 +53,4 @@ void MainUI::checkIncommingContent(const PlayContent *content)
     qDebug() << "add content11111111";
     // TODO: Some check if content already in current playlist.
     m_playlistModel->addContent(*content);
-    ui->playlistWidget->setModel(m_playlistModel);
 }

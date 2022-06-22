@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 
 #include "core/coreplayer.h"
+#include "core/listtabmodel.h"
 #include "core/playlistmodel.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,6 +22,7 @@ public:
 private:
     Ui::MainUI *ui;
     PlaylistModel *m_playlistModel;
+    ListTabModel *m_listTabModel;
 
 private slots:
     void openAudio();
