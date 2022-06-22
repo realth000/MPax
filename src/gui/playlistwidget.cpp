@@ -8,6 +8,11 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     ui(new Ui::PlaylistWidget)
 {
     ui->setupUi(this);
+    ui->tableView->verticalHeader()->setHidden(true);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->setSelectionBehavior(QTableView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+//        ui->tableView->setItemDelegate(new NoFocusDelegate);
 }
 
 PlaylistWidget::~PlaylistWidget()

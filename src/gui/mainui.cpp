@@ -13,7 +13,6 @@ MainUI::MainUI(QWidget *parent)
         qDebug() << "empy";
     }
     this->setMinimumSize(800, 600);
-
     // Bind playlist view and model.
 
     // This one not works.
@@ -34,8 +33,13 @@ void MainUI::InitConnections()
 
 void MainUI::openAudio()
 {
+    PlayContent *t = new PlayContent;
+    t->contentPath = "123";
+    t->contentName = "456";
+    m_playlistModel->addContent(*t);
+    ui->playlistWidget->setModel(m_playlistModel);
+    qDebug() << "all data count" << m_playlistModel->count();
     ui->playControlWidget->setContentPath("/home/th000/Desktop/QtProjects/MPax/Aoibridge.mp3");
-
 }
 
 void MainUI::checkIncommingContent(const PlayContent *content)

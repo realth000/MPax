@@ -1,5 +1,7 @@
 #include "playlistmodel.h"
 
+#include <QDebug>
+
 PlaylistModelHeader::PlaylistModelHeader(const QList<PlaylistHeaderItem> &headerList)
     : m_header(headerList)
 {
@@ -148,12 +150,19 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 //                break;
 //        default: return QVariant();
 //        }
-//        return returnValue;
+    //        return returnValue;
+}
+
+int PlaylistModel::count() const
+{
+    return m_content.length();
 }
 
 void PlaylistModel::addContent(const PlayContent &content)
 {
+    beginResetModel();
     m_content.append(content);
+    endResetModel();
 }
 
 
