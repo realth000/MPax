@@ -73,6 +73,10 @@ void PlayControlWidget::updatePlay()
         m_corePlayer->play();
         break;
     case QMediaPlayer::StoppedState:
+        if (m_currentContentUrl.toLocalFile().isEmpty()) {
+            qDebug() << "audio not selected";
+            return;
+        }
         m_corePlayer->play(m_currentContentUrl);
         break;
     default:
