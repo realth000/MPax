@@ -26,4 +26,9 @@ void ListTabWidget::addContent(PlayContent *playContent) {
 
 void ListTabWidget::InitConnections() {
     connect(m_listTabModel, &ListTabModel::currentPlaylistChanged, this, &ListTabWidget::currentPlaylistChanged);
+    connect(ui->listView, &QListView::clicked, this, &ListTabWidget::updateCurrentPlaylist);
+}
+
+void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
+    m_listTabModel->setCurrentPlaylist(index.row());
 }

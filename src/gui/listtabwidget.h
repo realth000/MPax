@@ -29,6 +29,9 @@ private:
     ListTabModel *m_listTabModel;
 
     void InitConnections();
+
+private slots:
+    void updateCurrentPlaylist(const QModelIndex &index);
 };
 
 #endif // LISTTABWIDGET_H

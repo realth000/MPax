@@ -26,10 +26,8 @@ PlaylistWidget::~PlaylistWidget()
 
 void PlaylistWidget::setModel(PlaylistModel *playlistModel)
 {
-    qDebug() << "set model in PlayListWidget with PlayContent count =" << playlistModel->count() << playlistModel->count();
     m_playlistModel = playlistModel;
     ui->tableView->setModel(m_playlistModel);
-    qDebug() << "set model in PlayListWidget with PlayContent count =" << m_playlistModel->count() << playlistModel->count();
 }
 
 PlayContent *PlaylistWidget::preContent() const {
