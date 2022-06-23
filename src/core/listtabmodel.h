@@ -6,18 +6,29 @@
 
 #include "core/playlistmodel.h"
 
+#define DEFAULT_PLAYLIST_NAME "default"
+
 class ListTabModel : public QStringListModel
 {
+    Q_OBJECT
+
 public:
     ListTabModel();
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+signals:
+    void currentPlaylistChanged(PlaylistModel *playlistModel);
+
 public slots:
+    void addContent(PlayContent *playContent);
     void addPlaylist(PlaylistModel *playlistModel);
+    void setCurrentPlaylist(const int &index);
+    PlaylistModel* currentPlaylist() const;
 
 private:
     QList<PlaylistModel*> m_playlistList;
+    PlaylistModel *m_currentPlayListModel;
 };
 
 #endif // LISTTABMODEL_H

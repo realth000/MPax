@@ -6,9 +6,7 @@
 
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainUI),
-      m_playlistModel(new PlaylistModel("default", PlaylistModelHeader::defaultHeaderList())),
-      m_listTabModel(new ListTabModel)
+      ui(new Ui::MainUI)
 {
     ui->setupUi(this);
     if (ui->playControlWidget == nullptr) {
@@ -17,9 +15,6 @@ MainUI::MainUI(QWidget *parent)
     this->setMinimumSize(800, 600);
     // Bind playlist view and model.
 
-    ui->playlistWidget->setModel(m_playlistModel);
-    m_listTabModel->addPlaylist(m_playlistModel);
-    ui->listTabWidget->setModel(m_listTabModel);
     InitConnections();
 }
 
@@ -33,8 +28,9 @@ void MainUI::InitConnections()
     connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
     connect(ui->playControlWidget, &PlayControlWidget::playPre, this, &MainUI::playPre);
     connect(ui->playControlWidget, &PlayControlWidget::playNext, this, &MainUI::playNext);
-    connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncommingContent);
+    connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncomingContent);
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
+    connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
 }
 
 void MainUI::openAudio()
@@ -47,8 +43,7 @@ void MainUI::openAudio()
     PlayContent *t = new PlayContent;
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
-    m_playlistModel->addContent(t);
-    ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
+    ui->listTabWidget->addContent(t);
 }
 
 void MainUI::addPlaylist()
@@ -56,10 +51,10 @@ void MainUI::addPlaylist()
     ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME));
 }
 
-void MainUI::checkIncommingContent(PlayContent *content)
+void MainUI::checkIncomingContent(PlayContent *content)
 {
-    // TODO: Some check if content already in current playlist.
-    m_playlistModel->addContent(content);
+    // This slot is triggered by playControlWidget's contentChanged signal.
+    // What we need to do here is to do something that should happen on UI when the current PlayContent changed.
 }
 
 void MainUI::playPre() {

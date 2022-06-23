@@ -3,9 +3,13 @@
 
 #include <QtCore/QtDebug>
 
-PlaylistWidget::PlaylistWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PlaylistWidget)
+// test
+#include "QStandardItemModel"
+
+PlaylistWidget::PlaylistWidget(QWidget *parent)
+  : QWidget(parent),
+    ui(new Ui::PlaylistWidget),
+    m_PlaylistModel(nullptr)
 {
     ui->setupUi(this);
     ui->tableView->verticalHeader()->setHidden(true);
@@ -22,9 +26,9 @@ PlaylistWidget::~PlaylistWidget()
 
 void PlaylistWidget::setModel(PlaylistModel *playlistModel)
 {
-    if (playlistModel == nullptr) {
-        qDebug() << "can not bind nullptr model with view in playlist";
-        return;
-    }
-    ui->tableView->setModel(playlistModel);
+    qDebug() << "set model in PlayListWidget with PlayContent count =" << playlistModel->count() << playlistModel->count();
+    m_PlaylistModel = playlistModel;
+    ui->tableView->setModel(m_PlaylistModel);
+    qDebug() << "set model in PlayListWidget with PlayContent count =" << m_PlaylistModel->count() << playlistModel->count();
 }
+

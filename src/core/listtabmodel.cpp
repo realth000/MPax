@@ -1,6 +1,9 @@
 #include "listtabmodel.h"
 
+#include <QtCore/QtDebug>
+
 ListTabModel::ListTabModel()
+  : m_currentPlayListModel(nullptr)
 {
 
 }
@@ -28,4 +31,28 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel)
     beginResetModel();
     m_playlistList.append(playlistModel);
     endResetModel();
+}
+
+void ListTabModel::setCurrentPlaylist(const int &index) {
+    if (m_playlistList.length() <= index) {
+        qDebug() << "can not set to a playlist out of index with value" << index;
+        return;
+    }
+    m_currentPlayListModel = m_playlistList[index];
+    emit currentPlaylistChanged(m_currentPlayListModel);
+}
+
+PlaylistModel *ListTabModel::currentPlaylist() const {
+    return m_currentPlayListModel;
+}
+
+void ListTabModel::addContent(PlayContent *playContent) {
+    if (m_currentPlayListModel == nullptr) {
+        m_currentPlayListModel = new PlaylistModel(DEFAULT_PLAYLIST_NAME);
+        // Add playlist to ListTabWidget.
+        addPlaylist(m_currentPlayListModel);
+    }
+    m_currentPlayListModel->addContent(playContent);
+    // Sync playlist content to PlaylistWidget.
+    emit currentPlaylistChanged(m_currentPlayListModel);
 }

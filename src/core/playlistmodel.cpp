@@ -139,9 +139,11 @@ int PlaylistModel::count() const
 
 void PlaylistModel::addContent(PlayContent *content)
 {
+    qDebug() << "PlaylistModel::addContent add" << content->contentPath << content->contentName;
     beginResetModel();
     m_content.append(content);
     endResetModel();
+    qDebug() << "PlaylistModel::addContent after, count =" << m_content.length();
 }
 
 void PlaylistModel::setPlaylistName(const QString &name)

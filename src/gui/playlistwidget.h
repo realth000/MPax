@@ -22,6 +22,7 @@ public slots:
 
 private:
     Ui::PlaylistWidget *ui;
+    PlaylistModel *m_PlaylistModel;
 };
 
 #endif // PLAYLISTWIDGET_H

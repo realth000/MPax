@@ -17,13 +17,18 @@ public:
     explicit ListTabWidget(QWidget *parent = nullptr);
     ~ListTabWidget();
 
+signals:
+    void currentPlaylistChanged(PlaylistModel *playlistModel);
+
 public slots:
-    void setModel(ListTabModel *listTabModel);
     void addPlaylist(PlaylistModel *playlistModel);
+    void addContent(PlayContent *playContent);
 
 private:
     Ui::ListTabWidget *ui;
-    ListTabModel *m_currentListTabModel;
+    ListTabModel *m_ListTabModel;
+
+    void InitConnections();
 };
 
 #endif // LISTTABWIDGET_H
