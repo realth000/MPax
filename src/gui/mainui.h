@@ -22,8 +22,11 @@ public:
 private:
     Ui::MainUI *ui;
 
+    void addAudioFile(const QString &filePath);
+
 private slots:
     void openAudio();
+    void scanAudioDir();
     void addPlaylist();
     void checkIncomingContent(PlayContent *content);
     void playPre();

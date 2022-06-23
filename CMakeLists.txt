@@ -21,6 +21,7 @@ else()
     add_executable(MPax)
 endif()
 
+add_subdirectory(resource)
 add_subdirectory(src)
 
 target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)

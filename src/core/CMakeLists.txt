@@ -1,3 +1,4 @@
+target_sources(MPax PRIVATE audioscanner.h audioscanner.cpp)
 target_sources(MPax PRIVATE playcontent.h)
 target_sources(MPax PRIVATE playlistmodel.h playlistmodel.cpp)
 target_sources(MPax PRIVATE listtabmodel.h listtabmodel.cpp)

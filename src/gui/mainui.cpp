@@ -4,6 +4,8 @@
 #include <QtCore/QtDebug>
 #include <QtWidgets/QFileDialog>
 
+#include "core/audioscanner.h"
+
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainUI)
@@ -30,6 +32,7 @@ void MainUI::InitConnections()
     connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncomingContent);
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
     connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
+    connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
 }
 
 void MainUI::openAudio()
@@ -39,12 +42,7 @@ void MainUI::openAudio()
         return;
     }
     QFileInfo fileInfo(filePath);
-    PlayContent *t = new PlayContent;
-    t->contentPath = fileInfo.absoluteFilePath();
-    t->contentName = fileInfo.fileName();
-    ui->listTabWidget->addContent(t);
-    ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
-    ui->playlistWidget->setCurrentContent(t);
+    addAudioFile(filePath);
 }
 
 void MainUI::addPlaylist()
@@ -76,4 +74,22 @@ void MainUI::playNext() {
     }
     ui->playControlWidget->setContentPath(content->contentPath);
     ui->playlistWidget->setCurrentContent(content);
+}
+
+void MainUI::scanAudioDir() {
+    const QString dirPath = QFileDialog::getExistingDirectory(this, "Scan directory");
+    if (dirPath.isEmpty()) {
+        return;
+    }
+    for (const auto &audioFile : AudioScanner::scanAudioInDir(dirPath, QStringList{"mp3"})) {
+        addAudioFile(audioFile);
+    }
+}
+
+void MainUI::addAudioFile(const QString &filePath) {
+    QFileInfo fileInfo(filePath);
+    PlayContent *t = new PlayContent;
+    t->contentPath = fileInfo.absoluteFilePath();
+    t->contentName = fileInfo.fileName();
+    ui->listTabWidget->addContent(t);
 }

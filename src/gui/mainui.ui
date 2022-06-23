@@ -101,6 +101,7 @@
      <string>FIle</string>
     </property>
     <addaction name="openAudioAction"/>
+    <addaction name="scanDirAction"/>
    </widget>
    <widget class="QMenu" name="playlistMenu">
     <property name="title">
@@ -120,6 +121,11 @@
   <action name="playlistAddAction">
    <property name="text">
     <string>New playlist</string>
+   </property>
+  </action>
+  <action name="scanDirAction">
+   <property name="text">
+    <string>Scan dir</string>
    </property>
   </action>
  </widget>
