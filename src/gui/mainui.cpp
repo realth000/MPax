@@ -33,6 +33,7 @@ void MainUI::InitConnections()
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
     connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
     connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
+    connect(ui->playlistWidget, &PlaylistWidget::playContent, this, &MainUI::playAudio);
 }
 
 void MainUI::openAudio()
@@ -62,8 +63,7 @@ void MainUI::playPre() {
         qDebug() << "can not find previous one";
         return;
     }
-    ui->playControlWidget->setContentPath(content->contentPath);
-    ui->playlistWidget->setCurrentContent(content);
+    playAudio(content);
 }
 
 void MainUI::playNext() {
@@ -72,8 +72,7 @@ void MainUI::playNext() {
         qDebug() << "can not find previous one";
         return;
     }
-    ui->playControlWidget->setContentPath(content->contentPath);
-    ui->playlistWidget->setCurrentContent(content);
+    playAudio(content);
 }
 
 void MainUI::scanAudioDir() {
@@ -92,4 +91,9 @@ void MainUI::addAudioFile(const QString &filePath) {
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
     ui->listTabWidget->addContent(t);
+}
+
+void MainUI::playAudio(PlayContent *content) {
+    ui->playControlWidget->setContentPath(content->contentPath);
+    ui->playlistWidget->setCurrentContent(content);
 }

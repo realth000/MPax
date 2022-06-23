@@ -17,6 +17,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
     ui->tableView->setSelectionBehavior(QTableView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 //        ui->tableView->setItemDelegate(new NoFocusDelegate);
+    InitConnections();
 }
 
 PlaylistWidget::~PlaylistWidget()
@@ -44,5 +45,15 @@ void PlaylistWidget::setCurrentContent(PlayContent *content) {
         return;
     }
     m_playlistModel->setCurrentPlayContent(m_playlistModel->indexOf(content));
+}
+
+void PlaylistWidget::InitConnections() {
+    connect(ui->tableView, &QTableView::doubleClicked, this, &PlaylistWidget::updatePlayContent);
+}
+
+void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
+    const int row = index.row();
+    m_playlistModel->setCurrentPlayContent(row);
+    emit playContent(m_playlistModel->currentPlayContent());
 }
 

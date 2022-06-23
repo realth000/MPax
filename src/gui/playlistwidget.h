@@ -17,15 +17,21 @@ public:
     explicit PlaylistWidget(QWidget *parent = nullptr);
     ~PlaylistWidget();
 
+signals:
+    void playContent(PlayContent *content);
+
 public slots:
     void setModel(PlaylistModel *playlistModel);
     PlayContent* nextContent() const;
     PlayContent* preContent() const;
     void setCurrentContent(PlayContent *content);
+    void updatePlayContent(const QModelIndex &index);
 
 private:
     Ui::PlaylistWidget *ui;
     PlaylistModel *m_playlistModel;
+
+    void InitConnections();
 };
 
 #endif // PLAYLISTWIDGET_H
