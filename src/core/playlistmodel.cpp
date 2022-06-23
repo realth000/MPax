@@ -196,3 +196,10 @@ bool PlaylistModel::contains(PlayContent *content) const {
 int PlaylistModel::indexOf(PlayContent *content) const {
     return m_contentList.indexOf(content);
 }
+
+PlayContent *PlaylistModel::content(const int &index) const {
+    if (m_contentList.length() <= index) {
+        return nullptr;
+    }
+    return m_contentList[index];
+}

@@ -24,6 +24,7 @@ public slots:
     void setModel(PlaylistModel *playlistModel);
     PlayContent* nextContent() const;
     PlayContent* preContent() const;
+    PlayContent* randomContent() const;
     void setCurrentContent(PlayContent *content);
     void updatePlayContent(const QModelIndex &index);
 

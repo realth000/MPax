@@ -22,7 +22,7 @@ public:
     Q_ENUM(PlayMode)
     explicit PlayControlWidget(QWidget *parent = nullptr);
     ~PlayControlWidget();
-
+    PlayMode playMode() const;
 signals:
     // FIXME: New content should be created by something but CorePlayer,
     // and after that the content is passed to CorePlayer and PlaylistModel.
@@ -31,6 +31,7 @@ signals:
     void contentChanged(PlayContent *content);
     void playPre();
     void playNext();
+    void playRandom();
 
 public slots:
     void setContentPath(const QString &contentPath);
@@ -65,6 +66,7 @@ private slots:
     void updateMuteButtonIcon();
     void updatePlayMode();
     void updatePlayModeButtonIcon();
+    void handleMediaStatusChanged(QMediaPlayer::MediaStatus status);
 };
 
 #endif // PLAYCONTROLWIDGET_H

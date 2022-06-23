@@ -46,6 +46,7 @@ public:
     void setCurrentPlayContent(const int &index);
     PlayContent* findNextContent() const;
     PlayContent* findPreContent() const;
+    PlayContent* content(const int &index) const;
 
 private:
 /* Something contains data, data is a list of music information

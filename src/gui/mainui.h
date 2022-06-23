@@ -31,6 +31,7 @@ private slots:
     void checkIncomingContent(PlayContent *content);
     void playPre();
     void playNext();
+    void playRandom();
     void playAudio(PlayContent *content);
 };
 #endif // MAINUI_H

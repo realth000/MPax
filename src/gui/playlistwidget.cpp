@@ -3,7 +3,8 @@
 
 #include <QtCore/QtDebug>
 
-// test
+#include <QtCore/QRandomGenerator>
+
 #include "QStandardItemModel"
 
 PlaylistWidget::PlaylistWidget(QWidget *parent)
@@ -55,5 +56,9 @@ void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
     const int row = index.row();
     m_playlistModel->setCurrentPlayContent(row);
     emit playContent(m_playlistModel->currentPlayContent());
+}
+
+PlayContent *PlaylistWidget::randomContent() const {
+    return m_playlistModel->content(QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
 }
 

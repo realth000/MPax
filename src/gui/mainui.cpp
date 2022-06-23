@@ -29,6 +29,7 @@ void MainUI::InitConnections()
     connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
     connect(ui->playControlWidget, &PlayControlWidget::playPre, this, &MainUI::playPre);
     connect(ui->playControlWidget, &PlayControlWidget::playNext, this, &MainUI::playNext);
+    connect(ui->playControlWidget, &PlayControlWidget::playRandom, this, &MainUI::playRandom);
     connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncomingContent);
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
     connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
@@ -67,9 +68,23 @@ void MainUI::playPre() {
 }
 
 void MainUI::playNext() {
-    PlayContent *content = ui->playlistWidget->nextContent();
+    PlayContent *content;
+    if (ui->playControlWidget->playMode() == PlayControlWidget::PlayMode::Random) {
+        content = ui->playlistWidget->randomContent();
+    } else {
+        content = ui->playlistWidget->nextContent();
+    }
     if (content == nullptr) {
-        qDebug() << "can not find previous one";
+        qDebug() << "can not find next one";
+        return;
+    }
+    playAudio(content);
+}
+
+void MainUI::playRandom() {
+    PlayContent *content = ui->playlistWidget->randomContent();
+    if (content == nullptr) {
+        qDebug() << "can not find random one";
         return;
     }
     playAudio(content);
@@ -97,3 +112,4 @@ void MainUI::playAudio(PlayContent *content) {
     ui->playControlWidget->setContentPath(content->contentPath);
     ui->playlistWidget->setCurrentContent(content);
 }
+
