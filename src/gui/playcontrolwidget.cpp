@@ -43,7 +43,9 @@ void PlayControlWidget::InitConfig()
 
 void PlayControlWidget::InitConnections()
 {
+    connect(ui->preButton, &QPushButton::clicked, this, &PlayControlWidget::playPre);
     connect(ui->playButton, &QPushButton::clicked, this, &PlayControlWidget::updatePlay);
+    connect(ui->nextButton, &QPushButton::clicked, this, &PlayControlWidget::playNext);
     connect(ui->stopButton, &QPushButton::clicked, this, &PlayControlWidget::stopPlay);
     connect(ui->muteButton, &QPushButton::clicked, this, &PlayControlWidget::updateMute);
     connect(ui->volumeSlider, &QSlider::valueChanged, this, &PlayControlWidget::updateVolume);

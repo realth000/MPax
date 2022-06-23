@@ -107,7 +107,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
             return QVariant(Qt::AlignCenter);
         }
         if(role == Qt::DisplayRole){
-            return QVariant(m_content[index.row()].value(m_header.usedHeader(index.column())));
+            return QVariant(m_content[index.row()]->value(m_header.usedHeader(index.column())));
         }
         return QVariant();
 }
@@ -137,7 +137,7 @@ int PlaylistModel::count() const
     return m_content.length();
 }
 
-void PlaylistModel::addContent(const PlayContent &content)
+void PlaylistModel::addContent(PlayContent *content)
 {
     beginResetModel();
     m_content.append(content);
@@ -152,6 +152,15 @@ void PlaylistModel::setPlaylistName(const QString &name)
 QString PlaylistModel::playlistName() const
 {
     return m_playlistName;
+}
+
+PlayContent* PlaylistModel::findNextContent() const {
+
+    return nullptr;
+}
+
+PlayContent* PlaylistModel::findPreContent() const {
+    return nullptr;
 }
 
 

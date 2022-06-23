@@ -20,6 +20,6 @@ void ListTabWidget::setModel(ListTabModel *listTabModel)
     ui->listView->setModel(m_currentListTabModel);
 }
 
-void ListTabWidget::addPlaylist(const QString &playlistName, PlaylistModel *playlistModel) {
+void ListTabWidget::addPlaylist(PlaylistModel *playlistModel) {
     m_currentListTabModel->addPlaylist(playlistModel);
 }

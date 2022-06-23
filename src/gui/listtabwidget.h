@@ -19,7 +19,7 @@ public:
 
 public slots:
     void setModel(ListTabModel *listTabModel);
-    void addPlaylist(const QString &playlistName, PlaylistModel *playlistModel);
+    void addPlaylist(PlaylistModel *playlistModel);
 
 private:
     Ui::ListTabWidget *ui;

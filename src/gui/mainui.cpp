@@ -31,6 +31,8 @@ MainUI::~MainUI()
 void MainUI::InitConnections()
 {
     connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
+    connect(ui->playControlWidget, &PlayControlWidget::playPre, this, &MainUI::playPre);
+    connect(ui->playControlWidget, &PlayControlWidget::playNext, this, &MainUI::playNext);
     connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncommingContent);
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
 }
@@ -45,17 +47,25 @@ void MainUI::openAudio()
     PlayContent *t = new PlayContent;
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
-    m_playlistModel->addContent(*t);
+    m_playlistModel->addContent(t);
     ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
 }
 
 void MainUI::addPlaylist()
 {
-    ui->listTabWidget->addPlaylist(DEFAULT_PLAYLIST_NAME, new PlaylistModel(DEFAULT_PLAYLIST_NAME));
+    ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME));
 }
 
-void MainUI::checkIncommingContent(const PlayContent *content)
+void MainUI::checkIncommingContent(PlayContent *content)
 {
     // TODO: Some check if content already in current playlist.
-    m_playlistModel->addContent(*content);
+    m_playlistModel->addContent(content);
+}
+
+void MainUI::playPre() {
+
+}
+
+void MainUI::playNext() {
+
 }

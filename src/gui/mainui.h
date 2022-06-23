@@ -29,6 +29,8 @@ private:
 private slots:
     void openAudio();
     void addPlaylist();
-    void checkIncommingContent(const PlayContent *content);
+    void checkIncommingContent(PlayContent *content);
+    void playPre();
+    void playNext();
 };
 #endif // MAINUI_H
