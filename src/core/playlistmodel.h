@@ -28,7 +28,7 @@ private:
 class PlaylistModel : public QAbstractItemModel
 {
 public:
-    explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem> = {}, QObject *parent = nullptr);
+    explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem>, QObject *parent = nullptr);
     QModelIndex parent(const QModelIndex &index) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
