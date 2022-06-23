@@ -7,6 +7,8 @@
 #include "core/listtabmodel.h"
 #include "core/playlistmodel.h"
 
+#define DEFAULT_PLAYLIST_NAME "default"
+
 QT_BEGIN_NAMESPACE
     namespace Ui { class MainUI; }
 QT_END_NAMESPACE
@@ -26,6 +28,7 @@ private:
 
 private slots:
     void openAudio();
+    void addPlaylist();
     void checkIncommingContent(const PlayContent *content);
 };
 #endif // MAINUI_H

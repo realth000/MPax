@@ -32,6 +32,7 @@ void MainUI::InitConnections()
 {
     connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
     connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncommingContent);
+    connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
 }
 
 void MainUI::openAudio()
@@ -46,6 +47,11 @@ void MainUI::openAudio()
     t->contentName = fileInfo.fileName();
     m_playlistModel->addContent(*t);
     ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
+}
+
+void MainUI::addPlaylist()
+{
+    ui->listTabWidget->addPlaylist(DEFAULT_PLAYLIST_NAME, new PlaylistModel(DEFAULT_PLAYLIST_NAME));
 }
 
 void MainUI::checkIncommingContent(const PlayContent *content)

@@ -102,12 +102,24 @@
     </property>
     <addaction name="openAudioAction"/>
    </widget>
+   <widget class="QMenu" name="playlistMenu">
+    <property name="title">
+     <string>Playlist</string>
+    </property>
+    <addaction name="playlistAddAction"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="playlistMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAudioAction">
    <property name="text">
     <string>Open audio</string>
+   </property>
+  </action>
+  <action name="playlistAddAction">
+   <property name="text">
+    <string>New playlist</string>
    </property>
   </action>
  </widget>

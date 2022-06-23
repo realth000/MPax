@@ -22,7 +22,7 @@ void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl)
 {
     m_currentContentUrl = contentUrl;
     m_playlist->clear();
-    m_playlist->addMedia(QMediaContent(m_currentContentUrl));
+    m_playlist->addMedia(m_currentContentUrl);
 }
 
 void CorePlayer::updatePlayState(const QMediaPlayer::State &state)

@@ -19,9 +19,11 @@ public:
 
 public slots:
     void setModel(ListTabModel *listTabModel);
+    void addPlaylist(const QString &playlistName, PlaylistModel *playlistModel);
 
 private:
     Ui::ListTabWidget *ui;
+    ListTabModel *m_currentListTabModel;
 };
 
 #endif // LISTTABWIDGET_H
