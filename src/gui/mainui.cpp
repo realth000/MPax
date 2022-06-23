@@ -44,11 +44,12 @@ void MainUI::openAudio()
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
     ui->listTabWidget->addContent(t);
+    ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
 }
 
 void MainUI::addPlaylist()
 {
-    ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME));
+    ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME, QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true)}));
 }
 
 void MainUI::checkIncomingContent(PlayContent *content)

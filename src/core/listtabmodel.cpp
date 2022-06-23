@@ -31,6 +31,10 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel)
     beginResetModel();
     m_playlistList.append(playlistModel);
     endResetModel();
+    if (m_currentPlayListModel == nullptr) {
+        m_currentPlayListModel = m_playlistList[m_playlistList.length()-1];
+        emit currentPlaylistChanged(m_currentPlayListModel);
+    }
 }
 
 void ListTabModel::setCurrentPlaylist(const int &index) {
