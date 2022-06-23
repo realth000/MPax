@@ -14,6 +14,12 @@ class PlayControlWidget : public QWidget
     Q_OBJECT
 
 public:
+    enum class PlayMode {
+        ListRepeat = 0,
+        SingleRepeat,
+        Random
+    };
+    Q_ENUM(PlayMode)
     explicit PlayControlWidget(QWidget *parent = nullptr);
     ~PlayControlWidget();
 
@@ -39,7 +45,10 @@ private:
     bool m_volMute;
     int m_vol;
 
+    PlayMode m_playMode;
+
     void InitConfig();
+    void InitIconFont();
     void InitConnections();
     QString MiliSecondToString(const qint64 &ms);
 
@@ -52,6 +61,10 @@ private slots:
     void updateVolume(const int &vol);
     void updatePlayPosition(const qint64 &position);
     void setPlayPosition();
+    void setPlayDuration(const qint64 &duration);
+    void updateMuteButtonIcon();
+    void updatePlayMode();
+    void updatePlayModeButtonIcon();
 };
 
 #endif // PLAYCONTROLWIDGET_H

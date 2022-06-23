@@ -19,6 +19,7 @@ public:
 signals:
     void playStateChanged(QMediaPlayer::State);
     void playPositionChanged(const qint64 &position);
+    void playDurationChanged(const qint64 &duration);
 
 public slots:
     void play(const QUrl &contentUrl = QUrl());

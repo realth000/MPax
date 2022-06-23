@@ -13,8 +13,7 @@ MainUI::MainUI(QWidget *parent)
         qDebug() << "empy";
     }
     this->setMinimumSize(800, 600);
-    // Bind playlist view and model.
-
+    this->setWindowTitle(QStringLiteral("MPax"));
     InitConnections();
 }
 

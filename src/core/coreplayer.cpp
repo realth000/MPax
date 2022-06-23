@@ -16,6 +16,7 @@ void CorePlayer::InitConnections()
 {
     connect(m_player, &QMediaPlayer::stateChanged, this, &CorePlayer::updatePlayState);
     connect(m_player, &QMediaPlayer::positionChanged, this, &CorePlayer::playPositionChanged);
+    connect(m_player, &QMediaPlayer::durationChanged, this, &CorePlayer::playDurationChanged);
 }
 
 void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl)

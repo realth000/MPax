@@ -2,6 +2,7 @@
 #include "ui_playcontrolwidget.h"
 
 #include <QtCore/QtDebug>
+#include <QtGui/QFontDatabase>
 
 PlayControlWidget::PlayControlWidget(QWidget *parent) :
     QWidget(parent),
@@ -9,10 +10,12 @@ PlayControlWidget::PlayControlWidget(QWidget *parent) :
     m_corePlayer(new CorePlayer),
     m_corePlayerState(QMediaPlayer::StoppedState),
     m_volMute(false),
-    m_vol(50)
+    m_vol(50),
+    m_playMode(PlayMode::ListRepeat)
 {
     ui->setupUi(this);
     InitConfig();
+    InitIconFont();
     InitConnections();
 }
 
@@ -47,12 +50,14 @@ void PlayControlWidget::InitConnections()
     connect(ui->playButton, &QPushButton::clicked, this, &PlayControlWidget::updatePlay);
     connect(ui->nextButton, &QPushButton::clicked, this, &PlayControlWidget::playNext);
     connect(ui->stopButton, &QPushButton::clicked, this, &PlayControlWidget::stopPlay);
+    connect(ui->playModeButton, &QPushButton::clicked, this, &PlayControlWidget::updatePlayMode);
     connect(ui->muteButton, &QPushButton::clicked, this, &PlayControlWidget::updateMute);
     connect(ui->volumeSlider, &QSlider::valueChanged, this, &PlayControlWidget::updateVolume);
     connect(ui->playPosSlider, &QSlider::sliderReleased, this, &PlayControlWidget::setPlayPosition);
 
     connect(m_corePlayer, &CorePlayer::playStateChanged, this, &PlayControlWidget::updatePlayerState);
     connect(m_corePlayer, &CorePlayer::playPositionChanged, this, &PlayControlWidget::updatePlayPosition);
+    connect(m_corePlayer, &CorePlayer::playDurationChanged, this, &PlayControlWidget::setPlayDuration);
 }
 
 QString PlayControlWidget::MiliSecondToString(const qint64 &ms)
@@ -68,9 +73,11 @@ void PlayControlWidget::updatePlay()
     switch (m_corePlayer->PlayState()) {
     case QMediaPlayer::PlayingState:
         m_corePlayer->pause();
+        ui->playButton->setText(QChar(0xf04b));
         break;
     case QMediaPlayer::PausedState:
         m_corePlayer->play();
+        ui->playButton->setText(QChar(0xf04c));
         break;
     case QMediaPlayer::StoppedState:
         if (m_currentContentUrl.toLocalFile().isEmpty()) {
@@ -78,6 +85,7 @@ void PlayControlWidget::updatePlay()
             return;
         }
         m_corePlayer->play(m_currentContentUrl);
+        ui->playButton->setText(QChar(0xf04c));
         break;
     default:
         break;
@@ -92,6 +100,7 @@ void PlayControlWidget::updatePlayerState(const QMediaPlayer::State &state)
 void PlayControlWidget::stopPlay()
 {
     m_corePlayer->stop();
+    ui->playButton->setText(QChar(0xf04b));
 }
 
 void PlayControlWidget::updateMute()
@@ -103,6 +112,7 @@ void PlayControlWidget::updateMuteWithValue(const bool &muted)
 {
     m_volMute = muted;
     m_corePlayer->setVolMute(m_volMute);
+    updateMuteButtonIcon();
 }
 
 void PlayControlWidget::updateVolume(const int &vol)
@@ -132,4 +142,64 @@ void PlayControlWidget::setPlayPosition()
 {
     qDebug() << "setPlayPosition" << ui->playPosSlider->value();
     m_corePlayer->setPlayPosition(ui->playPosSlider->value());
+}
+
+void PlayControlWidget::InitIconFont() {
+    QFont awesome6Font = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf")).at(0));;
+    ui->preButton->setFont(awesome6Font);
+    ui->preButton->setText(QChar(0xf04a));
+    ui->playButton->setFont(awesome6Font);
+    ui->playButton->setText(QChar(0xf04b));
+    ui->nextButton->setFont(awesome6Font);
+    ui->nextButton->setText(QChar(0xf04e));
+    ui->stopButton->setFont(awesome6Font);
+    ui->stopButton->setText(QChar(0xf04d));
+    ui->playModeButton->setFont(awesome6Font);
+    updatePlayModeButtonIcon();
+    ui->muteButton->setFont(awesome6Font);
+    updateMuteButtonIcon();
+}
+
+void PlayControlWidget::updateMuteButtonIcon() {
+    if (m_volMute || m_vol == 0) {
+        ui->muteButton->setText(QChar(0xf026));
+    } else {
+        ui->muteButton->setText(QChar(0xf028));
+    }
+}
+
+void PlayControlWidget::updatePlayModeButtonIcon() {
+    switch (m_playMode) {
+        case PlayMode::ListRepeat:
+            ui->playModeButton->setText(QChar(0xf079));
+            break;
+        case PlayMode::SingleRepeat:
+            ui->playModeButton->setText(QChar(0xf365));
+            break;
+        case PlayMode::Random:
+            ui->playModeButton->setText(QChar(0xf074));
+            break;
+    }
+}
+
+void PlayControlWidget::updatePlayMode() {
+    switch (m_playMode) {
+        case PlayMode::ListRepeat:
+            m_playMode = PlayMode::SingleRepeat;
+            break;
+        case PlayMode::SingleRepeat:
+            m_playMode = PlayMode::Random;
+            break;
+        case PlayMode::Random:
+            m_playMode = PlayMode::ListRepeat;
+            break;
+        default:
+            return;
+    }
+    updatePlayModeButtonIcon();
+}
+
+void PlayControlWidget::setPlayDuration(const qint64 &duration) {
+    ui->playPosSlider->setMaximum(duration);
+    ui->timeTotalLabel->setText(MiliSecondToString(duration));
 }
