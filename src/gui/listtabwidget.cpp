@@ -4,10 +4,10 @@
 ListTabWidget::ListTabWidget(QWidget *parent)
   : QWidget(parent),
     ui(new Ui::ListTabWidget),
-    m_ListTabModel(new ListTabModel)
+    m_listTabModel(new ListTabModel)
 {
     ui->setupUi(this);
-    ui->listView->setModel(m_ListTabModel);
+    ui->listView->setModel(m_listTabModel);
     InitConnections();
 }
 
@@ -17,13 +17,13 @@ ListTabWidget::~ListTabWidget()
 }
 
 void ListTabWidget::addPlaylist(PlaylistModel *playlistModel) {
-    m_ListTabModel->addPlaylist(playlistModel);
+    m_listTabModel->addPlaylist(playlistModel);
 }
 
 void ListTabWidget::addContent(PlayContent *playContent) {
-    m_ListTabModel->addContent(playContent);
+    m_listTabModel->addContent(playContent);
 }
 
 void ListTabWidget::InitConnections() {
-    connect(m_ListTabModel, &ListTabModel::currentPlaylistChanged, this, &ListTabWidget::currentPlaylistChanged);
+    connect(m_listTabModel, &ListTabModel::currentPlaylistChanged, this, &ListTabWidget::currentPlaylistChanged);
 }

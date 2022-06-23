@@ -37,9 +37,13 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     int count() const;
+    bool contains(PlayContent *content) const;
+    int indexOf(PlayContent *content) const;
     void addContent(PlayContent *content);
     void setPlaylistName(const QString &name);
     QString playlistName() const;
+    PlayContent* currentPlayContent() const;
+    void setCurrentPlayContent(const int &index);
     PlayContent* findNextContent() const;
     PlayContent* findPreContent() const;
 
@@ -47,9 +51,10 @@ private:
 /* Something contains data, data is a list of music information
  * Music information contains meta datas
  */
-    QList<PlayContent*> m_content;
+    QList<PlayContent*> m_contentList;
     PlaylistModelHeader m_header;
     QString m_playlistName;
+    PlayContent* m_currentPlayContent;
 };
 
 #endif // PLAYLISTMODEL_H

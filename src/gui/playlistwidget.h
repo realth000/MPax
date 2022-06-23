@@ -19,10 +19,13 @@ public:
 
 public slots:
     void setModel(PlaylistModel *playlistModel);
+    PlayContent* nextContent() const;
+    PlayContent* preContent() const;
+    void setCurrentContent(PlayContent *content);
 
 private:
     Ui::PlaylistWidget *ui;
-    PlaylistModel *m_PlaylistModel;
+    PlaylistModel *m_playlistModel;
 };
 
 #endif // PLAYLISTWIDGET_H

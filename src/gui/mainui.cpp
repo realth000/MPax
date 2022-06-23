@@ -45,6 +45,7 @@ void MainUI::openAudio()
     t->contentName = fileInfo.fileName();
     ui->listTabWidget->addContent(t);
     ui->playControlWidget->setContentPath(fileInfo.absoluteFilePath());
+    ui->playlistWidget->setCurrentContent(t);
 }
 
 void MainUI::addPlaylist()
@@ -59,9 +60,21 @@ void MainUI::checkIncomingContent(PlayContent *content)
 }
 
 void MainUI::playPre() {
-
+    PlayContent *content = ui->playlistWidget->preContent();
+    if (content == nullptr) {
+        qDebug() << "can not find previous one";
+        return;
+    }
+    ui->playControlWidget->setContentPath(content->contentPath);
+    ui->playlistWidget->setCurrentContent(content);
 }
 
 void MainUI::playNext() {
-
+    PlayContent *content = ui->playlistWidget->nextContent();
+    if (content == nullptr) {
+        qDebug() << "can not find previous one";
+        return;
+    }
+    ui->playControlWidget->setContentPath(content->contentPath);
+    ui->playlistWidget->setCurrentContent(content);
 }

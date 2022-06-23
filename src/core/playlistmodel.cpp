@@ -67,7 +67,8 @@ QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList()
 PlaylistModel::PlaylistModel(const QString &playlistName, QList<QPair<QString, bool>> headerList, QObject *parent)
     : QAbstractItemModel{parent},
       m_header(headerList),
-      m_playlistName(playlistName)
+      m_playlistName(playlistName),
+      m_currentPlayContent(nullptr)
 {
 
 }
@@ -89,7 +90,7 @@ QModelIndex PlaylistModel::index(int row, int column, const QModelIndex &parent)
 
 int PlaylistModel::rowCount(const QModelIndex &parent) const
 {
-    return m_content.length();
+    return m_contentList.length();
 }
 
 int PlaylistModel::columnCount(const QModelIndex &parent) const
@@ -107,7 +108,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
             return QVariant(Qt::AlignCenter);
         }
         if(role == Qt::DisplayRole){
-            return QVariant(m_content[index.row()]->value(m_header.usedHeader(index.column())));
+            return QVariant(m_contentList[index.row()]->value(m_header.usedHeader(index.column())));
         }
         return QVariant();
 }
@@ -134,16 +135,14 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 
 int PlaylistModel::count() const
 {
-    return m_content.length();
+    return m_contentList.length();
 }
 
 void PlaylistModel::addContent(PlayContent *content)
 {
-    qDebug() << "PlaylistModel::addContent add" << content->contentPath << content->contentName;
     beginResetModel();
-    m_content.append(content);
+    m_contentList.append(content);
     endResetModel();
-    qDebug() << "PlaylistModel::addContent after, count =" << m_content.length();
 }
 
 void PlaylistModel::setPlaylistName(const QString &name)
@@ -156,13 +155,44 @@ QString PlaylistModel::playlistName() const
     return m_playlistName;
 }
 
-PlayContent* PlaylistModel::findNextContent() const {
+PlayContent *PlaylistModel::currentPlayContent() const {
+    return m_currentPlayContent;
+}
 
-    return nullptr;
+void PlaylistModel::setCurrentPlayContent(const int &index) {
+    if (m_contentList.length() <= index) {
+        qDebug() << "can not set current play content out of index";
+        return;
+    }
+    m_currentPlayContent = m_contentList[index];
+}
+
+PlayContent* PlaylistModel::findNextContent() const {
+    if (m_contentList.length() == 0) {
+        return nullptr;
+    }
+    const int i = m_contentList.indexOf(m_currentPlayContent);
+    if (i == m_contentList.length()-1) {
+        return m_contentList[0];
+    }
+    return m_contentList[i+1];
 }
 
 PlayContent* PlaylistModel::findPreContent() const {
-    return nullptr;
+    if (m_contentList.length() == 0) {
+        return nullptr;
+    }
+    const int i = m_contentList.indexOf(m_currentPlayContent);
+    if (i == 0) {
+        return m_contentList[m_contentList.length()-1];
+    }
+    return m_contentList[i-1];
 }
 
+bool PlaylistModel::contains(PlayContent *content) const {
+    return m_contentList.contains(content);
+}
 
+int PlaylistModel::indexOf(PlayContent *content) const {
+    return m_contentList.indexOf(content);
+}

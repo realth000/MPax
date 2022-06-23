@@ -26,7 +26,7 @@ public slots:
 
 private:
     Ui::ListTabWidget *ui;
-    ListTabModel *m_ListTabModel;
+    ListTabModel *m_listTabModel;
 
     void InitConnections();
 };
