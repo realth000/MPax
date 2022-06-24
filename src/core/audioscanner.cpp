@@ -19,7 +19,7 @@ QStringList AudioScanner::scanAudioInDir(const QString &dirPath, const QStringLi
             }
         }
         if(it.fileInfo().isDir()){
-            allAudio.append(scanAudioInDir(dirPath, audioFormat));
+            allAudio.append(scanAudioInDir(it.filePath(), audioFormat));
         }
         it.next();
     }
