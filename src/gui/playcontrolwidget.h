@@ -4,6 +4,7 @@
 #include <QtWidgets/QWidget>
 
 #include "core/coreplayer.h"
+#include "core/playcontent.h"
 
 namespace Ui {
 class PlayControlWidget;
@@ -24,17 +25,13 @@ public:
     ~PlayControlWidget();
     PlayMode playMode() const;
 signals:
-    // FIXME: New content should be created by something but CorePlayer,
-    // and after that the content is passed to CorePlayer and PlaylistModel.
-    // But remember, there may still should be a check of the existence of current content
-    // if current content changed.
-    void contentChanged(PlayContent *content);
     void playPre();
     void playNext();
     void playRandom();
 
 public slots:
     void setContentPath(const QString &contentPath);
+    void updatePlayInfo(PlayContent *content);
 
 private:
     Ui::PlayControlWidget *ui;
@@ -49,6 +46,7 @@ private:
     PlayMode m_playMode;
 
     void InitConfig();
+    void InitCss(const QString &cssFilePath);
     void InitIconFont();
     void InitConnections();
     QString MiliSecondToString(const qint64 &ms);

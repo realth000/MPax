@@ -2,10 +2,10 @@
 #include "ui_playlistwidget.h"
 
 #include <QtCore/QtDebug>
-
 #include <QtCore/QRandomGenerator>
+#include <QtGui/QStandardItemModel>
 
-#include "QStandardItemModel"
+#include "util/cssloader.h"
 
 PlaylistWidget::PlaylistWidget(QWidget *parent)
   : QWidget(parent),
@@ -18,6 +18,9 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
     ui->tableView->setSelectionBehavior(QTableView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 //        ui->tableView->setItemDelegate(new NoFocusDelegate);
+    // Set tableView row height.
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+    InitCss(":/css/playlistwidget.css");
     InitConnections();
 }
 
@@ -66,5 +69,9 @@ void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
 
 PlayContent *PlaylistWidget::randomContent() const {
     return m_playlistModel->content(QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
+}
+
+void PlaylistWidget::InitCss(const QString &cssFilePath) {
+    this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
 

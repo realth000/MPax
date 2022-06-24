@@ -30,7 +30,6 @@ void MainUI::InitConnections()
     connect(ui->playControlWidget, &PlayControlWidget::playPre, this, &MainUI::playPre);
     connect(ui->playControlWidget, &PlayControlWidget::playNext, this, &MainUI::playNext);
     connect(ui->playControlWidget, &PlayControlWidget::playRandom, this, &MainUI::playRandom);
-    connect(ui->playControlWidget, &PlayControlWidget::contentChanged, this, &MainUI::checkIncomingContent);
     connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
     connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
     connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
@@ -49,12 +48,6 @@ void MainUI::openAudio()
 void MainUI::addPlaylist()
 {
     ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME, QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true)}));
-}
-
-void MainUI::checkIncomingContent(PlayContent *content)
-{
-    // This slot is triggered by playControlWidget's contentChanged signal.
-    // What we need to do here is to do something that should happen on UI when the current PlayContent changed.
 }
 
 void MainUI::playPre() {
@@ -109,6 +102,7 @@ PlayContent * MainUI::addAudioFile(const QString &filePath) {
 }
 
 void MainUI::playAudio(PlayContent *content) {
+    ui->playControlWidget->updatePlayInfo(content);
     ui->playControlWidget->setContentPath(content->contentPath);
     ui->playlistWidget->setCurrentContent(content);
 }

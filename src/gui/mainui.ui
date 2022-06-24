@@ -98,7 +98,7 @@
    </property>
    <widget class="QMenu" name="fileMenu">
     <property name="title">
-     <string>FIle</string>
+     <string>File</string>
     </property>
     <addaction name="openAudioAction"/>
     <addaction name="scanDirAction"/>

@@ -5,8 +5,7 @@
 CorePlayer::CorePlayer(QObject *parent)
     : QObject{parent},
       m_player(new QMediaPlayer),
-      m_playlist(new QMediaPlaylist),
-      m_currentContent(nullptr)
+      m_playlist(new QMediaPlaylist)
 {
     InitConnections();
     m_player->setPlaylist(m_playlist);

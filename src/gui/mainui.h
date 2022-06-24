@@ -28,7 +28,6 @@ private slots:
     void openAudio();
     void scanAudioDir();
     void addPlaylist();
-    void checkIncomingContent(PlayContent *content);
     void playPre();
     void playNext();
     void playRandom();

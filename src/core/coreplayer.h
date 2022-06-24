@@ -7,8 +7,6 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QMediaPlaylist>
 
-#include "core/playcontent.h"
-
 class CorePlayer : public QObject
 {
     Q_OBJECT
@@ -34,7 +32,6 @@ private:
     QMediaPlayer *m_player;
     QMediaPlaylist *m_playlist;
     QUrl m_currentContentUrl;
-    PlayContent *m_currentContent;
 
     void InitConnections();
     void UpdateCurrentContent(const QUrl &contentUrl);

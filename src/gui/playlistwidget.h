@@ -32,6 +32,7 @@ private:
     Ui::PlaylistWidget *ui;
     PlaylistModel *m_playlistModel;
 
+    void InitCss(const QString &cssFilePath);
     void InitConnections();
 };
 

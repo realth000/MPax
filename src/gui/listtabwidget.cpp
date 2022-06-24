@@ -1,6 +1,8 @@
 #include "listtabwidget.h"
 #include "ui_listtabwidget.h"
 
+#include "util/cssloader.h"
+
 ListTabWidget::ListTabWidget(QWidget *parent)
   : QWidget(parent),
     ui(new Ui::ListTabWidget),
@@ -9,6 +11,7 @@ ListTabWidget::ListTabWidget(QWidget *parent)
     ui->setupUi(this);
     ui->listView->setModel(m_listTabModel);
     InitConnections();
+    InitCss(":/css/listtabwidget.css");
 }
 
 ListTabWidget::~ListTabWidget()
@@ -31,4 +34,8 @@ void ListTabWidget::InitConnections() {
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
     m_listTabModel->setCurrentPlaylist(index.row());
+}
+
+void ListTabWidget::InitCss(const QString &cssFilePath) {
+    this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }

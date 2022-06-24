@@ -4,6 +4,22 @@
 #include <QtCore/QtDebug>
 #include <QtGui/QFontDatabase>
 
+#include "util/cssloader.h"
+
+#define ICON_COVER    QChar(0xf51f) // 0xf51f 0xf8d9
+#define ICON_PLAY     QChar(0xf04b)
+#define ICON_PAUSE    QChar(0xf04c)
+#define ICON_PRE      QChar(0xf04a)
+#define ICON_NEXT     QChar(0xf04e)
+#define ICON_STOP     QChar(0xf04d)
+#define ICON_VOL_MUTE QChar(0xf6a9) // 0xf2e2, 0xf6a9
+#define ICON_VOL_LVL1 QChar(0xf027)
+#define ICON_VOL_LVL2 QChar(0xf6a8)
+#define ICON_VOL_LVL3 QChar(0xf028)
+#define ICON_PLAY_MODE_LIST_REPEAT QChar(0xf079)
+#define ICON_PLAY_MODE_SING_REPEAT QChar(0xf365)
+#define ICON_PLAY_MODE_LIST_RANDOM QChar(0xf074)
+
 PlayControlWidget::PlayControlWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PlayControlWidget),
@@ -15,6 +31,9 @@ PlayControlWidget::PlayControlWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     InitConfig();
+    ui->audioInfoGroupBox->setLayout(ui->audoInfoHBoxLayout);
+    ui->playPosSlider->setEnabled(false);
+    InitCss(":/css/playcontrolwidget.css");
     InitIconFont();
     InitConnections();
 }
@@ -74,11 +93,13 @@ void PlayControlWidget::updatePlay()
     switch (m_corePlayer->PlayState()) {
     case QMediaPlayer::PlayingState:
         m_corePlayer->pause();
-        ui->playButton->setText(QChar(0xf04b));
+        ui->playButton->setText(ICON_PLAY);
+        ui->playPosSlider->setEnabled(false);
         break;
     case QMediaPlayer::PausedState:
         m_corePlayer->play();
-        ui->playButton->setText(QChar(0xf04c));
+        ui->playButton->setText(ICON_PAUSE);
+        ui->playPosSlider->setEnabled(true);
         break;
     case QMediaPlayer::StoppedState:
         if (m_currentContentUrl.toLocalFile().isEmpty()) {
@@ -86,7 +107,8 @@ void PlayControlWidget::updatePlay()
             return;
         }
         m_corePlayer->play(m_currentContentUrl);
-        ui->playButton->setText(QChar(0xf04c));
+        ui->playButton->setText(ICON_PAUSE);
+        ui->playPosSlider->setEnabled(true);
         break;
     default:
         break;
@@ -101,7 +123,7 @@ void PlayControlWidget::updatePlayerState(const QMediaPlayer::State &state)
 void PlayControlWidget::stopPlay()
 {
     m_corePlayer->stop();
-    ui->playButton->setText(QChar(0xf04b));
+    ui->playButton->setText(ICON_PLAY);
 }
 
 void PlayControlWidget::updateMute()
@@ -122,12 +144,14 @@ void PlayControlWidget::updateVolume(const int &vol)
         qDebug() << "invalid volume" << vol;
         return;
     }
-    if (vol == 0) {
+    m_vol = vol;
+    if (m_vol == 0) {
         updateMuteWithValue(true);
     } else if (m_volMute) {
         updateMuteWithValue(false);
     }
-    m_corePlayer->setVol(vol);
+    m_corePlayer->setVol(m_vol);
+    updateMuteButtonIcon();
 }
 
 void PlayControlWidget::updatePlayPosition(const qint64 &position)
@@ -141,20 +165,25 @@ void PlayControlWidget::updatePlayPosition(const qint64 &position)
 
 void PlayControlWidget::setPlayPosition()
 {
+    if (m_corePlayerState != QMediaPlayer::PlayingState) {
+        return;
+    }
     qDebug() << "setPlayPosition" << ui->playPosSlider->value();
     m_corePlayer->setPlayPosition(ui->playPosSlider->value());
 }
 
 void PlayControlWidget::InitIconFont() {
     QFont awesome6Font = QFont(QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf")).at(0));;
+    ui->coverLabel->setFont(awesome6Font);
+    ui->coverLabel->setText(ICON_COVER);
     ui->preButton->setFont(awesome6Font);
-    ui->preButton->setText(QChar(0xf04a));
+    ui->preButton->setText(ICON_PRE);
     ui->playButton->setFont(awesome6Font);
-    ui->playButton->setText(QChar(0xf04b));
+    ui->playButton->setText(ICON_PLAY);
     ui->nextButton->setFont(awesome6Font);
-    ui->nextButton->setText(QChar(0xf04e));
+    ui->nextButton->setText(ICON_NEXT);
     ui->stopButton->setFont(awesome6Font);
-    ui->stopButton->setText(QChar(0xf04d));
+    ui->stopButton->setText(ICON_STOP);
     ui->playModeButton->setFont(awesome6Font);
     updatePlayModeButtonIcon();
     ui->muteButton->setFont(awesome6Font);
@@ -163,22 +192,26 @@ void PlayControlWidget::InitIconFont() {
 
 void PlayControlWidget::updateMuteButtonIcon() {
     if (m_volMute || m_vol == 0) {
-        ui->muteButton->setText(QChar(0xf026));
+        ui->muteButton->setText(ICON_VOL_MUTE);
+    } else if (m_vol <= 30) {
+        ui->muteButton->setText(ICON_VOL_LVL1);
+    } else if (m_vol <= 70) {
+        ui->muteButton->setText(ICON_VOL_LVL2);
     } else {
-        ui->muteButton->setText(QChar(0xf028));
+        ui->muteButton->setText(ICON_VOL_LVL3);
     }
 }
 
 void PlayControlWidget::updatePlayModeButtonIcon() {
     switch (m_playMode) {
         case PlayMode::ListRepeat:
-            ui->playModeButton->setText(QChar(0xf079));
+            ui->playModeButton->setText(ICON_PLAY_MODE_LIST_REPEAT);
             break;
         case PlayMode::SingleRepeat:
-            ui->playModeButton->setText(QChar(0xf365));
+            ui->playModeButton->setText(ICON_PLAY_MODE_SING_REPEAT);
             break;
         case PlayMode::Random:
-            ui->playModeButton->setText(QChar(0xf074));
+            ui->playModeButton->setText(ICON_PLAY_MODE_LIST_RANDOM);
             break;
     }
 }
@@ -223,4 +256,38 @@ void PlayControlWidget::handleMediaStatusChanged(QMediaPlayer::MediaStatus statu
 
 PlayControlWidget::PlayMode PlayControlWidget::playMode() const {
     return m_playMode;
+}
+
+void PlayControlWidget::InitCss(const QString &cssFilePath) {
+    this->setStyleSheet(util::loadCssFromFile(cssFilePath));
+}
+
+void PlayControlWidget::updatePlayInfo(PlayContent *content) {
+    if (content == nullptr) {
+        qDebug() << "can not update null play info";
+        return;
+    }
+    const QStringList nameInfo = content->contentName.split(" - ");
+    if (!content->title.isEmpty()) {
+        ui->titleButton->setText(content->title);
+    } else if (nameInfo.length() == 2) {
+        ui->titleButton->setText(QFileInfo(nameInfo[1]).baseName());
+    } else {
+        ui->titleButton->setText(QFileInfo(content->contentName).baseName());
+    }
+    if (!content->artist.isEmpty()) {
+        ui->artistButton->setText(content->artist);
+    } else if (nameInfo.length() == 2) {
+        ui->artistButton->setText(nameInfo[0]);
+    }
+    if (!content->albumTitle.isEmpty()) {
+        ui->albumButton->setText(content->albumTitle);
+    } else {
+        ui->albumButton->setText(content->contentPath);
+    }
+    if (!content->albumCover.isNull()) {
+        ui->coverLabel->setPixmap(QPixmap::fromImage(content->albumCover));
+    } else {
+        ui->coverLabel->setText(ICON_COVER);
+    }
 }

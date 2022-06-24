@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>css/playcontrolwidget.css</file>
+        <file>css/listtabwidget.css</file>
+        <file>css/playlistwidget.css</file>
+    </qresource>
+</RCC>

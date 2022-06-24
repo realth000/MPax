@@ -61,7 +61,7 @@ QString PlaylistModelHeader::usedHeader(const int &index) const
 
 QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList()
 {
-    return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true)};
+    return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentName", true)};
 }
 
 PlaylistModel::PlaylistModel(const QString &playlistName, QList<QPair<QString, bool>> headerList, QObject *parent)
@@ -105,7 +105,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
         if(role == Qt::TextAlignmentRole){
-            return QVariant(Qt::AlignCenter);
+            return QVariant(Qt::AlignLeft);
         }
         if(role == Qt::DisplayRole){
             return QVariant(m_contentList[index.row()]->value(m_header.usedHeader(index.column())));

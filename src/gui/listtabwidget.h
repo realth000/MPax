@@ -29,6 +29,7 @@ private:
     ListTabModel *m_listTabModel;
 
     void InitConnections();
+    void InitCss(const QString &cssFilePath);
 
 private slots:
     void updateCurrentPlaylist(const QModelIndex &index);

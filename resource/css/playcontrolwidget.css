@@ -1,0 +1,19 @@
+QLabel#coverLabel {
+    /*border: 1px solid #ff0000;*/
+    font-size: 30px;
+}
+
+QPushButton#titleButton {
+    border: none;
+    text-align: left;
+}
+
+QPushButton#artistButton {
+    border: none;
+    text-align: left;
+}
+
+QPushButton#albumButton {
+    border: none;
+    text-align: left;
+}
