@@ -22,7 +22,7 @@ public:
 private:
     Ui::MainUI *ui;
 
-    void addAudioFile(const QString &filePath);
+    PlayContent* addAudioFile(const QString &filePath);
 
 private slots:
     void openAudio();

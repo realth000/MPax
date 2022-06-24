@@ -43,8 +43,7 @@ void MainUI::openAudio()
     if (filePath.isEmpty()) {
         return;
     }
-    QFileInfo fileInfo(filePath);
-    addAudioFile(filePath);
+    playAudio(addAudioFile(filePath));
 }
 
 void MainUI::addPlaylist()
@@ -100,16 +99,16 @@ void MainUI::scanAudioDir() {
     }
 }
 
-void MainUI::addAudioFile(const QString &filePath) {
+PlayContent * MainUI::addAudioFile(const QString &filePath) {
     QFileInfo fileInfo(filePath);
     PlayContent *t = new PlayContent;
     t->contentPath = fileInfo.absoluteFilePath();
     t->contentName = fileInfo.fileName();
     ui->listTabWidget->addContent(t);
+    return t;
 }
 
 void MainUI::playAudio(PlayContent *content) {
     ui->playControlWidget->setContentPath(content->contentPath);
     ui->playlistWidget->setCurrentContent(content);
 }
-
