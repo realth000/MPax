@@ -33,10 +33,16 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel)
 }
 
 PlayContent *PlaylistWidget::preContent() const {
+    if (m_playlistModel == nullptr) {
+        return nullptr;
+    }
     return m_playlistModel->findPreContent();
 }
 
 PlayContent *PlaylistWidget::nextContent() const {
+    if (m_playlistModel == nullptr) {
+        return nullptr;
+    }
     return m_playlistModel->findNextContent();
 }
 
