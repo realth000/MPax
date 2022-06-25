@@ -7,37 +7,36 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QMediaPlaylist>
 
-class CorePlayer : public QObject
-{
-    Q_OBJECT
-public:
-    explicit CorePlayer(QObject *parent = nullptr);
+class CorePlayer : public QObject {
+  Q_OBJECT
+ public:
+  explicit CorePlayer(QObject *parent = nullptr);
 
-    QMediaPlayer::State PlayState();
-signals:
-    void playStateChanged(QMediaPlayer::State);
-    void playPositionChanged(const qint64 &position);
-    void playDurationChanged(const qint64 &duration);
-    void playMediaStatusChanged(QMediaPlayer::MediaStatus status);
+  QMediaPlayer::State PlayState();
+ signals:
+  void playStateChanged(QMediaPlayer::State);
+  void playPositionChanged(const qint64 &position);
+  void playDurationChanged(const qint64 &duration);
+  void playMediaStatusChanged(QMediaPlayer::MediaStatus status);
 
-public slots:
-    void play(const QUrl &contentUrl = QUrl());
-    void pause();
-    void stop();
-    void setVolMute(const bool &muted);
-    void setVol(const int &vol);
-    void setPlayPosition(const qint64 &position);
+ public slots:
+  void play(const QUrl &contentUrl = QUrl());
+  void pause();
+  void stop();
+  void setVolMute(const bool &muted);
+  void setVol(const int &vol);
+  void setPlayPosition(const qint64 &position);
 
-private:
-    QMediaPlayer *m_player;
-    QMediaPlaylist *m_playlist;
-    QUrl m_currentContentUrl;
+ private:
+  QMediaPlayer *m_player;
+  QMediaPlaylist *m_playlist;
+  QUrl m_currentContentUrl;
 
-    void InitConnections();
-    void UpdateCurrentContent(const QUrl &contentUrl);
+  void InitConnections();
+  void UpdateCurrentContent(const QUrl &contentUrl);
 
-private slots:
-    void updatePlayState(const QMediaPlayer::State &state);
+ private slots:
+  void updatePlayState(const QMediaPlayer::State &state);
 };
 
-#endif // COREPLAYER_H
+#endif  // COREPLAYER_H

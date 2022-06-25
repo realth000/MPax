@@ -9,30 +9,29 @@ namespace Ui {
 class ListTabWidget;
 }
 
-class ListTabWidget : public QWidget
-{
-    Q_OBJECT
+class ListTabWidget : public QWidget {
+  Q_OBJECT
 
-public:
-    explicit ListTabWidget(QWidget *parent = nullptr);
-    ~ListTabWidget();
+ public:
+  explicit ListTabWidget(QWidget *parent = nullptr);
+  ~ListTabWidget();
 
-signals:
-    void currentPlaylistChanged(PlaylistModel *playlistModel);
+ signals:
+  void currentPlaylistChanged(PlaylistModel *playlistModel);
 
-public slots:
-    void addPlaylist(PlaylistModel *playlistModel);
-    void addContent(PlayContent *playContent);
+ public slots:
+  void addPlaylist(PlaylistModel *playlistModel);
+  void addContent(PlayContent *playContent);
 
-private:
-    Ui::ListTabWidget *ui;
-    ListTabModel *m_listTabModel;
+ private:
+  Ui::ListTabWidget *ui;
+  ListTabModel *m_listTabModel;
 
-    void InitConnections();
-    void InitCss(const QString &cssFilePath);
+  void InitConnections();
+  void InitCss(const QString &cssFilePath);
 
-private slots:
-    void updateCurrentPlaylist(const QModelIndex &index);
+ private slots:
+  void updateCurrentPlaylist(const QModelIndex &index);
 };
 
-#endif // LISTTABWIDGET_H
+#endif  // LISTTABWIDGET_H

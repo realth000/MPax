@@ -8,29 +8,30 @@
 #include "core/playlistmodel.h"
 
 QT_BEGIN_NAMESPACE
-    namespace Ui { class MainUI; }
+namespace Ui {
+class MainUI;
+}
 QT_END_NAMESPACE
-class MainUI : public QMainWindow
-{
-    Q_OBJECT
+class MainUI : public QMainWindow {
+  Q_OBJECT
 
-public:
-    MainUI(QWidget *parent = nullptr);
-    ~MainUI();
-    void InitConnections();
+ public:
+  MainUI(QWidget *parent = nullptr);
+  ~MainUI();
+  void InitConnections();
 
-private:
-    Ui::MainUI *ui;
+ private:
+  Ui::MainUI *ui;
 
-    PlayContent* addAudioFile(const QString &filePath);
+  PlayContent *addAudioFile(const QString &filePath);
 
-private slots:
-    void openAudio();
-    void scanAudioDir();
-    void addPlaylist();
-    void playPre();
-    void playNext();
-    void playRandom();
-    void playAudio(PlayContent *content);
+ private slots:
+  void openAudio();
+  void scanAudioDir();
+  void addPlaylist();
+  void playPre();
+  void playNext();
+  void playRandom();
+  void playAudio(PlayContent *content);
 };
-#endif // MAINUI_H
+#endif  // MAINUI_H

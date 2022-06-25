@@ -5,82 +5,73 @@
 CorePlayer::CorePlayer(QObject *parent)
     : QObject{parent},
       m_player(new QMediaPlayer),
-      m_playlist(new QMediaPlaylist)
-{
-    InitConnections();
-    m_player->setPlaylist(m_playlist);
+      m_playlist(new QMediaPlaylist) {
+  InitConnections();
+  m_player->setPlaylist(m_playlist);
 }
 
-void CorePlayer::InitConnections()
-{
-    connect(m_player, &QMediaPlayer::stateChanged, this, &CorePlayer::updatePlayState);
-    connect(m_player, &QMediaPlayer::positionChanged, this, &CorePlayer::playPositionChanged);
-    connect(m_player, &QMediaPlayer::durationChanged, this, &CorePlayer::playDurationChanged);
-    connect(m_player, &QMediaPlayer::mediaStatusChanged, this, &CorePlayer::playMediaStatusChanged);
+void CorePlayer::InitConnections() {
+  connect(m_player, &QMediaPlayer::stateChanged, this,
+          &CorePlayer::updatePlayState);
+  connect(m_player, &QMediaPlayer::positionChanged, this,
+          &CorePlayer::playPositionChanged);
+  connect(m_player, &QMediaPlayer::durationChanged, this,
+          &CorePlayer::playDurationChanged);
+  connect(m_player, &QMediaPlayer::mediaStatusChanged, this,
+          &CorePlayer::playMediaStatusChanged);
 }
 
-void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl)
-{
-    m_currentContentUrl = contentUrl;
-    m_playlist->clear();
-    m_playlist->addMedia(m_currentContentUrl);
+void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl) {
+  m_currentContentUrl = contentUrl;
+  m_playlist->clear();
+  m_playlist->addMedia(m_currentContentUrl);
 }
 
-void CorePlayer::updatePlayState(const QMediaPlayer::State &state)
-{
-    emit playStateChanged(state);
-    switch (state) {
+void CorePlayer::updatePlayState(const QMediaPlayer::State &state) {
+  emit playStateChanged(state);
+  switch (state) {
     case QMediaPlayer::PlayingState:
-        break;
+      break;
     case QMediaPlayer::PausedState:
     case QMediaPlayer::StoppedState:
     default:
-        break;
-    }
+      break;
+  }
 }
 
-QMediaPlayer::State CorePlayer::PlayState()
-{
-    return m_player->state();
-}
+QMediaPlayer::State CorePlayer::PlayState() { return m_player->state(); }
 
-void CorePlayer::play(const QUrl &contentUrl)
-{
-    if (contentUrl.isEmpty()) {
-        qDebug() << "continue" << m_currentContentUrl.fileName();
-        m_player->play();
-        return;
-    }
-    qDebug() << "play" << contentUrl;
-    UpdateCurrentContent(contentUrl);
+void CorePlayer::play(const QUrl &contentUrl) {
+  if (contentUrl.isEmpty()) {
+    qDebug() << "continue" << m_currentContentUrl.fileName();
     m_player->play();
+    return;
+  }
+  qDebug() << "play" << contentUrl;
+  UpdateCurrentContent(contentUrl);
+  m_player->play();
 }
 
-void CorePlayer::pause()
-{
-    qDebug() << "pause" << m_currentContentUrl.fileName();
-    m_player->pause();
+void CorePlayer::pause() {
+  qDebug() << "pause" << m_currentContentUrl.fileName();
+  m_player->pause();
 }
 
-void CorePlayer::stop()
-{
-    qDebug() << "stop" << m_currentContentUrl.fileName();
-    m_player->stop();
+void CorePlayer::stop() {
+  qDebug() << "stop" << m_currentContentUrl.fileName();
+  m_player->stop();
 }
 
-void CorePlayer::setVolMute(const bool &muted)
-{
-    qDebug() << "set muted" << muted;
-    m_player->setMuted(muted);
+void CorePlayer::setVolMute(const bool &muted) {
+  qDebug() << "set muted" << muted;
+  m_player->setMuted(muted);
 }
 
-void CorePlayer::setVol(const int &vol)
-{
-    qDebug() << "set volume to" << vol;
-    m_player->setVolume(vol);
+void CorePlayer::setVol(const int &vol) {
+  qDebug() << "set volume to" << vol;
+  m_player->setVolume(vol);
 }
 
-void CorePlayer::setPlayPosition(const qint64 &position)
-{
-    m_player->setPosition(position);
+void CorePlayer::setPlayPosition(const qint64 &position) {
+  m_player->setPosition(position);
 }

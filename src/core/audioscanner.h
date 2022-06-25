@@ -3,10 +3,10 @@
 
 #include <QtCore/QFileInfo>
 
-class AudioScanner
-{
-public:
-    static QStringList scanAudioInDir(const QString &dirPath, const QStringList &audioFormat);
+class AudioScanner {
+ public:
+  static QStringList scanAudioInDir(const QString &dirPath,
+                                    const QStringList &audioFormat);
 };
 
-#endif // AUDIOSCANNER_H
+#endif  // AUDIOSCANNER_H
