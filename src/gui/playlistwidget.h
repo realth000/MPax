@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 
-#include "core/playlistmodel.h"
+#include "model/playlistmodel.h"
 
 namespace Ui {
 class PlaylistWidget;

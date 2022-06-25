@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 
-#include "core/listtabmodel.h"
+#include "model/listtabmodel.h"
 
 namespace Ui {
 class ListTabWidget;

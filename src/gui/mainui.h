@@ -3,9 +3,9 @@
 
 #include <QtWidgets/QMainWindow>
 
-#include "core/coreplayer.h"
-#include "core/listtabmodel.h"
-#include "core/playlistmodel.h"
+#include "audio/coreplayer.h"
+#include "model/listtabmodel.h"
+#include "model/playlistmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

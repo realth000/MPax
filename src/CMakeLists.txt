@@ -1,3 +1,6 @@
 add_subdirectory(util)
+add_subdirectory(config)
+add_subdirectory(audio)
+add_subdirectory(model)
 add_subdirectory(gui)
 add_subdirectory(core)

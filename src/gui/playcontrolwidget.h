@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 
-#include "core/coreplayer.h"
+#include "audio/coreplayer.h"
 #include "core/playcontent.h"
 
 namespace Ui {

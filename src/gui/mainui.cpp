@@ -4,7 +4,7 @@
 #include <QtWidgets/QFileDialog>
 
 #include "./ui_mainui.h"
-#include "core/audioscanner.h"
+#include "audio/audioscanner.h"
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);

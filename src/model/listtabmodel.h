@@ -4,7 +4,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStringListModel>
 
-#include "core/playlistmodel.h"
+#include "model/playlistmodel.h"
 
 #define DEFAULT_PLAYLIST_NAME "default"
 
