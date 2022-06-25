@@ -47,7 +47,7 @@ void MainUI::openAudio()
 
 void MainUI::addPlaylist()
 {
-    ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME, QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentPath", true)}));
+    ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME, PlaylistModelHeader::defaultHeaderList()));
 }
 
 void MainUI::playPre() {
