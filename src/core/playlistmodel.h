@@ -53,7 +53,7 @@ class PlaylistModel : public QAbstractItemModel {
   /* Something contains data, data is a list of music information
    * Music information contains meta datas
    */
-  QList<PlayContent *> m_contentList;
+  PlayContentList m_contentList;
   PlaylistModelHeader m_header;
   QString m_playlistName;
   PlayContent *m_currentPlayContent;

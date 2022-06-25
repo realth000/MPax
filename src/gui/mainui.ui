@@ -108,6 +108,8 @@
      <string>Playlist</string>
     </property>
     <addaction name="playlistAddAction"/>
+    <addaction name="savePlaylistAction"/>
+    <addaction name="saveAllPlaylistAction"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="playlistMenu"/>
@@ -126,6 +128,16 @@
   <action name="scanDirAction">
    <property name="text">
     <string>Scan dir</string>
+   </property>
+  </action>
+  <action name="savePlaylistAction">
+   <property name="text">
+    <string>Save playlist</string>
+   </property>
+  </action>
+  <action name="saveAllPlaylistAction">
+   <property name="text">
+    <string>Save all playlist</string>
    </property>
   </action>
  </widget>

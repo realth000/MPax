@@ -22,6 +22,8 @@ class ListTabWidget : public QWidget {
  public slots:
   void addPlaylist(PlaylistModel *playlistModel);
   void addContent(PlayContent *playContent);
+  void savePlaylist(const QString &filePath);
+  void saveAllPlaylist(const QString &filePath);
 
  private:
   Ui::ListTabWidget *ui;

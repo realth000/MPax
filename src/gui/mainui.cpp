@@ -33,6 +33,10 @@ void MainUI::InitConnections() {
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContent, this,
           &MainUI::playAudio);
+  connect(ui->savePlaylistAction, &QAction::triggered, this,
+          &MainUI::savePlaylist);
+  connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
+          &MainUI::saveAllPlaylist);
 }
 
 void MainUI::openAudio() {
@@ -96,10 +100,7 @@ void MainUI::scanAudioDir() {
 }
 
 PlayContent *MainUI::addAudioFile(const QString &filePath) {
-  QFileInfo fileInfo(filePath);
-  PlayContent *t = new PlayContent;
-  t->contentPath = fileInfo.absoluteFilePath();
-  t->contentName = fileInfo.fileName();
+  PlayContent *t = new PlayContent(filePath);
   ui->listTabWidget->addContent(t);
   return t;
 }
@@ -108,4 +109,18 @@ void MainUI::playAudio(PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setCurrentContent(content);
+}
+void MainUI::savePlaylist() {
+  const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
+  if (filePath.isEmpty()) {
+    return;
+  }
+  ui->listTabWidget->savePlaylist(filePath);
+}
+void MainUI::saveAllPlaylist() {
+  const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
+  if (filePath.isEmpty()) {
+    return;
+  }
+  ui->listTabWidget->saveAllPlaylist(filePath);
 }

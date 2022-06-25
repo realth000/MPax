@@ -1,5 +1,6 @@
 #include "listtabmodel.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QtDebug>
 
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {}
@@ -67,3 +68,17 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
   }
   return QStringListModel::setData(index, value, role);
 }
+
+void ListTabModel::saveCurrentPlaylist(const QString &filePath) const {
+  QFile file(filePath);
+  if (!file.open(QIODevice::WriteOnly)) {
+    qDebug() << "can not save playlist to" << filePath;
+    return;
+  }
+  QTextStream stream;
+  stream.setCodec("UTF-8");
+  stream.setDevice(&file);
+  stream << m_currentPlayListModel->playlistName();
+}
+
+void ListTabModel::saveAllPlaylist(const QString &filePath) const {}

@@ -37,3 +37,9 @@ void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
 void ListTabWidget::InitCss(const QString &cssFilePath) {
   this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
+void ListTabWidget::savePlaylist(const QString &filePath) {
+  m_listTabModel->saveCurrentPlaylist(filePath);
+}
+void ListTabWidget::saveAllPlaylist(const QString &filePath) {
+  m_listTabModel->saveAllPlaylist(filePath);
+}
