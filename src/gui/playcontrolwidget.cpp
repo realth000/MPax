@@ -281,9 +281,10 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
   if (!content->title.isEmpty()) {
     ui->titleButton->setText(content->title);
   } else if (nameInfo.length() == 2) {
-    ui->titleButton->setText(QFileInfo(nameInfo[1]).baseName());
+    ui->titleButton->setText(QFileInfo(nameInfo[1]).completeBaseName());
   } else {
-    ui->titleButton->setText(QFileInfo(content->contentName).baseName());
+    ui->titleButton->setText(
+        QFileInfo(content->contentName).completeBaseName());
   }
   if (!content->artist.isEmpty()) {
     ui->artistButton->setText(content->artist);
