@@ -77,14 +77,26 @@ void ListTabModel::saveCurrentPlaylist(const QString &filePath) const {
     qDebug() << "can not save playlist to" << filePath;
     return;
   }
-  qDebug() << "write stream start";
   QTextStream stream;
   stream.setCodec("UTF-8");
   stream.setDevice(&file);
-  QString t = PlaylistJson::toJsonString(m_currentPlayListModel->list());
-  stream << t;
+  stream << PlaylistJson::toJsonString(m_currentPlayListModel->list());
   file.close();
-  qDebug() << "write stream finish with" << t;
 }
 
-void ListTabModel::saveAllPlaylist(const QString &filePath) const {}
+void ListTabModel::saveAllPlaylist(const QString &filePath) const {
+  QFile file(filePath);
+  if (!file.open(QIODevice::WriteOnly)) {
+    qDebug() << "can not save playlist to" << filePath;
+    return;
+  }
+  QTextStream stream;
+  stream.setCodec("UTF-8");
+  stream.setDevice(&file);
+  QList<Playlist> allList;
+  for (auto playlist : m_playlistList) {
+    allList.append(playlist->list());
+  }
+  stream << PlaylistJson::toJsonString(allList);
+  file.close();
+}
