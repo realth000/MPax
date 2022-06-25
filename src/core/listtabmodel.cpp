@@ -60,3 +60,13 @@ void ListTabModel::addContent(PlayContent *playContent) {
     // Sync playlist content to PlaylistWidget.
     emit currentPlaylistChanged(m_currentPlayListModel);
 }
+
+bool ListTabModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    if (role == Qt::EditRole && !value.toString().isEmpty() && m_playlistList.length() > index.row()) {
+        beginResetModel();
+        m_playlistList[index.row()]->setPlaylistName(value.toString());
+        endResetModel();
+        return true;
+    }
+    return QStringListModel::setData(index, value, role);
+}
