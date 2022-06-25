@@ -3,6 +3,7 @@
 #include <QtCore/QtDebug>
 #include <QtGui/QFontDatabase>
 
+#include "config/appconfig.h"
 #include "ui_playcontrolwidget.h"
 #include "util/cssloader.h"
 
@@ -67,7 +68,7 @@ void PlayControlWidget::InitConnections() {
   connect(ui->stopButton, &QPushButton::clicked, this,
           &PlayControlWidget::stopPlay);
   connect(ui->playModeButton, &QPushButton::clicked, this,
-          &PlayControlWidget::updatePlayMode);
+          QOverload<>::of(&PlayControlWidget::updatePlayMode));
   connect(ui->muteButton, &QPushButton::clicked, this,
           &PlayControlWidget::updateMute);
   connect(ui->volumeSlider, &QSlider::valueChanged, this,
@@ -242,6 +243,22 @@ void PlayControlWidget::updatePlayMode() {
   updatePlayModeButtonIcon();
 }
 
+void PlayControlWidget::updatePlayMode(const int &playMode) {
+  auto m = static_cast<PlayMode>(playMode);
+  switch (m) {
+    case PlayMode::ListRepeat:
+    case PlayMode::SingleRepeat:
+    case PlayMode::Random:
+      break;
+    default:
+      m_playMode = PlayMode::ListRepeat;
+      updatePlayModeButtonIcon();
+      return;
+  }
+  m_playMode = m;
+  updatePlayModeButtonIcon();
+}
+
 void PlayControlWidget::setPlayDuration(const qint64 &duration) {
   ui->playPosSlider->setMaximum(duration);
   ui->timeTotalLabel->setText(MiliSecondToString(duration));
@@ -301,4 +318,12 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
   } else {
     ui->coverLabel->setText(ICON_COVER);
   }
+}
+
+void PlayControlWidget::updateConfig() {
+  Config::ConfigPairMap map = Config::AppConfig::getInstance()->config();
+  updatePlayMode(map[CONFIG_PLAY_MODE].value.toInt());
+  ui->volumeSlider->setValue(map[CONFIG_VOLUME].value.toInt());
+  m_volMute = map[CONFIG_VOLUME_MUTE].value.toBool();
+  updateMuteWithValue(m_volMute);
 }

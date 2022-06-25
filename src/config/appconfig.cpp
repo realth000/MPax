@@ -1,4 +1,4 @@
-#include "configdefine.h"
+#include "appconfig.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
@@ -9,21 +9,6 @@
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
 #define TYPE_BOOL "bool"
-
-#define PARSE_VARIANT(VALUE, TYPE)  \
-  ({                                \
-    if (TYPE == "QStringList") {    \
-      return VALUE.toStringList();  \
-    } else if (TYPE == "QString") { \
-      return VALUE.toString();      \
-    } else if (TYPE == "int") {     \
-      return VALUE.toInt();         \
-    } else if (TYPE == "bool") {    \
-      return VALUE.toBool();        \
-    } else {                        \
-      return VALUE;                 \
-    }                               \
-  })
 
 #define COMPARE_ZERO(VALUE, TYPE, IS)                       \
   if (TYPE == "QStringList") {                              \
@@ -75,12 +60,12 @@ void Config::AppConfig::printConfig() {
 void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
 
 Config::AppConfig::AppConfig() : m_configMap(QMap<QString, ConfigPair>()) {
-  addConfig("AllPlaylist", QStringList{}, TYPE_STRING_LIST);
-  addConfig("CurrentPlaylist", "", TYPE_STRING);
-  addConfig("CurrentPlayContent", "", TYPE_STRING);
-  addConfig("PlayMode", 0, TYPE_INT);
-  addConfig("Volume", 50, TYPE_INT);
-  addConfig("VolumeMute", false, TYPE_BOOL);
+  addConfig(CONFIG_ALL_PLAYLIST, QStringList{}, TYPE_STRING_LIST);
+  addConfig(CONFIG_CUR_PLAYLIST, "", TYPE_STRING);
+  addConfig(CONFIG_CUR_PLAYCONTENT, "", TYPE_STRING);
+  addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);
+  addConfig(CONFIG_VOLUME, 50, TYPE_INT);
+  addConfig(CONFIG_VOLUME_MUTE, false, TYPE_BOOL);
 }
 
 Config::AppConfig::~AppConfig() {}

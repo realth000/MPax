@@ -27,6 +27,7 @@ class PlayControlWidget : public QWidget {
  public slots:
   void setContentPath(const QString &contentPath);
   void updatePlayInfo(PlayContent *content);
+  void updateConfig();
 
  private:
   Ui::PlayControlWidget *ui;
@@ -58,6 +59,7 @@ class PlayControlWidget : public QWidget {
   void setPlayDuration(const qint64 &duration);
   void updateMuteButtonIcon();
   void updatePlayMode();
+  void updatePlayMode(const int &playMode);
   void updatePlayModeButtonIcon();
   void handleMediaStatusChanged(QMediaPlayer::MediaStatus status);
 };

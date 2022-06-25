@@ -1,8 +1,15 @@
-#ifndef MPAX_CONFIGDEFINE_H
-#define MPAX_CONFIGDEFINE_H
+#ifndef MPAX_APPCONFIG_H
+#define MPAX_APPCONFIG_H
 
 #include <QtCore/QPair>
 #include <QtCore/QVariant>
+
+#define CONFIG_ALL_PLAYLIST "AllPlaylist"
+#define CONFIG_CUR_PLAYLIST "CurrentPlaylist"
+#define CONFIG_CUR_PLAYCONTENT "CurrentPlayContent"
+#define CONFIG_PLAY_MODE "PlayMode"
+#define CONFIG_VOLUME "Volume"
+#define CONFIG_VOLUME_MUTE "VolumeMute"
 
 namespace Config {
 struct ConfigPair {
@@ -36,4 +43,4 @@ class AppConfig {
   void loadConfig(const QString &filePath);
 };
 }  // namespace Config
-#endif  // MPAX_CONFIGDEFINE_H
+#endif  // MPAX_APPCONFIG_H
