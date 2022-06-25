@@ -2,14 +2,15 @@
 #define MPAX_PLAYLISTJSON_H
 
 #include "core/playcontent.h"
+#include "core/playlist.h"
 
 namespace PlaylistJson {
 
-QString toJsonString(const PlayContentList &playlist);
+QString toJsonString(const Playlist &playlist);
 
-QString toJsonString(const QList<PlayContentList> &playlist);
+QString toJsonString(const QList<Playlist> &playlist);
 
-QList<PlayContentList> fromJsonString(const QString &jsonString);
+QList<Playlist> fromJsonString(const QString &jsonString);
 
 };  // namespace PlaylistJson
 

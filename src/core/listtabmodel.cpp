@@ -3,6 +3,8 @@
 #include <QtCore/QFile>
 #include <QtCore/QtDebug>
 
+#include "core/playlistjson.h"
+
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {}
 
 int ListTabModel::rowCount(const QModelIndex &parent) const {
@@ -75,10 +77,14 @@ void ListTabModel::saveCurrentPlaylist(const QString &filePath) const {
     qDebug() << "can not save playlist to" << filePath;
     return;
   }
+  qDebug() << "write stream start";
   QTextStream stream;
   stream.setCodec("UTF-8");
   stream.setDevice(&file);
-  stream << m_currentPlayListModel->playlistName();
+  QString t = PlaylistJson::toJsonString(m_currentPlayListModel->list());
+  stream << t;
+  file.close();
+  qDebug() << "write stream finish with" << t;
 }
 
 void ListTabModel::saveAllPlaylist(const QString &filePath) const {}

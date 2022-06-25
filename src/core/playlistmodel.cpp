@@ -58,6 +58,7 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
                              QList<QPair<QString, bool>> headerList,
                              QObject *parent)
     : QAbstractItemModel{parent},
+      m_listInfo(),
       m_header(headerList),
       m_playlistName(playlistName),
       m_currentPlayContent(nullptr) {}
@@ -181,4 +182,8 @@ PlayContent *PlaylistModel::content(const int &index) const {
     return nullptr;
   }
   return m_contentList[index];
+}
+
+Playlist PlaylistModel::list() const {
+  return Playlist(m_listInfo, m_contentList);
 }

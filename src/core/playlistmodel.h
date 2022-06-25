@@ -4,10 +4,9 @@
 #include <QtCore/QAbstractItemModel>
 
 #include "core/playcontent.h"
+#include "core/playlist.h"
 
 typedef QPair<QString, bool> PlaylistHeaderItem;
-
-class PlayConentInfo {};
 
 class PlaylistModelHeader {
  public:
@@ -48,11 +47,11 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContent *findNextContent() const;
   PlayContent *findPreContent() const;
   PlayContent *content(const int &index) const;
+  Playlist list() const;
 
  private:
-  /* Something contains data, data is a list of music information
-   * Music information contains meta datas
-   */
+  // TODO: Combine PlaylistInfo and PlayContentList to PlayContentList.
+  PlaylistInfo m_listInfo;
   PlayContentList m_contentList;
   PlaylistModelHeader m_header;
   QString m_playlistName;

@@ -4,67 +4,90 @@
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
 
 #define KEY_TYPE "type"
 #define VAL_TYPE_PLAYLIST "playlist"
 #define KEY_FORMAT_VER "format_version"
 #define VAL_FORMAT_VER 1
-#define KEY_PLAYLIST_COUNT "playlist_count"
+#define KEY_COUNT "count"
 #define KEY_SAVE_TIME "save_time"
 #define TIME_FORMAT "yyyy-MM-dd HH:mm:ss"
 #define KEY_DATA "data"
+#define KEY_PLAYLIST_INFO "play_list_info"
+#define KEY_PLAYLIST_DATA "play_list_data"
 
-QString PlaylistJson::toJsonString(const PlayContentList &playlist) {
-  return toJsonString(QList<PlayContentList>{playlist});
+QString PlaylistJson::toJsonString(const Playlist &playlist) {
+  return toJsonString(QList<Playlist>{playlist});
 }
 
-QString PlaylistJson::toJsonString(const QList<PlayContentList> &playlist) {
+QString PlaylistJson::toJsonString(const QList<Playlist> &playlist) {
   QJsonDocument doc;
   QJsonObject obj;
   obj.insert(KEY_TYPE, VAL_TYPE_PLAYLIST);
   obj.insert(KEY_FORMAT_VER, VAL_FORMAT_VER);
-  obj.insert(KEY_PLAYLIST_COUNT, playlist.count());
+  obj.insert(KEY_COUNT, playlist.count());
   obj.insert(KEY_SAVE_TIME, QDateTime::currentDateTime().toString(TIME_FORMAT));
-
-  QJsonObject contentObj;
-  QList<PlayContentList>::const_iterator it = playlist.constBegin();
+  QJsonObject dataObj;
+  QList<Playlist>::const_iterator it = playlist.constBegin();
   int pos = 0;
   while (it != playlist.constEnd()) {
-    PlayContentList::const_iterator itt = it.i->t().constBegin();
+    QJsonObject playlistObj;
+    // Read info.
+    QJsonObject playlistInfoObj;
+    playlistInfoObj.insert(PLAYLIST_INFO_NAME,
+                           it.i->t().info()->info(PLAYLIST_INFO_NAME));
+    playlistInfoObj.insert(PLAYLIST_INFO_COUNT,
+                           it.i->t().info()->info(PLAYLIST_INFO_COUNT));
+    // Read content.
+    PlayContentList::const_iterator itt = it.i->t().content()->constBegin();
     QJsonArray arr;
-    while (itt != it.i->t().constEnd()) {
+    while (itt != it.i->t().content()->constEnd()) {
       arr.append(itt.i->t()->value("ContentPath").toString());
+      itt++;
     }
-    contentObj.insert(QString::number(pos), arr);
+    playlistObj.insert(KEY_PLAYLIST_INFO, playlistInfoObj);
+    playlistObj.insert(KEY_PLAYLIST_DATA, arr);
+    dataObj.insert(QString::number(pos), playlistObj);
     pos++;
+    it++;
   }
-  obj.insert(KEY_DATA, contentObj);
+  obj.insert(KEY_DATA, dataObj);
   doc.setObject(obj);
   return doc.toJson();
 }
 
-QList<PlayContentList> PlaylistJson::fromJsonString(const QString &jsonString) {
+QList<Playlist> PlaylistJson::fromJsonString(const QString &jsonString) {
   QJsonParseError err;
   const QJsonDocument doc = QJsonDocument::fromJson(jsonString.toUtf8(), &err);
   if (doc.isNull()) {
     qDebug() << "can not parse json:" << err.errorString();
-    return QList<PlayContentList>();
+    return QList<Playlist>();
   }
   QJsonObject obj = doc.object();
-  QJsonObject contentObj = obj.value(KEY_DATA).toObject();
-  if (contentObj.isEmpty()) {
-    return QList<PlayContentList>();
+  QJsonObject dataObj = obj.value(KEY_DATA).toObject();
+  if (dataObj.isEmpty()) {
+    return QList<Playlist>();
   }
-  QList<PlayContentList> allList;
-  const QStringList contentKeys = contentObj.keys();
+  QList<Playlist> allList;
+  const QStringList contentKeys = dataObj.keys();
   for (const auto &key : contentKeys) {
-    PlayContentList list;
-    const QJsonArray arr = contentObj.value(key).toArray();
+    PlaylistInfo *info = new PlaylistInfo;
+    PlayContentList *list = new PlayContentList;
+    // Read info.
+    const QJsonObject playlistInfoObj =
+        dataObj.value(key).toObject().value(KEY_PLAYLIST_INFO).toObject();
+    info->setInfo(PLAYLIST_INFO_NAME,
+                  playlistInfoObj.value(PLAYLIST_INFO_NAME).toString());
+    info->setInfo(PLAYLIST_INFO_COUNT,
+                  playlistInfoObj.value(PLAYLIST_INFO_COUNT).toString());
+
+    // Read content.
+    const QJsonArray arr =
+        dataObj.value(key).toObject().value(KEY_PLAYLIST_DATA).toArray();
     for (const auto &a : arr) {
-      list.append(new PlayContent(a.toString()));
+      list->append(new PlayContent(a.toString()));
     }
-    allList.append(list);
+    allList.append(Playlist(info, list));
   }
   return allList;
 }

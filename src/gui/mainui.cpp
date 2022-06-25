@@ -117,6 +117,7 @@ void MainUI::savePlaylist() {
   }
   ui->listTabWidget->savePlaylist(filePath);
 }
+
 void MainUI::saveAllPlaylist() {
   const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
   if (filePath.isEmpty()) {
