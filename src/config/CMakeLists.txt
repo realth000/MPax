@@ -1,1 +1,1 @@
-target_sources(MPax PRIVATE configdefine.h)
+target_sources(MPax PRIVATE configdefine.h configdefine.cpp)

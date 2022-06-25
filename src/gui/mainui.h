@@ -35,5 +35,6 @@ class MainUI : public QMainWindow {
   void playAudio(PlayContent *content);
   void savePlaylist();
   void saveAllPlaylist();
+  void updateConfig();
 };
 #endif  // MAINUI_H

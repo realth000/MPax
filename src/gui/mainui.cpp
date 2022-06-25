@@ -5,6 +5,7 @@
 
 #include "./ui_mainui.h"
 #include "audio/audioscanner.h"
+#include "config/configdefine.h"
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);
@@ -14,6 +15,8 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
   InitConnections();
+  Config::AppConfig::getInstance()->loadConfig();
+  Config::AppConfig::getInstance()->printConfig();
 }
 
 MainUI::~MainUI() { delete ui; }
@@ -124,4 +127,9 @@ void MainUI::saveAllPlaylist() {
     return;
   }
   ui->listTabWidget->saveAllPlaylist(filePath);
+}
+
+void MainUI::updateConfig() {
+  const Config::ConfigPairMap map = Config::AppConfig::getInstance()->config();
+  Config::ConfigPairMap::const_iterator it = map.constBegin();
 }
