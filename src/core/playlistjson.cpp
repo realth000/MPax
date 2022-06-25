@@ -5,6 +5,41 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 
+/*
+ * {
+ *  "type": "playlist",
+ *  "format_version": 1,
+ *    "count": 123,
+ *    "save_time": "yyyy-MM-dd HH:mm:ss",
+ *    "data": {
+ *      "0": {
+ *        "play_list_info": {
+ *          "name": "play_list_name1",
+ *          "count": 100
+ *        },
+ *        "play_list_data": [
+ *          "/path1/1",
+ *          "/path1/2",
+ *          ...,
+ *          "/path1/100",
+ *        ]
+ *      },
+ *      "1": {
+ *        "play_list_info": {
+ *          "name": "play_list_name2",
+ *          "count": 23
+ *        },
+ *        "play_list_data": [
+ *          "/path2/1",
+ *          "/path2/2",
+ *          ...,
+ *          "/path2/23",
+ *        ]
+ *      }
+ *    }
+ * }
+ */
+
 #define KEY_TYPE "type"
 #define VAL_TYPE_PLAYLIST "playlist"
 #define KEY_FORMAT_VER "format_version"
