@@ -58,9 +58,10 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
                              QList<QPair<QString, bool>> headerList,
                              QObject *parent)
     : QAbstractItemModel{parent},
-      m_listInfo(),
-      m_header(headerList),
       m_playlistName(playlistName),
+      m_listInfo(PlaylistInfo(
+          QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
+      m_header(headerList),
       m_currentPlayContent(nullptr) {}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
@@ -127,10 +128,14 @@ void PlaylistModel::addContent(PlayContent *content) {
   beginResetModel();
   m_contentList.append(content);
   endResetModel();
+  m_listInfo.setInfo(
+      PLAYLIST_INFO_COUNT,
+      QString::number(m_listInfo.info(PLAYLIST_INFO_COUNT).toInt() + 1));
 }
 
 void PlaylistModel::setPlaylistName(const QString &name) {
   m_playlistName = name;
+  m_listInfo.setInfo(PLAYLIST_INFO_NAME, m_playlistName);
 }
 
 QString PlaylistModel::playlistName() const { return m_playlistName; }

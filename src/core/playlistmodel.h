@@ -50,11 +50,11 @@ class PlaylistModel : public QAbstractItemModel {
   Playlist list() const;
 
  private:
+  QString m_playlistName;
   // TODO: Combine PlaylistInfo and PlayContentList to PlayContentList.
   PlaylistInfo m_listInfo;
   PlayContentList m_contentList;
   PlaylistModelHeader m_header;
-  QString m_playlistName;
   PlayContent *m_currentPlayContent;
 };
 
