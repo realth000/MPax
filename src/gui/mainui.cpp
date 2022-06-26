@@ -149,6 +149,9 @@ void MainUI::loadPlaylist() {
   const QStringList allPlaylistPath = Config::AppConfig::getInstance()
                                           ->config(CONFIG_ALL_PLAYLIST)
                                           .value.toStringList();
+  if (allPlaylistPath.isEmpty()) {
+    return;
+  }
   const int currentPlaylist = Config::AppConfig::getInstance()
                                   ->config(CONFIG_CUR_PLAYLIST)
                                   .value.toInt();
