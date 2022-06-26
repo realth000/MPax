@@ -67,6 +67,7 @@ PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlist.info()->info(PLAYLIST_INFO_NAME)),
       m_listInfo(*playlist.info()),
+      m_contentList(*playlist.content()),
       m_currentPlayContent(nullptr) {}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
