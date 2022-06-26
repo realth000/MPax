@@ -43,34 +43,20 @@ QMediaPlayer::State CorePlayer::PlayState() { return m_player->state(); }
 
 void CorePlayer::play(const QUrl &contentUrl) {
   if (contentUrl.isEmpty()) {
-    qDebug() << "continue" << m_currentContentUrl.fileName();
     m_player->play();
     return;
   }
-  qDebug() << "play" << contentUrl;
   UpdateCurrentContent(contentUrl);
   m_player->play();
 }
 
-void CorePlayer::pause() {
-  qDebug() << "pause" << m_currentContentUrl.fileName();
-  m_player->pause();
-}
+void CorePlayer::pause() { m_player->pause(); }
 
-void CorePlayer::stop() {
-  qDebug() << "stop" << m_currentContentUrl.fileName();
-  m_player->stop();
-}
+void CorePlayer::stop() { m_player->stop(); }
 
-void CorePlayer::setVolMute(const bool &muted) {
-  qDebug() << "set muted" << muted;
-  m_player->setMuted(muted);
-}
+void CorePlayer::setVolMute(const bool &muted) { m_player->setMuted(muted); }
 
-void CorePlayer::setVol(const int &vol) {
-  qDebug() << "set volume to" << vol;
-  m_player->setVolume(vol);
-}
+void CorePlayer::setVol(const int &vol) { m_player->setVolume(vol); }
 
 void CorePlayer::setPlayPosition(const qint64 &position) {
   m_player->setPosition(position);

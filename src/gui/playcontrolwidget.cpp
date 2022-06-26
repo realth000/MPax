@@ -183,7 +183,6 @@ void PlayControlWidget::setPlayPosition() {
   if (m_corePlayerState != QMediaPlayer::PlayingState) {
     return;
   }
-  qDebug() << "setPlayPosition" << ui->playPosSlider->value();
   m_corePlayer->setPlayPosition(ui->playPosSlider->value());
 }
 

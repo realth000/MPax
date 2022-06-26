@@ -14,7 +14,6 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
   Config::AppConfig::getInstance()->loadConfig();
-  Config::AppConfig::getInstance()->printConfig();
   QList<Playlist> playlistList =
       Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
 

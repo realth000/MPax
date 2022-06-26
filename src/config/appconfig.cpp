@@ -133,7 +133,6 @@ void Config::AppConfig::saveConfig() {
   ConfigPairMap::const_iterator it = m_configMap.constBegin();
   while (it != m_configMap.constEnd()) {
     SAVE_CONFIG(config, it.key());
-    qDebug() << "save config" << it.key() << it.value().value;
     it++;
   }
   delete config;
