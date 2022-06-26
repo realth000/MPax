@@ -20,19 +20,38 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
 
   InitConnections();
   emit updateConfig();
+
   // Load default playlist from ./mpax.list.conf.
   ui->listTabWidget->addPlaylist(playlistList);
   // Set current Playlist from config.
-  ui->listTabWidget->setCurrentPlaylist(Config::AppConfig::getInstance()
-                                            ->config(CONFIG_CUR_PLAYLIST)
-                                            .value.toInt());
-  ui->playlistWidget->setModel(ui->listTabWidget->CurrentPlaylist());
+  const int playlist = Config::AppConfig::getInstance()
+                           ->config(CONFIG_CUR_PLAYLIST)
+                           .value.toInt();
+  if (playlist < 0) {
+    qDebug() << "current playlist pos <0";
+    return;
+  }
+  ui->listTabWidget->setCurrentPlaylist(playlist);
+  PlaylistModel *model = ui->listTabWidget->CurrentPlaylist();
+  if (model == nullptr) {
+    qDebug() << "current PlaylistModel is null";
+    return;
+  }
+  ui->playlistWidget->setModel(model);
+  const int playContent = Config::AppConfig::getInstance()
+                              ->config(CONFIG_CUR_PLAYCONTENT)
+                              .value.toInt();
+  if (playContent < 0) {
+    qDebug() << "current playContent pos < 0";
+    return;
+  }
   // Set current PlayContent from config.
-  ui->playlistWidget->setCurrentContent(Config::AppConfig::getInstance()
-                                            ->config(CONFIG_CUR_PLAYCONTENT)
-                                            .value.toInt());
+  ui->playlistWidget->setCurrentContent(playContent);
   // Start play;
   PlayContentPos cp = ui->playlistWidget->currentPlayContent();
+  if (cp.index < 0 || cp.content == nullptr) {
+    return;
+  }
   playAudio(cp.index, cp.content);
 }
 
@@ -76,13 +95,15 @@ void MainUI::openAudio() {
     return;
   }
   playAudio(ui->playlistWidget->count() - 1, addAudioFile(filePath));
-  //  ui->listTabWidget->saveDefaultPlaylist();
+  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 void MainUI::addPlaylist() {
   ui->listTabWidget->addPlaylist(new PlaylistModel(
       DEFAULT_PLAYLIST_NAME, PlaylistModelHeader::defaultHeaderList()));
-  //  ui->listTabWidget->saveDefaultPlaylist();
+  // This will save empty default playlist.
+  // This one is not ui->listTabWidget->addPlaylist, will not cause large IO.
+  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 void MainUI::playPre() {
@@ -128,7 +149,7 @@ void MainUI::scanAudioDir() {
        AudioScanner::scanAudioInDir(dirPath, QStringList{"mp3"})) {
     addAudioFile(audioFile);
   }
-  //  ui->listTabWidget->saveDefaultPlaylist();
+  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 PlayContent *MainUI::addAudioFile(const QString &filePath) {
