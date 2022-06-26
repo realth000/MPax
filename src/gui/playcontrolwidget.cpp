@@ -149,6 +149,8 @@ void PlayControlWidget::updateMute() { updateMuteWithValue(!m_volMute); }
 void PlayControlWidget::updateMuteWithValue(const bool &muted) {
   m_volMute = muted;
   m_corePlayer->setVolMute(m_volMute);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_VOLUME_MUTE, m_volMute);
+  Config::AppConfig::getInstance()->saveConfigDefer();
   updateMuteButtonIcon();
 }
 
@@ -164,6 +166,8 @@ void PlayControlWidget::updateVolume(const int &vol) {
     updateMuteWithValue(false);
   }
   m_corePlayer->setVol(m_vol);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_VOLUME, m_vol);
+  Config::AppConfig::getInstance()->saveConfigDefer();
   updateMuteButtonIcon();
 }
 
@@ -245,6 +249,9 @@ void PlayControlWidget::updatePlayMode() {
     default:
       return;
   }
+  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAY_MODE,
+                                              static_cast<int>(m_playMode));
+  Config::AppConfig::getInstance()->saveConfigDefer();
   updatePlayModeButtonIcon();
 }
 

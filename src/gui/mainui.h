@@ -40,5 +40,6 @@ class MainUI : public QMainWindow {
   void savePlaylist();
   void saveAllPlaylist();
   void loadPlaylist();
+  void saveConfig();
 };
 #endif  // MAINUI_H

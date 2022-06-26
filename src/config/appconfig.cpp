@@ -35,6 +35,9 @@
     m_configMap[CONFIG_NAME].value = v;                   \
   }
 
+#define SAVE_CONFIG(CONFIG, CONFIG_NAME) \
+  CONFIG->setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
+
 Config::AppConfig* Config::AppConfig::getInstance() {
   static AppConfig ac;
   return &ac;
@@ -63,7 +66,9 @@ void Config::AppConfig::printConfig() {
 
 void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
 
-Config::AppConfig::AppConfig() : m_configMap(QMap<QString, ConfigPair>()) {
+Config::AppConfig::AppConfig()
+    : m_configMap(QMap<QString, ConfigPair>()),
+      m_saveConfigDeferTimer(new QTimer) {
   addConfig(CONFIG_ALL_PLAYLIST, QStringList{}, TYPE_STRING_LIST);
   addConfig(CONFIG_PLAYLIST_HEADER, QMap<QString, QVariant>(),
             TYPE_MAP_STRING_INT);
@@ -72,6 +77,12 @@ Config::AppConfig::AppConfig() : m_configMap(QMap<QString, ConfigPair>()) {
   addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);
   addConfig(CONFIG_VOLUME, 50, TYPE_INT);
   addConfig(CONFIG_VOLUME_MUTE, false, TYPE_BOOL);
+
+  // Auto save has a delay.
+  m_saveConfigDeferTimer->setInterval(1000);
+  m_saveConfigDeferTimer->setSingleShot(true);
+  connect(m_saveConfigDeferTimer, &QTimer::timeout, this,
+          &AppConfig::saveConfig);
 }
 
 Config::AppConfig::~AppConfig() {}
@@ -97,7 +108,30 @@ void Config::AppConfig::loadConfig(const QString& filePath) {
   delete config;
 }
 
+void Config::AppConfig::saveConfigSoon() {
+  m_saveConfigDeferTimer->stop();
+  saveConfig();
+}
+
+void Config::AppConfig::saveConfigDefer() { m_saveConfigDeferTimer->start(); }
+
 const Config::ConfigPair Config::AppConfig::config(
     const QString& configName) const {
   return m_configMap[configName];
+}
+
+void Config::AppConfig::saveConfig() {
+  QSettings* config = new QSettings(QDir::toNativeSeparators(CONFIG_FILE_PATH),
+                                    QSettings::IniFormat);
+  if (config == nullptr) {
+    qDebug() << "can not save config";
+    return;
+  }
+  ConfigPairMap::const_iterator it = m_configMap.constBegin();
+  while (it != m_configMap.constEnd()) {
+    SAVE_CONFIG(config, it.key());
+    qDebug() << "save config" << it.key() << it.value().value;
+    it++;
+  }
+  delete config;
 }

@@ -12,9 +12,9 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
-  InitConnections();
   Config::AppConfig::getInstance()->loadConfig();
   Config::AppConfig::getInstance()->printConfig();
+  InitConnections();
   emit updateConfig();
 }
 
@@ -44,6 +44,8 @@ void MainUI::InitConnections() {
   connect(this, &MainUI::updateConfig, ui->playControlWidget,
           &PlayControlWidget::updateConfig);
   connect(this, &MainUI::updateConfig, this, &MainUI::loadPlaylist);
+  connect(ui->saveSettingsAction, &QAction::triggered, this,
+          &MainUI::saveConfig);
 }
 
 void MainUI::openAudio() {
@@ -161,4 +163,8 @@ void MainUI::loadPlaylist() {
   }
   ui->listTabWidget->setCurrentPlaylist(currentPlaylist);
   playAudio(currentPlayContent);
+}
+
+void MainUI::saveConfig() {
+  Config::AppConfig::getInstance()->saveConfigSoon();
 }

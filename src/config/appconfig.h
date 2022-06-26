@@ -2,6 +2,7 @@
 #define MPAX_APPCONFIG_H
 
 #include <QtCore/QPair>
+#include <QtCore/QTimer>
 #include <QtCore/QVariant>
 
 #define CONFIG_ALL_PLAYLIST "AllPlaylist"
@@ -21,7 +22,9 @@ struct ConfigPair {
 
 typedef QMap<QString, ConfigPair> ConfigPairMap;
 
-class AppConfig {
+class AppConfig : public QObject {
+  Q_OBJECT
+
  public:
   static AppConfig *getInstance();
   AppConfig(const AppConfig &) = delete;
@@ -33,15 +36,21 @@ class AppConfig {
 
  public slots:
   void loadConfig();
+  void saveConfigSoon();
+  void saveConfigDefer();
 
  private:
   QMap<QString, ConfigPair> m_configMap;
+  QTimer *m_saveConfigDeferTimer;
 
   AppConfig();
   ~AppConfig();
   void addConfig(const QString &name, const QVariant &value,
                  const QString &type);
   void loadConfig(const QString &filePath);
+
+ private slots:
+  void saveConfig();
 };
 }  // namespace Config
 #endif  // MPAX_APPCONFIG_H

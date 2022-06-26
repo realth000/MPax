@@ -111,8 +111,16 @@
     <addaction name="savePlaylistAction"/>
     <addaction name="saveAllPlaylistAction"/>
    </widget>
+   <widget class="QMenu" name="settingsMenu">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="loadSettingsAction"/>
+    <addaction name="saveSettingsAction"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="playlistMenu"/>
+   <addaction name="settingsMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAudioAction">
@@ -138,6 +146,21 @@
   <action name="saveAllPlaylistAction">
    <property name="text">
     <string>Save all playlist</string>
+   </property>
+  </action>
+  <action name="actionSave_setting">
+   <property name="text">
+    <string>Save setting</string>
+   </property>
+  </action>
+  <action name="loadSettingsAction">
+   <property name="text">
+    <string>Load settings</string>
+   </property>
+  </action>
+  <action name="saveSettingsAction">
+   <property name="text">
+    <string>Save settings</string>
    </property>
   </action>
  </widget>
