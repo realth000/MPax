@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pic/logo/MPax.svg</file>
+        <file>pic/logo/MPax@4x.png</file>
+    </qresource>
+</RCC>

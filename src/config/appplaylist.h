@@ -1,11 +1,13 @@
 #ifndef MPAX_APPPLAYLIST_H
 #define MPAX_APPPLAYLIST_H
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QObject>
 
 #include "core/playlistjson.h"
 
-#define CONFIG_PLAYLIST_FILE_PATH "./mpax.list.conf"
+#define CONFIG_PLAYLIST_FILE_PATH \
+  QCoreApplication::applicationDirPath() + "/mpax.list.conf"
 
 namespace Config {
 

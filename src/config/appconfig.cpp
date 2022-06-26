@@ -1,10 +1,11 @@
 #include "appconfig.h"
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
 #include <QtCore/QtDebug>
 
-#define CONFIG_FILE_PATH "./mpax.conf"
+#define CONFIG_FILE_PATH QCoreApplication::applicationDirPath() + "/mpax.conf"
 #define TYPE_STRING_LIST "QStringList"
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"

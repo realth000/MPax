@@ -92,5 +92,6 @@ void ListTabModel::saveAllPlaylist(const QString &filePath) const {
 }
 
 void ListTabModel::saveDefaultPlaylist() const {
+  qDebug() << "save default playlist to" << CONFIG_PLAYLIST_FILE_PATH;
   saveAllPlaylist(CONFIG_PLAYLIST_FILE_PATH);
 }

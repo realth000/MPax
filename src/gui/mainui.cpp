@@ -11,6 +11,7 @@
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);
+  this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
   Config::AppConfig::getInstance()->loadConfig();

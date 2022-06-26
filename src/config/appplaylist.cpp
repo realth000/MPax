@@ -2,8 +2,6 @@
 
 #include <QtCore/QtDebug>
 
-#define CONFIG_PLAYLIST_FILE_PATH "./mpax.list.conf"
-
 namespace Config {
 void AppPlaylist::savePlaylist(const QString& filePath, const QString& data) {
   QFile file(filePath);

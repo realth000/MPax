@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=MPax
+Comment=MPax music player
+Exec=/opt/MPax/MPax
+Icon=/opt/MPax/MPax.svg
+Terminal=false
+Type=Application
+StartupNotify=true
