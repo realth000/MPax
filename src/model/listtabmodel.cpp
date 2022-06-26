@@ -3,9 +3,12 @@
 #include <QtCore/QFile>
 #include <QtCore/QtDebug>
 
+#include "config/appplaylist.h"
 #include "core/playlistjson.h"
 
-ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {}
+ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
+  connect(this, &ListTabModel::dataChanged, this, &ListTabModel::savePlaylist);
+}
 
 int ListTabModel::rowCount(const QModelIndex &parent) const {
   return m_playlistList.length();
@@ -72,31 +75,19 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
 }
 
 void ListTabModel::saveCurrentPlaylist(const QString &filePath) const {
-  QFile file(filePath);
-  if (!file.open(QIODevice::WriteOnly)) {
-    qDebug() << "can not save playlist to" << filePath;
-    return;
-  }
-  QTextStream stream;
-  stream.setCodec("UTF-8");
-  stream.setDevice(&file);
-  stream << PlaylistJson::toJsonString(m_currentPlayListModel->list());
-  file.close();
+  Config::AppPlaylist::savePlaylist(
+      filePath, PlaylistJson::toJsonString(m_currentPlayListModel->list()));
 }
 
 void ListTabModel::saveAllPlaylist(const QString &filePath) const {
-  QFile file(filePath);
-  if (!file.open(QIODevice::WriteOnly)) {
-    qDebug() << "can not save playlist to" << filePath;
-    return;
-  }
-  QTextStream stream;
-  stream.setCodec("UTF-8");
-  stream.setDevice(&file);
   QList<Playlist> allList;
   for (auto playlist : m_playlistList) {
     allList.append(playlist->list());
   }
-  stream << PlaylistJson::toJsonString(allList);
-  file.close();
+  Config::AppPlaylist::savePlaylist(filePath,
+                                    PlaylistJson::toJsonString(allList));
+}
+
+void ListTabModel::savePlaylist() const {
+  saveAllPlaylist(CONFIG_PLAYLIST_FILE_PATH);
 }

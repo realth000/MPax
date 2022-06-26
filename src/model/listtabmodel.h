@@ -33,6 +33,9 @@ class ListTabModel : public QStringListModel {
  private:
   QList<PlaylistModel *> m_playlistList;
   PlaylistModel *m_currentPlayListModel;
+
+ private slots:
+  void savePlaylist() const;
 };
 
 #endif  // LISTTABMODEL_H

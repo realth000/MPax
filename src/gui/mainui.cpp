@@ -6,6 +6,7 @@
 #include "./ui_mainui.h"
 #include "audio/audioscanner.h"
 #include "config/appconfig.h"
+#include "config/appplaylist.h"
 #include "core/playlistjson.h"
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
@@ -160,7 +161,7 @@ void MainUI::loadPlaylist() {
                                      .value.toInt();
   QStringList::const_iterator it = allPlaylistPath.constBegin();
   while (it != allPlaylistPath.constEnd()) {
-    QList<Playlist> playlistList = PlaylistJson::fromJsonString((*it));
+    QList<Playlist> playlistList = Config::AppPlaylist::loadPlaylist((*it));
     ui->listTabWidget->addPlaylist(playlistList);
     it++;
   }
