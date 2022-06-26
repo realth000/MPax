@@ -15,6 +15,10 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   this->setWindowTitle(QStringLiteral("MPax"));
   Config::AppConfig::getInstance()->loadConfig();
   Config::AppConfig::getInstance()->printConfig();
+  QList<Playlist> playlistList =
+      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
+  // Load default playlist from ./mpax.list.conf.
+  ui->listTabWidget->addPlaylist(playlistList);
   InitConnections();
   emit updateConfig();
 }
@@ -57,11 +61,13 @@ void MainUI::openAudio() {
     return;
   }
   playAudio(addAudioFile(filePath));
+  //  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 void MainUI::addPlaylist() {
   ui->listTabWidget->addPlaylist(new PlaylistModel(
       DEFAULT_PLAYLIST_NAME, PlaylistModelHeader::defaultHeaderList()));
+  //  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 void MainUI::playPre() {
@@ -107,6 +113,7 @@ void MainUI::scanAudioDir() {
        AudioScanner::scanAudioInDir(dirPath, QStringList{"mp3"})) {
     addAudioFile(audioFile);
   }
+  //  ui->listTabWidget->saveDefaultPlaylist();
 }
 
 PlayContent *MainUI::addAudioFile(const QString &filePath) {

@@ -26,6 +26,7 @@ class ListTabWidget : public QWidget {
   void savePlaylist(const QString &filePath);
   void saveAllPlaylist(const QString &filePath);
   void setCurrentPlaylist(const int &index);
+  void saveDefaultPlaylist();
 
  private:
   Ui::ListTabWidget *ui;

@@ -7,7 +7,8 @@
 #include "core/playlistjson.h"
 
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
-  connect(this, &ListTabModel::dataChanged, this, &ListTabModel::savePlaylist);
+  connect(this, &ListTabModel::dataChanged, this,
+          &ListTabModel::saveDefaultPlaylist);
 }
 
 int ListTabModel::rowCount(const QModelIndex &parent) const {
@@ -69,8 +70,10 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
     beginResetModel();
     m_playlistList[index.row()]->setPlaylistName(value.toString());
     endResetModel();
+    emit dataChanged();
     return true;
   }
+  emit dataChanged();
   return QStringListModel::setData(index, value, role);
 }
 
@@ -88,6 +91,6 @@ void ListTabModel::saveAllPlaylist(const QString &filePath) const {
                                     PlaylistJson::toJsonString(allList));
 }
 
-void ListTabModel::savePlaylist() const {
+void ListTabModel::saveDefaultPlaylist() const {
   saveAllPlaylist(CONFIG_PLAYLIST_FILE_PATH);
 }

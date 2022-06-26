@@ -55,3 +55,7 @@ void ListTabWidget::addPlaylist(const QList<Playlist> &playlistList) {
     m_listTabModel->addPlaylist(new PlaylistModel(playlist));
   }
 }
+
+void ListTabWidget::saveDefaultPlaylist() {
+  m_listTabModel->saveDefaultPlaylist();
+}

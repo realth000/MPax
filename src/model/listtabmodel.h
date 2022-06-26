@@ -21,6 +21,7 @@ class ListTabModel : public QStringListModel {
 
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);
+  void dataChanged();
 
  public slots:
   void addContent(PlayContent *playContent);
@@ -29,13 +30,11 @@ class ListTabModel : public QStringListModel {
   PlaylistModel *currentPlaylist() const;
   void saveCurrentPlaylist(const QString &filePath) const;
   void saveAllPlaylist(const QString &filePath) const;
+  void saveDefaultPlaylist() const;
 
  private:
   QList<PlaylistModel *> m_playlistList;
   PlaylistModel *m_currentPlayListModel;
-
- private slots:
-  void savePlaylist() const;
 };
 
 #endif  // LISTTABMODEL_H
