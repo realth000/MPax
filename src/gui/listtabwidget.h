@@ -18,6 +18,7 @@ class ListTabWidget : public QWidget {
 
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);
+  void currentPlaylistIndexChanged(const int &index);
 
  public slots:
   void addPlaylist(PlaylistModel *playlistModel);
@@ -27,6 +28,7 @@ class ListTabWidget : public QWidget {
   void saveAllPlaylist(const QString &filePath);
   void setCurrentPlaylist(const int &index);
   void saveDefaultPlaylist();
+  PlaylistModel *CurrentPlaylist() const;
 
  private:
   Ui::ListTabWidget *ui;

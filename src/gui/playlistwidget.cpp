@@ -42,16 +42,16 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   ui->tableView->setModel(m_playlistModel);
 }
 
-PlayContent *PlaylistWidget::preContent() const {
+PlayContentPos PlaylistWidget::preContent() const {
   if (m_playlistModel == nullptr) {
-    return nullptr;
+    return PlayContentPos{-1, nullptr};
   }
   return m_playlistModel->findPreContent();
 }
 
-PlayContent *PlaylistWidget::nextContent() const {
+PlayContentPos PlaylistWidget::nextContent() const {
   if (m_playlistModel == nullptr) {
-    return nullptr;
+    return PlayContentPos{-1, nullptr};
   }
   return m_playlistModel->findNextContent();
 }
@@ -82,7 +82,7 @@ void PlaylistWidget::InitConnections() {
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
   const int row = index.row();
   m_playlistModel->setCurrentPlayContent(row);
-  emit playContent(m_playlistModel->currentPlayContent());
+  emit playContentChanged(row, m_playlistModel->currentPlayContent().content);
 }
 
 void PlaylistWidget::updateConfig() {
@@ -105,7 +105,7 @@ void PlaylistWidget::updateConfig() {
   setHeader(header);
 }
 
-PlayContent *PlaylistWidget::randomContent() const {
+PlayContentPos PlaylistWidget::randomContent() const {
   return m_playlistModel->content(
       QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
 }
@@ -114,6 +114,8 @@ void PlaylistWidget::InitCss(const QString &cssFilePath) {
   this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
 
-const PlayContent *PlaylistWidget::currentPlayContent() const {
+PlayContentPos PlaylistWidget::currentPlayContent() const {
   return m_playlistModel->currentPlayContent();
 }
+
+int PlaylistWidget::count() const { return m_playlistModel->count(); }

@@ -32,6 +32,7 @@ void ListTabWidget::InitConnections() {
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
   m_listTabModel->setCurrentPlaylist(index.row());
+  emit currentPlaylistIndexChanged(index.row());
 }
 
 void ListTabWidget::InitCss(const QString &cssFilePath) {
@@ -48,6 +49,10 @@ void ListTabWidget::saveAllPlaylist(const QString &filePath) {
 
 void ListTabWidget::setCurrentPlaylist(const int &index) {
   m_listTabModel->setCurrentPlaylist(index);
+}
+
+PlaylistModel *ListTabWidget::CurrentPlaylist() const {
+  return m_listTabModel->currentPlaylist();
 }
 
 void ListTabWidget::addPlaylist(const QList<Playlist> &playlistList) {

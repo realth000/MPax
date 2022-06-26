@@ -146,8 +146,9 @@ void PlaylistModel::setPlaylistName(const QString &name) {
 
 QString PlaylistModel::playlistName() const { return m_playlistName; }
 
-PlayContent *PlaylistModel::currentPlayContent() const {
-  return m_currentPlayContent;
+PlayContentPos PlaylistModel::currentPlayContent() const {
+  return PlayContentPos{m_contentList.indexOf(m_currentPlayContent),
+                        m_currentPlayContent};
 }
 
 void PlaylistModel::setCurrentPlayContent(const int &index) {
@@ -158,26 +159,27 @@ void PlaylistModel::setCurrentPlayContent(const int &index) {
   m_currentPlayContent = m_contentList[index];
 }
 
-PlayContent *PlaylistModel::findNextContent() const {
+PlayContentPos PlaylistModel::findNextContent() const {
   if (m_contentList.length() == 0) {
-    return nullptr;
+    return PlayContentPos{-1, nullptr};
   }
   const int i = m_contentList.indexOf(m_currentPlayContent);
   if (i == m_contentList.length() - 1) {
-    return m_contentList[0];
+    return PlayContentPos{0, m_contentList[0]};
   }
-  return m_contentList[i + 1];
+  return PlayContentPos{i + 1, m_contentList[i + 1]};
 }
 
-PlayContent *PlaylistModel::findPreContent() const {
+PlayContentPos PlaylistModel::findPreContent() const {
   if (m_contentList.length() == 0) {
-    return nullptr;
+    return PlayContentPos{-1, nullptr};
   }
   const int i = m_contentList.indexOf(m_currentPlayContent);
   if (i == 0) {
-    return m_contentList[m_contentList.length() - 1];
+    return PlayContentPos{m_contentList.length() - 1,
+                          m_contentList[m_contentList.length() - 1]};
   }
-  return m_contentList[i - 1];
+  return PlayContentPos{i - 1, m_contentList[i - 1]};
 }
 
 bool PlaylistModel::contains(PlayContent *content) const {
@@ -188,11 +190,11 @@ int PlaylistModel::indexOf(PlayContent *content) const {
   return m_contentList.indexOf(content);
 }
 
-PlayContent *PlaylistModel::content(const int &index) const {
+PlayContentPos PlaylistModel::content(const int &index) const {
   if (m_contentList.length() <= index) {
-    return nullptr;
+    return PlayContentPos{-1, nullptr};
   }
-  return m_contentList[index];
+  return PlayContentPos{index, m_contentList[index]};
 }
 
 Playlist PlaylistModel::list() const {

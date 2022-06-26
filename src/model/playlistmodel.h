@@ -8,6 +8,11 @@
 
 typedef QPair<QString, int> PlaylistHeaderItem;
 
+struct PlayContentPos {
+  int index;
+  PlayContent *content;
+};
+
 class PlaylistModelHeader {
  public:
   explicit PlaylistModelHeader(const QList<PlaylistHeaderItem> &headerList);
@@ -44,11 +49,11 @@ class PlaylistModel : public QAbstractItemModel {
   void setPlaylistName(const QString &name);
   void setHeader(const PlaylistModelHeader *header);
   QString playlistName() const;
-  PlayContent *currentPlayContent() const;
+  PlayContentPos currentPlayContent() const;
   void setCurrentPlayContent(const int &index);
-  PlayContent *findNextContent() const;
-  PlayContent *findPreContent() const;
-  PlayContent *content(const int &index) const;
+  PlayContentPos findNextContent() const;
+  PlayContentPos findPreContent() const;
+  PlayContentPos content(const int &index) const;
   Playlist list() const;
 
  private:

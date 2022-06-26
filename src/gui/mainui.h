@@ -35,11 +35,12 @@ class MainUI : public QMainWindow {
   void playPre();
   void playNext();
   void playRandom();
-  void playAudio(PlayContent *content);
+  void playAudio(const int &index, PlayContent *content);
   void playAudio(const int &index);
   void savePlaylist();
   void saveAllPlaylist();
   void loadPlaylist();
   void saveConfig();
+  void saveCurrentPlaylistIndex(const int &index);
 };
 #endif  // MAINUI_H

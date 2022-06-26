@@ -17,10 +17,23 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   Config::AppConfig::getInstance()->printConfig();
   QList<Playlist> playlistList =
       Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
-  // Load default playlist from ./mpax.list.conf.
-  ui->listTabWidget->addPlaylist(playlistList);
+
   InitConnections();
   emit updateConfig();
+  // Load default playlist from ./mpax.list.conf.
+  ui->listTabWidget->addPlaylist(playlistList);
+  // Set current Playlist from config.
+  ui->listTabWidget->setCurrentPlaylist(Config::AppConfig::getInstance()
+                                            ->config(CONFIG_CUR_PLAYLIST)
+                                            .value.toInt());
+  ui->playlistWidget->setModel(ui->listTabWidget->CurrentPlaylist());
+  // Set current PlayContent from config.
+  ui->playlistWidget->setCurrentContent(Config::AppConfig::getInstance()
+                                            ->config(CONFIG_CUR_PLAYCONTENT)
+                                            .value.toInt());
+  // Start play;
+  PlayContentPos cp = ui->playlistWidget->currentPlayContent();
+  playAudio(cp.index, cp.content);
 }
 
 MainUI::~MainUI() { delete ui; }
@@ -37,9 +50,11 @@ void MainUI::InitConnections() {
           &MainUI::addPlaylist);
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
           ui->playlistWidget, &PlaylistWidget::setModel);
+  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistIndexChanged, this,
+          &MainUI::saveCurrentPlaylistIndex);
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
-  connect(ui->playlistWidget, &PlaylistWidget::playContent, this,
-          QOverload<PlayContent *>::of(&MainUI::playAudio));
+  connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
+          QOverload<const int &, PlayContent *>::of(&MainUI::playAudio));
   connect(ui->savePlaylistAction, &QAction::triggered, this,
           &MainUI::savePlaylist);
   connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
@@ -60,7 +75,7 @@ void MainUI::openAudio() {
   if (filePath.isEmpty()) {
     return;
   }
-  playAudio(addAudioFile(filePath));
+  playAudio(ui->playlistWidget->count() - 1, addAudioFile(filePath));
   //  ui->listTabWidget->saveDefaultPlaylist();
 }
 
@@ -71,36 +86,36 @@ void MainUI::addPlaylist() {
 }
 
 void MainUI::playPre() {
-  PlayContent *content = ui->playlistWidget->preContent();
-  if (content == nullptr) {
+  PlayContentPos cp = ui->playlistWidget->preContent();
+  if (cp.content == nullptr) {
     qDebug() << "can not find previous one";
     return;
   }
-  playAudio(content);
+  playAudio(cp.index, cp.content);
 }
 
 void MainUI::playNext() {
-  PlayContent *content;
+  PlayContentPos cp = PlayContentPos{-1, nullptr};
   if (ui->playControlWidget->playMode() ==
       PlayControlWidget::PlayMode::Random) {
-    content = ui->playlistWidget->randomContent();
+    cp = ui->playlistWidget->randomContent();
   } else {
-    content = ui->playlistWidget->nextContent();
+    cp = ui->playlistWidget->nextContent();
   }
-  if (content == nullptr) {
+  if (cp.content == nullptr) {
     qDebug() << "can not find next one";
     return;
   }
-  playAudio(content);
+  playAudio(cp.index, cp.content);
 }
 
 void MainUI::playRandom() {
-  PlayContent *content = ui->playlistWidget->randomContent();
-  if (content == nullptr) {
+  PlayContentPos cp = ui->playlistWidget->randomContent();
+  if (cp.content == nullptr) {
     qDebug() << "can not find random one";
     return;
   }
-  playAudio(content);
+  playAudio(cp.index, cp.content);
 }
 
 void MainUI::scanAudioDir() {
@@ -122,15 +137,17 @@ PlayContent *MainUI::addAudioFile(const QString &filePath) {
   return t;
 }
 
-void MainUI::playAudio(PlayContent *content) {
+void MainUI::playAudio(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setCurrentContent(content);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
+  Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
 void MainUI::playAudio(const int &index) {
   ui->playlistWidget->setCurrentContent(index);
-  const PlayContent *content = ui->playlistWidget->currentPlayContent();
+  const PlayContent *content = ui->playlistWidget->currentPlayContent().content;
   if (content == nullptr) {
     return;
   }
@@ -178,4 +195,9 @@ void MainUI::loadPlaylist() {
 
 void MainUI::saveConfig() {
   Config::AppConfig::getInstance()->saveConfigSoon();
+}
+
+void MainUI::saveCurrentPlaylistIndex(const int &index) {
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYLIST, index);
+  Config::AppConfig::getInstance()->saveConfigDefer();
 }

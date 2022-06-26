@@ -20,19 +20,20 @@ class PlaylistWidget : public QWidget {
   ~PlaylistWidget();
 
  signals:
-  void playContent(PlayContent *content);
+  void playContentChanged(const int &row, PlayContent *content);
 
  public slots:
   void setHeader(const PlaylistModelHeader *header);
   void setModel(PlaylistModel *playlistModel);
-  PlayContent *nextContent() const;
-  PlayContent *preContent() const;
-  PlayContent *randomContent() const;
-  const PlayContent *currentPlayContent() const;
+  PlayContentPos nextContent() const;
+  PlayContentPos preContent() const;
+  PlayContentPos randomContent() const;
+  PlayContentPos currentPlayContent() const;
   void setCurrentContent(PlayContent *content);
   void setCurrentContent(const int &index);
   void updatePlayContent(const QModelIndex &index);
   void updateConfig();
+  int count() const;
 
  private:
   Ui::PlaylistWidget *ui;
