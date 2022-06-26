@@ -89,7 +89,10 @@ Config::AppConfig::~AppConfig() {}
 
 void Config::AppConfig::addConfig(const QString& name, const QVariant& value,
                                   const QString& type) {
-  ConfigPair config = {.name = name, .value = value, .type = type};
+  ConfigPair config;
+  config.name = name;
+  config.value = value;
+  config.type = type;
   m_configMap.insert(config.name, config);
 }
 
