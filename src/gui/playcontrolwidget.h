@@ -25,6 +25,7 @@ class PlayControlWidget : public QWidget {
   void playRandom();
 
  public slots:
+  void setContent(const PlayContent *content);
   void setContentPath(const QString &contentPath);
   void updatePlayInfo(PlayContent *content);
   void updateConfig();

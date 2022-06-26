@@ -6,7 +6,7 @@
 #include "core/playcontent.h"
 #include "core/playlist.h"
 
-typedef QPair<QString, bool> PlaylistHeaderItem;
+typedef QPair<QString, int> PlaylistHeaderItem;
 
 class PlaylistModelHeader {
  public:
@@ -19,13 +19,14 @@ class PlaylistModelHeader {
   static QList<PlaylistHeaderItem> defaultHeaderList();
 
  private:
-  QList<QPair<QString, bool>> m_header;
+  QList<QPair<QString, int>> m_header;
 };
 
 class PlaylistModel : public QAbstractItemModel {
  public:
   explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem>,
                          QObject *parent = nullptr);
+  explicit PlaylistModel(const Playlist &playlist, QObject *parent = nullptr);
   QModelIndex parent(const QModelIndex &index) const override;
   QModelIndex index(int row, int column,
                     const QModelIndex &parent = QModelIndex()) const override;
@@ -41,6 +42,7 @@ class PlaylistModel : public QAbstractItemModel {
   int indexOf(PlayContent *content) const;
   void addContent(PlayContent *content);
   void setPlaylistName(const QString &name);
+  void setHeader(const PlaylistModelHeader *header);
   QString playlistName() const;
   PlayContent *currentPlayContent() const;
   void setCurrentPlayContent(const int &index);
@@ -54,7 +56,8 @@ class PlaylistModel : public QAbstractItemModel {
   // TODO: Combine PlaylistInfo and PlayContentList to PlayContentList.
   PlaylistInfo m_listInfo;
   PlayContentList m_contentList;
-  PlaylistModelHeader m_header;
+  // Copy of PlaylistWidget::m_header.
+  const PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
 };
 

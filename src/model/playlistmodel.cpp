@@ -11,7 +11,7 @@ int PlaylistModelHeader::headerCount() const { return m_header.count(); }
 int PlaylistModelHeader::usedHeaderCount() const {
   int c = 0;
   for (const auto &h : m_header) {
-    if (h.second) {
+    if (h.second > 0) {
       c++;
     }
   }
@@ -38,7 +38,7 @@ QString PlaylistModelHeader::usedHeader(const int &index) const {
     return QString();
   }
   for (const auto &h : m_header) {
-    if (!h.second) {
+    if (h.second <= 0) {
       continue;
     }
     if (i == 0) {
@@ -51,17 +51,22 @@ QString PlaylistModelHeader::usedHeader(const int &index) const {
 }
 
 QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList() {
-  return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentName", true)};
+  return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentName", 100)};
 }
 
 PlaylistModel::PlaylistModel(const QString &playlistName,
-                             QList<QPair<QString, bool>> headerList,
+                             QList<PlaylistHeaderItem> headerList,
                              QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlistName),
       m_listInfo(PlaylistInfo(
           QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
-      m_header(headerList),
+      m_currentPlayContent(nullptr) {}
+
+PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
+    : QAbstractItemModel{parent},
+      m_playlistName(playlist.info()->info(PLAYLIST_INFO_NAME)),
+      m_listInfo(*playlist.info()),
       m_currentPlayContent(nullptr) {}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
@@ -85,7 +90,7 @@ int PlaylistModel::rowCount(const QModelIndex &parent) const {
 
 int PlaylistModel::columnCount(const QModelIndex &parent) const {
   // Only shows used column
-  return m_header.usedHeaderCount();
+  return m_header->usedHeaderCount();
 }
 
 QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
@@ -96,8 +101,8 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
     return QVariant(Qt::AlignLeft);
   }
   if (role == Qt::DisplayRole) {
-    return QVariant(
-        m_contentList[index.row()]->value(m_header.usedHeader(index.column())));
+    return QVariant(m_contentList[index.row()]->value(
+        m_header->usedHeader(index.column())));
   }
   return QVariant();
 }
@@ -119,7 +124,7 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
   }
-  return m_header.usedHeader(section);
+  return m_header->usedHeader(section);
 }
 
 int PlaylistModel::count() const { return m_contentList.length(); }
@@ -191,4 +196,8 @@ PlayContent *PlaylistModel::content(const int &index) const {
 
 Playlist PlaylistModel::list() const {
   return Playlist(m_listInfo, m_contentList);
+}
+
+void PlaylistModel::setHeader(const PlaylistModelHeader *header) {
+  m_header = header;
 }

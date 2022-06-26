@@ -9,16 +9,20 @@
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
 #define TYPE_BOOL "bool"
+#define TYPE_MAP "QMap"
+#define TYPE_MAP_STRING_INT "QMap<QString, int>"
 
 #define COMPARE_ZERO(VALUE, TYPE, IS)                       \
-  if (TYPE == "QStringList") {                              \
+  if (TYPE == TYPE_STRING_LIST) {                           \
     IS = VALUE.toStringList().length() == 0 ? true : false; \
-  } else if (TYPE == "QString") {                           \
+  } else if (TYPE == TYPE_STRING) {                         \
     IS = VALUE.toString().isEmpty() ? true : false;         \
-  } else if (TYPE == "int") {                               \
+  } else if (TYPE == TYPE_INT) {                            \
     IS = VALUE.toInt() == 0 ? true : false;                 \
-  } else if (TYPE == "bool") {                              \
+  } else if (TYPE == TYPE_BOOL) {                           \
     IS = !VALUE.toBool();                                   \
+  } else if (TYPE.left(4) == TYPE_MAP) {                    \
+    IS = VALUE.toMap().count() == 0 ? true : false;         \
   } else {                                                  \
     IS = true;                                              \
   }
@@ -50,8 +54,8 @@ void Config::AppConfig::setConfig(const QString& name, const QVariant& value) {
 
 void Config::AppConfig::printConfig() {
   qDebug() << "AppConfig:";
-  ConfigPairMap::const_iterator it = m_configMap.cbegin();
-  while (it != m_configMap.end()) {
+  ConfigPairMap::const_iterator it = m_configMap.constBegin();
+  while (it != m_configMap.constEnd()) {
     qDebug() << it.key() << it.value().value;
     it++;
   }
@@ -61,8 +65,10 @@ void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
 
 Config::AppConfig::AppConfig() : m_configMap(QMap<QString, ConfigPair>()) {
   addConfig(CONFIG_ALL_PLAYLIST, QStringList{}, TYPE_STRING_LIST);
-  addConfig(CONFIG_CUR_PLAYLIST, "", TYPE_STRING);
-  addConfig(CONFIG_CUR_PLAYCONTENT, "", TYPE_STRING);
+  addConfig(CONFIG_PLAYLIST_HEADER, QMap<QString, QVariant>(),
+            TYPE_MAP_STRING_INT);
+  addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);
+  addConfig(CONFIG_CUR_PLAYCONTENT, 0, TYPE_INT);
   addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);
   addConfig(CONFIG_VOLUME, 50, TYPE_INT);
   addConfig(CONFIG_VOLUME_MUTE, false, TYPE_BOOL);
@@ -89,4 +95,9 @@ void Config::AppConfig::loadConfig(const QString& filePath) {
     it++;
   }
   delete config;
+}
+
+const Config::ConfigPair Config::AppConfig::config(
+    const QString& configName) const {
+  return m_configMap[configName];
 }

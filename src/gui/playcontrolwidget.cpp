@@ -40,6 +40,11 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
 
 PlayControlWidget::~PlayControlWidget() { delete ui; }
 
+void PlayControlWidget::setContent(const PlayContent *content) {
+  m_currentContentUrl.setPath(content->contentPath);
+  m_corePlayer->stop();
+}
+
 void PlayControlWidget::setContentPath(const QString &contentPath) {
   m_currentContentUrl.setPath(contentPath);
   m_corePlayer->stop();

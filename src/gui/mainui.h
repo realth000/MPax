@@ -19,6 +19,7 @@ class MainUI : public QMainWindow {
   MainUI(QWidget *parent = nullptr);
   ~MainUI();
   void InitConnections();
+
  signals:
   void updateConfig();
 
@@ -35,7 +36,9 @@ class MainUI : public QMainWindow {
   void playNext();
   void playRandom();
   void playAudio(PlayContent *content);
+  void playAudio(const int &index);
   void savePlaylist();
   void saveAllPlaylist();
+  void loadPlaylist();
 };
 #endif  // MAINUI_H

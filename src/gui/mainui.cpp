@@ -6,6 +6,7 @@
 #include "./ui_mainui.h"
 #include "audio/audioscanner.h"
 #include "config/appconfig.h"
+#include "core/playlistjson.h"
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);
@@ -33,13 +34,16 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::setModel);
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContent, this,
-          &MainUI::playAudio);
+          QOverload<PlayContent *>::of(&MainUI::playAudio));
   connect(ui->savePlaylistAction, &QAction::triggered, this,
           &MainUI::savePlaylist);
   connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
           &MainUI::saveAllPlaylist);
+  connect(this, &MainUI::updateConfig, ui->playlistWidget,
+          &PlaylistWidget::updateConfig);
   connect(this, &MainUI::updateConfig, ui->playControlWidget,
           &PlayControlWidget::updateConfig);
+  connect(this, &MainUI::updateConfig, this, &MainUI::loadPlaylist);
 }
 
 void MainUI::openAudio() {
@@ -114,6 +118,11 @@ void MainUI::playAudio(PlayContent *content) {
   ui->playlistWidget->setCurrentContent(content);
 }
 
+void MainUI::playAudio(const int &index) {
+  ui->playlistWidget->setCurrentContent(index);
+  ui->playControlWidget->setContent(ui->playlistWidget->currentPlayContent());
+}
+
 void MainUI::savePlaylist() {
   const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
   if (filePath.isEmpty()) {
@@ -128,4 +137,26 @@ void MainUI::saveAllPlaylist() {
     return;
   }
   ui->listTabWidget->saveAllPlaylist(filePath);
+}
+
+void MainUI::loadPlaylist() {
+  const QStringList allPlaylistPath = Config::AppConfig::getInstance()
+                                          ->config(CONFIG_ALL_PLAYLIST)
+                                          .value.toStringList();
+  const int currentPlaylist = Config::AppConfig::getInstance()
+                                  ->config(CONFIG_CUR_PLAYLIST)
+                                  .value.toInt();
+  const int currentPlayContent = Config::AppConfig::getInstance()
+                                     ->config(CONFIG_CUR_PLAYCONTENT)
+                                     .value.toInt();
+  QStringList::const_iterator it = allPlaylistPath.constBegin();
+  while (it != allPlaylistPath.constEnd()) {
+    qDebug() << "parse" << (*it).toUtf8();
+    QList<Playlist> playlistList = PlaylistJson::fromJsonString((*it));
+    ui->listTabWidget->addPlaylist(playlistList);
+    it++;
+  }
+  qDebug() << "bbbb";
+  ui->listTabWidget->setCurrentPlaylist(currentPlaylist);
+  playAudio(currentPlayContent);
 }
