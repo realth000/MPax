@@ -10,7 +10,7 @@ QString toJsonString(const Playlist &playlist);
 
 QString toJsonString(const QList<Playlist> &playlist);
 
-QList<Playlist> fromJsonString(const QString &jsonString);
+QList<Playlist> fromJsonString(const QString &filePath);
 
 };  // namespace PlaylistJson
 

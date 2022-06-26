@@ -91,7 +91,17 @@ QString PlaylistJson::toJsonString(const QList<Playlist> &playlist) {
   return doc.toJson();
 }
 
-QList<Playlist> PlaylistJson::fromJsonString(const QString &jsonString) {
+QList<Playlist> PlaylistJson::fromJsonString(const QString &filePath) {
+  QFile file(filePath);
+  QTextStream stream;
+  stream.setCodec("UTF-8");
+  stream.setDevice(&file);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "can not open playlist file.";
+    return QList<Playlist>();
+  }
+  const QString jsonString = stream.readAll();
+  file.close();
   QJsonParseError err;
   const QJsonDocument doc = QJsonDocument::fromJson(jsonString.toUtf8(), &err);
   if (doc.isNull()) {

@@ -120,7 +120,11 @@ void MainUI::playAudio(PlayContent *content) {
 
 void MainUI::playAudio(const int &index) {
   ui->playlistWidget->setCurrentContent(index);
-  ui->playControlWidget->setContent(ui->playlistWidget->currentPlayContent());
+  const PlayContent *content = ui->playlistWidget->currentPlayContent();
+  if (content == nullptr) {
+    return;
+  }
+  ui->playControlWidget->setContent(content);
 }
 
 void MainUI::savePlaylist() {
@@ -151,12 +155,10 @@ void MainUI::loadPlaylist() {
                                      .value.toInt();
   QStringList::const_iterator it = allPlaylistPath.constBegin();
   while (it != allPlaylistPath.constEnd()) {
-    qDebug() << "parse" << (*it).toUtf8();
     QList<Playlist> playlistList = PlaylistJson::fromJsonString((*it));
     ui->listTabWidget->addPlaylist(playlistList);
     it++;
   }
-  qDebug() << "bbbb";
   ui->listTabWidget->setCurrentPlaylist(currentPlaylist);
   playAudio(currentPlayContent);
 }

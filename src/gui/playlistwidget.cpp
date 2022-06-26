@@ -67,7 +67,8 @@ void PlaylistWidget::setCurrentContent(PlayContent *content) {
 
 void PlaylistWidget::setCurrentContent(const int &index) {
   if (m_playlistModel->count() <= index) {
-    qDebug() << "set current content out of index";
+    qDebug() << "set current content out of index" << m_playlistModel->count()
+             << "to" << index;
     return;
   }
   m_playlistModel->setCurrentPlayContent(index);
