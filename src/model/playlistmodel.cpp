@@ -61,14 +61,18 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
       m_playlistName(playlistName),
       m_listInfo(PlaylistInfo(
           QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
-      m_currentPlayContent(nullptr) {}
+      m_currentPlayContent(nullptr),
+      m_headerTrans(
+          QMap<QString, QString>{{"ContentName", tr("ContentName")}}) {}
 
 PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlist.info()->info(PLAYLIST_INFO_NAME)),
       m_listInfo(*playlist.info()),
       m_contentList(*playlist.content()),
-      m_currentPlayContent(nullptr) {}
+      m_currentPlayContent(nullptr),
+      m_headerTrans(
+          QMap<QString, QString>{{"ContentName", tr("ContentName")}}) {}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
   // TODO: Check if incorrent.
@@ -126,7 +130,7 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
   }
-  return m_header->usedHeader(section);
+  return m_headerTrans[m_header->usedHeader(section)];
 }
 
 int PlaylistModel::count() const { return m_contentList.length(); }

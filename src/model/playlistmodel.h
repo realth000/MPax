@@ -2,6 +2,7 @@
 #define PLAYLISTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
+#include <QtCore/QObject>
 
 #include "core/playcontent.h"
 #include "core/playlist.h"
@@ -28,6 +29,8 @@ class PlaylistModelHeader {
 };
 
 class PlaylistModel : public QAbstractItemModel {
+  // Translation need this marco!!!
+  Q_OBJECT
  public:
   explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem>,
                          QObject *parent = nullptr);
@@ -64,6 +67,7 @@ class PlaylistModel : public QAbstractItemModel {
   // Copy of PlaylistWidget::m_header.
   const PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
+  QMap<QString, QString> m_headerTrans;
 };
 
 #endif  // PLAYLISTMODEL_H
