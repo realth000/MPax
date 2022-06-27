@@ -1,3 +1,145 @@
+QTableView {
+    outline: none;
+    background-color: #1e1d23;
+    border: 1px solid #2f2e33;
+    selection-background-color: #007b50;
+}
+
+QHeaderView {
+    color: #a9b7c6;
+    background-color: #272632;
+    border: 1px solid #2f2e33;
+}
+
+QHeaderView::section {
+    background-color: transparent;
+    border: 2px solid transparent;
+    selection-background-color: #007b50;
+    padding-left: 2px;
+}
+
 QTableView::item {
     /*border: 1px solid #ff0000;*/
+    color: #a9b7c6;
+    border: 2px solid transparent;
+}
+
+QTableView::item:hover {
+    color: #FFFFFF;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #04b97f;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QTableView::item:selected {
+    color: #FFFFFF;
+    outline: none;
+    background-color: #007b50;
+    border: 2px solid transparent;
+}
+
+QScrollBar:vertical {
+    border: 1px solid #3e3d53;
+    background-color: transparent;
+    width: 17px;
+    margin: 15px 0 15px 0;
+}
+
+QScrollBar::handle:vertical {
+    border: none;
+    background-color: #272632;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #04b97f;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+    background-color: #272632;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:pressed {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #007b50;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+    background-color: #272632;
+    min-height: 20px;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 2px solid #3e3d53;
+    background-color: #3e3d53;
+    height: 15px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical:hover {
+    border-style: solid;
+    border-top-color: #04b97f;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QScrollBar::sub-line:vertical:pressed {
+    border-style: solid;
+    border-top-color: #007b50;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QScrollBar::add-line:vertical {
+    border: 2px solid #3e3d53;
+    background-color: #3e3d53;
+    height: 15px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical:hover {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: #04b97f;
+    border-left-width: 2px;
+}
+
+QScrollBar::add-line:vertical:pressed {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color:  #007b50;
+    border-left-width: 2px;
+}
+
+QScrollBar::up-arrow:vertical{
+    border-image: url(:/pic/arrow_up_white_15.png);
+    width: 12px;
+    height: 12px;
+}
+
+QScrollBar::down-arrow:vertical {
+    border-image: url(:/pic/arrow_down_white_15.png);
+    width: 12px;
+    height: 12px;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }

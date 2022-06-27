@@ -99,7 +99,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
     return QVariant();
   }
   if (role == Qt::TextAlignmentRole) {
-    return QVariant(Qt::AlignLeft);
+    return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
   }
   if (role == Qt::DisplayRole) {
     return QVariant(m_contentList[index.row()]->value(
@@ -112,14 +112,15 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
                                    int role) const {
   switch (role) {
     case Qt::DecorationRole:
-      if (section == 0) {
-        QImage pixmap(16, 1, QImage::Format_ARGB32_Premultiplied);
-        pixmap.fill(Qt::transparent);
-        return pixmap;
-      }
+      //      if (section == 0) {
+      //        QImage pixmap(16, 1, QImage::Format_ARGB32_Premultiplied);
+      //        pixmap.fill(Qt::transparent);
+      //        return pixmap;
+      //      }
+      return QVariant();
       break;
     case Qt::TextAlignmentRole:
-      return Qt::AlignLeft;
+      return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
   }
 
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {

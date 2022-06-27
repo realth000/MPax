@@ -3,5 +3,6 @@
         <file>css/playcontrolwidget.css</file>
         <file>css/listtabwidget.css</file>
         <file>css/playlistwidget.css</file>
+        <file>css/external/MaterialDark.css</file>
     </qresource>
 </RCC>

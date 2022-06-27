@@ -8,12 +8,14 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
+#include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
+  this->setStyleSheet(util::loadCssFromFile(":/css/external/MaterialDark.css"));
   Config::AppConfig::getInstance()->loadConfig();
   QList<Playlist> playlistList =
       Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);

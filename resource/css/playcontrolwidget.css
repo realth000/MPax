@@ -3,17 +3,62 @@ QLabel#coverLabel {
     font-size: 30px;
 }
 
-QPushButton#titleButton {
+QPushButton#titleButton, QPushButton#artistButton, QPushButton#albumButton {
     border: none;
     text-align: left;
 }
 
-QPushButton#artistButton {
-    border: none;
-    text-align: left;
+QPushButton#preButton, QPushButton#playButton, QPushButton#nextButton, QPushButton#stopButton, QPushButton#stopButton, QPushButton#playModeButton, QPushButton#muteButton {
+    font-size: 18px;
 }
 
-QPushButton#albumButton {
-    border: none;
-    text-align: left;
+/*QSlider::handle {*/
+/*    height:60px;*/
+/*    background: #04b97f;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*QSlider::sub-page {*/
+/*    background: #007b50;*/
+/*}*/
+
+QSlider::groove:horizontal {
+    height: 5px;
+    background: #04b97f;
+}
+
+QSlider::handle:horizontal {
+    background: #f0ffff;
+    border: 1px solid #2f2e33;
+    width: 14px;
+    margin: -7px 0;
+    border-radius: 8px;
+}
+
+QSlider::add-page:horizontal {
+    background: #f0ffff;
+}
+
+QSlider::sub-page:horizontal {
+    background: #04b97f;
+}
+
+QSlider::add-page:horizontal:disabled {
+    background: #2f2e33;
+}
+
+QSlider::handle:horizontal:disabled {
+    background: #2f2e33;
+    border: 1px solid #2f2e33;
+    width: 14px;
+    margin: -7px 0;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal:disabled {
+    background: #2f2e33;
+}
+
+QGroupBox {
+    border: 1px solid #2f2e33;
 }

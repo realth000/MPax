@@ -1,3 +1,46 @@
+QListView {
+    outline: none;
+    color: #a9b7c6;
+    background-color: #1e1d23;
+    border: 1px solid #2f2e33;
+    selection-background-color: #007b50;
+}
+
 QListView::item {
-    height:30px;
+    height: 30px;
+    border: 2px solid transparent;
+}
+
+QListView::item:hover {
+    color: #FFFFFF;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #04b97f;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QListView::item:selected {
+    /*selection-color: #a9b7c6;*/
+    background-color: #007b50;
+    border: 2px solid transparent;
+}
+
+QListView::item:selected:!active {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #04b97f;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+    background: #222b2e;
+}
+
+QLineEdit {
+    border-radius: none;
+    border: none;
+    background-color: #222b2e;
+    selection-background-color: #007b50;
+    color: #d3dae3;
 }
