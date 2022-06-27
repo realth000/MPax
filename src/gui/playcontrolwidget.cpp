@@ -318,6 +318,8 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     ui->artistButton->setText(content->artist);
   } else if (nameInfo.length() == 2) {
     ui->artistButton->setText(nameInfo[0]);
+  } else {
+    ui->artistButton->setText("Unknown");
   }
   if (!content->albumTitle.isEmpty()) {
     ui->albumButton->setText(content->albumTitle);
