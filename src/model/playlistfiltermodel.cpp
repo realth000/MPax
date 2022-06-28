@@ -24,3 +24,8 @@ bool PlaylistFilterModel::lessThan(const QModelIndex &left,
   }
   return QSortFilterProxyModel::lessThan(left, right);
 }
+
+QModelIndex PlaylistFilterModel::sourceIndex(
+    const QModelIndex &proxyIndex) const {
+  return mapToSource(proxyIndex);
+}

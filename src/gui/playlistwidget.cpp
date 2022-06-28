@@ -24,7 +24,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   // Set tableView row height.
   ui->tableView->verticalHeader()->setDefaultSectionSize(30);
   ui->tableView->setSortingEnabled(true);
-  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+  //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   InitCss(":/css/playlistwidget.css");
   InitConnections();
 }
@@ -85,7 +85,7 @@ void PlaylistWidget::InitConnections() {
 }
 
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
-  const int row = index.row();
+  const int row = m_playlistFilterModel->sourceIndex(index).row();
   m_playlistModel->setCurrentPlayContent(row);
   emit playContentChanged(row, m_playlistModel->currentPlayContent().content);
 }

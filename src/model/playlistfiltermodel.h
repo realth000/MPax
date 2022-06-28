@@ -7,6 +7,7 @@ class PlaylistFilterModel : public QSortFilterProxyModel {
   Q_OBJECT
  public:
   explicit PlaylistFilterModel(QObject *parent = nullptr);
+  QModelIndex sourceIndex(const QModelIndex &proxyIndex) const;
 
  protected:
   bool filterAcceptsRow(int sourceRow,
