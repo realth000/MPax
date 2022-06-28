@@ -13,7 +13,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
     : QWidget(parent),
       ui(new Ui::PlaylistWidget),
       m_header(header),
-      m_playlistModel(nullptr) {
+      m_playlistModel(nullptr),
+      m_playlistFilterModel(new PlaylistFilterModel) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->horizontalHeader()->setStretchLastSection(true);
@@ -22,6 +23,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   //        ui->tableView->setItemDelegate(new NoFocusDelegate);
   // Set tableView row height.
   ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+  ui->tableView->setSortingEnabled(true);
+  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   InitCss(":/css/playlistwidget.css");
   InitConnections();
 }
@@ -39,7 +42,9 @@ void PlaylistWidget::setHeader(const PlaylistModelHeader *header) {
 void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   m_playlistModel = playlistModel;
   m_playlistModel->setHeader(m_header);
-  ui->tableView->setModel(m_playlistModel);
+  //  ui->tableView->setModel(m_playlistModel);
+  m_playlistFilterModel->setSourceModel(m_playlistModel);
+  ui->tableView->setModel(m_playlistFilterModel);
 }
 
 PlayContentPos PlaylistWidget::preContent() const {

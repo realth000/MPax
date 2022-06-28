@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QWidget>
 
+#include "model/playlistfiltermodel.h"
 #include "model/playlistmodel.h"
 
 namespace Ui {
@@ -39,6 +40,7 @@ class PlaylistWidget : public QWidget {
   Ui::PlaylistWidget *ui;
   const PlaylistModelHeader *m_header;
   PlaylistModel *m_playlistModel;
+  PlaylistFilterModel *m_playlistFilterModel;
 
   void InitCss(const QString &cssFilePath);
   void InitConnections();
