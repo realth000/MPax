@@ -10,7 +10,8 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainUI;
-}
+typedef QPair<int, PlayContent *> PlayContentPair;
+}  // namespace Ui
 QT_END_NAMESPACE
 class MainUI : public QMainWindow {
   Q_OBJECT
@@ -25,8 +26,11 @@ class MainUI : public QMainWindow {
 
  private:
   Ui::MainUI *ui;
+  QList<Ui::PlayContentPair> *m_history;
+  int m_historyPos;
 
   PlayContent *addAudioFile(const QString &filePath);
+  void addHistory(const PlayContentPos &cp);
 
  private slots:
   void openAudio();
@@ -42,5 +46,7 @@ class MainUI : public QMainWindow {
   void loadPlaylist();
   void saveConfig();
   void saveCurrentPlaylistIndex(const int &index);
+  void removeLastHistory();
+  void handleDoubleClickPlay(const int &index, PlayContent *content);
 };
 #endif  // MAINUI_H

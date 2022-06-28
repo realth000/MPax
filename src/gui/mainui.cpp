@@ -10,7 +10,11 @@
 #include "core/playlistjson.h"
 #include "util/cssloader.h"
 
-MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
+MainUI::MainUI(QWidget *parent)
+    : QMainWindow(parent),
+      ui(new Ui::MainUI),
+      m_history(new QList<Ui::PlayContentPair>),
+      m_historyPos(0) {
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
@@ -54,6 +58,7 @@ MainUI::MainUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainUI) {
   if (cp.index < 0 || cp.content == nullptr) {
     return;
   }
+  addHistory(cp);
   playAudio(cp.index, cp.content);
 }
 
@@ -67,6 +72,8 @@ void MainUI::InitConnections() {
           &MainUI::playNext);
   connect(ui->playControlWidget, &PlayControlWidget::playRandom, this,
           &MainUI::playRandom);
+  connect(ui->playControlWidget, &PlayControlWidget::playInvalid, this,
+          &MainUI::removeLastHistory);
   connect(ui->playlistAddAction, &QAction::triggered, this,
           &MainUI::addPlaylist);
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
@@ -75,7 +82,7 @@ void MainUI::InitConnections() {
           &MainUI::saveCurrentPlaylistIndex);
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
-          QOverload<const int &, PlayContent *>::of(&MainUI::playAudio));
+          &MainUI::handleDoubleClickPlay);
   connect(ui->savePlaylistAction, &QAction::triggered, this,
           &MainUI::savePlaylist);
   connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
@@ -109,7 +116,16 @@ void MainUI::addPlaylist() {
 }
 
 void MainUI::playPre() {
-  PlayContentPos cp = ui->playlistWidget->preContent();
+  PlayContentPos cp;
+  if (ui->playControlWidget->playMode() ==
+          PlayControlWidget::PlayMode::Random &&
+      m_history->count() > 0 && m_historyPos > 0) {
+    m_historyPos--;
+    cp.index = (*m_history)[m_historyPos].first;
+    cp.content = (*m_history)[m_historyPos].second;
+  } else {
+    cp = ui->playlistWidget->preContent();
+  }
   if (cp.content == nullptr) {
     qDebug() << "can not find previous one";
     return;
@@ -122,8 +138,14 @@ void MainUI::playNext() {
   if (ui->playControlWidget->playMode() ==
       PlayControlWidget::PlayMode::Random) {
     cp = ui->playlistWidget->randomContent();
+    addHistory(cp);
+  } else if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
+    m_historyPos++;
+    cp.index = (*m_history)[m_historyPos].first;
+    cp.content = (*m_history)[m_historyPos].second;
   } else {
     cp = ui->playlistWidget->nextContent();
+    addHistory(cp);
   }
   if (cp.content == nullptr) {
     qDebug() << "can not find next one";
@@ -223,4 +245,21 @@ void MainUI::saveConfig() {
 void MainUI::saveCurrentPlaylistIndex(const int &index) {
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYLIST, index);
   Config::AppConfig::getInstance()->saveConfigDefer();
+}
+
+void MainUI::removeLastHistory() {
+  if (m_historyPos == m_history->count()) {
+    m_historyPos--;
+  }
+  m_history->removeLast();
+}
+
+void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
+  addHistory(PlayContentPos{index, content});
+  playAudio(index, content);
+}
+
+void MainUI::addHistory(const PlayContentPos &cp) {
+  m_history->append(Ui::PlayContentPair(cp.index, cp.content));
+  m_historyPos = m_history->count() - 1;
 }

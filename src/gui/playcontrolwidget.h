@@ -24,6 +24,7 @@ class PlayControlWidget : public QWidget {
   void playPre();
   void playNext();
   void playRandom();
+  void playInvalid();
 
  public slots:
   void setContent(const PlayContent *content);

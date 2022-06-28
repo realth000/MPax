@@ -295,6 +295,7 @@ void PlayControlWidget::handleMediaStatusChanged(
     case QMediaPlayer::UnknownMediaStatus:
       qDebug() << "can not play invalid media" << m_currentContentUrl;
       QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
+      emit playInvalid();
       m_waitEventLoop.exec();
       emit playNext();
   }
