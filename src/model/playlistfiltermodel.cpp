@@ -29,3 +29,15 @@ QModelIndex PlaylistFilterModel::sourceIndex(
     const QModelIndex &proxyIndex) const {
   return mapToSource(proxyIndex);
 }
+QModelIndex PlaylistFilterModel::nextSourceRow(
+    const QModelIndex &proxyIndex) const {
+  if (proxyIndex.row() + 1 >= sourceModel()->rowCount()) {
+    return mapToSource(index(0, 0));
+  }
+  return mapToSource(proxyIndex.siblingAtRow(proxyIndex.row() + 1));
+}
+
+QModelIndex PlaylistFilterModel::fromSourceIndex(
+    const QModelIndex &sourceIndex) const {
+  return mapFromSource(sourceIndex);
+}

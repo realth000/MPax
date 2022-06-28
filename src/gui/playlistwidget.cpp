@@ -51,6 +51,8 @@ PlayContentPos PlaylistWidget::preContent() const {
   if (m_playlistModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
+  const QModelIndex filterIndex =
+      m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
   return m_playlistModel->findPreContent();
 }
 
@@ -58,7 +60,14 @@ PlayContentPos PlaylistWidget::nextContent() const {
   if (m_playlistModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
-  return m_playlistModel->findNextContent();
+  PlayContentPos pc = m_playlistModel->currentPlayContent();
+
+  const QModelIndex filterIndex =
+      m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
+  return m_playlistModel->content(
+      m_playlistFilterModel
+          ->nextSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex))
+          .row());
 }
 
 void PlaylistWidget::setCurrentContent(PlayContent *content) {
