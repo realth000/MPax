@@ -1,6 +1,7 @@
 #ifndef PLAYCONTROLWIDGET_H
 #define PLAYCONTROLWIDGET_H
 
+#include <QtCore/QEventLoop>
 #include <QtWidgets/QWidget>
 
 #include "audio/coreplayer.h"
@@ -35,6 +36,7 @@ class PlayControlWidget : public QWidget {
   CorePlayer *m_corePlayer;
   QUrl m_currentContentUrl;
   QMediaPlayer::State m_corePlayerState;
+  QEventLoop m_waitEventLoop;
 
   // Volume control
   bool m_volMute;

@@ -1,5 +1,6 @@
 #include "playcontrolwidget.h"
 
+#include <QtCore/QTimer>
 #include <QtCore/QtDebug>
 #include <QtGui/QFontDatabase>
 
@@ -277,18 +278,25 @@ void PlayControlWidget::setPlayDuration(const qint64 &duration) {
 
 void PlayControlWidget::handleMediaStatusChanged(
     QMediaPlayer::MediaStatus status) {
-  if (status == QMediaPlayer::EndOfMedia) {
-    switch (m_playMode) {
-      case PlayMode::ListRepeat:
-        emit playNext();
-        break;
-      case PlayMode::SingleRepeat:
-        m_corePlayer->play();
-        break;
-      case PlayMode::Random:
-        emit playRandom();
-        break;
-    }
+  switch (status) {
+    case QMediaPlayer::EndOfMedia:
+      switch (m_playMode) {
+        case PlayMode::ListRepeat:
+          emit playNext();
+          break;
+        case PlayMode::SingleRepeat:
+          m_corePlayer->play();
+          break;
+        case PlayMode::Random:
+          emit playRandom();
+          break;
+      }
+    case QMediaPlayer::InvalidMedia:
+    case QMediaPlayer::UnknownMediaStatus:
+      qDebug() << "can not play invalid media" << m_currentContentUrl;
+      QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
+      m_waitEventLoop.exec();
+      emit playNext();
   }
 }
 
