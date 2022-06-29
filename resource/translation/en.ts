@@ -162,5 +162,20 @@
         <source>Form</source>
         <translation>Form</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="110"/>
+        <source>Delete</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="113"/>
+        <source>Play</source>
+        <translation>Play</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="115"/>
+        <source>Open in folder</source>
+        <translation>Open in folder</translation>
+    </message>
 </context>
 </TS>

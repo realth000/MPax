@@ -49,6 +49,7 @@ class PlaylistModel : public QAbstractItemModel {
   bool contains(PlayContent *content) const;
   int indexOf(PlayContent *content) const;
   void addContent(PlayContent *content);
+  bool removeContent(const int &index);
   void setPlaylistName(const QString &name);
   void setHeader(const PlaylistModelHeader *header);
   QString playlistName() const;

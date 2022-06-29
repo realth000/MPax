@@ -1,5 +1,13 @@
 #include "playlistwidget.h"
 
+#ifdef Q_OS_LINUX
+#include <QtCore/QProcess>
+#else
+#include <QtCore/QDir>
+#include <QtCore/QUrl>
+#include <QtGui/QDesktopServices>
+#endif
+
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtDebug>
 #include <QtGui/QStandardItemModel>
@@ -14,7 +22,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
       ui(new Ui::PlaylistWidget),
       m_header(header),
       m_playlistModel(nullptr),
-      m_playlistFilterModel(new PlaylistFilterModel) {
+      m_playlistFilterModel(new PlaylistFilterModel),
+      m_tableViewContextMenu(InitTableViewContextMenu()) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->horizontalHeader()->setStretchLastSection(true);
@@ -25,6 +34,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->verticalHeader()->setDefaultSectionSize(30);
   ui->tableView->setSortingEnabled(true);
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+  ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   InitCss(":/css/playlistwidget.css");
   InitConnections();
 }
@@ -91,6 +101,62 @@ void PlaylistWidget::setCurrentContent(const int &index) {
 void PlaylistWidget::InitConnections() {
   connect(ui->tableView, &QTableView::doubleClicked, this,
           &PlaylistWidget::updatePlayContent);
+  connect(ui->tableView, &QTableView::customContextMenuRequested, this,
+          &PlaylistWidget::openTableViewContextMenu);
+}
+
+QMenu *PlaylistWidget::InitTableViewContextMenu() {
+  QMenu *m = new QMenu(this);
+  QAction *actionDelete = new QAction(tr("Delete"));
+  connect(actionDelete, &QAction::triggered, this,
+          &PlaylistWidget::actionDelete);
+  QAction *actionPlay = new QAction(tr("Play"));
+  connect(actionPlay, &QAction::triggered, this, &PlaylistWidget::actionPlay);
+  QAction *actionOpen = new QAction(tr("Open in folder"));
+  connect(actionOpen, &QAction::triggered, this,
+          &PlaylistWidget::actionOpenInFolder);
+  m->addAction(actionDelete);
+  m->addSeparator();
+  m->addAction(actionOpen);
+  m->addAction(actionPlay);
+  return m;
+}
+
+void PlaylistWidget::actionDelete() {
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  for (auto t : m_tableViewSelectedRows) {
+    const int tt = m_playlistFilterModel->mapToSource(t).row();
+    m_playlistModel->removeContent(tt);
+  }
+  emit playlistChanged();
+}
+
+void PlaylistWidget::actionOpenInFolder() {
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  const QModelIndex i = m_tableViewSelectedRows[0];
+  const QString path =
+      m_playlistModel->content(m_playlistFilterModel->mapToSource(i).row())
+          .content->contentPath;
+#ifdef Q_OS_LINUX
+  QProcess p;
+  p.startDetached("nautilus", {path});
+#else
+  QDesktopServices::openUrl(
+      QUrl("file://" + QFileInfo(path).absoluteDir().absolutePath()));
+#endif
+}
+
+void PlaylistWidget::actionPlay() {
+  if (m_tableViewSelectedRows.count() < 0) {
+    return;
+  }
+  PlayContentPos pc = m_playlistModel->content(
+      m_playlistFilterModel->mapToSource(m_tableViewSelectedRows[0]).row());
+  emit playContentChanged(pc.index, pc.content);
 }
 
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
@@ -133,3 +199,8 @@ PlayContentPos PlaylistWidget::currentPlayContent() const {
 }
 
 int PlaylistWidget::count() const { return m_playlistModel->count(); }
+
+void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
+  m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
+  m_tableViewContextMenu->popup(QCursor().pos());
+}

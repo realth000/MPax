@@ -83,6 +83,8 @@ void MainUI::InitConnections() {
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
           &MainUI::handleDoubleClickPlay);
+  connect(ui->playlistWidget, &PlaylistWidget::playlistChanged,
+          ui->listTabWidget, &ListTabWidget::saveDefaultPlaylist);
   connect(ui->savePlaylistAction, &QAction::triggered, this,
           &MainUI::savePlaylist);
   connect(ui->saveAllPlaylistAction, &QAction::triggered, this,

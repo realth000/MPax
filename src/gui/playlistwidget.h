@@ -1,6 +1,7 @@
 #ifndef PLAYLISTWIDGET_H
 #define PLAYLISTWIDGET_H
 
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QWidget>
 
 #include "model/playlistfiltermodel.h"
@@ -22,6 +23,7 @@ class PlaylistWidget : public QWidget {
 
  signals:
   void playContentChanged(const int &row, PlayContent *content);
+  void playlistChanged();
 
  public slots:
   void setHeader(const PlaylistModelHeader *header);
@@ -41,9 +43,18 @@ class PlaylistWidget : public QWidget {
   const PlaylistModelHeader *m_header;
   PlaylistModel *m_playlistModel;
   PlaylistFilterModel *m_playlistFilterModel;
+  QMenu *m_tableViewContextMenu;
+  QModelIndexList m_tableViewSelectedRows;
 
   void InitCss(const QString &cssFilePath);
   void InitConnections();
+  QMenu *InitTableViewContextMenu();
+  void actionDelete();
+  void actionOpenInFolder();
+  void actionPlay();
+
+ private slots:
+  void openTableViewContextMenu(const QPoint &pos);
 };
 
 #endif  // PLAYLISTWIDGET_H

@@ -155,5 +155,20 @@
         <source>Form</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="110"/>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="113"/>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="115"/>
+        <source>Open in folder</source>
+        <translation>在文件夹中打开</translation>
+    </message>
 </context>
 </TS>

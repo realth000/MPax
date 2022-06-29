@@ -144,6 +144,16 @@ void PlaylistModel::addContent(PlayContent *content) {
       QString::number(m_listInfo.info(PLAYLIST_INFO_COUNT).toInt() + 1));
 }
 
+bool PlaylistModel::removeContent(const int &index) {
+  if (m_contentList.size() <= index) {
+    return false;
+  }
+  beginResetModel();
+  m_contentList.removeAt(index);
+  endResetModel();
+  return true;
+}
+
 void PlaylistModel::setPlaylistName(const QString &name) {
   m_playlistName = name;
   m_listInfo.setInfo(PLAYLIST_INFO_NAME, m_playlistName);
