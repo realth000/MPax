@@ -14,75 +14,83 @@
     <name>MainUI</name>
     <message>
         <location filename="../../src/gui/mainui.ui" line="14"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="150"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="157"/>
         <source>MainUI</source>
         <translation>MainUI</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="101"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="159"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="168"/>
         <source>File</source>
         <translation>File</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="108"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="160"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="169"/>
         <source>Playlist</source>
         <translation>Playlist</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="116"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="161"/>
+        <location filename="../../src/gui/mainui.ui" line="117"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="170"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="128"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="151"/>
+        <location filename="../../src/gui/mainui.ui" line="129"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="158"/>
         <source>Open audio</source>
         <translation>Open audio</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="133"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="152"/>
+        <location filename="../../src/gui/mainui.ui" line="134"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="159"/>
         <source>New playlist</source>
         <translation>New playlist</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="138"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="153"/>
+        <location filename="../../src/gui/mainui.ui" line="139"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="160"/>
         <source>Scan dir</source>
         <translation>Scan dir</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="143"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="154"/>
+        <location filename="../../src/gui/mainui.ui" line="144"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="161"/>
         <source>Save playlist</source>
         <translation>Save playlist</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="148"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="155"/>
+        <location filename="../../src/gui/mainui.ui" line="149"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="162"/>
         <source>Save all playlist</source>
         <translation>Save all playlists</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="153"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="156"/>
+        <location filename="../../src/gui/mainui.ui" line="154"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="163"/>
         <source>Save setting</source>
         <translation>Save settings</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="158"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="157"/>
+        <location filename="../../src/gui/mainui.ui" line="159"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="164"/>
         <source>Load settings</source>
         <translation>Load settings</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.ui" line="163"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="158"/>
+        <location filename="../../src/gui/mainui.ui" line="164"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="165"/>
         <source>Save settings</source>
         <translation>Save settings</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/mainui.ui" line="169"/>
+        <location filename="../../src/gui/mainui.ui" line="174"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="166"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="167"/>
+        <source>Search in playlist</source>
+        <translation>Search in playlist</translation>
     </message>
 </context>
 <context>
@@ -152,6 +160,34 @@
     <message>
         <source>ContentName</source>
         <translation type="obsolete">Title</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistSearch</name>
+    <message>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearch.h" line="54"/>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistSearchDialog</name>
+    <message>
+        <location filename="../../src/gui/playlistsearchdialog.ui" line="14"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearchdialog.h" line="72"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistsearchdialog.ui" line="26"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearchdialog.h" line="74"/>
+        <source>Case sensitivity</source>
+        <translation>Case sensitive</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="14"/>
+        <source>Search in playlist</source>
+        <translation>Search in playlist</translation>
     </message>
 </context>
 <context>

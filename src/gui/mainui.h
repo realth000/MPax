@@ -48,5 +48,6 @@ class MainUI : public QMainWindow {
   void saveCurrentPlaylistIndex(const int &index);
   void removeLastHistory();
   void handleDoubleClickPlay(const int &index, PlayContent *content);
+  void openSearchWindow();
 };
 #endif  // MAINUI_H

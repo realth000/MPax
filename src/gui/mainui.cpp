@@ -8,6 +8,7 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
+#include "gui/playlistsearchdialog.h"
 #include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent)
@@ -96,6 +97,8 @@ void MainUI::InitConnections() {
   connect(this, &MainUI::updateConfig, this, &MainUI::loadPlaylist);
   connect(ui->saveSettingsAction, &QAction::triggered, this,
           &MainUI::saveConfig);
+  connect(ui->searchPlaylistAction, &QAction::triggered, this,
+          &MainUI::openSearchWindow);
 }
 
 void MainUI::openAudio() {
@@ -194,11 +197,13 @@ void MainUI::playAudio(const int &index, PlayContent *content) {
 
 void MainUI::playAudio(const int &index) {
   ui->playlistWidget->setCurrentContent(index);
-  const PlayContent *content = ui->playlistWidget->currentPlayContent().content;
+  PlayContent *content = ui->playlistWidget->currentPlayContent().content;
   if (content == nullptr) {
     return;
   }
-  ui->playControlWidget->setContent(content);
+  ui->playControlWidget->updatePlayInfo(content);
+  ui->playControlWidget->setContentPath(content->contentPath);
+  ui->playlistWidget->setCurrentContent(content);
 }
 
 void MainUI::savePlaylist() {
@@ -264,4 +269,14 @@ void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
 void MainUI::addHistory(const PlayContentPos &cp) {
   m_history->append(Ui::PlayContentPair(cp.index, cp.content));
   m_historyPos = m_history->count() - 1;
+}
+
+void MainUI::openSearchWindow() {
+  PlaylistSearchDialog *d =
+      new PlaylistSearchDialog(this, ui->listTabWidget->CurrentPlaylist());
+  connect(d, &PlaylistSearchDialog::playContentChanged, this,
+          [this](const int &index) { playAudio(index); });
+  connect(d, &PlaylistSearchDialog::finished, d,
+          &PlaylistSearchDialog::deleteLater);
+  d->show();
 }

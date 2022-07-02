@@ -110,6 +110,7 @@
     <addaction name="playlistAddAction"/>
     <addaction name="savePlaylistAction"/>
     <addaction name="saveAllPlaylistAction"/>
+    <addaction name="searchPlaylistAction"/>
    </widget>
    <widget class="QMenu" name="settingsMenu">
     <property name="title">
@@ -161,6 +162,16 @@
   <action name="saveSettingsAction">
    <property name="text">
     <string>Save settings</string>
+   </property>
+  </action>
+  <action name="searchPlaylistAction">
+   <property name="text">
+    <string>Search in playlist</string>
+   </property>
+  </action>
+  <action name="searchPlaylistAction_2">
+   <property name="text">
+    <string>Search in playlist</string>
    </property>
   </action>
  </widget>

@@ -1,0 +1,36 @@
+#ifndef PLAYLISTSEARCHDIALOG_H
+#define PLAYLISTSEARCHDIALOG_H
+
+#include <QtCore/QRegExp>
+#include <QtCore/QSortFilterProxyModel>
+#include <QtWidgets/QDialog>
+
+#include "core/playcontent.h"
+#include "model/playlistsearchfiltermodel.h"
+
+namespace Ui {
+class PlaylistSearchDialog;
+}  // namespace Ui
+
+class PlaylistSearchDialog : public QDialog {
+  Q_OBJECT
+
+ public:
+  explicit PlaylistSearchDialog(QWidget *parent, QAbstractItemModel *model);
+  ~PlaylistSearchDialog();
+
+ signals:
+  void playContentChanged(const int &row);
+
+ private:
+  Ui::PlaylistSearchDialog *ui;
+  Model::PlaylistSearchFilterModel *m_model;
+
+  Qt::CaseSensitivity caseSensitivity();
+
+ private slots:
+  void updateSearchFilter(const QString &filterString);
+  void updatePlayContent(const QModelIndex &index);
+};
+
+#endif  // PLAYLISTSEARCHDIALOG_H
