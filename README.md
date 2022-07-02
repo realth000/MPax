@@ -32,12 +32,13 @@ MPax is available on Linux and Windows now (though recommend to use foobar2000 o
   - [ ] Delete play list.
   - [ ] **Export and import play lists (in or not in .m3u8)**.
   - [ ] Custom play list header.
-  - [ ] **Sort by custom header**.
+  - [x] **Sort by custom header**.
   - [ ] **Move audio between play lists**.
   - [ ] **Groups in play list**.
-  - [ ] Manage audio file through play list.
+  - [x] Manage audio file through play list.
 
 * - [ ] Search.
+  - [x] Basic search.
   - [ ] **Search with id3v2 info**.
   - [ ] **Search statement (for example, only search in title by "TITLE HAS xxx")**.
 * - [ ] Manage id3v2 info.
