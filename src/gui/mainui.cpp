@@ -117,6 +117,15 @@ void MainUI::InitConnections() {
           m_searchDialog, &PlaylistSearchDialog::setModel);
 }
 
+void MainUI::keyPressEvent(QKeyEvent *event) {
+  if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F) {
+    if (!m_searchDialog->isVisible()) {
+      openSearchWindow();
+      event->accept();
+    }
+  }
+}
+
 void MainUI::openAudio() {
   const QString filePath = QFileDialog::getOpenFileName(
       this, "Open audio", QCoreApplication::applicationFilePath(),

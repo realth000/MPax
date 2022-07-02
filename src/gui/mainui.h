@@ -1,6 +1,7 @@
 ﻿#ifndef MAINUI_H
 #define MAINUI_H
 
+#include <QtGui/QKeyEvent>
 #include <QtWidgets/QMainWindow>
 
 #include "audio/coreplayer.h"
@@ -24,6 +25,9 @@ class MainUI : public QMainWindow {
 
  signals:
   void updateConfig();
+
+ protected:
+  void keyPressEvent(QKeyEvent *event) override;
 
  private:
   Ui::MainUI *ui;
