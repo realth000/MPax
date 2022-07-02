@@ -204,6 +204,8 @@ void MainUI::playAudio(const int &index) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setCurrentContent(content);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
+  Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
 void MainUI::savePlaylist() {
@@ -232,9 +234,9 @@ void MainUI::loadPlaylist() {
   const int currentPlaylist = Config::AppConfig::getInstance()
                                   ->config(CONFIG_CUR_PLAYLIST)
                                   .value.toInt();
-  const int currentPlayContent = Config::AppConfig::getInstance()
-                                     ->config(CONFIG_CUR_PLAYCONTENT)
-                                     .value.toInt();
+  const int currentPlayIndex = Config::AppConfig::getInstance()
+                                   ->config(CONFIG_CUR_PLAYCONTENT)
+                                   .value.toInt();
   QStringList::const_iterator it = allPlaylistPath.constBegin();
   while (it != allPlaylistPath.constEnd()) {
     QList<Playlist> playlistList = Config::AppPlaylist::loadPlaylist((*it));
@@ -242,7 +244,16 @@ void MainUI::loadPlaylist() {
     it++;
   }
   ui->listTabWidget->setCurrentPlaylist(currentPlaylist);
-  playAudio(currentPlayContent);
+  ui->playlistWidget->setCurrentContent(currentPlayIndex);
+  PlayContent *content = ui->playlistWidget->currentPlayContent().content;
+  if (content == nullptr) {
+    return;
+  }
+  ui->playControlWidget->updatePlayInfo(content);
+  ui->playControlWidget->setContentPath(content->contentPath);
+  ui->playlistWidget->setCurrentContent(content);
+  playAudio(currentPlayIndex, content);
+  //  playAudio(currentPlayContent);
 }
 
 void MainUI::saveConfig() {
@@ -275,7 +286,19 @@ void MainUI::openSearchWindow() {
   PlaylistSearchDialog *d =
       new PlaylistSearchDialog(this, ui->listTabWidget->CurrentPlaylist());
   connect(d, &PlaylistSearchDialog::playContentChanged, this,
-          [this](const int &index) { playAudio(index); });
+          [this](const int &index) {
+            ui->playlistWidget->setCurrentContent(index);
+            PlayContent *content =
+                ui->playlistWidget->currentPlayContent().content;
+            if (content == nullptr) {
+              return;
+            }
+            ui->playControlWidget->updatePlayInfo(content);
+            ui->playControlWidget->setContentPath(content->contentPath);
+            ui->playlistWidget->setCurrentContent(content);
+            addHistory(PlayContentPos{index, content});
+            playAudio(index, content);
+          });
   connect(d, &PlaylistSearchDialog::finished, d,
           &PlaylistSearchDialog::deleteLater);
   d->show();
