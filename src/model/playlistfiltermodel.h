@@ -9,7 +9,8 @@ class PlaylistFilterModel : public QSortFilterProxyModel {
   explicit PlaylistFilterModel(QObject *parent = nullptr);
   QModelIndex sourceIndex(const QModelIndex &proxyIndex) const;
   QModelIndex fromSourceIndex(const QModelIndex &sourceIndex) const;
-  QModelIndex nextSourceRow(const QModelIndex &proxyIndex) const;
+  QModelIndex seekSourceRow(const QModelIndex &proxyIndex,
+                            const int &offset) const;
 
  protected:
   bool filterAcceptsRow(int sourceRow,

@@ -63,7 +63,11 @@ PlayContentPos PlaylistWidget::preContent() const {
   }
   const QModelIndex filterIndex =
       m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
-  return m_playlistModel->findPreContent();
+  return m_playlistModel->content(
+      m_playlistFilterModel
+          ->seekSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex),
+                          -1)
+          .row());
 }
 
 PlayContentPos PlaylistWidget::nextContent() const {
@@ -76,7 +80,8 @@ PlayContentPos PlaylistWidget::nextContent() const {
       m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
   return m_playlistModel->content(
       m_playlistFilterModel
-          ->nextSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex))
+          ->seekSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex),
+                          1)
           .row());
 }
 

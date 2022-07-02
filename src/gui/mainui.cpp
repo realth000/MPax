@@ -153,8 +153,14 @@ void MainUI::playPre() {
     m_historyPos--;
     cp.index = (*m_history)[m_historyPos].first;
     cp.content = (*m_history)[m_historyPos].second;
+  } else if (m_history->count() > 0 && m_historyPos - 1 < m_history->count() &&
+             m_historyPos - 1 >= 0) {
+    m_historyPos--;
+    cp.index = (*m_history)[m_historyPos].first;
+    cp.content = (*m_history)[m_historyPos].second;
   } else {
     cp = ui->playlistWidget->preContent();
+    addHistory(cp);
   }
   if (cp.content == nullptr) {
     qDebug() << "can not find previous one";

@@ -29,12 +29,13 @@ QModelIndex PlaylistFilterModel::sourceIndex(
     const QModelIndex &proxyIndex) const {
   return mapToSource(proxyIndex);
 }
-QModelIndex PlaylistFilterModel::nextSourceRow(
-    const QModelIndex &proxyIndex) const {
-  if (proxyIndex.row() + 1 >= sourceModel()->rowCount()) {
+QModelIndex PlaylistFilterModel::seekSourceRow(const QModelIndex &proxyIndex,
+                                               const int &offset) const {
+  const int nIndex = proxyIndex.row() + offset;
+  if (nIndex >= sourceModel()->rowCount() || nIndex < 0) {
     return mapToSource(index(0, 0));
   }
-  return mapToSource(proxyIndex.siblingAtRow(proxyIndex.row() + 1));
+  return mapToSource(proxyIndex.siblingAtRow(nIndex));
 }
 
 QModelIndex PlaylistFilterModel::fromSourceIndex(
