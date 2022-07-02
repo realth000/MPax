@@ -299,6 +299,8 @@ void MainUI::openSearchWindow() {
             addHistory(PlayContentPos{index, content});
             playAudio(index, content);
           });
+  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, d,
+          &PlaylistSearchDialog::setModel);
   connect(d, &PlaylistSearchDialog::finished, d,
           &PlaylistSearchDialog::deleteLater);
   d->show();

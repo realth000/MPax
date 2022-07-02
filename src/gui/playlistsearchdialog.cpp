@@ -36,6 +36,10 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent,
 
 PlaylistSearchDialog::~PlaylistSearchDialog() {}
 
+void PlaylistSearchDialog::setModel(QAbstractItemModel *model) {
+  m_model->setSourceModel(model);
+}
+
 Qt::CaseSensitivity PlaylistSearchDialog::caseSensitivity() {
   return ui->caseCheckBox->isChecked() ? Qt::CaseSensitive
                                        : Qt::CaseInsensitive;

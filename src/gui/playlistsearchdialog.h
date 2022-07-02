@@ -22,6 +22,9 @@ class PlaylistSearchDialog : public QDialog {
  signals:
   void playContentChanged(const int &row);
 
+ public slots:
+  void setModel(QAbstractItemModel *model);
+
  private:
   Ui::PlaylistSearchDialog *ui;
   Model::PlaylistSearchFilterModel *m_model;
