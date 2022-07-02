@@ -156,6 +156,14 @@
     </message>
 </context>
 <context>
+    <name>PlaylistSearch</name>
+    <message>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearch.h" line="54"/>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+</context>
+<context>
     <name>PlaylistSearchDialog</name>
     <message>
         <location filename="../../src/gui/playlistsearchdialog.ui" line="14"/>
