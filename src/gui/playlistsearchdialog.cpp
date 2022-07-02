@@ -5,8 +5,7 @@
 #include "ui_playlistsearchdialog.h"
 #include "util/cssloader.h"
 
-PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent,
-                                           QAbstractItemModel *model)
+PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::PlaylistSearchDialog),
       m_model(new Model::PlaylistSearchFilterModel) {
@@ -23,7 +22,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent,
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
   this->setStyleSheet(util::loadCssFromFile(":/css/playlistwidget.css"));
-  m_model->setSourceModel(model);
+  //  m_model->setSourceModel(model);
   ui->searchTableView->setModel(m_model);
 
   connect(ui->searchLineEdit, &QLineEdit::textEdited, this,

@@ -16,7 +16,7 @@ class PlaylistSearchDialog : public QDialog {
   Q_OBJECT
 
  public:
-  explicit PlaylistSearchDialog(QWidget *parent, QAbstractItemModel *model);
+  explicit PlaylistSearchDialog(QWidget *parent);
   ~PlaylistSearchDialog();
 
  signals:

@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 
 #include "audio/coreplayer.h"
+#include "gui/playlistsearchdialog.h"
 #include "model/listtabmodel.h"
 #include "model/playlistmodel.h"
 
@@ -28,6 +29,7 @@ class MainUI : public QMainWindow {
   Ui::MainUI *ui;
   QList<Ui::PlayContentPair> *m_history;
   int m_historyPos;
+  PlaylistSearchDialog *m_searchDialog;
 
   PlayContent *addAudioFile(const QString &filePath);
   void addHistory(const PlayContentPos &cp);

@@ -8,14 +8,14 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
-#include "gui/playlistsearchdialog.h"
 #include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainUI),
       m_history(new QList<Ui::PlayContentPair>),
-      m_historyPos(0) {
+      m_historyPos(0),
+      m_searchDialog(new PlaylistSearchDialog(this)) {
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
@@ -99,6 +99,22 @@ void MainUI::InitConnections() {
           &MainUI::saveConfig);
   connect(ui->searchPlaylistAction, &QAction::triggered, this,
           &MainUI::openSearchWindow);
+  connect(m_searchDialog, &PlaylistSearchDialog::playContentChanged, this,
+          [this](const int &index) {
+            ui->playlistWidget->setCurrentContent(index);
+            PlayContent *content =
+                ui->playlistWidget->currentPlayContent().content;
+            if (content == nullptr) {
+              return;
+            }
+            ui->playControlWidget->updatePlayInfo(content);
+            ui->playControlWidget->setContentPath(content->contentPath);
+            ui->playlistWidget->setCurrentContent(content);
+            addHistory(PlayContentPos{index, content});
+            playAudio(index, content);
+          });
+  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
+          m_searchDialog, &PlaylistSearchDialog::setModel);
 }
 
 void MainUI::openAudio() {
@@ -283,25 +299,6 @@ void MainUI::addHistory(const PlayContentPos &cp) {
 }
 
 void MainUI::openSearchWindow() {
-  PlaylistSearchDialog *d =
-      new PlaylistSearchDialog(this, ui->listTabWidget->CurrentPlaylist());
-  connect(d, &PlaylistSearchDialog::playContentChanged, this,
-          [this](const int &index) {
-            ui->playlistWidget->setCurrentContent(index);
-            PlayContent *content =
-                ui->playlistWidget->currentPlayContent().content;
-            if (content == nullptr) {
-              return;
-            }
-            ui->playControlWidget->updatePlayInfo(content);
-            ui->playControlWidget->setContentPath(content->contentPath);
-            ui->playlistWidget->setCurrentContent(content);
-            addHistory(PlayContentPos{index, content});
-            playAudio(index, content);
-          });
-  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, d,
-          &PlaylistSearchDialog::setModel);
-  connect(d, &PlaylistSearchDialog::finished, d,
-          &PlaylistSearchDialog::deleteLater);
-  d->show();
+  m_searchDialog->setModel(ui->listTabWidget->CurrentPlaylist());
+  m_searchDialog->show();
 }
