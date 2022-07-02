@@ -111,7 +111,7 @@ QString PlayControlWidget::MiliSecondToString(const qint64 &ms) {
 }
 
 void PlayControlWidget::updatePlay() {
-  switch (m_corePlayer->PlayState()) {
+  switch (m_corePlayer->playState()) {
     case QMediaPlayer::PlayingState:
       m_corePlayer->pause();
       ui->playButton->setText(ICON_PLAY);
@@ -291,9 +291,22 @@ void PlayControlWidget::handleMediaStatusChanged(
           emit playRandom();
           break;
       }
-    case QMediaPlayer::InvalidMedia:
+    case QMediaPlayer::InvalidMedia: {
+      // It seems switching audio file when EOF will cause an InvalidMedia state
+      // no matter the new audio is valid or not, so a second check on player
+      // state after some time is needed.
+      QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
+      m_waitEventLoop.exec();
+      const QMediaPlayer::MediaStatus m = m_corePlayer->mediaStatus();
+      if (m == QMediaPlayer::InvalidMedia || m == QMediaPlayer::NoMedia ||
+          m == QMediaPlayer::UnknownMediaStatus) {
+        qDebug() << "can not play invalid media" << m_currentContentUrl;
+        emit playInvalid();
+        emit playNext();
+      }
+    } break;
     case QMediaPlayer::UnknownMediaStatus:
-      qDebug() << "can not play invalid media" << m_currentContentUrl;
+      qDebug() << "UnknownMediaStatus" << m_currentContentUrl;
       QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
       emit playInvalid();
       m_waitEventLoop.exec();

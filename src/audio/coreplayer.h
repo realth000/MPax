@@ -11,8 +11,9 @@ class CorePlayer : public QObject {
   Q_OBJECT
  public:
   explicit CorePlayer(QObject *parent = nullptr);
+  QMediaPlayer::State playState() const;
+  QMediaPlayer::MediaStatus mediaStatus() const;
 
-  QMediaPlayer::State PlayState();
  signals:
   void playStateChanged(QMediaPlayer::State);
   void playPositionChanged(const qint64 &position);

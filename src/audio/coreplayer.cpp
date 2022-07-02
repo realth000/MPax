@@ -39,7 +39,11 @@ void CorePlayer::updatePlayState(const QMediaPlayer::State &state) {
   }
 }
 
-QMediaPlayer::State CorePlayer::PlayState() { return m_player->state(); }
+QMediaPlayer::State CorePlayer::playState() const { return m_player->state(); }
+
+QMediaPlayer::MediaStatus CorePlayer::mediaStatus() const {
+  return m_player->mediaStatus();
+}
 
 void CorePlayer::play(const QUrl &contentUrl) {
   if (contentUrl.isEmpty()) {
