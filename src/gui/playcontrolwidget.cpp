@@ -29,13 +29,17 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
       m_corePlayerState(QMediaPlayer::StoppedState),
       m_volMute(false),
       m_vol(50),
-      m_playMode(PlayMode::ListRepeat) {
+      m_playMode(PlayMode::ListRepeat),
+      m_playPauseKey(nullptr),
+      m_playPreKey(nullptr),
+      m_playNextKey(nullptr) {
   ui->setupUi(this);
   InitConfig();
   ui->audioInfoGroupBox->setLayout(ui->audoInfoHBoxLayout);
   ui->playPosSlider->setEnabled(false);
   InitCss(":/css/playcontrolwidget.css");
   InitIconFont();
+  InitShortcut();
   InitConnections();
 }
 
@@ -312,6 +316,17 @@ void PlayControlWidget::handleMediaStatusChanged(
       m_waitEventLoop.exec();
       emit playNext();
   }
+}
+
+void PlayControlWidget::InitShortcut() {
+  m_playPauseKey = new QHotkey(QKeySequence("Ctrl+Meta+B"), true, this);
+  m_playPreKey = new QHotkey(QKeySequence("Ctrl+Meta+Left"), true, this);
+  m_playNextKey = new QHotkey(QKeySequence("Ctrl+Meta+Right"), true, this);
+  connect(m_playPauseKey, &QHotkey::activated, this,
+          &PlayControlWidget::updatePlay);
+  connect(m_playPreKey, &QHotkey::activated, this, &PlayControlWidget::playPre);
+  connect(m_playNextKey, &QHotkey::activated, this,
+          &PlayControlWidget::playNext);
 }
 
 PlayControlWidget::PlayMode PlayControlWidget::playMode() const {

@@ -158,9 +158,8 @@
 <context>
     <name>PlaylistSearch</name>
     <message>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearch.h" line="54"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="vanished">Form</translation>
     </message>
 </context>
 <context>
@@ -178,7 +177,7 @@
         <translation>区分大小写</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="14"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="13"/>
         <source>Search in playlist</source>
         <translation>播放列表中搜索</translation>
     </message>
@@ -192,19 +191,32 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="110"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="115"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="113"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="118"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="115"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="120"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
+    </message>
+</context>
+<context>
+    <name>QHotkey</name>
+    <message>
+        <location filename="../../external/QHotkey/qhotkey.cpp" line="294"/>
+        <source>Failed to register %1. Error: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../external/QHotkey/qhotkey.cpp" line="314"/>
+        <source>Failed to unregister %1. Error: %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

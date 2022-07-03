@@ -4,6 +4,7 @@
 #include <QtCore/QEventLoop>
 #include <QtWidgets/QWidget>
 
+#include "QHotkey/QHotkey"
 #include "audio/coreplayer.h"
 #include "core/playcontent.h"
 
@@ -20,6 +21,7 @@ class PlayControlWidget : public QWidget {
   explicit PlayControlWidget(QWidget *parent = nullptr);
   ~PlayControlWidget();
   PlayMode playMode() const;
+
  signals:
   void playPre();
   void playNext();
@@ -45,10 +47,16 @@ class PlayControlWidget : public QWidget {
 
   PlayMode m_playMode;
 
+  // Shortcut
+  QHotkey *m_playPauseKey;
+  QHotkey *m_playPreKey;
+  QHotkey *m_playNextKey;
+
   void InitConfig();
   void InitCss(const QString &cssFilePath);
   void InitIconFont();
   void InitConnections();
+  void InitShortcut();
   QString MiliSecondToString(const qint64 &ms);
 
  private slots:
