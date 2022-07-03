@@ -376,4 +376,16 @@ void PlayControlWidget::updateConfig() {
   ui->volumeSlider->setValue(map[CONFIG_VOLUME].value.toInt());
   m_volMute = map[CONFIG_VOLUME_MUTE].value.toBool();
   updateMuteWithValue(m_volMute);
+  m_playPauseKey->setShortcut(Config::AppConfig::getInstance()
+                                  ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
+                                  .value.toString(),
+                              true);
+  m_playPreKey->setShortcut(Config::AppConfig::getInstance()
+                                ->config(CONFIG_SHORTCUT_PLAY_PRE)
+                                .value.toString(),
+                            true);
+  m_playNextKey->setShortcut(Config::AppConfig::getInstance()
+                                 ->config(CONFIG_SHORTCUT_PLAY_NEXT)
+                                 .value.toString(),
+                             true);
 }

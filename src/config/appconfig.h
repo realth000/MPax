@@ -12,6 +12,9 @@
 #define CONFIG_PLAY_MODE "PlayMode"
 #define CONFIG_VOLUME "Volume"
 #define CONFIG_VOLUME_MUTE "VolumeMute"
+#define CONFIG_SHORTCUT_PLAY_PAUSE "ShortcutPlayPause"
+#define CONFIG_SHORTCUT_PLAY_PRE "ShortcutPlayPre"
+#define CONFIG_SHORTCUT_PLAY_NEXT "ShortcutPlayNext"
 
 namespace Config {
 struct ConfigPair {
