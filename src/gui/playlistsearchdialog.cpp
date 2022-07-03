@@ -23,6 +23,8 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
   this->setStyleSheet(util::loadCssFromFile(":/css/playlistwidget.css"));
   //  m_model->setSourceModel(model);
+  ui->caseCheckBox->setFocusPolicy(Qt::NoFocus);
+  ui->searchLineEdit->setFocus();
   ui->searchTableView->setModel(m_model);
 
   connect(ui->searchLineEdit, &QLineEdit::textEdited, this,

@@ -72,7 +72,7 @@ QScrollBar::handle:vertical:pressed {
     border-left-color: #007b50;
     border-bottom-color: transparent;
     border-left-width: 2px;
-    background-color: #272632;
+    background-color: #007b50;
     min-height: 20px;
 }
 
@@ -142,4 +142,21 @@ QScrollBar::down-arrow:vertical {
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
+}
+
+QCheckBox:hover {
+    border-color: transparent;
+    color: #FFFFFF;
+}
+
+QCheckBox::indicator:checked {
+    background-color: qradialgradient(spread:pad,cx:0.5,cy:0.5,radius:0.5,fx:0.5,fy:0.5,stop:0.6 #04b97f,stop:0.8 transparent);
+}
+
+QLineEdit {
+    border-radius: none;
+    border: none;
+    background-color: #222b2e;
+    selection-background-color: #007b50;
+    color: #d3dae3;
 }
