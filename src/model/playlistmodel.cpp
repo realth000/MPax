@@ -2,9 +2,13 @@
 
 #include <QDebug>
 
+#include "core/playlistsql.h"
+
 PlaylistModelHeader::PlaylistModelHeader(
     const QList<PlaylistHeaderItem> &headerList)
-    : m_header(headerList) {}
+    : m_header(headerList) {
+  PlaylistSql::getInstance();
+}
 
 int PlaylistModelHeader::headerCount() const { return m_header.count(); }
 

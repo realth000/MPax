@@ -5,6 +5,7 @@
 
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
+#include "core/playlistsql.h"
 
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
   connect(this, &ListTabModel::dataChanged, this,
@@ -87,6 +88,7 @@ void ListTabModel::saveAllPlaylist(const QString &filePath) const {
   for (auto playlist : m_playlistList) {
     allList.append(playlist->list());
   }
+  PlaylistSql::getInstance()->savePlaylist(allList);
   Config::AppPlaylist::savePlaylist(filePath,
                                     PlaylistJson::toJsonString(allList));
 }

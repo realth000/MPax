@@ -18,10 +18,12 @@ class PlaylistSql : public QObject {
   void loadPlaylist();
 
  private:
+  QSqlDatabase m_database;
+
   PlaylistSql();
   ~PlaylistSql();
-  QSqlDatabase m_database;
-  QSqlDatabase m_memDatabase;
+  bool tryOpenDatabase();
+  void tryCloseDatabase();
 };
 
 #endif  // MPAX_PLAYLISTSQL_H
