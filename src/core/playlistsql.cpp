@@ -92,7 +92,43 @@ exit:
 
 void PlaylistSql::updatePlaylist(const QList<Playlist>& playlists) {}
 
-void PlaylistSql::loadPlaylist() {}
+QList<Playlist> PlaylistSql::loadPlaylist() {
+  if (!tryOpenDatabase()) {
+    qDebug() << "can not load playlist, database failed to open";
+    return QList<Playlist>{};
+  }
+  QSqlQuery query(m_database);
+  bool ok = query.exec(QString("SELECT * FROM %1").arg(SQL_MASTER_TABLE_NAME));
+  if (!ok) {
+    qDebug() << "can not read playlist info";
+    tryCloseDatabase();
+    return QList<Playlist>{};
+  }
+  QList<Playlist> allList;
+  while (query.next()) {
+    PlaylistInfo* info = new PlaylistInfo;
+    PlayContentList* list = new PlayContentList;
+
+    int id = query.value("id").toInt();
+    QString name = query.value("name").toString();
+    QSqlQuery q(m_database);
+    ok = q.exec(QString("SELECT * FROM playlist_%1_table").arg(id));
+    if (!ok) {
+      qDebug() << "can not load playlist data" << name << ":" << q.lastError();
+      tryCloseDatabase();
+      return QList<Playlist>{};
+    }
+    info->setInfo(PLAYLIST_INFO_NAME, name);
+
+    while (q.next()) {
+      //      qDebug() << q.value("path").toString();
+      list->append(new PlayContent(q.value("path").toString()));
+    }
+    allList.append(Playlist(info, list));
+  }
+  tryCloseDatabase();
+  return allList;
+}
 
 PlaylistSql::PlaylistSql()
     : m_database(

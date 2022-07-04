@@ -8,6 +8,7 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
+#include "core/playlistsql.h"
 #include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent)
@@ -22,9 +23,9 @@ MainUI::MainUI(QWidget *parent)
   this->setWindowTitle(QStringLiteral("MPax"));
   this->setStyleSheet(util::loadCssFromFile(":/css/external/MaterialDark.css"));
   Config::AppConfig::getInstance()->loadConfig();
-  QList<Playlist> playlistList =
-      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
-
+  //  QList<Playlist> playlistList =
+  //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
+  QList<Playlist> playlistList = PlaylistSql::getInstance()->loadPlaylist();
   InitConnections();
   emit updateConfig();
 

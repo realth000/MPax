@@ -15,7 +15,7 @@ class PlaylistSql : public QObject {
  public slots:
   void savePlaylist(const QList<Playlist>& playlists);
   void updatePlaylist(const QList<Playlist>& playlists);
-  void loadPlaylist();
+  QList<Playlist> loadPlaylist();
 
  private:
   QSqlDatabase m_database;
