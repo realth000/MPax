@@ -87,15 +87,12 @@ void MainUI::InitConnections() {
           &MainUI::handleDoubleClickPlay);
   connect(ui->playlistWidget, &PlaylistWidget::playlistChanged,
           ui->listTabWidget, &ListTabWidget::saveDefaultPlaylist);
-  connect(ui->savePlaylistAction, &QAction::triggered, this,
-          &MainUI::savePlaylist);
   connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
           &MainUI::saveAllPlaylist);
   connect(this, &MainUI::updateConfig, ui->playlistWidget,
           &PlaylistWidget::updateConfig);
   connect(this, &MainUI::updateConfig, ui->playControlWidget,
           &PlayControlWidget::updateConfig);
-  connect(this, &MainUI::updateConfig, this, &MainUI::loadPlaylist);
   connect(ui->saveSettingsAction, &QAction::triggered, this,
           &MainUI::saveConfig);
   connect(ui->searchPlaylistAction, &QAction::triggered, this,
@@ -240,52 +237,12 @@ void MainUI::playAudio(const int &index) {
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
-void MainUI::savePlaylist() {
-  const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
-  if (filePath.isEmpty()) {
-    return;
-  }
-  ui->listTabWidget->savePlaylist(filePath);
-}
-
 void MainUI::saveAllPlaylist() {
   const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
   if (filePath.isEmpty()) {
     return;
   }
   ui->listTabWidget->saveAllPlaylist(filePath);
-}
-
-void MainUI::loadPlaylist() {
-  const QStringList allPlaylistPath = Config::AppConfig::getInstance()
-                                          ->config(CONFIG_ALL_PLAYLIST)
-                                          .value.toStringList();
-  if (allPlaylistPath.isEmpty()) {
-    return;
-  }
-  const int currentPlaylist = Config::AppConfig::getInstance()
-                                  ->config(CONFIG_CUR_PLAYLIST)
-                                  .value.toInt();
-  const int currentPlayIndex = Config::AppConfig::getInstance()
-                                   ->config(CONFIG_CUR_PLAYCONTENT)
-                                   .value.toInt();
-  QStringList::const_iterator it = allPlaylistPath.constBegin();
-  while (it != allPlaylistPath.constEnd()) {
-    QList<Playlist> playlistList = Config::AppPlaylist::loadPlaylist((*it));
-    ui->listTabWidget->addPlaylist(playlistList);
-    it++;
-  }
-  ui->listTabWidget->setCurrentPlaylist(currentPlaylist);
-  ui->playlistWidget->setCurrentContent(currentPlayIndex);
-  PlayContent *content = ui->playlistWidget->currentPlayContent().content;
-  if (content == nullptr) {
-    return;
-  }
-  ui->playControlWidget->updatePlayInfo(content);
-  ui->playControlWidget->setContentPath(content->contentPath);
-  ui->playlistWidget->setCurrentContent(content);
-  playAudio(currentPlayIndex, content);
-  //  playAudio(currentPlayContent);
 }
 
 void MainUI::saveConfig() {

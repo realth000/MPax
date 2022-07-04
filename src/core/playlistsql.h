@@ -6,6 +6,8 @@
 
 #include "core/playlist.h"
 
+#define SQL_DB_NAME QCoreApplication::applicationDirPath() + "/playlist.db"
+
 class PlaylistSql : public QObject {
  public:
   static PlaylistSql* getInstance();
@@ -14,6 +16,7 @@ class PlaylistSql : public QObject {
 
  public slots:
   void savePlaylist(const QList<Playlist>& playlists);
+  static void savePlaylist(const QString& filePath);
   void updatePlaylist(const QList<Playlist>& playlists);
   QList<Playlist> loadPlaylist();
 

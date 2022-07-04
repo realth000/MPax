@@ -24,7 +24,6 @@ class ListTabWidget : public QWidget {
   void addPlaylist(PlaylistModel *playlistModel);
   void addPlaylist(const QList<Playlist> &playlistList);
   void addContent(PlayContent *playContent);
-  void savePlaylist(const QString &filePath);
   void saveAllPlaylist(const QString &filePath);
   void setCurrentPlaylist(const int &index);
   void saveDefaultPlaylist();

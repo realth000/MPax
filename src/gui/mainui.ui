@@ -108,7 +108,6 @@
      <string>Playlist</string>
     </property>
     <addaction name="playlistAddAction"/>
-    <addaction name="savePlaylistAction"/>
     <addaction name="saveAllPlaylistAction"/>
     <addaction name="searchPlaylistAction"/>
    </widget>

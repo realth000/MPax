@@ -70,7 +70,6 @@ void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
 Config::AppConfig::AppConfig()
     : m_configMap(QMap<QString, ConfigPair>()),
       m_saveConfigDeferTimer(new QTimer) {
-  addConfig(CONFIG_ALL_PLAYLIST, QStringList{}, TYPE_STRING_LIST);
   addConfig(CONFIG_PLAYLIST_HEADER, QMap<QString, QVariant>(),
             TYPE_MAP_STRING_INT);
   addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);

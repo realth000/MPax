@@ -2,11 +2,11 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
+#include <QtCore/QFile>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 
 #define SQL_DB_CONN "playlist_db_connection"
-#define SQL_DB_NAME QCoreApplication::applicationDirPath() + "/playlist.db"
 #define SQL_MEM_DB_CONN "playlist_mem_db_connection"
 #define SQL_MEM_DB_NAME "playlist_mem_db"
 #define SQL_MASTER_TABLE_NAME "playlist_info_table"
@@ -88,6 +88,10 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   m_database.commit();
 exit:
   tryCloseDatabase();
+}
+
+void PlaylistSql::savePlaylist(const QString& dbPath) {
+  QFile::copy(SQL_DB_NAME, dbPath);
 }
 
 void PlaylistSql::updatePlaylist(const QList<Playlist>& playlists) {}

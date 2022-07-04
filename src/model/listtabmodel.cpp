@@ -78,22 +78,16 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
   return QStringListModel::setData(index, value, role);
 }
 
-void ListTabModel::saveCurrentPlaylist(const QString &filePath) const {
-  Config::AppPlaylist::savePlaylist(
-      filePath, PlaylistJson::toJsonString(m_currentPlayListModel->list()));
+void ListTabModel::saveAllPlaylist(const QString &filePath) const {
+  PlaylistSql::getInstance()->savePlaylist(filePath);
 }
 
-void ListTabModel::saveAllPlaylist(const QString &filePath) const {
+void ListTabModel::saveAllPlaylist() const {
   QList<Playlist> allList;
   for (auto playlist : m_playlistList) {
     allList.append(playlist->list());
   }
   PlaylistSql::getInstance()->savePlaylist(allList);
-  Config::AppPlaylist::savePlaylist(filePath,
-                                    PlaylistJson::toJsonString(allList));
 }
 
-void ListTabModel::saveDefaultPlaylist() const {
-  qDebug() << "save default playlist to" << CONFIG_PLAYLIST_FILE_PATH;
-  saveAllPlaylist(CONFIG_PLAYLIST_FILE_PATH);
-}
+void ListTabModel::saveDefaultPlaylist() const { saveAllPlaylist(); }

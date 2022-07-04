@@ -5,7 +5,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QVariant>
 
-#define CONFIG_ALL_PLAYLIST "AllPlaylist"
+//#define CONFIG_ALL_PLAYLIST "AllPlaylist"
 #define CONFIG_PLAYLIST_HEADER "PlaylistHeader"
 #define CONFIG_CUR_PLAYLIST "CurrentPlaylist"
 #define CONFIG_CUR_PLAYCONTENT "CurrentPlayContent"
