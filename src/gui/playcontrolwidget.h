@@ -58,6 +58,7 @@ class PlayControlWidget : public QWidget {
   void InitConnections();
   void InitShortcut();
   QString MiliSecondToString(const qint64 &ms);
+  void DisableFocus();
 
  private slots:
   void updatePlay();

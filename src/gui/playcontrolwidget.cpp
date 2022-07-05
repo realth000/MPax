@@ -37,6 +37,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   InitConfig();
   ui->audioInfoGroupBox->setLayout(ui->audoInfoHBoxLayout);
   ui->playPosSlider->setEnabled(false);
+  DisableFocus();
   InitCss(":/css/playcontrolwidget.css");
   InitIconFont();
   InitShortcut();
@@ -112,6 +113,20 @@ QString PlayControlWidget::MiliSecondToString(const qint64 &ms) {
       .arg(hh, 2, 10, QLatin1Char('0'))
       .arg(mm, 2, 10, QLatin1Char('0'))
       .arg(ss, 2, 10, QLatin1Char('0'));
+}
+
+void PlayControlWidget::DisableFocus() {
+  ui->titleButton->setFocusPolicy(Qt::NoFocus);
+  ui->artistButton->setFocusPolicy(Qt::NoFocus);
+  ui->albumButton->setFocusPolicy(Qt::NoFocus);
+  ui->preButton->setFocusPolicy(Qt::NoFocus);
+  ui->playButton->setFocusPolicy(Qt::NoFocus);
+  ui->nextButton->setFocusPolicy(Qt::NoFocus);
+  ui->stopButton->setFocusPolicy(Qt::NoFocus);
+  ui->playPosSlider->setFocusPolicy(Qt::NoFocus);
+  ui->playModeButton->setFocusPolicy(Qt::NoFocus);
+  ui->muteButton->setFocusPolicy(Qt::NoFocus);
+  ui->volumeSlider->setFocusPolicy(Qt::NoFocus);
 }
 
 void PlayControlWidget::updatePlay() {
