@@ -38,6 +38,16 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel) {
   }
 }
 
+void ListTabModel::removePlaylist(const int &index) {
+  if (m_playlistList.length() <= index) {
+    return;
+  }
+  m_currentPlayListModel = nullptr;
+  // FIXME: Memory leak and shared PlayContent!
+  m_playlistList.removeAt(index);
+  PlaylistSql::getInstance()->removePlaylist(index);
+}
+
 void ListTabModel::setCurrentPlaylist(const int &index) {
   if (m_playlistList.length() <= index) {
     qDebug() << "can not set to a playlist out of index with value" << index;

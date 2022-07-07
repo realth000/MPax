@@ -26,6 +26,7 @@ class ListTabModel : public QStringListModel {
  public slots:
   void addContent(PlayContent *playContent);
   void addPlaylist(PlaylistModel *playlistModel);
+  void removePlaylist(const int &index);
   void setCurrentPlaylist(const int &index);
   PlaylistModel *currentPlaylist() const;
   void saveAllPlaylist(const QString &filePath) const;

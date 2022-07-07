@@ -17,11 +17,13 @@ class PlaylistSql : public QObject {
  public slots:
   void savePlaylist(const QList<Playlist>& playlists);
   static void savePlaylist(const QString& filePath);
+  void removePlaylist(const int& index);
   void updatePlaylist(const QList<Playlist>& playlists);
   QList<Playlist> loadPlaylist();
 
  private:
   QSqlDatabase m_database;
+  QVector<QPair<QString, QString>> m_nameVector;
 
   PlaylistSql();
   ~PlaylistSql();

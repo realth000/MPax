@@ -6,9 +6,11 @@
 ListTabWidget::ListTabWidget(QWidget *parent)
     : QWidget(parent),
       ui(new Ui::ListTabWidget),
-      m_listTabModel(new ListTabModel) {
+      m_listTabModel(new ListTabModel),
+      m_listViewContextMenu(InitListViewContextMenu()) {
   ui->setupUi(this);
   ui->listView->setModel(m_listTabModel);
+  ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
   InitConnections();
   InitCss(":/css/listtabwidget.css");
 }
@@ -28,6 +30,8 @@ void ListTabWidget::InitConnections() {
           &ListTabWidget::currentPlaylistChanged);
   connect(ui->listView, &QListView::clicked, this,
           &ListTabWidget::updateCurrentPlaylist);
+  connect(ui->listView, &QListView::customContextMenuRequested, this,
+          &ListTabWidget::openListViewContextMenu);
 }
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
@@ -35,8 +39,26 @@ void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
   emit currentPlaylistIndexChanged(index.row());
 }
 
+void ListTabWidget::openListViewContextMenu() {
+  m_listViewContextMenu->popup(QCursor::pos());
+}
+
 void ListTabWidget::InitCss(const QString &cssFilePath) {
   this->setStyleSheet(util::loadCssFromFile(cssFilePath));
+}
+
+QMenu *ListTabWidget::InitListViewContextMenu() {
+  QMenu *m = new QMenu(this);
+  QAction *actionDelete = new QAction(tr("Delete"));
+  connect(actionDelete, &QAction::triggered, this,
+          &ListTabWidget::removePlaylist);
+  m->addAction(actionDelete);
+  return m;
+}
+
+void ListTabWidget::removePlaylist() {
+  m_listTabModel->removePlaylist(ui->listView->currentIndex().row());
+  emit currentPlaylistChanged(m_listTabModel->currentPlaylist());
 }
 
 void ListTabWidget::saveAllPlaylist(const QString &filePath) {

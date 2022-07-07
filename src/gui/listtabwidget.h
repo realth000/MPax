@@ -1,6 +1,7 @@
 #ifndef LISTTABWIDGET_H
 #define LISTTABWIDGET_H
 
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QWidget>
 
 #include "model/listtabmodel.h"
@@ -32,12 +33,16 @@ class ListTabWidget : public QWidget {
  private:
   Ui::ListTabWidget *ui;
   ListTabModel *m_listTabModel;
+  QMenu *m_listViewContextMenu;
 
   void InitConnections();
   void InitCss(const QString &cssFilePath);
+  QMenu *InitListViewContextMenu();
 
  private slots:
   void updateCurrentPlaylist(const QModelIndex &index);
+  void openListViewContextMenu();
+  void removePlaylist();
 };
 
 #endif  // LISTTABWIDGET_H

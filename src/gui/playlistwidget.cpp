@@ -51,7 +51,9 @@ void PlaylistWidget::setHeader(const PlaylistModelHeader *header) {
 
 void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   m_playlistModel = playlistModel;
-  m_playlistModel->setHeader(m_header);
+  if (m_playlistModel != nullptr) {
+    m_playlistModel->setHeader(m_header);
+  }
   //  ui->tableView->setModel(m_playlistModel);
   m_playlistFilterModel->setSourceModel(m_playlistModel);
   ui->tableView->setModel(m_playlistFilterModel);
