@@ -60,3 +60,43 @@ target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MA
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(MPax)
 endif ()
+
+# Get git info
+find_package(Git QUIET)
+if (GIT_FOUND)
+    set(GIT_COMMIT_TIME "")
+    set(GIT_COMMIT "")
+    set(GIT_COMMIT_LONG "")
+
+    # GIT_BRANCH   = $$system(git rev-parse --abbrev-ref HEAD)
+    execute_process(
+            #COMMAND ${GIT_EXECUTABLE} --no-pager log -1 --pretty=format:%cd --date=format:"%F %T %z"
+            COMMAND ${GIT_EXECUTABLE} --no-pager show --oneline --format=%cd --date=format:"%F %T %z" -s HEAD
+            OUTPUT_VARIABLE GIT_COMMIT_TIME
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} --no-pager show --oneline --format=\"%h\" -s HEAD
+            OUTPUT_VARIABLE GIT_COMMIT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} --no-pager show --oneline --format=\"%H\" -s HEAD
+            OUTPUT_VARIABLE GIT_COMMIT_LONG
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    add_definitions(-DAPP_COMMIT_TIME=${GIT_COMMIT_TIME})
+    add_definitions(-DAPP_COMMIT=${GIT_COMMIT})
+    add_definitions(-DAPP_COMMIT_LONG=${GIT_COMMIT_LONG})
+    message(STATUS "Git commit time:" ${GIT_COMMIT_TIME})
+    message(STATUS "Git commit:" ${GIT_COMMIT})
+    message(STATUS "Git commit full name:" ${GIT_COMMIT_LONG})
+else ()
+    message(WARNING "Git not found")
+endif ()

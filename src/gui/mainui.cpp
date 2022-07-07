@@ -2,6 +2,7 @@
 
 #include <QtCore/QtDebug>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 
 #include "./ui_mainui.h"
 #include "audio/audioscanner.h"
@@ -9,6 +10,7 @@
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
 #include "core/playlistsql.h"
+#include "gui/aboutdialog.h"
 #include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent)
@@ -113,6 +115,9 @@ void MainUI::InitConnections() {
           });
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
           m_searchDialog, &PlaylistSearchDialog::setModel);
+  connect(ui->aboutAction, &QAction::triggered, this, &MainUI::showAboutInfo);
+  connect(ui->aboutQtAction, &QAction::triggered, this,
+          &MainUI::showAboutQtInfo);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -275,3 +280,11 @@ void MainUI::openSearchWindow() {
   m_searchDialog->setModel(ui->listTabWidget->CurrentPlaylist());
   m_searchDialog->show();
 }
+
+void MainUI::showAboutInfo() {
+  AboutDialog *aboutDialog = new AboutDialog(this);
+  aboutDialog->setWindowTitle(tr("About MPax"));
+  aboutDialog->exec();
+}
+
+void MainUI::showAboutQtInfo() { QMessageBox::aboutQt(this, tr("About Qt")); }

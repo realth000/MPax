@@ -53,5 +53,7 @@ class MainUI : public QMainWindow {
   void removeLastHistory();
   void handleDoubleClickPlay(const int &index, PlayContent *content);
   void openSearchWindow();
+  void showAboutInfo();
+  void showAboutQtInfo();
 };
 #endif  // MAINUI_H

@@ -118,9 +118,18 @@
     <addaction name="loadSettingsAction"/>
     <addaction name="saveSettingsAction"/>
    </widget>
+   <widget class="QMenu" name="aboutMenu">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="aboutAction"/>
+    <addaction name="aboutQtAction"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="playlistMenu"/>
    <addaction name="settingsMenu"/>
+   <addaction name="aboutMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="openAudioAction">
@@ -171,6 +180,16 @@
   <action name="searchPlaylistAction_2">
    <property name="text">
     <string>Search in playlist</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="text">
+    <string>About MPax</string>
+   </property>
+  </action>
+  <action name="aboutQtAction">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>
