@@ -148,13 +148,19 @@ void PlaylistModel::addContent(PlayContent *content) {
       QString::number(m_listInfo.info(PLAYLIST_INFO_COUNT).toInt() + 1));
 }
 
-bool PlaylistModel::removeContent(const int &index) {
-  if (m_contentList.size() <= index) {
-    return false;
+bool PlaylistModel::removeContent(QList<int> indexes) {
+  std::sort(indexes.begin(), indexes.end());
+  QList<int>::const_reverse_iterator it = indexes.crbegin();
+  while (it != indexes.crend()) {
+    if (m_contentList.size() <= *it) {
+      qDebug() << "remove content out of index" << m_contentList.size() << *it;
+      return false;
+    }
+    beginResetModel();
+    m_contentList.removeAt(*it);
+    endResetModel();
+    it++;
   }
-  beginResetModel();
-  m_contentList.removeAt(index);
-  endResetModel();
   return true;
 }
 

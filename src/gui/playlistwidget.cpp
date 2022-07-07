@@ -28,7 +28,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->horizontalHeader()->setStretchLastSection(true);
   ui->tableView->setSelectionBehavior(QTableView::SelectRows);
-  ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+  //  ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
   //        ui->tableView->setItemDelegate(new NoFocusDelegate);
   // Set tableView row height.
   ui->tableView->verticalHeader()->setDefaultSectionSize(30);
@@ -133,10 +133,12 @@ void PlaylistWidget::actionDelete() {
   if (m_tableViewSelectedRows.count() <= 0) {
     return;
   }
+  QList<int> indexes;
   for (auto t : m_tableViewSelectedRows) {
     const int tt = m_playlistFilterModel->mapToSource(t).row();
-    m_playlistModel->removeContent(tt);
+    indexes.append(tt);
   }
+  m_playlistModel->removeContent(indexes);
   emit playlistChanged();
 }
 
