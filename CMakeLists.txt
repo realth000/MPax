@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.13)
 
-project(MPax VERSION 0.1 LANGUAGES CXX)
+project(MPax VERSION 0.1 LANGUAGES C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -11,7 +11,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -s -Wl,-z,relro,-z,now,-z,noexecstack -fstack-protector-all -fPIE -pie -D_FORTIFY_SOURCE=2")
 endif ()
@@ -21,8 +20,39 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Multimedia Lingui
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Multimedia LinguistTools Sql X11Extras)
 
 include_directories(external)
+include_directories(external/taglib)
+include_directories(external/taglib/taglib)
 include_directories(src)
-
+# Should move this include directories to taglib
+include_directories(
+        external/taglib/taglib/toolkit
+        external/taglib/taglib/asf
+        external/taglib/taglib/mpeg
+        external/taglib/taglib/ogg
+        external/taglib/taglib/ogg/flac
+        external/taglib/taglib/flac
+        external/taglib/taglib/mpc
+        external/taglib/taglib/mp4
+        external/taglib/taglib/ogg/vorbis
+        external/taglib/taglib/ogg/speex
+        external/taglib/taglib/ogg/opus
+        external/taglib/taglib/mpeg/id3v2
+        external/taglib/taglib/mpeg/id3v2/frames
+        external/taglib/taglib/mpeg/id3v1
+        external/taglib/taglib/ape
+        external/taglib/taglib/wavpack
+        external/taglib/taglib/trueaudio
+        external/taglib/taglib/riff
+        external/taglib/taglib/riff/aiff
+        external/taglib/taglib/riff/wav
+        external/taglib/taglib/mod
+        external/taglib/taglib/s3m
+        external/taglib/taglib/it
+        external/taglib/taglib/xm
+        external/taglib/3rdparty
+)
+#get_property(dirs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+#message(">>> include_dirs=${dirs}")
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MPax MANUAL_FINALIZATION ${PROJECT_SOURCES} ${QM_FILES} ${TS_FILES})
 else ()
@@ -55,7 +85,7 @@ qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 #qt5_add_translation(QM_FILES ${TS_FILES})
 
-target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey)
+target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey tag)
 
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(MPax)

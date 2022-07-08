@@ -4,6 +4,7 @@
 #include <QtCore/QtDebug>
 #include <QtGui/QFontDatabase>
 
+#include "audio/audioinfo.h"
 #include "config/appconfig.h"
 #include "ui_playcontrolwidget.h"
 #include "util/cssloader.h"
@@ -55,6 +56,7 @@ void PlayControlWidget::setContentPath(const QString &contentPath) {
   m_currentContentUrl.setPath(contentPath);
   m_corePlayer->stop();
   updatePlay();
+  AudioInfo::readAudioInfo(contentPath);
 }
 
 void PlayControlWidget::InitConfig() {
