@@ -56,7 +56,6 @@ void PlayControlWidget::setContentPath(const QString &contentPath) {
   m_currentContentUrl.setPath(contentPath);
   m_corePlayer->stop();
   updatePlay();
-  AudioInfo::readAudioInfo(contentPath);
 }
 
 void PlayControlWidget::InitConfig() {
@@ -359,6 +358,7 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     qDebug() << "can not update null play info";
     return;
   }
+  AudioInfo::readAudioInfo(content->contentPath, content);
   const QStringList nameInfo = content->contentName.split(" - ");
   if (!content->title.isEmpty()) {
     ui->titleButton->setText(content->title);
