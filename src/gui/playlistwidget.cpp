@@ -88,6 +88,10 @@ PlayContentPos PlaylistWidget::nextContent() const {
 }
 
 void PlaylistWidget::setCurrentContent(PlayContent *content) {
+  if (m_playlistModel == nullptr) {
+    qDebug() << "can not set current content to a null playlist";
+    return;
+  }
   if (!m_playlistModel->contains(content)) {
     qDebug()
         << "the current content you want to set not exists in current playlist";
@@ -97,6 +101,10 @@ void PlaylistWidget::setCurrentContent(PlayContent *content) {
 }
 
 void PlaylistWidget::setCurrentContent(const int &index) {
+  if (m_playlistModel == nullptr) {
+    qDebug() << "can not set current content index in a null playlist";
+    return;
+  }
   if (m_playlistModel->count() <= index) {
     qDebug() << "set current content out of index" << m_playlistModel->count()
              << "to" << index;
@@ -130,6 +138,9 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
 }
 
 void PlaylistWidget::actionDelete() {
+  if (m_playlistModel == nullptr) {
+    return;
+  }
   if (m_tableViewSelectedRows.count() <= 0) {
     return;
   }
@@ -143,6 +154,9 @@ void PlaylistWidget::actionDelete() {
 }
 
 void PlaylistWidget::actionOpenInFolder() {
+  if (m_playlistModel == nullptr) {
+    return;
+  }
   if (m_tableViewSelectedRows.count() <= 0) {
     return;
   }
@@ -160,6 +174,9 @@ void PlaylistWidget::actionOpenInFolder() {
 }
 
 void PlaylistWidget::actionPlay() {
+  if (m_playlistModel == nullptr) {
+    return;
+  }
   if (m_tableViewSelectedRows.count() < 0) {
     return;
   }
@@ -169,6 +186,10 @@ void PlaylistWidget::actionPlay() {
 }
 
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
+  if (m_playlistModel == nullptr) {
+    qDebug() << "can not update play content index in a null playlist";
+    return;
+  }
   const int row = m_playlistFilterModel->sourceIndex(index).row();
   m_playlistModel->setCurrentPlayContent(row);
   emit playContentChanged(row, m_playlistModel->currentPlayContent().content);
@@ -195,6 +216,9 @@ void PlaylistWidget::updateConfig() {
 }
 
 PlayContentPos PlaylistWidget::randomContent() const {
+  if (m_playlistModel == nullptr) {
+    return PlayContentPos{-1, nullptr};
+  }
   return m_playlistModel->content(
       QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
 }
@@ -204,10 +228,18 @@ void PlaylistWidget::InitCss(const QString &cssFilePath) {
 }
 
 PlayContentPos PlaylistWidget::currentPlayContent() const {
+  if (m_playlistModel == nullptr) {
+    return PlayContentPos{};
+  }
   return m_playlistModel->currentPlayContent();
 }
 
-int PlaylistWidget::count() const { return m_playlistModel->count(); }
+int PlaylistWidget::count() const {
+  if (m_playlistModel == nullptr) {
+    return 0;
+  }
+  return m_playlistModel->count();
+}
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
