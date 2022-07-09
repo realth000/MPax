@@ -21,17 +21,16 @@
 #define SQL_INIT_INFO_TABLE                                                  \
   QString(                                                                   \
       "CREATE TABLE IF NOT EXISTS %1(id INT NOT NULL PRIMARY KEY,sort INT, " \
-      "playlist_deleted BOOLEAN, playlist_name TEXT,table_name TEXT);")      \
+      "playlist_name TEXT,table_name TEXT);")                                \
       .arg(SQL_MASTER_TABLE_NAME)
 
 #define SQL_CLEAR_PLAYLIST_INFO \
   QString("DELETE FROM %1;").arg(SQL_MASTER_TABLE_NAME)
 
-#define SQL_SAVE_PLAYLIST                                           \
-  QString(                                                          \
-      "REPLACE INTO %1(id, sort, playlist_deleted, playlist_name, " \
-      "table_name) VALUES(:v_id, :v_sort, :v_playlist_deleted, "    \
-      ":v_playlist_name, :v_table_name);")                          \
+#define SQL_SAVE_PLAYLIST                                                   \
+  QString(                                                                  \
+      "REPLACE INTO %1(id, sort, playlist_name, table_name) VALUES(:v_id, " \
+      ":v_sort, :v_playlist_name, :v_table_name);")                         \
       .arg(SQL_MASTER_TABLE_NAME)
 
 PlaylistSql* PlaylistSql::getInstance() {
@@ -46,6 +45,8 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   }
   int playlistCount = 0;
   QStringList tableNames;
+  QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
+  m_nameVector.clear();
   m_database.transaction();
   QSqlQuery query(m_database);
   // Delete old playlist data.
@@ -54,6 +55,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   bool ok = query.exec();
   if (!ok) {
     m_database.rollback();
+    m_nameVector = nameVectorBackup;
     qDebug() << "can not get table name data" << query.lastError();
     goto exit;
   }
@@ -64,6 +66,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     ok = query.exec(QString("DROP TABLE %1").arg(t));
     if (!ok) {
       m_database.rollback();
+      m_nameVector = nameVectorBackup;
       qDebug() << "can not delete old playlist table" << query.lastError();
       goto exit;
     }
@@ -71,6 +74,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   ok = query.exec(SQL_CLEAR_PLAYLIST_INFO);
   if (!ok) {
     m_database.rollback();
+    m_nameVector = nameVectorBackup;
     qDebug() << "can not erase old playlist info" << query.lastError();
     goto exit;
   }
@@ -83,13 +87,13 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     query.prepare(SQL_SAVE_PLAYLIST);
     query.bindValue(QStringLiteral(":v_id"), playlistCount);
     query.bindValue(QStringLiteral(":v_sort"), playlistCount);
-    query.bindValue(QStringLiteral(":v_playlist_deleted"), 0);
     query.bindValue(QStringLiteral(":v_playlist_name"), playlistName);
     query.bindValue(QStringLiteral(":v_table_name"), tableName);
 
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
+      m_nameVector = nameVectorBackup;
       qDebug() << "can not save playlist info:" << playlistName << ":"
                << query.lastError() << query.lastQuery();
       goto exit;
@@ -101,6 +105,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
+      m_nameVector = nameVectorBackup;
       qDebug() << "can not create playlist table:" << playlistName << ":"
                << query.lastError();
       goto exit;
@@ -116,6 +121,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       ok = query.exec();
       if (!ok) {
         m_database.rollback();
+        m_nameVector = nameVectorBackup;
         qDebug() << "can not save playlist data:" << playlistName << ":"
                  << query.lastError();
         goto exit;
@@ -145,16 +151,17 @@ void PlaylistSql::removePlaylist(const int& index) {
     qDebug() << "database not open, failed to delete" << playlistName;
     return;
   }
+  QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
   m_database.transaction();
   QSqlQuery query(m_database);
-  // Tag playlist_deleted set to true.
-  query.prepare(QString("UPDATE %1 SET playlist_deleted = 'true' WHERE "
-                        "table_name = :v_table_name")
+  // Delete playlist info.
+  query.prepare(QString("DELETE FROM %1 WHERE table_name = :v_table_name")
                     .arg(SQL_MASTER_TABLE_NAME));
   query.bindValue(":v_table_name", tableName);
   bool ok = query.exec();
   if (!ok) {
     m_database.rollback();
+    m_nameVector = nameVectorBackup;
     qDebug() << "can not delete playlist info for " << playlistName
              << query.lastError();
     goto exit;
@@ -163,11 +170,13 @@ void PlaylistSql::removePlaylist(const int& index) {
   ok = query.exec(QString("DROP TABLE %1").arg(tableName));
   if (!ok) {
     m_database.rollback();
+    m_nameVector = nameVectorBackup;
     qDebug() << "can not delete playlist data for" << playlistName
              << query.lastError();
     goto exit;
   }
   m_database.commit();
+  m_nameVector.removeAt(index);
 exit:
   tryCloseDatabase();
 }
@@ -183,8 +192,7 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     return QList<Playlist>{};
   }
   QSqlQuery query(m_database);
-  bool ok = query.exec(QString("SELECT * FROM %1 WHERE playlist_deleted=false")
-                           .arg(SQL_MASTER_TABLE_NAME));
+  bool ok = query.exec(QString("SELECT * FROM %1").arg(SQL_MASTER_TABLE_NAME));
   if (!ok) {
     qDebug() << "can not read playlist info" << query.lastError();
     goto exit;
