@@ -20,23 +20,25 @@ AboutDialog::AboutDialog(QWidget *parent)
   const QString introduction =
       QString("<p>" + tr("MPax is a simple music player.") + "</p>");
   const QString commitUrl =
-      QString("<p>" + tr("Build commit: ") +
+      QString("<p>" + tr("Build: ") +
               "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
               "<font color=#007b50>%2</font></a></p>")
           .arg(APP_COMMIT_LONG, APP_COMMIT);
   const QString commitTime =
-      QString("<p>" + tr("Build commit time: ") + "%1</p>")
-          .arg(APP_COMMIT_TIME);
+      QString("<p>" + tr("Build time: ") + "%1</p>").arg(APP_COMMIT_TIME);
   const QString depHead =
       QString("<h2>" + tr("MPax uses the libraries bellow:") + "</h2>");
   const QString depQt = QString(
                             "<p><a href=\"https://www.qt.io\">"
                             "<font color=#007b50>Qt</font></a>" +
-                            tr(": ") + "%1</p>")
+                            tr(": ") + "%1 [GPL/LGPL]</p>")
                             .arg(QT_VERSION_STR);
   const QString depQHotKey = QString(
       "<p><a href=\"https://github.com/Skycoder42/QHotkey\">"
-      "<font color=#007b50>Skycoder42/QHotkey</font></a></p>");
+      "<font color=#007b50>Skycoder42/QHotkey</font></a> [BSD-3-clause]</p>");
+  const QString depTagLib = QString(
+      "<p><a href=\"https://taglib.org/\">"
+      "<font color=#007b50>TagLib</font></a> [LGPL v2.1]</p>");
   ui->infoTextBrowser->setReadOnly(true);
   ui->infoTextBrowser->setContextMenuPolicy(Qt::NoContextMenu);
   ui->infoTextBrowser->setOpenExternalLinks(true);
@@ -47,6 +49,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   aboutText += depHead;
   aboutText += depQt;
   aboutText += depQHotKey;
+  aboutText += depTagLib;
   ui->infoTextBrowser->setText(aboutText);
 }
 

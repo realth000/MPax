@@ -135,8 +135,8 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
 
 void MainUI::openAudio() {
   const QString filePath = QFileDialog::getOpenFileName(
-      this, "Open audio", QCoreApplication::applicationFilePath(),
-      "MP3(*.mp3)");
+      this, tr("Open audio"), QCoreApplication::applicationFilePath(),
+      tr("Audio files") + "(*.mp3 *.flac *.wav);;");
   if (filePath.isEmpty()) {
     return;
   }
@@ -208,7 +208,7 @@ void MainUI::playRandom() {
 
 void MainUI::scanAudioDir() {
   const QString dirPath =
-      QFileDialog::getExistingDirectory(this, "Scan directory");
+      QFileDialog::getExistingDirectory(this, tr("Scan directory"));
   if (dirPath.isEmpty()) {
     return;
   }
@@ -247,7 +247,8 @@ void MainUI::playAudio(const int &index) {
 }
 
 void MainUI::saveAllPlaylist() {
-  const QString filePath = QFileDialog::getSaveFileName(this, "Save playlist");
+  const QString filePath =
+      QFileDialog::getSaveFileName(this, tr("Save playlist"));
   if (filePath.isEmpty()) {
     return;
   }
