@@ -1,14 +1,43 @@
 #include "audioinfo.h"
 
+#include <QtCore/QBuffer>
 #include <QtCore/QDebug>
+#include <QtGui/QImageReader>
 
 #include "taglib/fileref.h"
+#include "taglib/mpeg/id3v2/frames/attachedpictureframe.h"
+#include "taglib/mpeg/id3v2/id3v2tag.h"
 #include "taglib/tag.h"
 #include "tpropertymap.h"
 
 bool AudioInfo::readAudioInfo(const QString& audioPath,
                               PlayContent* playContent) {
   TagLib::FileRef f(audioPath.toUtf8().constData());
+  TagLib::ID3v2::Tag pf(f.file(), 0);
+  if (!pf.isEmpty()) {
+    //    for (auto& i : pf.properties()) {
+    //      qDebug() << "pMap" << i.first.toCString(true)
+    //               << i.second.toString().toCString(true);
+    //    }
+    for (auto i : pf.frameList()) {
+      //      qDebug() << "frame" << i->toString().toCString(true)
+      //               << i->render().data();
+      if (QString(i->toString().toCString(true)) == "[image/jpeg]") {
+        auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame*>(i);
+        if (p != nullptr) {
+          const TagLib::ByteVector vector = p->picture().toBase64();
+          QByteArray arr = QByteArray::fromBase64(
+              QByteArray::fromRawData(vector.data(), vector.size()));
+          if (playContent->albumCover.loadFromData(arr)) {
+            qDebug() << "load album cover:" << p->mimeType().toCString(true)
+                     << p->type() << playContent->albumCover.size();
+          } else {
+            qDebug() << "load album cover failed";
+          }
+        }
+      }
+    }
+  }
 
   if (playContent == nullptr) {
     qDebug() << "can not save audio info in a null PlayContent:" << audioPath;

@@ -49,6 +49,9 @@
          </rect>
         </property>
         <layout class="QHBoxLayout" name="audoInfoHBoxLayout">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
          <item>
           <widget class="QLabel" name="coverLabel">
            <property name="sizePolicy">
@@ -58,6 +61,12 @@
             </sizepolicy>
            </property>
            <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="maximumSize">
             <size>
              <width>60</width>
              <height>60</height>

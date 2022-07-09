@@ -38,6 +38,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   InitConfig();
   ui->audioInfoGroupBox->setLayout(ui->audoInfoHBoxLayout);
   ui->playPosSlider->setEnabled(false);
+  ui->coverLabel->setScaledContents(true);
   DisableFocus();
   InitCss(":/css/playcontrolwidget.css");
   InitIconFont();

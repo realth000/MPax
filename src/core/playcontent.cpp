@@ -32,6 +32,8 @@ QVariant PlayContent::value(const QString& headerName) const {
     return QVariant(albumCover);
   } else if (headerName == QStringLiteral("Year")) {
     return QVariant(albumYear);
+  } else if (headerName == QStringLiteral("AlbumCover")) {
+    return QVariant(albumCover);
   }
   return QVariant();
 }
