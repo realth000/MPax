@@ -183,7 +183,8 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     return QList<Playlist>{};
   }
   QSqlQuery query(m_database);
-  bool ok = query.exec(QString("SELECT * FROM %1").arg(SQL_MASTER_TABLE_NAME));
+  bool ok = query.exec(QString("SELECT * FROM %1 WHERE playlist_deleted=false")
+                           .arg(SQL_MASTER_TABLE_NAME));
   if (!ok) {
     qDebug() << "can not read playlist info" << query.lastError();
     goto exit;
