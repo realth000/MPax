@@ -212,8 +212,8 @@ void MainUI::scanAudioDir() {
   if (dirPath.isEmpty()) {
     return;
   }
-  for (const auto &audioFile :
-       AudioScanner::scanAudioInDir(dirPath, QStringList{"mp3"})) {
+  for (const auto &audioFile : AudioScanner::scanAudioInDir(
+           dirPath, QStringList{"mp3", "flac", "wav"})) {
     addAudioFile(audioFile);
   }
   ui->listTabWidget->saveDefaultPlaylist();
