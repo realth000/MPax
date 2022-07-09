@@ -383,6 +383,8 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
   }
   if (!content->albumCover.isNull()) {
     ui->coverLabel->setPixmap(QPixmap::fromImage(content->albumCover));
+    // Delete album cover?
+    content->albumCover = QImage();
   } else {
     ui->coverLabel->setText(ICON_COVER);
   }
