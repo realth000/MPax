@@ -16,7 +16,7 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   TagLib::ID3v2::Tag pf(f.file(), 0);
   if (!pf.isEmpty()) {
     for (auto i : pf.frameList()) {
-      if (QString(i->toString().toCString(true)) == "[image/jpeg]") {
+      if (QString(i->toString().toCString(true)).contains("[image/")) {
         auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame*>(i);
         if (p != nullptr) {
           const TagLib::ByteVector vector = p->picture().toBase64();
