@@ -1,9 +1,11 @@
 #include "playlistjson.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QDebug>
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
+#include <QtCore/QTextStream>
 
 /*
  * {
