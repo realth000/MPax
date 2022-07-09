@@ -14,6 +14,7 @@ QStringList AudioScanner::scanAudioInDir(const QString &dirPath,
       dirPath, QDir::Files | QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot,
       QDirIterator::Subdirectories);
   while (it.hasNext()) {
+    it.next();
     if (it.fileInfo().isFile()) {
       for (const auto &f : audioFormat) {
         if (f == it.fileInfo().suffix()) {
@@ -24,7 +25,6 @@ QStringList AudioScanner::scanAudioInDir(const QString &dirPath,
     if (it.fileInfo().isDir()) {
       allAudio.append(scanAudioInDir(it.filePath(), audioFormat));
     }
-    it.next();
   }
   return allAudio;
 }
