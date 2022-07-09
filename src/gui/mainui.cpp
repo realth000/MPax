@@ -66,7 +66,11 @@ MainUI::MainUI(QWidget *parent)
   playAudio(cp.index, cp.content);
 }
 
-MainUI::~MainUI() { delete ui; }
+MainUI::~MainUI() {
+  delete ui;
+  delete m_history;
+  delete m_searchDialog;
+}
 
 void MainUI::InitConnections() {
   connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);

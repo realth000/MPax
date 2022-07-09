@@ -1,9 +1,12 @@
 #include "playlist.h"
 
+#include <QDebug>
 PlaylistInfo::PlaylistInfo() : m_info(new QMap<QString, QString>()) {}
 
 PlaylistInfo::PlaylistInfo(const QMap<QString, QString>& info)
     : m_info(new QMap<QString, QString>(info)) {}
+
+PlaylistInfo::~PlaylistInfo() { delete m_info; }
 
 const QMap<QString, QString>* PlaylistInfo::info() const { return m_info; }
 
@@ -40,6 +43,13 @@ Playlist::Playlist(const PlaylistInfo& playlistInfo,
                    const PlayContentList& playContentList)
     : m_playListInfo(new PlaylistInfo(playlistInfo)),
       m_playContentList(new PlayContentList(playContentList)) {}
+
+Playlist::~Playlist() {
+  // FIXME: Here has potential memory leak, but delete will cause SIGSEGV,
+  // Use QSharedPointer to avoid this.
+  //  delete m_playListInfo;
+  //  delete m_playContentList;
+}
 
 const PlayContentList* Playlist::content() const { return m_playContentList; }
 

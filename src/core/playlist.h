@@ -13,6 +13,7 @@ class PlaylistInfo {
  public:
   explicit PlaylistInfo();
   explicit PlaylistInfo(const QMap<QString, QString> &info);
+  virtual ~PlaylistInfo();
   static QMap<QString, QString> defaultInfo();
   const QMap<QString, QString> *info() const;
   QString info(const QString &infoName) const;
@@ -31,6 +32,7 @@ class Playlist {
                     PlayContentList *playContentList);
   explicit Playlist(const PlaylistInfo &playlistInfo,
                     const PlayContentList &playContentList);
+  virtual ~Playlist();
   const PlaylistInfo *info() const;
   const PlayContentList *content() const;
 

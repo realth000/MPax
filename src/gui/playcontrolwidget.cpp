@@ -209,24 +209,23 @@ void PlayControlWidget::setPlayPosition() {
 }
 
 void PlayControlWidget::InitIconFont() {
-  QFont awesome6Font =
+  m_awesome6Font =
       QFont(QFontDatabase::applicationFontFamilies(
                 QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf"))
                 .at(0));
-  ;
-  ui->coverLabel->setFont(awesome6Font);
+  ui->coverLabel->setFont(m_awesome6Font);
   ui->coverLabel->setText(ICON_COVER);
-  ui->preButton->setFont(awesome6Font);
+  ui->preButton->setFont(m_awesome6Font);
   ui->preButton->setText(ICON_PRE);
-  ui->playButton->setFont(awesome6Font);
+  ui->playButton->setFont(m_awesome6Font);
   ui->playButton->setText(ICON_PLAY);
-  ui->nextButton->setFont(awesome6Font);
+  ui->nextButton->setFont(m_awesome6Font);
   ui->nextButton->setText(ICON_NEXT);
-  ui->stopButton->setFont(awesome6Font);
+  ui->stopButton->setFont(m_awesome6Font);
   ui->stopButton->setText(ICON_STOP);
-  ui->playModeButton->setFont(awesome6Font);
+  ui->playModeButton->setFont(m_awesome6Font);
   updatePlayModeButtonIcon();
-  ui->muteButton->setFont(awesome6Font);
+  ui->muteButton->setFont(m_awesome6Font);
   updateMuteButtonIcon();
 }
 
@@ -313,9 +312,9 @@ void PlayControlWidget::handleMediaStatusChanged(
           break;
       }
     case QMediaPlayer::InvalidMedia: {
-      // It seems switching audio file when EOF will cause an InvalidMedia state
-      // no matter the new audio is valid or not, so a second check on player
-      // state after some time is needed.
+      // It seems switching audio file when EOF will cause an InvalidMedia
+      // state no matter the new audio is valid or not, so a second check on
+      // player state after some time is needed.
       QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
       m_waitEventLoop.exec();
       const QMediaPlayer::MediaStatus m = m_corePlayer->mediaStatus();
@@ -382,7 +381,9 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     ui->albumButton->setText(content->contentPath);
   }
   if (!content->albumCover.isNull()) {
-    ui->coverLabel->setPixmap(QPixmap::fromImage(content->albumCover));
+    ui->coverLabel->setPixmap(
+        QPixmap::fromImage(content->albumCover)
+            .scaled(60, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     // Delete album cover?
     content->albumCover = QImage();
   } else {

@@ -10,6 +10,11 @@ CorePlayer::CorePlayer(QObject *parent)
   m_player->setPlaylist(m_playlist);
 }
 
+CorePlayer::~CorePlayer() {
+  delete m_player;
+  delete m_playlist;
+}
+
 void CorePlayer::InitConnections() {
   connect(m_player, &QMediaPlayer::stateChanged, this,
           &CorePlayer::updatePlayState);

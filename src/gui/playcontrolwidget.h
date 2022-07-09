@@ -40,6 +40,7 @@ class PlayControlWidget : public QWidget {
   QUrl m_currentContentUrl;
   QMediaPlayer::State m_corePlayerState;
   QEventLoop m_waitEventLoop;
+  QFont m_awesome6Font;
 
   // Volume control
   bool m_volMute;
