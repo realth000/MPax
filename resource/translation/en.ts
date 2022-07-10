@@ -293,17 +293,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="117"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="125"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="120"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="128"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="122"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="130"/>
         <source>Open in folder</source>
         <translation>Open in folder</translation>
     </message>

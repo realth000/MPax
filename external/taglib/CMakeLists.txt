@@ -1,7 +1,3 @@
-cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
-
-project(taglib)
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 if (DEFINED ENABLE_STATIC)

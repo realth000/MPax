@@ -21,10 +21,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     endif ()
 endif ()
 
+if (UNIX)
+    find_package(X11 REQUIRED)
+    find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS X11Extras)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS X11Extras)
+endif ()
 
-find_package(X11 REQUIRED)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Multimedia LinguistTools Sql X11Extras)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Multimedia LinguistTools Sql X11Extras)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Multimedia LinguistTools Sql)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Multimedia LinguistTools Sql)
 
 include_directories(external)
 include_directories(external/taglib)
@@ -60,6 +64,10 @@ include_directories(
 )
 #get_property(dirs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 #message(">>> include_dirs=${dirs}")
+
+# Build static
+add_definitions(-DTAGLIB_STATIC)
+
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MPax MANUAL_FINALIZATION ${PROJECT_SOURCES} ${QM_FILES} ${TS_FILES})
 else ()
@@ -92,7 +100,7 @@ qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 #qt5_add_translation(QM_FILES ${TS_FILES})
 
-target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey tag)
+target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey tag z)
 
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(MPax)
