@@ -11,10 +11,10 @@
 #include "tpropertymap.h"
 
 bool AudioInfo::readAudioInfo(const QString& audioPath,
-                              PlayContent* playContent) {
+                              PlayContent* playContent, InfoOption infoOption) {
   TagLib::FileRef f(audioPath.toUtf8().constData());
   TagLib::ID3v2::Tag pf(f.file(), 0);
-  if (!pf.isEmpty()) {
+  if (infoOption != InfoOption::NoAlbumCover && !pf.isEmpty()) {
     for (auto i : pf.frameList()) {
       if (QString(i->toString().toCString(true)).contains("[image/")) {
         auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame*>(i);

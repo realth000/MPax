@@ -248,8 +248,22 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="70"/>
-        <location filename="../../src/model/playlistmodel.cpp" line="79"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="9"/>
+        <source>Title</source>
+        <translation>Title</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="10"/>
+        <source>Artist</source>
+        <translation>Artist</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
+        <source>AlbumTitle</source>
+        <translation>Album title</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
         <source>ContentName</source>
         <translation>Title</translation>
     </message>
@@ -293,17 +307,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="125"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="132"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="128"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="135"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="130"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="137"/>
         <source>Open in folder</source>
         <translation>Open in folder</translation>
     </message>

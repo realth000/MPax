@@ -2,7 +2,14 @@
 
 #include <QDebug>
 
+#include "audio/audioinfo.h"
 #include "core/playlistsql.h"
+
+const QMap<QString, QString> PlaylistModel::allHeaderList = {
+    {"Title", PlaylistModel::tr("Title")},
+    {"Artist", PlaylistModel::tr("Artist")},
+    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},
+    {"ContentName", PlaylistModel::tr("ContentName")}};
 
 PlaylistModelHeader::PlaylistModelHeader(
     const QList<PlaylistHeaderItem> &headerList)
@@ -55,7 +62,9 @@ QString PlaylistModelHeader::usedHeader(const int &index) const {
 }
 
 QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList() {
-  return QList<PlaylistHeaderItem>{PlaylistHeaderItem("ContentName", 100)};
+  return QList<PlaylistHeaderItem>{PlaylistHeaderItem("Title", 300),
+                                   PlaylistHeaderItem("Artist", 100),
+                                   PlaylistHeaderItem("AlbumTitle", 130)};
 }
 
 PlaylistModel::PlaylistModel(const QString &playlistName,
@@ -66,8 +75,9 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
       m_listInfo(PlaylistInfo(
           QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
       m_currentPlayContent(nullptr),
-      m_headerTrans(
-          QMap<QString, QString>{{"ContentName", tr("ContentName")}}) {}
+      m_headerTrans(allHeaderList) {
+  reloadPlayContentInfo();
+}
 
 PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
     : QAbstractItemModel{parent},
@@ -75,8 +85,9 @@ PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
       m_listInfo(*playlist.info()),
       m_contentList(*playlist.content()),
       m_currentPlayContent(nullptr),
-      m_headerTrans(
-          QMap<QString, QString>{{"ContentName", tr("ContentName")}}) {}
+      m_headerTrans(allHeaderList) {
+  reloadPlayContentInfo();
+}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
   // TODO: Check if incorrent.
@@ -130,7 +141,6 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
     case Qt::TextAlignmentRole:
       return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
   }
-
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
   }
@@ -224,6 +234,14 @@ PlayContentPos PlaylistModel::content(const int &index) const {
 
 Playlist PlaylistModel::list() const {
   return Playlist(m_listInfo, m_contentList);
+}
+
+void PlaylistModel::reloadPlayContentInfo() {
+  for (const auto content : m_contentList) {
+    // Only load audio info when content added to model.
+    AudioInfo::readAudioInfo(content->contentPath, content,
+                             AudioInfo::InfoOption::NoAlbumCover);
+  }
 }
 
 void PlaylistModel::setHeader(const PlaylistModelHeader *header) {

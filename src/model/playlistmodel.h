@@ -7,6 +7,7 @@
 #include "core/playcontent.h"
 #include "core/playlist.h"
 
+// QPair<Name, Width>, width is temporary deprecated.
 typedef QPair<QString, int> PlaylistHeaderItem;
 
 struct PlayContentPos {
@@ -59,6 +60,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos findPreContent() const;
   PlayContentPos content(const int &index) const;
   Playlist list() const;
+  void reloadPlayContentInfo();
 
  private:
   QString m_playlistName;
@@ -69,6 +71,7 @@ class PlaylistModel : public QAbstractItemModel {
   const PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
   QMap<QString, QString> m_headerTrans;
+  static const QMap<QString, QString> allHeaderList;
 };
 
 #endif  // PLAYLISTMODEL_H

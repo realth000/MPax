@@ -248,8 +248,22 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="70"/>
-        <location filename="../../src/model/playlistmodel.cpp" line="79"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="9"/>
+        <source>Title</source>
+        <translation>标题</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="10"/>
+        <source>Artist</source>
+        <translation>艺术家</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
+        <source>AlbumTitle</source>
+        <translation>专辑名</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
         <source>ContentName</source>
         <translation>标题</translation>
     </message>
@@ -286,17 +300,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="125"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="132"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="128"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="135"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="130"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="137"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
