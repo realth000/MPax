@@ -8,16 +8,15 @@
 PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::PlaylistSearchDialog),
-      m_model(new Model::PlaylistSearchFilterModel) {
+      m_model(new Model::PlaylistSearchFilterModel),
+      m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
   this->setWindowTitle(tr("Search in playlist"));
   ui->searchTableView->verticalHeader()->setHidden(true);
-  ui->searchTableView->horizontalHeader()->setStretchLastSection(true);
+  ui->searchTableView->horizontalHeader()->setStretchLastSection(false);
   ui->searchTableView->setSelectionBehavior(QTableView::SelectRows);
+  ui->searchTableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->searchTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-  //        ui->tableView->setItemDelegate(new NoFocusDelegate);
-  // Set tableView row height.
-  ui->searchTableView->verticalHeader()->setDefaultSectionSize(30);
   ui->searchTableView->setSortingEnabled(true);
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);

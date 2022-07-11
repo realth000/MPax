@@ -24,17 +24,14 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
       m_header(header),
       m_playlistModel(nullptr),
       m_playlistFilterModel(new PlaylistFilterModel),
-      m_tableViewContextMenu(InitTableViewContextMenu()) {
+      m_tableViewContextMenu(InitTableViewContextMenu()),
+      m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->horizontalHeader()->setStretchLastSection(false);
   ui->tableView->setSelectionBehavior(QTableView::SelectRows);
-  //  ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-  //        ui->tableView->setItemDelegate(new NoFocusDelegate);
-  // Set tableView row height.
-  //  ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+  ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->tableView->setSortingEnabled(true);
-  //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   InitCss(":/css/playlistwidget.css");
   InitConnections();
@@ -61,9 +58,6 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   //  ui->tableView->setModel(m_playlistModel);
   m_playlistFilterModel->setSourceModel(m_playlistModel);
   ui->tableView->setModel(m_playlistFilterModel);
-  ui->tableView->setColumnWidth(0, 500);
-  ui->tableView->setColumnWidth(1, 100);
-  ui->tableView->setColumnWidth(2, 150);
 }
 
 PlayContentPos PlaylistWidget::preContent() const {

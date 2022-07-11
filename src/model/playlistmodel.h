@@ -71,7 +71,6 @@ class PlaylistModel : public QAbstractItemModel {
   const PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
   QMap<QString, QString> m_headerTrans;
-  static const QMap<QString, QString> allHeaderList;
 };
 
 #endif  // PLAYLISTMODEL_H

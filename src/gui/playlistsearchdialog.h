@@ -28,6 +28,7 @@ class PlaylistSearchDialog : public QDialog {
  private:
   Ui::PlaylistSearchDialog *ui;
   Model::PlaylistSearchFilterModel *m_model;
+  QList<qreal> m_tableViewWidthRadio;
 
   Qt::CaseSensitivity caseSensitivity();
 

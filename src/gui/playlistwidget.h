@@ -45,6 +45,7 @@ class PlaylistWidget : public QWidget {
   PlaylistFilterModel *m_playlistFilterModel;
   QMenu *m_tableViewContextMenu;
   QModelIndexList m_tableViewSelectedRows;
+  QList<qreal> m_tableViewWidthRadio;
 
   void InitCss(const QString &cssFilePath);
   void InitConnections();

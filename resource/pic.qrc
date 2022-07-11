@@ -4,5 +4,7 @@
         <file>pic/logo/MPax@4x.png</file>
         <file>pic/arrow_up_white_15.png</file>
         <file>pic/arrow_down_white_15.png</file>
+        <file>pic/arrow_left_white_15.png</file>
+        <file>pic/arrow_right_white_15.png</file>
     </qresource>
 </RCC>

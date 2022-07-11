@@ -5,11 +5,15 @@
 #include "audio/audioinfo.h"
 #include "core/playlistsql.h"
 
-const QMap<QString, QString> PlaylistModel::allHeaderList = {
-    {"Title", PlaylistModel::tr("Title")},
-    {"Artist", PlaylistModel::tr("Artist")},
-    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},
-    {"ContentName", PlaylistModel::tr("ContentName")}};
+// clang-format off
+#define MODEL_ALL_HEADER                                   \
+  QMap<QString, QString> {                                 \
+    {"Title", PlaylistModel::tr("Title")},                 \
+    {"Artist", PlaylistModel::tr("Artist")},               \
+    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},       \
+    { "ContentName", PlaylistModel::tr("ContentName") }    \
+  }
+// clang-format on
 
 PlaylistModelHeader::PlaylistModelHeader(
     const QList<PlaylistHeaderItem> &headerList)
@@ -75,7 +79,7 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
       m_listInfo(PlaylistInfo(
           QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
       m_currentPlayContent(nullptr),
-      m_headerTrans(allHeaderList) {
+      m_headerTrans(MODEL_ALL_HEADER) {
   reloadPlayContentInfo();
 }
 
@@ -85,7 +89,7 @@ PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
       m_listInfo(*playlist.info()),
       m_contentList(*playlist.content()),
       m_currentPlayContent(nullptr),
-      m_headerTrans(allHeaderList) {
+      m_headerTrans(MODEL_ALL_HEADER) {
   reloadPlayContentInfo();
 }
 

@@ -34,10 +34,17 @@
     <widget class="QLineEdit" name="searchLineEdit"/>
    </item>
    <item>
-    <widget class="QTableView" name="searchTableView"/>
+    <widget class="TableViewEx" name="searchTableView"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TableViewEx</class>
+   <extends>QTableView</extends>
+   <header location="global">src/gui/widget/tableviewex.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

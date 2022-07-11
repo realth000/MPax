@@ -144,6 +144,110 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
 }
 
+QScrollBar:horizontal {
+    border: 1px solid #3e3d53;
+    background-color: transparent;
+    height: 17px;
+    margin: 0 15px 0 15px;
+}
+
+QScrollBar::handle:horizontal {
+    border: none;
+    background-color: #272632;
+    min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: #04b97f;
+    border-bottom-width: 2px;
+    background-color: #272632;
+    min-witdh: 20px;
+}
+
+QScrollBar::handle:horizontal:pressed {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: #007b50;
+    border-left-width: 2px;
+    background-color: #007b50;
+    min-width: 20px;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 2px solid #3e3d53;
+    background-color: #3e3d53;
+    width: 15px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal:hover {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #04b97f;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QScrollBar::sub-line:horizontal:pressed {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: #007b50;
+    border-bottom-color: transparent;
+    border-left-width: 2px;
+}
+
+QScrollBar::add-line:horizontal {
+    border: 2px solid #3e3d53;
+    background-color: #3e3d53;
+    width: 15px;
+    /*subcontrol-position: bottom;*/
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: #04b97f;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-right-width: 2px;
+}
+
+QScrollBar::add-line:horizontal:pressed {
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: #007b50;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-right-width: 2px;
+}
+
+QScrollBar::left-arrow:horizontal{
+    border-image: url(:/pic/arrow_left_white_15.png);
+    width: 12px;
+    height: 12px;
+}
+
+QScrollBar::right-arrow:horizontal {
+    border-image: url(:/pic/arrow_right_white_15.png);
+    width: 12px;
+    height: 12px;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
 QCheckBox:hover {
     border-color: transparent;
     color: #FFFFFF;

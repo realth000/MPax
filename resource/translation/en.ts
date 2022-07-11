@@ -248,22 +248,22 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="9"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
         <source>Title</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="10"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
         <source>Artist</source>
         <translation>Artist</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="13"/>
         <source>AlbumTitle</source>
         <translation>Album title</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="14"/>
         <source>ContentName</source>
         <translation>Title</translation>
     </message>
@@ -292,7 +292,7 @@
         <translation>Case sensitive</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="13"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="14"/>
         <source>Search in playlist</source>
         <translation>Search in playlist</translation>
     </message>
@@ -307,17 +307,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="132"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="135"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="129"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="137"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="131"/>
         <source>Open in folder</source>
         <translation>Open in folder</translation>
     </message>

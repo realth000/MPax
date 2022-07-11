@@ -248,22 +248,22 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="9"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="10"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="11"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="13"/>
         <source>AlbumTitle</source>
         <translation>专辑名</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="12"/>
+        <location filename="../../src/model/playlistmodel.cpp" line="14"/>
         <source>ContentName</source>
         <translation>标题</translation>
     </message>
@@ -285,7 +285,7 @@
         <translation>区分大小写</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="13"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="14"/>
         <source>Search in playlist</source>
         <translation>播放列表中搜索</translation>
     </message>
@@ -300,17 +300,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="132"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="135"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="129"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="137"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="131"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
