@@ -44,6 +44,11 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   playContent->albumYear = int(tag->year());
   playContent->trackNumber = int(tag->track());
 
+  // Replace empty info.
+  if (playContent->title.isEmpty()) {
+    playContent->title = playContent->contentName;
+  }
+
   TagLib::PropertyMap tags = f.file()->properties();
 
   unsigned int longest = 0;
