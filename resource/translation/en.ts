@@ -46,7 +46,7 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/listtabwidget.cpp" line="50"/>
+        <location filename="../../src/gui/listtabwidget.cpp" line="49"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
@@ -307,17 +307,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="123"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="129"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="131"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="128"/>
         <source>Open in folder</source>
         <translation>Open in folder</translation>
     </message>

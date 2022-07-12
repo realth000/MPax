@@ -46,7 +46,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/listtabwidget.cpp" line="50"/>
+        <location filename="../../src/gui/listtabwidget.cpp" line="49"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -300,17 +300,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="123"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="129"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="126"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="131"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="128"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>

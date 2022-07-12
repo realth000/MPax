@@ -61,6 +61,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos content(const int &index) const;
   Playlist list() const;
   void reloadPlayContentInfo();
+  void reloadPlayContentInfo(PlayContent *content);
 
  private:
   QString m_playlistName;

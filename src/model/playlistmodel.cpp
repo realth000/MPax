@@ -154,6 +154,7 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
 int PlaylistModel::count() const { return m_contentList.length(); }
 
 void PlaylistModel::addContent(PlayContent *content) {
+  reloadPlayContentInfo(content);
   beginResetModel();
   m_contentList.append(content);
   endResetModel();
@@ -246,6 +247,11 @@ void PlaylistModel::reloadPlayContentInfo() {
     AudioInfo::readAudioInfo(content->contentPath, content,
                              AudioInfo::InfoOption::NoAlbumCover);
   }
+}
+
+void PlaylistModel::reloadPlayContentInfo(PlayContent *content) {
+  AudioInfo::readAudioInfo(content->contentPath, content,
+                           AudioInfo::InfoOption::NoAlbumCover);
 }
 
 void PlaylistModel::setHeader(const PlaylistModelHeader *header) {
