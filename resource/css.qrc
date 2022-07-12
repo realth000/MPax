@@ -5,5 +5,6 @@
         <file>css/playlistwidget.css</file>
         <file>css/external/MaterialDark.css</file>
         <file>css/aboutdialog.css</file>
+        <file>css/base.css</file>
     </qresource>
 </RCC>

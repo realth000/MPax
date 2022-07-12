@@ -28,16 +28,13 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
       m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
-  ui->tableView->horizontalHeader()->setStretchLastSection(false);
   ui->tableView->setSelectionBehavior(QTableView::SelectRows);
   ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->tableView->setSortingEnabled(true);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-  InitCss(":/css/playlistwidget.css");
+  this->setStyleSheet(
+      util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
-
-  // Update ui
-  ui->tableView->setShowGrid(false);
 }
 
 PlaylistWidget::~PlaylistWidget() { delete ui; }
@@ -222,10 +219,6 @@ PlayContentPos PlaylistWidget::randomContent() const {
   }
   return m_playlistModel->content(
       QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
-}
-
-void PlaylistWidget::InitCss(const QString &cssFilePath) {
-  this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
 
 PlayContentPos PlaylistWidget::currentPlayContent() const {

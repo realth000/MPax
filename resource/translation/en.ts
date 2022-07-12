@@ -46,7 +46,7 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/listtabwidget.cpp" line="52"/>
+        <location filename="../../src/gui/listtabwidget.cpp" line="50"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
@@ -92,7 +92,7 @@
         <location filename="../../src/gui/mainui.ui" line="137"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="170"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="170"/>
-        <location filename="../../src/gui/mainui.cpp" line="138"/>
+        <location filename="../../src/gui/mainui.cpp" line="139"/>
         <source>Open audio</source>
         <translation>Open audio</translation>
     </message>
@@ -114,7 +114,7 @@
         <location filename="../../src/gui/mainui.ui" line="152"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="173"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="173"/>
-        <location filename="../../src/gui/mainui.cpp" line="251"/>
+        <location filename="../../src/gui/mainui.cpp" line="252"/>
         <source>Save playlist</source>
         <translation>Save playlist</translation>
     </message>
@@ -160,7 +160,7 @@
         <location filename="../../src/gui/mainui.ui" line="187"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="180"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="180"/>
-        <location filename="../../src/gui/mainui.cpp" line="291"/>
+        <location filename="../../src/gui/mainui.cpp" line="292"/>
         <source>About MPax</source>
         <translation>About MPax</translation>
     </message>
@@ -168,17 +168,17 @@
         <location filename="../../src/gui/mainui.ui" line="192"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="181"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="181"/>
-        <location filename="../../src/gui/mainui.cpp" line="295"/>
+        <location filename="../../src/gui/mainui.cpp" line="296"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="139"/>
+        <location filename="../../src/gui/mainui.cpp" line="140"/>
         <source>Audio files</source>
         <translation>Audio files</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="211"/>
+        <location filename="../../src/gui/mainui.cpp" line="212"/>
         <source>Scan directory</source>
         <translation>Scan directory</translation>
     </message>

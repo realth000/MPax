@@ -12,7 +12,8 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->listView->setModel(m_listTabModel);
   ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
   InitConnections();
-  InitCss(":/css/listtabwidget.css");
+  this->setStyleSheet(
+      util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
 }
 
 ListTabWidget::~ListTabWidget() { delete ui; }
@@ -41,10 +42,6 @@ void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
 
 void ListTabWidget::openListViewContextMenu() {
   m_listViewContextMenu->popup(QCursor::pos());
-}
-
-void ListTabWidget::InitCss(const QString &cssFilePath) {
-  this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
 
 QMenu *ListTabWidget::InitListViewContextMenu() {

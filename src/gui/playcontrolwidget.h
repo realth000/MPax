@@ -54,7 +54,6 @@ class PlayControlWidget : public QWidget {
   QHotkey *m_playNextKey;
 
   void InitConfig();
-  void InitCss(const QString &cssFilePath);
   void InitIconFont();
   void InitConnections();
   void InitShortcut();

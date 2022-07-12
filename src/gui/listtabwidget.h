@@ -36,7 +36,6 @@ class ListTabWidget : public QWidget {
   QMenu *m_listViewContextMenu;
 
   void InitConnections();
-  void InitCss(const QString &cssFilePath);
   QMenu *InitListViewContextMenu();
 
  private slots:

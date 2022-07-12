@@ -40,7 +40,8 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   ui->playPosSlider->setEnabled(false);
   ui->coverLabel->setScaledContents(true);
   DisableFocus();
-  InitCss(":/css/playcontrolwidget.css");
+  this->setStyleSheet(
+      util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
   InitShortcut();
   InitConnections();
@@ -347,10 +348,6 @@ void PlayControlWidget::InitShortcut() {
 
 PlayControlWidget::PlayMode PlayControlWidget::playMode() const {
   return m_playMode;
-}
-
-void PlayControlWidget::InitCss(const QString &cssFilePath) {
-  this->setStyleSheet(util::loadCssFromFile(cssFilePath));
 }
 
 void PlayControlWidget::updatePlayInfo(PlayContent *content) {

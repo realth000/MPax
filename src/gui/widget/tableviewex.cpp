@@ -6,6 +6,9 @@
 TableViewEx::TableViewEx(QWidget *parent) : QTableView(parent) {
   connect(horizontalHeader(), &QHeaderView::sectionResized, this,
           &TableViewEx::resizeColumnWidth);
+  horizontalHeader()->setStretchLastSection(true);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  setShowGrid(false);
 }
 
 void TableViewEx::resizeEvent(QResizeEvent *event) {
@@ -15,9 +18,10 @@ void TableViewEx::resizeEvent(QResizeEvent *event) {
   // FIXME: Avoid signal here without reconnect.
   disconnect(horizontalHeader(), &QHeaderView::sectionResized, this,
              &TableViewEx::resizeColumnWidth);
-  setColumnWidth(0, m_columnWidthRatio[0] * this->width() - 10);
-  setColumnWidth(1, m_columnWidthRatio[1] * this->width() - 10);
-  setColumnWidth(2, m_columnWidthRatio[2] * this->width() - 10);
+  setColumnWidth(0, m_columnWidthRatio[0] * this->width());
+  setColumnWidth(1, m_columnWidthRatio[1] * this->width());
+  // FIXME: Do not let need horizontal scrollbar.
+  setColumnWidth(2, m_columnWidthRatio[2] * this->width());
   connect(horizontalHeader(), &QHeaderView::sectionResized, this,
           &TableViewEx::resizeColumnWidth);
 }

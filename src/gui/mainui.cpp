@@ -23,7 +23,8 @@ MainUI::MainUI(QWidget *parent)
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
-  this->setStyleSheet(util::loadCssFromFile(":/css/external/MaterialDark.css"));
+  this->setStyleSheet(util::loadCssFromFile(
+      {":/css/external/MaterialDark.css", ":/css/base.css"}));
   Config::AppConfig::getInstance()->loadConfig();
   //  QList<Playlist> playlistList =
   //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);

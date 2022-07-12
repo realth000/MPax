@@ -13,14 +13,14 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   ui->setupUi(this);
   this->setWindowTitle(tr("Search in playlist"));
   ui->searchTableView->verticalHeader()->setHidden(true);
-  ui->searchTableView->horizontalHeader()->setStretchLastSection(false);
   ui->searchTableView->setSelectionBehavior(QTableView::SelectRows);
   ui->searchTableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->searchTableView->setSelectionMode(QAbstractItemView::SingleSelection);
   ui->searchTableView->setSortingEnabled(true);
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
-  this->setStyleSheet(util::loadCssFromFile(":/css/playlistwidget.css"));
+  this->setStyleSheet(
+      util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   //  m_model->setSourceModel(model);
   ui->caseCheckBox->setFocusPolicy(Qt::NoFocus);
   ui->searchLineEdit->setFocus();

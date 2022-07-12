@@ -4,23 +4,30 @@
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
 namespace util {
+static QString loadCssFromFile(const QStringList &filePathList) {
+  QString cssStr;
+  for (const auto &filePath : filePathList) {
+    if (!QFileInfo::exists(filePath)) {
+      qDebug() << "css file not exists" << filePath;
+      continue;
+    }
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+      qDebug() << "can not read css file" << filePath;
+      continue;
+    }
+    cssStr += QTextStream(&file).readAll();
+    file.close();
+  }
+  return cssStr;
+}
+
 static QString loadCssFromFile(const QString &filePath) {
-  if (!QFileInfo::exists(filePath)) {
-    qDebug() << "css file not exists" << filePath;
-    return QString();
-  }
-  QFile file(filePath);
-  if (!file.open(QIODevice::ReadOnly)) {
-    qDebug() << "can not read css file" << filePath;
-    return QString();
-  }
-  QString ret = QTextStream(&file).readAll();
-  file.close();
-  return ret;
+  return util::loadCssFromFile(QStringList{filePath});
 }
 }  // namespace util
 
