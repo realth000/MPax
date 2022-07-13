@@ -54,11 +54,6 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   if (m_showingModel != nullptr) {
     m_showingModel->setHeader(m_header);
   }
-  if (m_playingModel == nullptr) {
-    m_playingModel = playlistModel;
-    m_playingModel->setHeader(m_header);
-    m_playingFilterModel->setSourceModel(m_playingModel);
-  }
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
@@ -208,6 +203,7 @@ void PlaylistWidget::updatePlayingModel() {
   }
   m_playingModel = m_showingModel;
   m_playingFilterModel->setSourceModel(m_playingModel);
+  emit playingListChanged(m_playingModel);
 }
 
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {

@@ -49,7 +49,7 @@ class MainUI : public QMainWindow {
   void playAudioInPlayingList(const int &index, PlayContent *content);
   void saveAllPlaylist();
   void saveConfig();
-  void saveCurrentPlaylistIndex(const int &index);
+  void savePlayingListIndex(PlaylistModel *playlistModel);
   void removeLastHistory();
   void handleDoubleClickPlay(const int &index, PlayContent *content);
   void openSearchWindow();

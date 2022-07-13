@@ -49,6 +49,7 @@ MainUI::MainUI(QWidget *parent)
     return;
   }
   ui->playlistWidget->setModel(model);
+  ui->playlistWidget->updatePlayingModel();
   const int playContent = Config::AppConfig::getInstance()
                               ->config(CONFIG_CUR_PLAYCONTENT)
                               .value.toInt();
@@ -87,8 +88,8 @@ void MainUI::InitConnections() {
           &MainUI::addPlaylist);
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
           ui->playlistWidget, &PlaylistWidget::setModel);
-  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistIndexChanged, this,
-          &MainUI::saveCurrentPlaylistIndex);
+  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this,
+          &MainUI::savePlayingListIndex);
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
           &MainUI::handleDoubleClickPlay);
@@ -256,8 +257,9 @@ void MainUI::saveConfig() {
   Config::AppConfig::getInstance()->saveConfigSoon();
 }
 
-void MainUI::saveCurrentPlaylistIndex(const int &index) {
-  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYLIST, index);
+void MainUI::savePlayingListIndex(PlaylistModel *playlistModel) {
+  Config::AppConfig::getInstance()->setConfig(
+      CONFIG_CUR_PLAYLIST, ui->listTabWidget->indexOf(playlistModel));
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
 

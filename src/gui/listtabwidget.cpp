@@ -79,3 +79,7 @@ void ListTabWidget::addPlaylist(const QList<Playlist> &playlistList) {
 void ListTabWidget::saveDefaultPlaylist() {
   m_listTabModel->saveDefaultPlaylist();
 }
+
+int ListTabWidget::indexOf(PlaylistModel *playlistModel) const {
+  return m_listTabModel->indexOf(playlistModel);
+}

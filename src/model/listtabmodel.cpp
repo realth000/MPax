@@ -101,3 +101,7 @@ void ListTabModel::saveAllPlaylist() const {
 }
 
 void ListTabModel::saveDefaultPlaylist() const { saveAllPlaylist(); }
+
+int ListTabModel::indexOf(PlaylistModel *playlistModel) const {
+  return m_playlistList.indexOf(playlistModel);
+}

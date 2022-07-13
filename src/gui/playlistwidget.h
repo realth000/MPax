@@ -24,6 +24,7 @@ class PlaylistWidget : public QWidget {
  signals:
   void playContentChanged(const int &row, PlayContent *content);
   void playlistChanged();
+  void playingListChanged(PlaylistModel *playlistModel);
 
  public slots:
   void setHeader(const PlaylistModelHeader *header);
@@ -38,6 +39,7 @@ class PlaylistWidget : public QWidget {
   void updatePlayContent(const QModelIndex &index);
   void updateConfig();
   int countShowing() const;
+  void updatePlayingModel();
 
  private:
   Ui::PlaylistWidget *ui;
@@ -55,7 +57,6 @@ class PlaylistWidget : public QWidget {
   void actionDelete();
   void actionOpenInFolder();
   void actionPlay();
-  void updatePlayingModel();
 
  private slots:
   void openTableViewContextMenu(const QPoint &pos);
