@@ -32,17 +32,20 @@ class PlaylistWidget : public QWidget {
   PlayContentPos preContent() const;
   PlayContentPos randomContent() const;
   PlayContentPos currentPlayContent() const;
-  void setCurrentContent(PlayContent *content);
+  void setShowingListCurrentContent(PlayContent *content);
+  void setPlayingListCurrentContent(PlayContent *content);
   void setCurrentContent(const int &index);
   void updatePlayContent(const QModelIndex &index);
   void updateConfig();
-  int count() const;
+  int countShowing() const;
 
  private:
   Ui::PlaylistWidget *ui;
   const PlaylistModelHeader *m_header;
-  PlaylistModel *m_playlistModel;
-  PlaylistFilterModel *m_playlistFilterModel;
+  PlaylistModel *m_showingModel;
+  PlaylistFilterModel *m_showingFilterModel;
+  PlaylistModel *m_playingModel;
+  PlaylistFilterModel *m_playingFilterModel;
   QMenu *m_tableViewContextMenu;
   QModelIndexList m_tableViewSelectedRows;
   QList<qreal> m_tableViewWidthRadio;
@@ -52,6 +55,7 @@ class PlaylistWidget : public QWidget {
   void actionDelete();
   void actionOpenInFolder();
   void actionPlay();
+  void updatePlayingModel();
 
  private slots:
   void openTableViewContextMenu(const QPoint &pos);

@@ -64,7 +64,7 @@ MainUI::MainUI(QWidget *parent)
     return;
   }
   addHistory(cp);
-  playAudio(cp.index, cp.content);
+  playAudioInShowingList(cp.index, cp.content);
 }
 
 MainUI::~MainUI() {
@@ -114,9 +114,9 @@ void MainUI::InitConnections() {
             }
             ui->playControlWidget->updatePlayInfo(content);
             ui->playControlWidget->setContentPath(content->contentPath);
-            ui->playlistWidget->setCurrentContent(content);
+            ui->playlistWidget->setShowingListCurrentContent(content);
             addHistory(PlayContentPos{index, content});
-            playAudio(index, content);
+            playAudioInShowingList(index, content);
           });
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
           m_searchDialog, &PlaylistSearchDialog::setModel);
@@ -141,7 +141,8 @@ void MainUI::openAudio() {
   if (filePath.isEmpty()) {
     return;
   }
-  playAudio(ui->playlistWidget->count() - 1, addAudioFile(filePath));
+  playAudioInShowingList(ui->playlistWidget->countShowing() - 1,
+                         addAudioFile(filePath));
   ui->listTabWidget->saveDefaultPlaylist();
 }
 
@@ -174,7 +175,7 @@ void MainUI::playPre() {
     qDebug() << "can not find previous one";
     return;
   }
-  playAudio(cp.index, cp.content);
+  playAudioInPlayingList(cp.index, cp.content);
 }
 
 void MainUI::playNext() {
@@ -195,7 +196,7 @@ void MainUI::playNext() {
     qDebug() << "can not find next one";
     return;
   }
-  playAudio(cp.index, cp.content);
+  playAudioInPlayingList(cp.index, cp.content);
 }
 
 void MainUI::playRandom() {
@@ -204,7 +205,7 @@ void MainUI::playRandom() {
     qDebug() << "can not find random one";
     return;
   }
-  playAudio(cp.index, cp.content);
+  playAudioInPlayingList(cp.index, cp.content);
 }
 
 void MainUI::scanAudioDir() {
@@ -226,23 +227,18 @@ PlayContent *MainUI::addAudioFile(const QString &filePath) {
   return t;
 }
 
-void MainUI::playAudio(const int &index, PlayContent *content) {
+void MainUI::playAudioInShowingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
-  ui->playlistWidget->setCurrentContent(content);
+  ui->playlistWidget->setShowingListCurrentContent(content);
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
-void MainUI::playAudio(const int &index) {
-  ui->playlistWidget->setCurrentContent(index);
-  PlayContent *content = ui->playlistWidget->currentPlayContent().content;
-  if (content == nullptr) {
-    return;
-  }
+void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
-  ui->playlistWidget->setCurrentContent(content);
+  ui->playlistWidget->setPlayingListCurrentContent(content);
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
@@ -274,7 +270,7 @@ void MainUI::removeLastHistory() {
 
 void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
   addHistory(PlayContentPos{index, content});
-  playAudio(index, content);
+  playAudioInShowingList(index, content);
 }
 
 void MainUI::addHistory(const PlayContentPos &cp) {

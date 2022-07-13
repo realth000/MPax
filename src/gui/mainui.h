@@ -45,8 +45,8 @@ class MainUI : public QMainWindow {
   void playPre();
   void playNext();
   void playRandom();
-  void playAudio(const int &index, PlayContent *content);
-  void playAudio(const int &index);
+  void playAudioInShowingList(const int &index, PlayContent *content);
+  void playAudioInPlayingList(const int &index, PlayContent *content);
   void saveAllPlaylist();
   void saveConfig();
   void saveCurrentPlaylistIndex(const int &index);

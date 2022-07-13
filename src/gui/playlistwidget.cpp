@@ -22,8 +22,10 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
     : QWidget(parent),
       ui(new Ui::PlaylistWidget),
       m_header(header),
-      m_playlistModel(nullptr),
-      m_playlistFilterModel(new PlaylistFilterModel),
+      m_showingModel(nullptr),
+      m_showingFilterModel(new PlaylistFilterModel),
+      m_playingModel(nullptr),
+      m_playingFilterModel(new PlaylistFilterModel),
       m_tableViewContextMenu(InitTableViewContextMenu()),
       m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
@@ -48,67 +50,82 @@ void PlaylistWidget::setHeader(const PlaylistModelHeader *header) {
 }
 
 void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
-  m_playlistModel = playlistModel;
-  if (m_playlistModel != nullptr) {
-    m_playlistModel->setHeader(m_header);
+  m_showingModel = playlistModel;
+  if (m_showingModel != nullptr) {
+    m_showingModel->setHeader(m_header);
+  }
+  if (m_playingModel == nullptr) {
+    m_playingModel = playlistModel;
+    m_playingModel->setHeader(m_header);
+    m_playingFilterModel->setSourceModel(m_playingModel);
   }
   //  ui->tableView->setModel(m_playlistModel);
-  m_playlistFilterModel->setSourceModel(m_playlistModel);
-  ui->tableView->setModel(m_playlistFilterModel);
+  m_showingFilterModel->setSourceModel(m_showingModel);
+  ui->tableView->setModel(m_showingFilterModel);
 }
 
 PlayContentPos PlaylistWidget::preContent() const {
-  if (m_playlistModel == nullptr) {
+  if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
   const QModelIndex filterIndex =
-      m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
-  return m_playlistModel->content(
-      m_playlistFilterModel
-          ->seekSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex),
+      m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
+  return m_playingModel->content(
+      m_playingFilterModel
+          ->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex),
                           -1)
           .row());
 }
 
 PlayContentPos PlaylistWidget::nextContent() const {
-  if (m_playlistModel == nullptr) {
+  if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
-  PlayContentPos pc = m_playlistModel->currentPlayContent();
-
   const QModelIndex filterIndex =
-      m_playlistModel->index(m_playlistModel->currentPlayContent().index, 0);
-  return m_playlistModel->content(
-      m_playlistFilterModel
-          ->seekSourceRow(m_playlistFilterModel->fromSourceIndex(filterIndex),
-                          1)
+      m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
+  return m_playingModel->content(
+      m_playingFilterModel
+          ->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex), 1)
           .row());
 }
 
-void PlaylistWidget::setCurrentContent(PlayContent *content) {
-  if (m_playlistModel == nullptr) {
+void PlaylistWidget::setShowingListCurrentContent(PlayContent *content) {
+  if (m_showingModel == nullptr) {
     qDebug() << "can not set current content to a null playlist";
     return;
   }
-  if (!m_playlistModel->contains(content)) {
+  if (!m_showingModel->contains(content)) {
     qDebug()
         << "the current content you want to set not exists in current playlist";
     return;
   }
-  m_playlistModel->setCurrentPlayContent(m_playlistModel->indexOf(content));
+  m_showingModel->setCurrentPlayContent(m_showingModel->indexOf(content));
+}
+
+void PlaylistWidget::setPlayingListCurrentContent(PlayContent *content) {
+  if (m_playingModel == nullptr) {
+    qDebug() << "can not set current content to a null playlist";
+    return;
+  }
+  if (!m_playingModel->contains(content)) {
+    qDebug()
+        << "the current content you want to set not exists in current playlist";
+    return;
+  }
+  m_playingModel->setCurrentPlayContent(m_playingModel->indexOf(content));
 }
 
 void PlaylistWidget::setCurrentContent(const int &index) {
-  if (m_playlistModel == nullptr) {
+  if (m_showingModel == nullptr) {
     qDebug() << "can not set current content index in a null playlist";
     return;
   }
-  if (m_playlistModel->count() <= index) {
-    qDebug() << "set current content out of index" << m_playlistModel->count()
+  if (m_showingModel->count() <= index) {
+    qDebug() << "set current content out of index" << m_showingModel->count()
              << "to" << index;
     return;
   }
-  m_playlistModel->setCurrentPlayContent(index);
+  m_showingModel->setCurrentPlayContent(index);
 }
 
 void PlaylistWidget::InitConnections() {
@@ -136,7 +153,7 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
 }
 
 void PlaylistWidget::actionDelete() {
-  if (m_playlistModel == nullptr) {
+  if (m_showingModel == nullptr) {
     return;
   }
   if (m_tableViewSelectedRows.count() <= 0) {
@@ -144,15 +161,15 @@ void PlaylistWidget::actionDelete() {
   }
   QList<int> indexes;
   for (auto t : m_tableViewSelectedRows) {
-    const int tt = m_playlistFilterModel->mapToSource(t).row();
+    const int tt = m_showingFilterModel->mapToSource(t).row();
     indexes.append(tt);
   }
-  m_playlistModel->removeContent(indexes);
+  m_showingModel->removeContent(indexes);
   emit playlistChanged();
 }
 
 void PlaylistWidget::actionOpenInFolder() {
-  if (m_playlistModel == nullptr) {
+  if (m_showingModel == nullptr) {
     return;
   }
   if (m_tableViewSelectedRows.count() <= 0) {
@@ -160,7 +177,7 @@ void PlaylistWidget::actionOpenInFolder() {
   }
   const QModelIndex i = m_tableViewSelectedRows[0];
   const QString path =
-      m_playlistModel->content(m_playlistFilterModel->mapToSource(i).row())
+      m_showingModel->content(m_showingFilterModel->mapToSource(i).row())
           .content->contentPath;
 #ifdef Q_OS_LINUX
   QProcess p;
@@ -172,25 +189,37 @@ void PlaylistWidget::actionOpenInFolder() {
 }
 
 void PlaylistWidget::actionPlay() {
-  if (m_playlistModel == nullptr) {
+  if (m_showingModel == nullptr) {
     return;
   }
   if (m_tableViewSelectedRows.count() < 0) {
     return;
   }
-  PlayContentPos pc = m_playlistModel->content(
-      m_playlistFilterModel->mapToSource(m_tableViewSelectedRows[0]).row());
+  PlayContentPos pc = m_showingModel->content(
+      m_showingFilterModel->mapToSource(m_tableViewSelectedRows[0]).row());
+  // Click event on current showing model, update m_playingModel.
+  updatePlayingModel();
   emit playContentChanged(pc.index, pc.content);
 }
 
+void PlaylistWidget::updatePlayingModel() {
+  if (m_showingModel == nullptr) {
+    return;
+  }
+  m_playingModel = m_showingModel;
+  m_playingFilterModel->setSourceModel(m_playingModel);
+}
+
 void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
-  if (m_playlistModel == nullptr) {
+  if (m_showingModel == nullptr) {
     qDebug() << "can not update play content index in a null playlist";
     return;
   }
-  const int row = m_playlistFilterModel->sourceIndex(index).row();
-  m_playlistModel->setCurrentPlayContent(row);
-  emit playContentChanged(row, m_playlistModel->currentPlayContent().content);
+  const int row = m_showingFilterModel->sourceIndex(index).row();
+  m_showingModel->setCurrentPlayContent(row);
+  // Double-click on table,update m_playingModel.
+  updatePlayingModel();
+  emit playContentChanged(row, m_showingModel->currentPlayContent().content);
 }
 
 void PlaylistWidget::updateConfig() {
@@ -214,25 +243,25 @@ void PlaylistWidget::updateConfig() {
 }
 
 PlayContentPos PlaylistWidget::randomContent() const {
-  if (m_playlistModel == nullptr) {
+  if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
-  return m_playlistModel->content(
-      QRandomGenerator::securelySeeded().bounded(0, m_playlistModel->count()));
+  return m_playingModel->content(
+      QRandomGenerator::securelySeeded().bounded(0, m_showingModel->count()));
 }
 
 PlayContentPos PlaylistWidget::currentPlayContent() const {
-  if (m_playlistModel == nullptr) {
+  if (m_playingModel == nullptr) {
     return PlayContentPos{};
   }
-  return m_playlistModel->currentPlayContent();
+  return m_playingModel->currentPlayContent();
 }
 
-int PlaylistWidget::count() const {
-  if (m_playlistModel == nullptr) {
+int PlaylistWidget::countShowing() const {
+  if (m_showingModel == nullptr) {
     return 0;
   }
-  return m_playlistModel->count();
+  return m_showingModel->count();
 }
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
