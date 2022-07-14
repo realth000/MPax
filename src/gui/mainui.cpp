@@ -18,13 +18,15 @@ MainUI::MainUI(QWidget *parent)
       ui(new Ui::MainUI),
       m_history(new QList<Ui::PlayContentPair>),
       m_historyPos(0),
-      m_searchDialog(new PlaylistSearchDialog(this)) {
+      m_searchDialog(new PlaylistSearchDialog(this)),
+      m_statusLabel(new QLabel) {
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
   this->setStyleSheet(util::loadCssFromFile(
       {":/css/external/MaterialDark.css", ":/css/base.css"}));
+  InitStatusBar();
   Config::AppConfig::getInstance()->loadConfig();
   //  QList<Playlist> playlistList =
   //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
@@ -124,6 +126,8 @@ void MainUI::InitConnections() {
   connect(ui->aboutAction, &QAction::triggered, this, &MainUI::showAboutInfo);
   connect(ui->aboutQtAction, &QAction::triggered, this,
           &MainUI::showAboutQtInfo);
+  connect(ui->listTabWidget, &ListTabWidget::reloadInfoStatusChanged, this,
+          &MainUI::updateReloadInfoStatus);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -275,6 +279,10 @@ void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
   playAudioInShowingList(index, content);
 }
 
+void MainUI::InitStatusBar() {
+  ui->statusbar->addPermanentWidget(m_statusLabel);
+}
+
 void MainUI::addHistory(const PlayContentPos &cp) {
   m_history->append(Ui::PlayContentPair(cp.index, cp.content));
   m_historyPos = m_history->count() - 1;
@@ -292,3 +300,16 @@ void MainUI::showAboutInfo() {
 }
 
 void MainUI::showAboutQtInfo() { QMessageBox::aboutQt(this, tr("About Qt")); }
+
+void MainUI::updateReloadInfoStatus(const QString &playlistName, bool finished,
+                                    int count, qint64 time) {
+  if (!finished) {
+    m_statusLabel->setText(
+        QString(tr("reloading audio info") + " %1/%2ms")
+            .arg(QString::number(count), QString::number(time)));
+  } else {
+    m_statusLabel->setText(
+        QString(tr("reloaded audio info") + " %1/%2ms")
+            .arg(QString::number(count), QString::number(time)));
+  }
+}

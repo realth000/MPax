@@ -10,6 +10,10 @@
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
   connect(this, &ListTabModel::dataChanged, this,
           &ListTabModel::saveDefaultPlaylist);
+  for (auto list : m_playlistList) {
+    connect(list, &PlaylistModel::reloadInfoStatusChanged, this,
+            &ListTabModel::reloadInfoStatusChanged);
+  }
 }
 
 int ListTabModel::rowCount(const QModelIndex &parent) const {
@@ -36,6 +40,10 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel) {
     m_currentPlayListModel = m_playlistList[m_playlistList.length() - 1];
     emit currentPlaylistChanged(m_currentPlayListModel);
   }
+  connect(playlistModel, &PlaylistModel::reloadInfoStatusChanged, this,
+          &ListTabModel::reloadInfoStatusChanged);
+  QMetaObject::invokeMethod(playlistModel, "reloadPlayContentInfo",
+                            Qt::QueuedConnection);
 }
 
 void ListTabModel::removePlaylist(const int &index) {

@@ -22,6 +22,8 @@ class ListTabModel : public QStringListModel {
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);
   void dataChanged();
+  void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
+                               qint64 time);
 
  public slots:
   void addContent(PlayContent *playContent);

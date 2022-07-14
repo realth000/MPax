@@ -20,6 +20,8 @@ class ListTabWidget : public QWidget {
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);
   void currentPlaylistIndexChanged(const int &index);
+  void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
+                               qint64 time);
 
  public slots:
   void addPlaylist(PlaylistModel *playlistModel);

@@ -1,6 +1,11 @@
 #include "playlistmodel.h"
 
 #include <QDebug>
+#include <QtConcurrent/QtConcurrentMap>
+#include <QtCore/QEventLoop>
+#include <QtCore/QFutureWatcher>
+#include <QtCore/QTime>
+#include <QtCore/QTimer>
 
 #include "audio/audioinfo.h"
 #include "core/playlistsql.h"
@@ -79,9 +84,7 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
       m_listInfo(PlaylistInfo(
           QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
       m_currentPlayContent(nullptr),
-      m_headerTrans(MODEL_ALL_HEADER) {
-  reloadPlayContentInfo();
-}
+      m_headerTrans(MODEL_ALL_HEADER) {}
 
 PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
     : QAbstractItemModel{parent},
@@ -89,9 +92,7 @@ PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
       m_listInfo(*playlist.info()),
       m_contentList(*playlist.content()),
       m_currentPlayContent(nullptr),
-      m_headerTrans(MODEL_ALL_HEADER) {
-  reloadPlayContentInfo();
-}
+      m_headerTrans(MODEL_ALL_HEADER) {}
 
 QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
   // TODO: Check if incorrent.
@@ -242,11 +243,31 @@ Playlist PlaylistModel::list() const {
 }
 
 void PlaylistModel::reloadPlayContentInfo() {
-  for (const auto content : m_contentList) {
-    // Only load audio info when content added to model.
-    AudioInfo::readAudioInfo(content->contentPath, content,
-                             AudioInfo::InfoOption::NoAlbumCover);
-  }
+  QFutureWatcher<void> *reloadWatcher = new QFutureWatcher<void>;
+  QTimer *progressTimer = new QTimer;
+  QElapsedTimer *t = new QElapsedTimer;
+  connect(progressTimer, &QTimer::timeout, this,
+          [this, reloadWatcher, t, progressTimer]() {
+            emit this->reloadInfoStatusChanged(
+                m_listInfo.info(PLAYLIST_INFO_NAME),
+                reloadWatcher->isFinished(), reloadWatcher->progressValue(),
+                t->elapsed());
+            if (reloadWatcher->isFinished()) {
+              progressTimer->stop();
+              progressTimer->deleteLater();
+              t->invalidate();
+              delete t;
+              reloadWatcher->deleteLater();
+            }
+          });
+  progressTimer->start(100);
+  t->start();
+  QFuture<void> reloadFuture = QtConcurrent::map(
+      m_contentList, [&](PlayContent *content) -> PlayContent * {
+        AudioInfo::readAudioInfo(content->contentPath, content,
+                                 AudioInfo::InfoOption::NoAlbumCover);
+      });
+  reloadWatcher->setFuture(reloadFuture);
 }
 
 void PlaylistModel::reloadPlayContentInfo(PlayContent *content) {

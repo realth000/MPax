@@ -60,8 +60,14 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos findPreContent() const;
   PlayContentPos content(const int &index) const;
   Playlist list() const;
+
+ public slots:
   void reloadPlayContentInfo();
   void reloadPlayContentInfo(PlayContent *content);
+
+ signals:
+  void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
+                               qint64 time);
 
  private:
   QString m_playlistName;
@@ -73,5 +79,4 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContent *m_currentPlayContent;
   QMap<QString, QString> m_headerTrans;
 };
-
 #endif  // PLAYLISTMODEL_H

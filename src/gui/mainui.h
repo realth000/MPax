@@ -2,6 +2,7 @@
 #define MAINUI_H
 
 #include <QtGui/QKeyEvent>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 
 #include "audio/coreplayer.h"
@@ -34,9 +35,11 @@ class MainUI : public QMainWindow {
   QList<Ui::PlayContentPair> *m_history;
   int m_historyPos;
   PlaylistSearchDialog *m_searchDialog;
+  QLabel *m_statusLabel;
 
   PlayContent *addAudioFile(const QString &filePath);
   void addHistory(const PlayContentPos &cp);
+  void InitStatusBar();
 
  private slots:
   void openAudio();
@@ -55,5 +58,7 @@ class MainUI : public QMainWindow {
   void openSearchWindow();
   void showAboutInfo();
   void showAboutQtInfo();
+  void updateReloadInfoStatus(const QString &playlistName, bool finished,
+                              int count, qint64 time);
 };
 #endif  // MAINUI_H
