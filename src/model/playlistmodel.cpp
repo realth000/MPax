@@ -266,6 +266,7 @@ void PlaylistModel::reloadPlayContentInfo() {
       m_contentList, [&](PlayContent *content) -> PlayContent * {
         AudioInfo::readAudioInfo(content->contentPath, content,
                                  AudioInfo::InfoOption::NoAlbumCover);
+        return content;
       });
   reloadWatcher->setFuture(reloadFuture);
 }
