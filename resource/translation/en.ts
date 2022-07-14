@@ -183,13 +183,12 @@
         <translation>Scan directory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="307"/>
-        <location filename="../../src/gui/mainui.cpp" line="309"/>
+        <location filename="../../src/gui/mainui.cpp" line="308"/>
         <source>reloading audio info</source>
         <translation>reloading audio info</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="313"/>
+        <location filename="../../src/gui/mainui.cpp" line="312"/>
         <source>reloaded audio info</source>
         <translation>audio info reloaded</translation>
     </message>

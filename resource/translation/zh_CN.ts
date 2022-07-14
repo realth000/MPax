@@ -183,13 +183,12 @@
         <translation>扫描文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="307"/>
-        <location filename="../../src/gui/mainui.cpp" line="309"/>
+        <location filename="../../src/gui/mainui.cpp" line="308"/>
         <source>reloading audio info</source>
         <translation>正在重新加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="313"/>
+        <location filename="../../src/gui/mainui.cpp" line="312"/>
         <source>reloaded audio info</source>
         <translation>已重新加载音频信息</translation>
     </message>
