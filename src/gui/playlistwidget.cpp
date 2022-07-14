@@ -202,7 +202,7 @@ void PlaylistWidget::updatePlayingModel() {
     return;
   }
   m_playingModel = m_showingModel;
-  m_playingFilterModel->setSourceModel(m_playingModel);
+  m_playingFilterModel = m_showingFilterModel;
   emit playingListChanged(m_playingModel);
 }
 
