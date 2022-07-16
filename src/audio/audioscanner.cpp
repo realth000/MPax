@@ -37,12 +37,9 @@ void AudioScanner::scanDirPrivate(const QString &dirPath,
       QDirIterator::Subdirectories);
   while (it.hasNext()) {
     it.next();
-    if (it.fileInfo().isFile()) {
-      for (const auto &f : audioFormat) {
-        if (f == it.fileInfo().suffix()) {
-          m_audioList.append(it.filePath());
-        }
-      }
+    if (it.fileInfo().isFile() &&
+        audioFormat.contains(it.fileInfo().suffix())) {
+      m_audioList.append(it.filePath());
     }
   }
 }
