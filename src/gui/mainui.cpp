@@ -1,5 +1,7 @@
 ﻿#include "mainui.h"
 
+#include <QtConcurrent/QtConcurrentRun>
+#include <QtCore/QFutureWatcher>
 #include <QtCore/QtDebug>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -11,6 +13,7 @@
 #include "core/playlistjson.h"
 #include "core/playlistsql.h"
 #include "gui/aboutdialog.h"
+#include "gui/progressdialog.h"
 #include "util/cssloader.h"
 
 MainUI::MainUI(QWidget *parent)
@@ -219,17 +222,70 @@ void MainUI::scanAudioDir() {
   if (dirPath.isEmpty()) {
     return;
   }
-  for (const auto &audioFile : AudioScanner::scanAudioInDir(
-           dirPath, QStringList{"mp3", "flac", "wav"})) {
-    addAudioFile(audioFile);
-  }
-  ui->listTabWidget->saveDefaultPlaylist();
+  AudioScanner *scanner = new AudioScanner;
+  ProgressDialog *dialog = new ProgressDialog("Scanning directory");
+  dialog->setInfinite(true);
+  // Scan files.
+  connect(scanner, &AudioScanner::scanStatusChanged, this,
+          [this, dialog, scanner](bool finished, const qint64 &count) {
+            if (dialog->infinite()) {
+              dialog->updateProgress(count);
+            }
+            if (!finished) {
+              return;
+            }
+            // Load audio info.
+            dialog->setMax(scanner->audioFileList().length());
+            dialog->setInfinite(false);
+            dialog->setWorkName(tr("Loading audio info"));
+            QFutureWatcher<void> watcher;
+            QTimer timer;
+            QEventLoop waitLoop;
+            int loadFinishCount;
+            connect(&timer, &QTimer::timeout, this,
+                    [dialog, &loadFinishCount]() {
+                      dialog->updateProgress(loadFinishCount);
+                    });
+            connect(&watcher, &QFutureWatcher<void>::finished, this,
+                    [scanner, dialog, &timer, &waitLoop]() {
+                      dialog->deleteLater();
+                      scanner->deleteLater();
+                      timer.stop();
+                      waitLoop.quit();
+                    });
+            timer.start(100);
+            watcher.setFuture(QtConcurrent::run(this, &MainUI::addAudioFileList,
+                                                scanner->audioFileList(),
+                                                &loadFinishCount));
+            waitLoop.exec();
+            ui->listTabWidget->saveDefaultPlaylist();
+          });
+  const QStringList formatList = QStringList{"mp3", "flac", "wav"};
+  scanner->scanDir(dirPath, formatList);
+  dialog->exec();
+  //  QMetaObject::invokeMethod(scanner, "scanDir", Qt::QueuedConnection,
+  //                            Q_ARG(QString, dirPath),
+  //                            Q_ARG(QStringList, formatList));
 }
 
 PlayContent *MainUI::addAudioFile(const QString &filePath) {
   PlayContent *t = new PlayContent(filePath);
   ui->listTabWidget->addContent(t);
   return t;
+}
+
+void MainUI::addAudioFileList(const QStringList &filePathList, int *counter) {
+  if (counter == nullptr) {
+    for (const auto &filePath : filePathList) {
+      addAudioFile(filePath);
+    }
+  } else {
+    *counter = 0;
+    for (const auto &filePath : filePathList) {
+      (*counter)++;
+      addAudioFile(filePath);
+    }
+  }
 }
 
 void MainUI::playAudioInShowingList(const int &index, PlayContent *content) {

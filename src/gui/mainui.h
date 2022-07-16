@@ -38,6 +38,8 @@ class MainUI : public QMainWindow {
   QLabel *m_statusLabel;
 
   PlayContent *addAudioFile(const QString &filePath);
+  void addAudioFileList(const QStringList &filePathList,
+                        int *counter = nullptr);
   void addHistory(const PlayContentPos &cp);
   void InitStatusBar();
 
