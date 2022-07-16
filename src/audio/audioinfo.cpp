@@ -1,7 +1,10 @@
 #include "audioinfo.h"
 
+#include <QtConcurrent/QtConcurrentMap>
 #include <QtCore/QBuffer>
 #include <QtCore/QDebug>
+#include <QtCore/QFutureWatcher>
+#include <QtCore/QTimer>
 #include <QtGui/QImageReader>
 
 #include "taglib/fileref.h"
@@ -73,5 +76,31 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   }
   TagLib::AudioProperties* properties = f.audioProperties();
   playContent->audioBitRate = properties->bitrate();
+  return true;
+}
+
+bool AudioInfo::readAudioInfoList(PlayContentList* playContentList,
+                                  AudioInfo::InfoOption infoOption) {
+  QFutureWatcher<void>* watcher = new QFutureWatcher<void>;
+  QTimer* timer = new QTimer;
+  QElapsedTimer* t = new QElapsedTimer;
+  connect(timer, &QTimer::timeout, this, [this, watcher, t, timer]() {
+    emit this->reloadInfoStatusChanged(watcher->isFinished(),
+                                       watcher->progressValue(), t->elapsed());
+    if (watcher->isFinished()) {
+      timer->stop();
+      timer->deleteLater();
+      t->invalidate();
+      delete t;
+      watcher->deleteLater();
+    }
+  });
+  timer->start(100);
+  t->start();
+  watcher->setFuture(QtConcurrent::map(
+      *playContentList, [&](PlayContent* content) -> PlayContent* {
+        readAudioInfo(content->contentPath, content, infoOption);
+        return content;
+      }));
   return true;
 }
