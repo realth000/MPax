@@ -79,6 +79,7 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   return true;
 }
 
+#if 0
 bool AudioInfo::readAudioInfoList(PlayContentList* playContentList,
                                   AudioInfo::InfoOption infoOption) {
   QFutureWatcher<void>* watcher = new QFutureWatcher<void>;
@@ -104,3 +105,4 @@ bool AudioInfo::readAudioInfoList(PlayContentList* playContentList,
       }));
   return true;
 }
+#endif

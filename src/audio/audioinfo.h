@@ -14,8 +14,10 @@ class AudioInfo : public QObject {
 
   static bool readAudioInfo(const QString &audioPath, PlayContent *playContent,
                             InfoOption infoOption = InfoOption::All);
+#if 0
   bool readAudioInfoList(PlayContentList *playContentList,
                          InfoOption infoOption = InfoOption::All);
+#endif
 
  signals:
   void reloadInfoStatusChanged(bool finished, int count, qint64 time);
