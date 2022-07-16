@@ -32,7 +32,8 @@ void AudioScanner::scanDirPrivate(const QString &dirPath,
     m_audioList.clear();
   }
   QDirIterator it(
-      dirPath, QDir::Files | QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot,
+      dirPath,
+      QDir::Files | QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot,
       QDirIterator::Subdirectories);
   while (it.hasNext()) {
     it.next();
@@ -42,9 +43,6 @@ void AudioScanner::scanDirPrivate(const QString &dirPath,
           m_audioList.append(it.filePath());
         }
       }
-    }
-    if (it.fileInfo().isDir()) {
-      scanDirPrivate(it.filePath(), audioFormat);
     }
   }
 }
