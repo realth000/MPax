@@ -17,8 +17,15 @@ bool Model::PlaylistSearchFilterModel::filterAcceptsRow(
     return false;
   }
   QModelIndex index0 = sourceModel()->index(sourceRow, 0, sourceParent);
-  if (sourceModel()->data(index0).toString().contains(m_filterExp)) {
-    return true;
+  const int columnCount = sourceModel()->columnCount(sourceParent);
+  for (int i = 0; i < columnCount; i++) {
+    if (sourceModel()
+            ->data(index0.siblingAtColumn(i))
+            .toString()
+            .contains(m_filterExp)) {
+      return true;
+    }
   }
+
   return false;
 }
