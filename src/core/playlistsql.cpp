@@ -100,7 +100,8 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     }
     // Create playlist table.
     query.prepare(QString("CREATE TABLE %1(id INT NOT NULL "
-                          "PRIMARY KEY, path TEXT);")
+                          "PRIMARY KEY, path TEXT, title TEXT, artist "
+                          "TEXT, album_title TEXT);")
                       .arg(tableName));
     ok = query.exec();
     if (!ok) {
@@ -114,10 +115,15 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     int contentCount = 0;
     for (auto c : *playlist.content()) {
       query.prepare(QString("INSERT INTO %1(id  "
-                            ", path) VALUES(:v_id, :v_path);")
+                            ", path, title, artist, album_title) "
+                            "VALUES(:v_id, :v_path, :v_title, :v_artist, "
+                            ":v_album_title);")
                         .arg(tableName));
       query.bindValue(QStringLiteral(":v_id"), contentCount);
       query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
+      query.bindValue(QStringLiteral(":v_title"), c->value("Title"));
+      query.bindValue(QStringLiteral(":v_artist"), c->value("Artist"));
+      query.bindValue(QStringLiteral(":v_album_title"), c->value("AlbumTitle"));
       ok = query.exec();
       if (!ok) {
         m_database.rollback();
@@ -217,7 +223,11 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
 
     while (q.next()) {
       //      qDebug() << q.value("path").toString();
-      list->append(new PlayContent(q.value("path").toString()));
+      PlayContent* playContent = new PlayContent(q.value("path").toString());
+      playContent->title = q.value("title").toString();
+      playContent->artist = q.value("artist").toString();
+      playContent->albumTitle = q.value("album_title").toString();
+      list->append(playContent);
     }
     allList.append(Playlist(info, list));
   }
