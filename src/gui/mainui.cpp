@@ -188,11 +188,7 @@ void MainUI::playPre() {
 
 void MainUI::playNext() {
   PlayContentPos cp = PlayContentPos{-1, nullptr};
-  if (ui->playControlWidget->playMode() ==
-      PlayControlWidget::PlayMode::Random) {
-    cp = ui->playlistWidget->randomContent();
-    addHistory(cp);
-  } else if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
+  if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
     m_historyPos++;
     cp.index = (*m_history)[m_historyPos].first;
     cp.content = (*m_history)[m_historyPos].second;
