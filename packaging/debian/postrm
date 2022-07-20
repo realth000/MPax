@@ -1,0 +1,5 @@
+#/bin/bash
+
+if [ $1 != "upgrade" -a -e /opt/MPax ];then
+    rm -rf /opt/MPax
+fi

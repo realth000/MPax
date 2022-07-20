@@ -11,12 +11,12 @@ fi
 
 mkdir -p "${build_dir}"/opt/MPax/translation
 mkdir -p "${build_dir}"/usr/share/applications/
-cp -raf ../packaging/debian/ "${build_dir}"/DEBIAN
-cp -raf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
-cp -raf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
-cp -raf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/
-cp -raf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
-chmod +x "${build_dir}"/DEBIAN/postinst
-chmod 644 "${build_dir}"/usr/share/applications/mpax.desktop
+cp -rf ../packaging/debian/ "${build_dir}"/DEBIAN
+cp -rf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
+cp -rf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
+cp -rf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/
+cp -rf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
+chown -R root.root "${build_dir}"
+chmod -R 755 "${build_dir}"/DEBIAN
 
 dpkg -b "${build_dir}" "${pkg_name}_${pkg_version}-1ubuntu2204_amd64.deb"

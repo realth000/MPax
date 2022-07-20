@@ -1,4 +1,4 @@
 #!/bin/bash
 
 chmod +x /opt/MPax/MPax
-chmod -R 664 /opt/MPax
+chmod -R 777 /opt/MPax
