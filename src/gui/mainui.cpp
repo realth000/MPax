@@ -250,16 +250,18 @@ void MainUI::scanAudioDir() {
                   waitLoop.quit();
                 });
         timer.start(100);
-        const PlayContentList *currentContentList =
-            ui->listTabWidget->CurrentPlaylist()->list().content();
-        QStringList contentPathList;
-        for (const auto content : *currentContentList) {
-          contentPathList.append(content->contentPath);
-        }
         QStringList scannedPathList = scanner->audioFileList();
-        for (const auto &contentPath : contentPathList) {
-          if (scannedPathList.contains(contentPath)) {
-            scannedPathList.removeAll(contentPath);
+        if (ui->listTabWidget->CurrentPlaylist() != nullptr) {
+          const PlayContentList *currentContentList =
+              ui->listTabWidget->CurrentPlaylist()->list().content();
+          QStringList contentPathList;
+          for (const auto content : *currentContentList) {
+            contentPathList.append(content->contentPath);
+          }
+          for (const auto &contentPath : contentPathList) {
+            if (scannedPathList.contains(contentPath)) {
+              scannedPathList.removeAll(contentPath);
+            }
           }
         }
         watcher.setFuture(QtConcurrent::run(this, &MainUI::addAudioFileList,
