@@ -193,7 +193,12 @@ void MainUI::playNext() {
     cp.index = (*m_history)[m_historyPos].first;
     cp.content = (*m_history)[m_historyPos].second;
   } else {
-    cp = ui->playlistWidget->nextContent();
+    if (ui->playControlWidget->playMode() ==
+        PlayControlWidget::PlayMode::Random) {
+      cp = ui->playlistWidget->randomContent();
+    } else {
+      cp = ui->playlistWidget->nextContent();
+    }
     addHistory(cp);
   }
   if (cp.content == nullptr) {
