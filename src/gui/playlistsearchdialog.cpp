@@ -69,7 +69,7 @@ void PlaylistSearchDialog::keyPressEvent(QKeyEvent *event) {
     updatePlayContent(m_rowPos);
     return;
   }
-  event->ignore();
+  QDialog::keyPressEvent(event);
 }
 
 Qt::CaseSensitivity PlaylistSearchDialog::caseSensitivity() {
