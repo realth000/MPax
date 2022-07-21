@@ -14,6 +14,9 @@ class PlaylistSearchFilterModel : public PlaylistFilterModel {
 
   explicit PlaylistSearchFilterModel(QObject *parent = nullptr);
 
+ signals:
+  void rowCountChanged(const int &rowCount);
+
  public slots:
   void setFilterExp(const QRegExp &filter,
                     const Model::PlaylistSearchFilterModel::FilterMode &mode);

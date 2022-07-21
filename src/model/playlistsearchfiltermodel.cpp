@@ -1,5 +1,7 @@
 #include "playlistsearchfiltermodel.h"
 
+#include <QDebug>
+
 Model::PlaylistSearchFilterModel::PlaylistSearchFilterModel(QObject *parent)
     : PlaylistFilterModel(parent) {}
 
@@ -9,6 +11,7 @@ void Model::PlaylistSearchFilterModel::setFilterExp(
   m_filterExp = filter;
   m_filterMode = mode;
   setFilterRegExp(filter);
+  emit rowCountChanged(QSortFilterProxyModel::rowCount(QModelIndex()));
 }
 
 bool Model::PlaylistSearchFilterModel::filterAcceptsRow(

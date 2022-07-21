@@ -9,7 +9,9 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::PlaylistSearchDialog),
       m_model(new Model::PlaylistSearchFilterModel),
-      m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
+      m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}),
+      m_rowCount(-1),
+      m_rowPos(-1) {
   ui->setupUi(this);
   this->setWindowTitle(tr("Search in playlist"));
   ui->searchTableView->verticalHeader()->setHidden(true);
@@ -19,6 +21,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   ui->searchTableView->setSortingEnabled(true);
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui->searchTableView->setFocusPolicy(Qt::NoFocus);
   this->setStyleSheet(
       util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   //  m_model->setSourceModel(model);
@@ -31,7 +34,12 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   connect(ui->caseCheckBox, &QCheckBox::stateChanged, this,
           [this]() { updateSearchFilter(ui->searchLineEdit->text()); });
   connect(ui->searchTableView, &QTableView::doubleClicked, this,
-          &PlaylistSearchDialog::updatePlayContent);
+          QOverload<const QModelIndex &>::of(
+              &PlaylistSearchDialog::updatePlayContent));
+  connect(m_model, &Model::PlaylistSearchFilterModel::rowCountChanged, this,
+          &PlaylistSearchDialog::updateRowCountAfterFilter);
+  connect(ui->searchTableView, &QTableView::pressed, this,
+          [this](const QModelIndex &index) { this->m_rowPos = index.row(); });
 }
 
 PlaylistSearchDialog::~PlaylistSearchDialog() {}
@@ -40,9 +48,65 @@ void PlaylistSearchDialog::setModel(QAbstractItemModel *model) {
   m_model->setSourceModel(model);
 }
 
+void PlaylistSearchDialog::keyPressEvent(QKeyEvent *event) {
+  if (event->modifiers() == Qt::NoModifier) {
+    switch (event->key()) {
+      case Qt::Key_Up:
+        selectPre();
+        event->accept();
+        return;
+      case Qt::Key_Down:
+        selectNext();
+        event->accept();
+        return;
+      case Qt::Key_Return:
+        updatePlayContent(m_rowPos);
+        return;
+    }
+  }
+  if (event->modifiers() == Qt::KeypadModifier &&
+      event->key() == Qt::Key_Enter) {
+    updatePlayContent(m_rowPos);
+    return;
+  }
+  event->ignore();
+}
+
 Qt::CaseSensitivity PlaylistSearchDialog::caseSensitivity() {
   return ui->caseCheckBox->isChecked() ? Qt::CaseSensitive
                                        : Qt::CaseInsensitive;
+}
+
+void PlaylistSearchDialog::selectPre() {
+  if (m_rowCount <= 0) {
+    return;
+  }
+  if (m_rowPos > 0) {
+    ui->searchTableView->selectRow(--m_rowPos);
+  } else {
+    ui->searchTableView->selectRow(m_rowCount - 1);
+    m_rowPos = m_rowCount - 1;
+  }
+}
+
+void PlaylistSearchDialog::selectNext() {
+  if (m_rowCount <= 0) {
+    return;
+  }
+  if (m_rowPos < m_rowCount - 1) {
+    ui->searchTableView->selectRow(++m_rowPos);
+  } else {
+    ui->searchTableView->selectRow(0);
+    m_rowPos = 0;
+  }
+}
+
+void PlaylistSearchDialog::updateRowCountAfterFilter(const int newCount) {
+  m_rowCount = newCount;
+  if (m_rowCount > 0) {
+    m_rowPos = 0;
+    ui->searchTableView->selectRow(m_rowPos);
+  }
 }
 
 void PlaylistSearchDialog::updateSearchFilter(const QString &filterString) {
@@ -53,4 +117,8 @@ void PlaylistSearchDialog::updateSearchFilter(const QString &filterString) {
 void PlaylistSearchDialog::updatePlayContent(const QModelIndex &index) {
   const int row = m_model->sourceIndex(index).row();
   emit playContentChanged(row);
+}
+
+void PlaylistSearchDialog::updatePlayContent(const int &row) {
+  updatePlayContent(m_model->index(row, 0));
 }
