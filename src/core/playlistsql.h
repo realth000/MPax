@@ -18,7 +18,7 @@ class PlaylistSql : public QObject {
   void savePlaylist(const QList<Playlist>& playlists);
   static void savePlaylist(const QString& filePath);
   void removePlaylist(const int& index);
-  void updatePlaylist(const QList<Playlist>& playlists);
+  void updatePlaylist(const int& index, const Playlist& playlist);
   QList<Playlist> loadPlaylist();
 
  private:

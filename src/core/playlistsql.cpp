@@ -187,7 +187,52 @@ exit:
   tryCloseDatabase();
 }
 
-void PlaylistSql::updatePlaylist(const QList<Playlist>& playlists) {}
+void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
+  if (m_nameVector.length() <= index) {
+    qDebug() << "update Playlist index out of range" << index
+             << m_nameVector.length();
+    return;
+  }
+  int contentCount = 0;
+  const QString tableName = m_nameVector[index].first;
+  const QString playlistName = m_nameVector[index].second;
+  qDebug() << "update playlist" << tableName << playlistName;
+  if (!tryOpenDatabase()) {
+    qDebug() << "database not open, failed to update" << playlistName;
+    return;
+  }
+  m_database.transaction();
+  QSqlQuery query(m_database);
+  bool ok = query.exec(QString("DELETE FROM %1").arg(tableName));
+  if (!ok) {
+    qDebug() << "can not clear playlist data" << playlistName
+             << query.lastError();
+    m_database.rollback();
+    goto exit;
+  }
+  for (auto c : *playlist.content()) {
+    query.prepare(QString("INSERT INTO %1(id  "
+                          ", path, title, artist, album_title) "
+                          "VALUES(:v_id, :v_path, :v_title, :v_artist, "
+                          ":v_album_title);")
+                      .arg(tableName));
+    query.bindValue(QStringLiteral(":v_id"), contentCount);
+    query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
+    query.bindValue(QStringLiteral(":v_title"), c->value("Title"));
+    query.bindValue(QStringLiteral(":v_artist"), c->value("Artist"));
+    query.bindValue(QStringLiteral(":v_album_title"), c->value("AlbumTitle"));
+    ok = query.exec();
+    if (!ok) {
+      m_database.rollback();
+      qDebug() << "can not update playlist data:" << playlistName << ":"
+               << query.lastError();
+      goto exit;
+    }
+    contentCount++;
+  }
+exit:
+  tryCloseDatabase();
+}
 
 QList<Playlist> PlaylistSql::loadPlaylist() {
   QList<Playlist> allList;
