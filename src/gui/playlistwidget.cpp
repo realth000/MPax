@@ -128,8 +128,18 @@ void PlaylistWidget::InitConnections() {
           &PlaylistWidget::updatePlayContent);
   connect(ui->tableView, &QTableView::customContextMenuRequested, this,
           &PlaylistWidget::openTableViewContextMenu);
+  // Save current playlist if needed.
+  //  connect(ui->tableView->horizontalHeader(),
+  //  &QHeaderView::sortIndicatorChanged,
+  //          this, &PlaylistWidget::playlistOrderChanged);
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-          this, &PlaylistWidget::playlistOrderChanged);
+          this, [this](int logicalIndex, Qt::SortOrder order) {
+            Config::AppConfig::getInstance()->setConfig(
+                CONFIG_PLAYLIST_SORT_HEADER, m_header->header(logicalIndex));
+            Config::AppConfig::getInstance()->setConfig(
+                CONFIG_PLAYLIST_SORT_ORDER, order);
+            Config::AppConfig::getInstance()->saveConfigDefer();
+          });
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {

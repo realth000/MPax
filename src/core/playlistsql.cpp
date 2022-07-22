@@ -8,6 +8,8 @@
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 
+#include "config/appconfig.h"
+
 #define SQL_RANDOM_NAME(VAL)                                   \
   QString::number(QDateTime::currentMSecsSinceEpoch()) + "_" + \
       QString::number(VAL)
@@ -237,6 +239,14 @@ exit:
 QList<Playlist> PlaylistSql::loadPlaylist() {
   QList<Playlist> allList;
   QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
+  // Load playlist sort from config
+  const QString sortHeaderName =
+      m_titleMap[Config::AppConfig::getInstance()
+                     ->config(CONFIG_PLAYLIST_SORT_HEADER)
+                     .value.toString()];
+  const int sortOrder = Config::AppConfig::getInstance()
+                            ->config(CONFIG_PLAYLIST_SORT_ORDER)
+                            .value.toInt();
   m_nameVector.clear();
   if (!tryOpenDatabase()) {
     qDebug() << "can not load playlist, database failed to open";
@@ -256,7 +266,14 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     const QString tableName = query.value("table_name").toString();
     const QString playlistName = query.value("playlist_name").toString();
     QSqlQuery q(m_database);
-    ok = q.exec(QString("SELECT * FROM %1").arg(tableName));
+    if (!sortHeaderName.isEmpty()) {
+      ok = q.exec(QString("SELECT * FROM %1 ORDER BY %2 %3")
+                      .arg(tableName, sortHeaderName,
+                           sortOrder == Qt::DescendingOrder ? "DESC" : "ASC"));
+    } else {
+      ok = q.exec(QString("SELECT * FROM %1").arg(tableName));
+    }
+
     if (!ok) {
       qDebug() << "can not load playlist" << playlistName << ":"
                << q.lastError();
@@ -283,7 +300,10 @@ exit:
 
 PlaylistSql::PlaylistSql()
     : m_database(
-          QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)) {
+          QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)),
+      m_titleMap(QMap<QString, QString>{{"Title", "title"},
+                                        {"Artist", "artist"},
+                                        {"AlbumTitle", "album_title"}}) {
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "can not open playlist database" << SQL_DB_NAME;

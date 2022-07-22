@@ -24,6 +24,7 @@ class PlaylistSql : public QObject {
  private:
   QSqlDatabase m_database;
   QVector<QPair<QString, QString>> m_nameVector;
+  QMap<QString, QString> m_titleMap;
 
   PlaylistSql();
   ~PlaylistSql();
