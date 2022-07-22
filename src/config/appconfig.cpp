@@ -83,7 +83,7 @@ Config::AppConfig::AppConfig()
   addConfig(CONFIG_SHORTCUT_PLAY_PRE, "Ctrl+Meta+Left", TYPE_STRING);
   addConfig(CONFIG_SHORTCUT_PLAY_NEXT, "Ctrl+Meta+Right", TYPE_STRING);
   // Auto save has a delay.
-  m_saveConfigDeferTimer->setInterval(1000);
+  m_saveConfigDeferTimer->setInterval(300);
   m_saveConfigDeferTimer->setSingleShot(true);
   connect(m_saveConfigDeferTimer, &QTimer::timeout, this,
           &AppConfig::saveConfig);
@@ -140,4 +140,5 @@ void Config::AppConfig::saveConfig() {
     it++;
   }
   delete config;
+  saveConfigDefer();
 }

@@ -309,7 +309,6 @@ void MainUI::playAudioInShowingList(const int &index, PlayContent *content) {
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setShowingListCurrentContent(content);
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
-  Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
 void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
@@ -317,7 +316,6 @@ void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setPlayingListCurrentContent(content);
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
-  Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
 void MainUI::saveAllPlaylist() {
@@ -336,7 +334,6 @@ void MainUI::saveConfig() {
 void MainUI::savePlayingListIndex(PlaylistModel *playlistModel) {
   Config::AppConfig::getInstance()->setConfig(
       CONFIG_CUR_PLAYLIST, ui->listTabWidget->indexOf(playlistModel));
-  Config::AppConfig::getInstance()->saveConfigDefer();
 }
 
 void MainUI::removeLastHistory() {

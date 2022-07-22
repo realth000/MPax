@@ -138,7 +138,6 @@ void PlaylistWidget::InitConnections() {
                 CONFIG_PLAYLIST_SORT_HEADER, m_header->header(logicalIndex));
             Config::AppConfig::getInstance()->setConfig(
                 CONFIG_PLAYLIST_SORT_ORDER, order);
-            Config::AppConfig::getInstance()->saveConfigDefer();
           });
 }
 
