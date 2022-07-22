@@ -35,6 +35,7 @@ class ListTabModel : public QStringListModel {
   void saveAllPlaylist() const;
   void saveDefaultPlaylist() const;
   int indexOf(PlaylistModel *playlistModel) const;
+  void saveCurrentPlaylist();
 
  private:
   QList<PlaylistModel *> m_playlistList;

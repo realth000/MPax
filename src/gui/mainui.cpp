@@ -131,6 +131,8 @@ void MainUI::InitConnections() {
           &MainUI::showAboutQtInfo);
   connect(ui->listTabWidget, &ListTabWidget::reloadInfoStatusChanged, this,
           &MainUI::updateReloadInfoStatus);
+  connect(ui->playlistWidget, &PlaylistWidget::playlistOrderChanged,
+          ui->listTabWidget, &ListTabWidget::saveCurrentPlaylist);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {

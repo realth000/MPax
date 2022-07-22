@@ -128,6 +128,8 @@ void PlaylistWidget::InitConnections() {
           &PlaylistWidget::updatePlayContent);
   connect(ui->tableView, &QTableView::customContextMenuRequested, this,
           &PlaylistWidget::openTableViewContextMenu);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          this, &PlaylistWidget::playlistOrderChanged);
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {

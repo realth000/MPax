@@ -115,3 +115,9 @@ void ListTabModel::saveDefaultPlaylist() const { saveAllPlaylist(); }
 int ListTabModel::indexOf(PlaylistModel *playlistModel) const {
   return m_playlistList.indexOf(playlistModel);
 }
+
+void ListTabModel::saveCurrentPlaylist() {
+  PlaylistSql::getInstance()->updatePlaylist(
+      m_playlistList.indexOf(m_currentPlayListModel),
+      m_currentPlayListModel->list());
+}

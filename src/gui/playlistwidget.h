@@ -25,6 +25,7 @@ class PlaylistWidget : public QWidget {
   void playContentChanged(const int &row, PlayContent *content);
   void playlistChanged();
   void playingListChanged(PlaylistModel *playlistModel);
+  void playlistOrderChanged();
 
  public slots:
   void setHeader(const PlaylistModelHeader *header);

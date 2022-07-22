@@ -85,3 +85,7 @@ void ListTabWidget::saveDefaultPlaylist() {
 int ListTabWidget::indexOf(PlaylistModel *playlistModel) const {
   return m_listTabModel->indexOf(playlistModel);
 }
+
+void ListTabWidget::saveCurrentPlaylist() {
+  m_listTabModel->saveCurrentPlaylist();
+}

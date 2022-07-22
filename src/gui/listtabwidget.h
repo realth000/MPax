@@ -32,6 +32,7 @@ class ListTabWidget : public QWidget {
   void saveDefaultPlaylist();
   PlaylistModel *CurrentPlaylist() const;
   int indexOf(PlaylistModel *playlistModel) const;
+  void saveCurrentPlaylist();
 
  private:
   Ui::ListTabWidget *ui;
