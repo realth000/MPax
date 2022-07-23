@@ -112,6 +112,7 @@ void MainUI::InitConnections() {
           &MainUI::openSearchWindow);
   connect(m_searchDialog, &PlaylistSearchDialog::playContentChanged, this,
           [this](const int &index) {
+            ui->playlistWidget->updatePlayingModel();
             ui->playlistWidget->setCurrentContent(index);
             PlayContent *content =
                 ui->playlistWidget->currentPlayContent().content;
