@@ -54,6 +54,7 @@ void Config::AppConfig::setConfig(const QString& name, const QVariant& value) {
     return;
   }
   m_configMap[name].value = value;
+  saveConfigDefer();
 }
 
 void Config::AppConfig::printConfig() {
@@ -141,5 +142,4 @@ void Config::AppConfig::saveConfig() {
     it++;
   }
   delete config;
-  saveConfigDefer();
 }
