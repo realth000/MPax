@@ -82,6 +82,7 @@ Config::AppConfig::AppConfig()
   addConfig(CONFIG_SHORTCUT_PLAY_PAUSE, "Ctrl+Meta+B", TYPE_STRING);
   addConfig(CONFIG_SHORTCUT_PLAY_PRE, "Ctrl+Meta+Left", TYPE_STRING);
   addConfig(CONFIG_SHORTCUT_PLAY_NEXT, "Ctrl+Meta+Right", TYPE_STRING);
+  addConfig(CONFIG_PLAY_SEEK_STEP, 5000, TYPE_INT);
   // Auto save has a delay.
   m_saveConfigDeferTimer->setInterval(300);
   m_saveConfigDeferTimer->setSingleShot(true);

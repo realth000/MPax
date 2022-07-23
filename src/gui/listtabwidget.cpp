@@ -11,6 +11,7 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->setupUi(this);
   ui->listView->setModel(m_listTabModel);
   ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui->listView->setFocusPolicy(Qt::NoFocus);
   InitConnections();
   this->setStyleSheet(
       util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));

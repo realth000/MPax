@@ -141,8 +141,34 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
     if (!m_searchDialog->isVisible()) {
       openSearchWindow();
       event->accept();
+      return;
     }
   }
+  if (event->modifiers() == Qt::NoModifier) {
+    switch (event->key()) {
+      case Qt::Key_Space:
+        ui->playControlWidget->updatePlay();
+        event->accept();
+        return;
+      case Qt::Key_Left:
+        ui->playControlWidget->updatePlaySeekBackward(
+            Config::AppConfig::getInstance()
+                ->config(CONFIG_PLAY_SEEK_STEP)
+                .value.toInt());
+        event->accept();
+        return;
+      case Qt::Key_Right:
+        ui->playControlWidget->updatePlaySeekForward(
+            Config::AppConfig::getInstance()
+                ->config(CONFIG_PLAY_SEEK_STEP)
+                .value.toInt());
+        event->accept();
+        return;
+      default:
+        break;
+    }
+  }
+  QMainWindow::keyPressEvent(event);
 }
 
 void MainUI::openAudio() {

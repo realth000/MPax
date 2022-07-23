@@ -12,6 +12,7 @@
 #define CONFIG_CUR_PLAYLIST "CurrentPlaylist"
 #define CONFIG_CUR_PLAYCONTENT "CurrentPlayContent"
 #define CONFIG_PLAY_MODE "PlayMode"
+#define CONFIG_PLAY_SEEK_STEP "PlaySeekStep"
 #define CONFIG_VOLUME "Volume"
 #define CONFIG_VOLUME_MUTE "VolumeMute"
 #define CONFIG_SHORTCUT_PLAY_PAUSE "ShortcutPlayPause"

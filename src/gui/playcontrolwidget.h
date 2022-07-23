@@ -33,6 +33,9 @@ class PlayControlWidget : public QWidget {
   void setContentPath(const QString &contentPath);
   void updatePlayInfo(PlayContent *content);
   void updateConfig();
+  void updatePlay();
+  void updatePlaySeekForward(const int &msec);
+  void updatePlaySeekBackward(const int &msec);
 
  private:
   Ui::PlayControlWidget *ui;
@@ -61,7 +64,6 @@ class PlayControlWidget : public QWidget {
   void DisableFocus();
 
  private slots:
-  void updatePlay();
   void updatePlayerState(const QMediaPlayer::State &state);
   void stopPlay();
   void updateMute();
@@ -69,6 +71,7 @@ class PlayControlWidget : public QWidget {
   void updateVolume(const int &vol);
   void updatePlayPosition(const qint64 &position);
   void setPlayPosition();
+  void setPlayPosition(const int &msec);
   void setPlayDuration(const qint64 &duration);
   void updateMuteButtonIcon();
   void updatePlayMode();

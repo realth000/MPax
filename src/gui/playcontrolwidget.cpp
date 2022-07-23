@@ -88,7 +88,7 @@ void PlayControlWidget::InitConnections() {
   connect(ui->volumeSlider, &QSlider::valueChanged, this,
           &PlayControlWidget::updateVolume);
   connect(ui->playPosSlider, &QSlider::sliderReleased, this,
-          &PlayControlWidget::setPlayPosition);
+          QOverload<>::of(&PlayControlWidget::setPlayPosition));
 
   connect(m_corePlayer, &CorePlayer::playStateChanged, this,
           &PlayControlWidget::updatePlayerState);
@@ -158,6 +158,17 @@ void PlayControlWidget::updatePlay() {
   }
 }
 
+void PlayControlWidget::updatePlaySeekForward(const int &msec) {
+  setPlayPosition(ui->playPosSlider->value() + msec >
+                          ui->playPosSlider->maximum()
+                      ? ui->playPosSlider->maximum()
+                      : ui->playPosSlider->value() + msec);
+}
+
+void PlayControlWidget::updatePlaySeekBackward(const int &msec) {
+  setPlayPosition(ui->playPosSlider->value() - msec);
+}
+
 void PlayControlWidget::updatePlayerState(const QMediaPlayer::State &state) {
   m_corePlayerState = state;
 }
@@ -205,6 +216,13 @@ void PlayControlWidget::setPlayPosition() {
     return;
   }
   m_corePlayer->setPlayPosition(ui->playPosSlider->value());
+}
+
+void PlayControlWidget::setPlayPosition(const int &msec) {
+  if (m_corePlayerState != QMediaPlayer::PlayingState) {
+    return;
+  }
+  m_corePlayer->setPlayPosition(msec);
 }
 
 void PlayControlWidget::InitIconFont() {

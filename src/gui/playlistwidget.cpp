@@ -34,6 +34,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->tableView->setSortingEnabled(true);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui->tableView->setFocusPolicy(Qt::NoFocus);
   this->setStyleSheet(
       util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
