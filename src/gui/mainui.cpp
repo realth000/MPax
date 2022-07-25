@@ -69,7 +69,7 @@ MainUI::MainUI(QWidget *parent)
   if (cp.index < 0 || cp.content == nullptr) {
     return;
   }
-  addHistory(cp);
+  appendHistory(cp);
   playAudioInShowingList(cp.index, cp.content);
 }
 
@@ -95,6 +95,12 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::setModel);
   connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this,
           &MainUI::savePlayingListIndex);
+  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this,
+          [this]() {
+            // Clear play history when playlist changed.
+            this->m_history->clear();
+            this->m_historyPos = 0;
+          });
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
   connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
           &MainUI::handleDoubleClickPlay);
@@ -122,7 +128,7 @@ void MainUI::InitConnections() {
             ui->playControlWidget->updatePlayInfo(content);
             ui->playControlWidget->setContentPath(content->contentPath);
             ui->playlistWidget->setShowingListCurrentContent(content);
-            addHistory(PlayContentPos{index, content});
+            appendHistory(PlayContentPos{index, content});
             playAudioInShowingList(index, content);
           });
   connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
@@ -194,19 +200,17 @@ void MainUI::addPlaylist() {
 void MainUI::playPre() {
   PlayContentPos cp;
   if (ui->playControlWidget->playMode() ==
-          PlayControlWidget::PlayMode::Random &&
-      m_history->count() > 0 && m_historyPos > 0) {
-    m_historyPos--;
-    cp.index = (*m_history)[m_historyPos].first;
-    cp.content = (*m_history)[m_historyPos].second;
-  } else if (m_history->count() > 0 && m_historyPos - 1 < m_history->count() &&
-             m_historyPos - 1 >= 0) {
-    m_historyPos--;
-    cp.index = (*m_history)[m_historyPos].first;
-    cp.content = (*m_history)[m_historyPos].second;
+      PlayControlWidget::PlayMode::Random) {
+    if (m_history->count() > 0 && m_historyPos > 0) {
+      m_historyPos--;
+      cp.index = (*m_history)[m_historyPos].first;
+      cp.content = (*m_history)[m_historyPos].second;
+    } else {
+      cp = ui->playlistWidget->randomContent();
+      prependHistory(cp);
+    }
   } else {
     cp = ui->playlistWidget->preContent();
-    addHistory(cp);
   }
   if (cp.content == nullptr) {
     qDebug() << "can not find previous one";
@@ -217,19 +221,20 @@ void MainUI::playPre() {
 
 void MainUI::playNext() {
   PlayContentPos cp = PlayContentPos{-1, nullptr};
-  if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
-    m_historyPos++;
-    cp.index = (*m_history)[m_historyPos].first;
-    cp.content = (*m_history)[m_historyPos].second;
-  } else {
-    if (ui->playControlWidget->playMode() ==
-        PlayControlWidget::PlayMode::Random) {
-      cp = ui->playlistWidget->randomContent();
+  if (ui->playControlWidget->playMode() ==
+      PlayControlWidget::PlayMode::Random) {
+    if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
+      m_historyPos++;
+      cp.index = (*m_history)[m_historyPos].first;
+      cp.content = (*m_history)[m_historyPos].second;
     } else {
-      cp = ui->playlistWidget->nextContent();
+      cp = ui->playlistWidget->randomContent();
+      appendHistory(cp);
     }
-    addHistory(cp);
+  } else {
+    cp = ui->playlistWidget->nextContent();
   }
+
   if (cp.content == nullptr) {
     qDebug() << "can not find next one";
     return;
@@ -371,7 +376,7 @@ void MainUI::removeLastHistory() {
 }
 
 void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
-  addHistory(PlayContentPos{index, content});
+  appendHistory(PlayContentPos{index, content});
   playAudioInShowingList(index, content);
 }
 
@@ -379,9 +384,14 @@ void MainUI::InitStatusBar() {
   ui->statusbar->addPermanentWidget(m_statusLabel);
 }
 
-void MainUI::addHistory(const PlayContentPos &cp) {
+void MainUI::appendHistory(const PlayContentPos &cp) {
   m_history->append(Ui::PlayContentPair(cp.index, cp.content));
   m_historyPos = m_history->count() - 1;
+}
+
+void MainUI::prependHistory(const PlayContentPos &cp) {
+  m_history->prepend(Ui::PlayContentPair(cp.index, cp.content));
+  m_historyPos = 0;
 }
 
 void MainUI::openSearchWindow() {

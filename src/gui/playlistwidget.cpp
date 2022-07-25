@@ -210,11 +210,11 @@ void PlaylistWidget::actionPlay() {
 }
 
 void PlaylistWidget::updatePlayingModel() {
-  if (m_showingModel == nullptr) {
+  if (m_showingModel == nullptr || m_playingModel == m_showingModel) {
     return;
   }
   m_playingModel = m_showingModel;
-  m_playingFilterModel = m_showingFilterModel;
+  m_playingFilterModel->setSourceModel(m_playingModel);
   emit playingListChanged(m_playingModel);
 }
 
@@ -255,7 +255,7 @@ PlayContentPos PlaylistWidget::randomContent() const {
     return PlayContentPos{-1, nullptr};
   }
   return m_playingModel->content(
-      QRandomGenerator::securelySeeded().bounded(0, m_showingModel->count()));
+      QRandomGenerator::securelySeeded().bounded(0, m_playingModel->count()));
 }
 
 PlayContentPos PlaylistWidget::currentPlayContent() const {

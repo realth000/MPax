@@ -40,7 +40,8 @@ class MainUI : public QMainWindow {
   PlayContent *addAudioFile(const QString &filePath);
   void addAudioFileList(const QStringList &filePathList,
                         int *counter = nullptr);
-  void addHistory(const PlayContentPos &cp);
+  void appendHistory(const PlayContentPos &cp);
+  void prependHistory(const PlayContentPos &cp);
   void InitStatusBar();
 
  private slots:
