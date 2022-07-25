@@ -136,12 +136,21 @@ if (GIT_FOUND)
             ERROR_QUIET
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
+            OUTPUT_VARIABLE GIT_VERSION_TAG
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
     add_definitions(-DAPP_COMMIT_TIME=${GIT_COMMIT_TIME})
     add_definitions(-DAPP_COMMIT=${GIT_COMMIT})
     add_definitions(-DAPP_COMMIT_LONG=${GIT_COMMIT_LONG})
+    add_definitions(-DAPP_VERSION_TAG="${GIT_VERSION_TAG}")
     message(STATUS "Git commit time:" ${GIT_COMMIT_TIME})
     message(STATUS "Git commit:" ${GIT_COMMIT})
     message(STATUS "Git commit full name:" ${GIT_COMMIT_LONG})
+    message(STATUS "Git version tag:" ${GIT_VERSION_TAG})
 else ()
     message(WARNING "Git not found")
 endif ()

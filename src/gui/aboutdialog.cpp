@@ -22,6 +22,12 @@ AboutDialog::AboutDialog(QWidget *parent)
   const QString license =
       QString(tr("MPax is licensed under the term of GPL v3 license."));
   const QString infoHeader = QString("<h2>" + tr("Version info") + "</h2>");
+  const QString versionTagUrl =
+      QString(
+          tr("Version: ") +
+          "<a href=\"https://github.com/realth000/MPax/releases/tag/%1\"><font "
+          "color=#007b50>%1</font></a><br>")
+          .arg(APP_VERSION_TAG);
   const QString commitUrl =
       QString(tr("Build: ") +
               "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
@@ -64,6 +70,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   aboutText += introduction;
   aboutText += license;
   aboutText += infoHeader;
+  aboutText += versionTagUrl;
   aboutText += commitUrl;
   aboutText += commitTime;
   aboutText += depHead;
