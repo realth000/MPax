@@ -52,7 +52,7 @@ Available on Linux, gradually optimize the experience on Windows.
 
 ### Build steps
 
-1. ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev``
+1. ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``
 2. ``mkdir build && cd build``
 3. ``cmake ../ && cmake --build . --target=all -j $(nproc)``
 4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``

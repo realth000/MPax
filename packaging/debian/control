@@ -9,7 +9,8 @@ Build-Depends: cmake,
 		qtbase5-dev,
 		qttools5-dev,
 		qtmultimedia5-dev,
-		libqt5x11extras5-dev
+		libqt5x11extras5-dev,
+		qt5-default
 Depends: libqt5core5a,
 	libqt5concurrent5,
 	libqt5gui5,
@@ -22,7 +23,6 @@ Depends: libqt5core5a,
 	libqt5x11extras5,
 	libsqlite3-0,
 	gstreamer1.0-plugins-base,
-	libgstreamer-plugins-base1.0-0,
-	libgstreamer-plugins-good1.0-0
+	libgstreamer-plugins-base1.0-0
 Description: MPax is a simple and easy-to-use music player.
 
