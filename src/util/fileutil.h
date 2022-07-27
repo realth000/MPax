@@ -28,6 +28,11 @@ void openFileInDir(const QString &filePath) {
       QProcess::startDetached("peony", {filePath})) {
     return;
   }
+  // DDE
+  if (fileManagerType == "dde-file-manager.desktop" &&
+      QProcess::startDetached("dde-file-manager", {"--show-item", filePath})) {
+    return;
+  }
 #endif
   // Default, can not select file.
   QDesktopServices::openUrl(
