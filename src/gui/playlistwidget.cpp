@@ -1,13 +1,5 @@
 #include "playlistwidget.h"
 
-#ifdef Q_OS_LINUX
-#include <QtCore/QProcess>
-#else
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
-#include <QtGui/QDesktopServices>
-#endif
-
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtDebug>
 #include <QtGui/QStandardItemModel>
@@ -16,6 +8,7 @@
 #include "config/appconfig.h"
 #include "ui_playlistwidget.h"
 #include "util/cssloader.h"
+#include "util/fileutil.h"
 
 PlaylistWidget::PlaylistWidget(QWidget *parent,
                                const PlaylistModelHeader *header)
@@ -186,13 +179,7 @@ void PlaylistWidget::actionOpenInFolder() {
   const QString path =
       m_showingModel->content(m_showingFilterModel->mapToSource(i).row())
           .content->contentPath;
-#ifdef Q_OS_LINUX
-  QProcess p;
-  p.startDetached("nautilus", {path});
-#else
-  QDesktopServices::openUrl(
-      QUrl("file://" + QFileInfo(path).absoluteDir().absolutePath()));
-#endif
+  util::openFileInDir(path);
 }
 
 void PlaylistWidget::actionPlay() {
