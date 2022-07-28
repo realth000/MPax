@@ -12,7 +12,7 @@ TableViewEx::TableViewEx(QWidget *parent) : QTableView(parent) {
 }
 
 void TableViewEx::resizeEvent(QResizeEvent *event) {
-  if (event->oldSize() == event->size()) {
+  if (event->oldSize() == event->size() || m_columnWidthRatio.length() < 3) {
     return;
   }
   // FIXME: Avoid signal here without reconnect.

@@ -45,6 +45,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
 PlaylistSearchDialog::~PlaylistSearchDialog() {}
 
 void PlaylistSearchDialog::setModel(QAbstractItemModel *model) {
+  ui->searchTableView->setColumnWidthRatio(m_tableViewWidthRadio);
   m_model->setSourceModel(model);
 }
 
