@@ -85,8 +85,6 @@ void MainUI::InitConnections() {
           &MainUI::playPre);
   connect(ui->playControlWidget, &PlayControlWidget::playNext, this,
           &MainUI::playNext);
-  connect(ui->playControlWidget, &PlayControlWidget::playRandom, this,
-          &MainUI::playRandom);
   connect(ui->playControlWidget, &PlayControlWidget::playInvalid, this,
           &MainUI::removeLastHistory);
   connect(ui->playlistAddAction, &QAction::triggered, this,
@@ -237,15 +235,6 @@ void MainUI::playNext() {
 
   if (cp.content == nullptr) {
     qDebug() << "can not find next one";
-    return;
-  }
-  playAudioInPlayingList(cp.index, cp.content);
-}
-
-void MainUI::playRandom() {
-  PlayContentPos cp = ui->playlistWidget->randomContent();
-  if (cp.content == nullptr) {
-    qDebug() << "can not find random one";
     return;
   }
   playAudioInPlayingList(cp.index, cp.content);

@@ -324,7 +324,7 @@ void PlayControlWidget::handleMediaStatusChanged(
           m_corePlayer->play();
           break;
         case PlayMode::Random:
-          emit playRandom();
+          emit playNext();
           break;
       }
     case QMediaPlayer::InvalidMedia: {
