@@ -25,14 +25,18 @@ AboutDialog::AboutDialog(QWidget *parent)
   const QString versionTagUrl =
       QString(
           tr("Version: ") +
-          "<a href=\"https://github.com/realth000/MPax/releases/tag/%1\"><font "
+          "<a "
+          "href=\"https://github.com/realth000/MPax/releases/tag/v%1\"><font "
           "color=#007b50>%1</font></a><br>")
-          .arg(APP_VERSION_TAG);
+          .arg(QString(APP_VERSION_TAG).replace("v", ""));
   const QString commitUrl =
       QString(tr("Build: ") +
               "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
-              "<font color=#007b50>%2</font></a><br>")
-          .arg(APP_COMMIT_LONG, APP_COMMIT);
+              "<font color=#007b50>%2%3</font></a><br>")
+          .arg(APP_COMMIT_LONG, APP_COMMIT,
+               QString(APP_RELEASE_COUNT) != "1"
+                   ? "-release" + QString(APP_RELEASE_COUNT)
+                   : "");
   const QString commitTime =
       QString(tr("Build time: ") + "%1").arg(APP_COMMIT_TIME);
   const QString depHead =

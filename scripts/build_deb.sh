@@ -13,6 +13,12 @@ while getopts d: OPT; do
   esac
 done
 
+tag=$(git describe --abbrev=0 --tags)
+commit=$(git rev-parse HEAD)
+release_count=$(git log --pretty=oneline "${tag}"..."${commit}" | wc -l | xargs expr 1 +)
+
+[ -z "${release_count}" ] && release_count="1"
+
 [ -z "${distro_type}" ] && echo 'error: distro type not set: -d [distro type]' >&2 && exit 1
 
 pkg_name=$(grep 'Package' ../packaging/debian/control | cut -d' ' -f 2)
@@ -33,4 +39,4 @@ cp -rf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
 chown -R root.root "${build_dir}"
 chmod -R 755 "${build_dir}"/DEBIAN
 
-dpkg -b "${build_dir}" "${pkg_name}_${pkg_version}-1${distro_type}_amd64.deb"
+dpkg -b "${build_dir}" "${pkg_name}_${pkg_version}-${release_count}${distro_type}_amd64.deb"
