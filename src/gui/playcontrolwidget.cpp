@@ -204,10 +204,10 @@ void PlayControlWidget::updateVolume(const int &vol) {
 }
 
 void PlayControlWidget::updatePlayPosition(const qint64 &position) {
-  ui->timePostLabel->setText(MiliSecondToString(position));
   if (ui->playPosSlider->isSliderDown()) {
     return;
   }
+  ui->timePostLabel->setText(MiliSecondToString(position));
   ui->playPosSlider->setValue(position);
 }
 
