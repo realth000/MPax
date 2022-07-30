@@ -1,5 +1,9 @@
 #include "playlistfiltermodel.h"
 
+#include <QtCore/QDebug>
+
+#include "model/playlistmodel.h"
+
 PlaylistFilterModel::PlaylistFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent) {}
 
@@ -25,6 +29,19 @@ bool PlaylistFilterModel::lessThan(const QModelIndex &left,
   return QSortFilterProxyModel::lessThan(left, right);
 }
 
+void PlaylistFilterModel::sort(int column, Qt::SortOrder order) {
+  /**
+   * Consider the sorting policy in sql as the true order.
+   * For example, in ascending order:
+   * 1. Alphabets [a-z]
+   * 2. Characters in other languages.
+   */
+  emit sortFromSql(column, order);
+#if 0
+  QSortFilterProxyModel::sort(column, order);
+#endif
+}
+
 QModelIndex PlaylistFilterModel::sourceIndex(
     const QModelIndex &proxyIndex) const {
   return mapToSource(proxyIndex);
@@ -36,6 +53,19 @@ QModelIndex PlaylistFilterModel::seekSourceRow(const QModelIndex &proxyIndex,
     return mapToSource(index(0, 0));
   }
   return mapToSource(proxyIndex.siblingAtRow(nIndex));
+}
+
+void PlaylistFilterModel::setSourceModel(QAbstractItemModel *sourceModel) {
+  PlaylistModel *sourcePlaylistModel =
+      reinterpret_cast<PlaylistModel *>(sourceModel);
+  if (sourcePlaylistModel != nullptr) {
+    if (sourceModel != nullptr) {
+      disconnect(this, &PlaylistFilterModel::sortFromSql, sourceModel, nullptr);
+    }
+    connect(this, &PlaylistFilterModel::sortFromSql, sourcePlaylistModel,
+            &PlaylistModel::reloadPlaylistWithOrder);
+  }
+  QSortFilterProxyModel::setSourceModel(sourceModel);
 }
 
 QModelIndex PlaylistFilterModel::fromSourceIndex(

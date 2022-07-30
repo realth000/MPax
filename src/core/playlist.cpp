@@ -53,4 +53,9 @@ Playlist::~Playlist() {
 
 const PlayContentList* Playlist::content() const { return m_playContentList; }
 
+void Playlist::setContent(PlayContentList* list) {
+  delete m_playContentList;
+  m_playContentList = list;
+}
+
 const PlaylistInfo* Playlist::info() const { return m_playListInfo; }
