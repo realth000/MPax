@@ -334,3 +334,52 @@ void PlaylistSql::tryCloseDatabase() {
     m_database.close();
   }
 }
+
+bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
+                                        const QString& columnName,
+                                        Qt::SortOrder order) {
+  if (!tryOpenDatabase()) {
+    qDebug() << "can not load playlist with order, database failed to open";
+    return false;
+  }
+  const QString playlistName = playlist->info()->info(PLAYLIST_INFO_NAME);
+  if (playlistName.isEmpty()) {
+    qDebug() << "can not load playlist with order, empty playlist name";
+    return false;
+  }
+  PlayContentList* list = new PlayContentList;
+  QString tableName;
+  bool ok;
+  QSqlQuery q(m_database);
+  const QString sqlColumnName = m_titleMap[columnName];
+  if (sqlColumnName.isEmpty()) {
+    goto exit;
+  }
+  for (const auto& p : m_nameVector) {
+    if (p.second == playlistName) {
+      tableName = p.first;
+      break;
+    }
+  }
+  ok = q.exec(QString("SELECT * FROM %1 ORDER BY %2 %3")
+                  .arg(tableName, sqlColumnName,
+                       order == Qt::DescendingOrder ? "DESC" : "ASC"));
+  if (!ok) {
+    qDebug() << "can not load playlist with order" << playlistName << ":"
+             << q.lastError();
+    goto exit;
+  }
+  while (q.next()) {
+    PlayContent* playContent = new PlayContent(q.value("path").toString());
+    playContent->title = q.value("title").toString();
+    playContent->artist = q.value("artist").toString();
+    playContent->albumTitle = q.value("album_title").toString();
+    list->append(playContent);
+  }
+  playlist->setContent(list);
+  return true;
+
+exit:
+  tryCloseDatabase();
+  return false;
+}

@@ -11,12 +11,18 @@ class PlaylistFilterModel : public QSortFilterProxyModel {
   QModelIndex fromSourceIndex(const QModelIndex &sourceIndex) const;
   QModelIndex seekSourceRow(const QModelIndex &proxyIndex,
                             const int &offset) const;
+  virtual void setSourceModel(QAbstractItemModel *sourceModel) override;
+
+ signals:
+  void sortFromSql(int column, Qt::SortOrder order);
 
  protected:
   bool filterAcceptsRow(int sourceRow,
                         const QModelIndex &sourceParent) const override;
   bool lessThan(const QModelIndex &left,
                 const QModelIndex &right) const override;
+  virtual void sort(int column,
+                    Qt::SortOrder order = Qt::AscendingOrder) override;
 };
 
 #endif  // MPAX_PLAYLISTFILTERMODEL_H

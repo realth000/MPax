@@ -64,6 +64,7 @@ class PlaylistModel : public QAbstractItemModel {
  public slots:
   void reloadPlayContentInfo();
   void reloadPlayContentInfo(PlayContent *content);
+  void reloadPlaylistWithOrder(const int &column, Qt::SortOrder order);
 
  signals:
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,

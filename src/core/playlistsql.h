@@ -20,6 +20,8 @@ class PlaylistSql : public QObject {
   void removePlaylist(const int& index);
   void updatePlaylist(const int& index, const Playlist& playlist);
   QList<Playlist> loadPlaylist();
+  bool loadPlaylistWithOrder(Playlist* playlist, const QString& columnName,
+                             Qt::SortOrder order);
 
  private:
   QSqlDatabase m_database;

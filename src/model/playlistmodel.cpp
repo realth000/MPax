@@ -290,6 +290,23 @@ void PlaylistModel::reloadPlayContentInfo(PlayContent *content) {
                            AudioInfo::InfoOption::NoAlbumCover);
 }
 
+void PlaylistModel::reloadPlaylistWithOrder(const int &column,
+                                            Qt::SortOrder order) {
+  Playlist *playlist = new Playlist(m_listInfo, m_contentList);
+  if (!PlaylistSql::getInstance()->loadPlaylistWithOrder(
+          playlist, m_header->usedHeader(column), order)) {
+    qDebug() << "failed to reload playlist with order";
+    return;
+  }
+  beginResetModel();
+  m_contentList.clear();
+  for (auto t : *(playlist->content())) {
+    m_contentList.append(t);
+  }
+  endResetModel();
+  delete playlist;
+}
+
 void PlaylistModel::setHeader(const PlaylistModelHeader *header) {
   m_header = header;
 }

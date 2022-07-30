@@ -35,6 +35,7 @@ class Playlist {
   virtual ~Playlist();
   const PlaylistInfo *info() const;
   const PlayContentList *content() const;
+  void setContent(PlayContentList *list);
 
  private:
   PlaylistInfo *m_playListInfo;
