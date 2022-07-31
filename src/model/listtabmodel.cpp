@@ -73,6 +73,12 @@ PlaylistModel *ListTabModel::currentPlaylist() const {
 
 void ListTabModel::addContent(PlayContent *playContent) {
   if (m_currentPlayListModel == nullptr) {
+    /**
+     * Seems here is somewhere abnormal.
+     * Before adding content, suggests using Mainui::addPlaylist() to ensure
+     * there is at least one playlist.
+     * Create a playlist here may lose some initialization.
+     */
     m_currentPlayListModel = new PlaylistModel(
         DEFAULT_PLAYLIST_NAME,
         QList<PlaylistHeaderItem>{PlaylistModelHeader::defaultHeaderList()});
