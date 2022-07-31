@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QtConcurrent/QtConcurrentMap>
+#include <QtCore/QElapsedTimer>
 #include <QtCore/QFutureWatcher>
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
