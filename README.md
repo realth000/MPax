@@ -1,18 +1,32 @@
-[中文文档](./docs/README_zh_CN.md)
+<div align="center">
+    <p>
+    <h1>
+        <img src="./docs/images/MPax@4x.png"/>
+        <br/>
+        MPax
+    </h1>
+    </p>
+    <p>
+        <a href="https://github.com/realth000/MPax/actions">
+            <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux"/></a>
+        <a href="https://github.com/realth000/MPax/releases">
+            <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
+        <img src="https://img.shields.io/badge/Qt-5.12+-blue"/>
+        <a href="https://github.com/realth000/MPax/blob/master/LICENSE">
+            <img src="https://img.shields.io/github/license/realth000/MPax"/></a>
+    </p>
+</div>
 
-![MPax](./docs/images/MPax@4x.png)
 
----
+English|[简体中文](./docs/README_zh_CN.md)
 
 ## Introduction
 
 MPax is a simple and easy-to-use music player.
 
-Available on Linux, gradually optimize the experience on Windows.
-
 ![UI](./docs/images/ui_02.png)
 
-## TODO List
+## TODO list
 
 * * [ ] Music management.
   * [x] Basic music playing.
@@ -46,7 +60,7 @@ Available on Linux, gradually optimize the experience on Windows.
 
 ### Dependencies
 
-* Qt5 >= 5.15.1
+* Qt5 >= 5.12
 * GCC >= 4.7 (C++ 11)
 * CMake >= 3.13
 
@@ -57,7 +71,7 @@ Available on Linux, gradually optimize the experience on Windows.
 3. ``cmake ../ && cmake --build . --target=all -j $(nproc)``
 4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``
 
-## Release
+## Releases
 
 Releases are [here](https://github.com/realth000/MPax/releases).
 

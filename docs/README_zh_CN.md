@@ -1,16 +1,31 @@
-![MPax](./images/MPax@4x.png)
+<div align="center">
+    <p>
+    <h1>
+        <img src="./images/MPax@4x.png"/>
+        <br/>
+        MPax
+    </h1>
+    </p>
+    <p>
+        <a href="https://github.com/realth000/MPax/actions">
+            <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux"/></a>
+        <a href="https://github.com/realth000/MPax/releases">
+            <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
+        <img src="https://img.shields.io/badge/Qt-5.12+-blue"/>
+        <a href="https://github.com/realth000/MPax/blob/master/LICENSE">
+            <img src="https://img.shields.io/github/license/realth000/MPax"/></a>
+    </p>
+</div>
 
----
+[English](../README.md)|简体中文
 
 ## 介绍
 
 MPax是一款简约易用的音乐播放器。
 
-支持Linux平台，逐渐优化Windows上的体验。
-
 ![UI](./images/ui_01.png)
 
-## TODO List
+## 计划要做的
 
 * * [ ] 音乐管理。
   * [x] 基本的音乐播放。
@@ -45,7 +60,7 @@ MPax是一款简约易用的音乐播放器。
 
 ### 依赖
 
-* Qt5 >= 5.15.1
+* Qt5 >= 5.12
 * GCC >= 4.7 (C++ 11)
 * CMake >= 3.13
 
@@ -60,7 +75,7 @@ MPax是一款简约易用的音乐播放器。
 
  [在这里](https://github.com/realth000/MPax/releases)。
 
-## 版权
+## 开源许可
 
 MPax在GPL v3协议下分发。
 
