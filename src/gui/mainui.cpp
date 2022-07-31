@@ -291,6 +291,8 @@ void MainUI::scanAudioDir() {
               scannedPathList.removeAll(contentPath);
             }
           }
+        } else {
+          addPlaylist();
         }
         watcher.setFuture(QtConcurrent::run(this, &MainUI::addAudioFileList,
                                             scannedPathList, &loadFinishCount));
