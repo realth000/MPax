@@ -19,7 +19,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
+    
+    - name: Install depends
+      run: sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default
+    
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -29,9 +32,9 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C ${{env.BUILD_TYPE}}
+#     - name: Test
+#       working-directory: ${{github.workspace}}/build
+#       # Execute tests defined by the CMake configuration.  
+#       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+#       run: ctest -C ${{env.BUILD_TYPE}}
       
