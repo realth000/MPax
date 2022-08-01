@@ -37,6 +37,7 @@ class PlaylistWidget : public QWidget {
   void setShowingListCurrentContent(PlayContent *content);
   void setPlayingListCurrentContent(PlayContent *content);
   void setCurrentContent(const int &index);
+  void setCurrentContent(const QString &contentPath);
   void updatePlayContent(const QModelIndex &index);
   void updateConfig();
   int countShowing() const;

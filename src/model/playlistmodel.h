@@ -59,6 +59,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos findNextContent() const;
   PlayContentPos findPreContent() const;
   PlayContentPos content(const int &index) const;
+  PlayContentPos content(const QString &contentPath) const;
   Playlist list() const;
 
  public slots:

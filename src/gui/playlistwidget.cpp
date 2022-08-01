@@ -117,6 +117,23 @@ void PlaylistWidget::setCurrentContent(const int &index) {
   m_showingModel->setCurrentPlayContent(index);
 }
 
+void PlaylistWidget::setCurrentContent(const QString &playContent) {
+  if (m_showingModel == nullptr) {
+    qDebug() << "can not set current content index in a null playlist";
+    return;
+  }
+  if (!m_showingModel->list().contains(playContent)) {
+    qDebug() << "set current content not in current playlist " << playContent;
+    return;
+  }
+  PlayContentPos pc = m_showingModel->content(playContent);
+  if (pc.index < 0 || pc.content == nullptr) {
+    qDebug() << "can not set empty content path to current content";
+    return;
+  }
+  m_showingModel->setCurrentPlayContent(pc.index);
+}
+
 void PlaylistWidget::InitConnections() {
   connect(ui->tableView, &QTableView::doubleClicked, this,
           &PlaylistWidget::updatePlayContent);

@@ -36,6 +36,7 @@ class Playlist {
   const PlaylistInfo *info() const;
   const PlayContentList *content() const;
   void setContent(PlayContentList *list);
+  bool contains(const QString &contentPath) const;
 
  private:
   PlaylistInfo *m_playListInfo;
