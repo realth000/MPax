@@ -51,6 +51,18 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
+  const QString sortHeader = Config::AppConfig::getInstance()
+                                 ->config(CONFIG_PLAYLIST_SORT_HEADER)
+                                 .value.toString();
+  const Qt::SortOrder sortOrder =
+      static_cast<Qt::SortOrder>(Config::AppConfig::getInstance()
+                                     ->config(CONFIG_PLAYLIST_SORT_ORDER)
+                                     .value.toInt());
+  for (int i = 0; i < m_header->headerCount(); i++) {
+    if (m_header->usedHeader(i) == sortHeader) {
+      ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
+    }
+  }
 }
 
 PlayContentPos PlaylistWidget::preContent() const {

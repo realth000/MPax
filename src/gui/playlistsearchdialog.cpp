@@ -28,6 +28,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   ui->caseCheckBox->setFocusPolicy(Qt::NoFocus);
   ui->searchLineEdit->setFocus();
   ui->searchTableView->setModel(m_model);
+  ui->searchTableView->setSortingEnabled(false);
 
   connect(ui->searchLineEdit, &QLineEdit::textEdited, this,
           &PlaylistSearchDialog::updateSearchFilter);
