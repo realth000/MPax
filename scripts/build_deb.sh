@@ -22,7 +22,7 @@ release_count=$(git log --pretty=oneline "${tag}"..."${commit}" | wc -l | xargs 
 [ -z "${distro_type}" ] && echo 'error: distro type not set: -d [distro type]' >&2 && exit 1
 
 pkg_name=$(grep 'Package' ../packaging/debian/control | cut -d' ' -f 2)
-pkg_version=$(grep 'Version' ../packaging/debian/control | cut -d' ' -f 2)
+pkg_version=$(grep "VERSION .* LANGUAGES" ../CMakeLists.txt  -o | cut -d' ' -f2)
 build_dir="${pkg_name}-${pkg_version}"
 
 if [ -e "${build_dir}" ];then
@@ -32,6 +32,7 @@ fi
 mkdir -p "${build_dir}"/opt/MPax/translation
 mkdir -p "${build_dir}"/usr/share/applications/
 cp -rf ../packaging/debian/ "${build_dir}"/DEBIAN
+sed -i "s/@@deb_version@@/${pkg_version}-${release_count}${distro_type}/1" "${build_dir}"/DEBIAN/control
 cp -rf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
 cp -rf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
 cp -rf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/

@@ -1,5 +1,5 @@
 Package: mpax
-Version: 1.0.1
+Version: @@deb_version@@
 Maintainer: realth000 <a598919335@gmail.com>
 Section: sound
 Priority: optional
