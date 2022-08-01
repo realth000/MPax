@@ -55,11 +55,11 @@ MainUI::MainUI(QWidget *parent)
   }
   ui->playlistWidget->setModel(model);
   ui->playlistWidget->updatePlayingModel();
-  const int playContent = Config::AppConfig::getInstance()
-                              ->config(CONFIG_CUR_PLAYCONTENT)
-                              .value.toInt();
-  if (playContent < 0) {
-    qDebug() << "current playContent pos < 0";
+  const QString playContent = Config::AppConfig::getInstance()
+                                  ->config(CONFIG_CUR_PLAYCONTENT)
+                                  .value.toString();
+  if (playContent.isEmpty()) {
+    qDebug() << "empty current playContent";
     return;
   }
   // Set current PlayContent from config.
@@ -331,14 +331,16 @@ void MainUI::playAudioInShowingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setShowingListCurrentContent(content);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT,
+                                              content->contentPath);
 }
 
 void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setPlayingListCurrentContent(content);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, index);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT,
+                                              content->contentPath);
 }
 
 void MainUI::saveAllPlaylist() {

@@ -59,3 +59,12 @@ void Playlist::setContent(PlayContentList* list) {
 }
 
 const PlaylistInfo* Playlist::info() const { return m_playListInfo; }
+
+bool Playlist::contains(const QString& contentPath) const {
+  for (auto c : *m_playContentList) {
+    if (c->contentPath == contentPath) {
+      return true;
+    }
+  }
+  return false;
+}

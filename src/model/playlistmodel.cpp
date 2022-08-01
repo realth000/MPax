@@ -237,6 +237,17 @@ PlayContentPos PlaylistModel::content(const int &index) const {
   return PlayContentPos{index, m_contentList[index]};
 }
 
+PlayContentPos PlaylistModel::content(const QString &contentPath) const {
+  int i = 0;
+  for (auto c : m_contentList) {
+    if (c->contentPath == contentPath) {
+      return PlayContentPos{i, c};
+    }
+    i++;
+  }
+  return PlayContentPos{-1, nullptr};
+}
+
 Playlist PlaylistModel::list() const {
   return Playlist(m_listInfo, m_contentList);
 }
