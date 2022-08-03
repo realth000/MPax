@@ -74,3 +74,5 @@ Thumbs.db
 .idea/
 cmake-build-*
 CMakeLists.txt.user
+scripts/mpax-*
+scripts/mpax_*
