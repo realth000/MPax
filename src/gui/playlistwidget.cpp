@@ -6,12 +6,13 @@
 #include <QtWidgets/QScrollBar>
 
 #include "config/appconfig.h"
+#include "model/playlistmodelheader.h"
 #include "ui_playlistwidget.h"
 #include "util/cssloader.h"
 #include "util/fileutil.h"
 
 PlaylistWidget::PlaylistWidget(QWidget *parent,
-                               const PlaylistModelHeader *header)
+                               const PLModel::PlaylistModelHeader *header)
     : QWidget(parent),
       ui(new Ui::PlaylistWidget),
       m_header(header),
@@ -35,7 +36,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
 
 PlaylistWidget::~PlaylistWidget() { delete ui; }
 
-void PlaylistWidget::setHeader(const PlaylistModelHeader *header) {
+void PlaylistWidget::setHeader(const PLModel::PlaylistModelHeader *header) {
   if (m_header != nullptr) {
     delete m_header;
     m_header = nullptr;
@@ -261,8 +262,8 @@ void PlaylistWidget::updateConfig() {
     }
     it++;
   }
-  const PlaylistModelHeader *header = new PlaylistModelHeader(
-      noHeader ? PlaylistModelHeader::defaultHeaderList() : list);
+  const PLModel::PlaylistModelHeader *header = new PLModel::PlaylistModelHeader(
+      noHeader ? PLModel::PlaylistModelHeader::defaultHeaderList() : list);
   setHeader(header);
 }
 

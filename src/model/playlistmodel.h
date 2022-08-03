@@ -6,6 +6,7 @@
 
 #include "core/playcontent.h"
 #include "core/playlist.h"
+#include "playlistmodelheader.h"
 
 // QPair<Name, Width>, width is temporary deprecated.
 typedef QPair<QString, int> PlaylistHeaderItem;
@@ -13,20 +14,6 @@ typedef QPair<QString, int> PlaylistHeaderItem;
 struct PlayContentPos {
   int index;
   PlayContent *content;
-};
-
-class PlaylistModelHeader {
- public:
-  explicit PlaylistModelHeader(const QList<PlaylistHeaderItem> &headerList);
-  int headerCount() const;
-  int usedHeaderCount() const;
-  bool setHeaderUsed(const PlaylistHeaderItem &headerItem);
-  QString header(const int &index) const;
-  QString usedHeader(const int &index) const;
-  static QList<PlaylistHeaderItem> defaultHeaderList();
-
- private:
-  QList<QPair<QString, int>> m_header;
 };
 
 class PlaylistModel : public QAbstractItemModel {
@@ -52,7 +39,7 @@ class PlaylistModel : public QAbstractItemModel {
   void addContent(PlayContent *content);
   bool removeContent(QList<int> indexes);
   void setPlaylistName(const QString &name);
-  void setHeader(const PlaylistModelHeader *header);
+  void setHeader(const PLModel::PlaylistModelHeader *header);
   QString playlistName() const;
   PlayContentPos currentPlayContent() const;
   void setCurrentPlayContent(const int &index);
@@ -77,7 +64,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlaylistInfo m_listInfo;
   PlayContentList m_contentList;
   // Copy of PlaylistWidget::m_header.
-  const PlaylistModelHeader *m_header;
+  const PLModel::PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
   QMap<QString, QString> m_headerTrans;
 };

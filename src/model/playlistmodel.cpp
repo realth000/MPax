@@ -20,62 +20,6 @@
   }
 // clang-format on
 
-PlaylistModelHeader::PlaylistModelHeader(
-    const QList<PlaylistHeaderItem> &headerList)
-    : m_header(headerList) {
-  PlaylistSql::getInstance();
-}
-
-int PlaylistModelHeader::headerCount() const { return m_header.count(); }
-
-int PlaylistModelHeader::usedHeaderCount() const {
-  int c = 0;
-  for (const auto &h : m_header) {
-    if (h.second > 0) {
-      c++;
-    }
-  }
-  return c;
-}
-
-bool PlaylistModelHeader::setHeaderUsed(const PlaylistHeaderItem &headerItem) {
-  for (auto &&h : m_header) {
-    if (h.first == headerItem.first) {
-      h.second = headerItem.second;
-      return true;
-    }
-  }
-  return false;
-}
-
-QString PlaylistModelHeader::header(const int &index) const {
-  return m_header[index].first;
-}
-
-QString PlaylistModelHeader::usedHeader(const int &index) const {
-  int i = index;
-  if (m_header.length() <= i) {
-    return QString();
-  }
-  for (const auto &h : m_header) {
-    if (h.second <= 0) {
-      continue;
-    }
-    if (i == 0) {
-      return h.first;
-    } else {
-      i--;
-    }
-  }
-  return QString();
-}
-
-QList<PlaylistHeaderItem> PlaylistModelHeader::defaultHeaderList() {
-  return QList<PlaylistHeaderItem>{PlaylistHeaderItem("Title", 300),
-                                   PlaylistHeaderItem("Artist", 100),
-                                   PlaylistHeaderItem("AlbumTitle", 130)};
-}
-
 PlaylistModel::PlaylistModel(const QString &playlistName,
                              QList<PlaylistHeaderItem> headerList,
                              QObject *parent)
@@ -319,6 +263,6 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
   delete playlist;
 }
 
-void PlaylistModel::setHeader(const PlaylistModelHeader *header) {
+void PlaylistModel::setHeader(const PLModel::PlaylistModelHeader *header) {
   m_header = header;
 }

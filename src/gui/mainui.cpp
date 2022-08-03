@@ -188,8 +188,9 @@ void MainUI::openAudio() {
 }
 
 void MainUI::addPlaylist() {
-  ui->listTabWidget->addPlaylist(new PlaylistModel(
-      DEFAULT_PLAYLIST_NAME, PlaylistModelHeader::defaultHeaderList()));
+  ui->listTabWidget->addPlaylist(
+      new PlaylistModel(DEFAULT_PLAYLIST_NAME,
+                        PLModel::PlaylistModelHeader::defaultHeaderList()));
   // This will save empty default playlist.
   // This one is not ui->listTabWidget->addPlaylist, will not cause large IO.
   ui->listTabWidget->saveDefaultPlaylist();
