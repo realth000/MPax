@@ -25,16 +25,16 @@ PlaylistModel::PlaylistModel(const QString &playlistName,
                              QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlistName),
-      m_listInfo(PlaylistInfo(
-          QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}})),
+      m_playlist(new Playlist(PlaylistInfo(QMap<QString, QString>{
+                                  {PLAYLIST_INFO_NAME, m_playlistName}}),
+                              PlayContentList())),
       m_currentPlayContent(nullptr),
       m_headerTrans(MODEL_ALL_HEADER) {}
 
 PlaylistModel::PlaylistModel(const Playlist &playlist, QObject *parent)
     : QAbstractItemModel{parent},
-      m_playlistName(playlist.info()->info(PLAYLIST_INFO_NAME)),
-      m_listInfo(*playlist.info()),
-      m_contentList(*playlist.content()),
+      m_playlistName(playlist.info().info(PLAYLIST_INFO_NAME)),
+      m_playlist(new Playlist(playlist.info(), playlist.content())),
       m_currentPlayContent(nullptr),
       m_headerTrans(MODEL_ALL_HEADER) {}
 
@@ -54,7 +54,7 @@ QModelIndex PlaylistModel::index(int row, int column,
 }
 
 int PlaylistModel::rowCount(const QModelIndex &parent) const {
-  return m_contentList.length();
+  return m_playlist->content().length();
 }
 
 int PlaylistModel::columnCount(const QModelIndex &parent) const {
@@ -70,7 +70,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
     return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
   }
   if (role == Qt::DisplayRole) {
-    return QVariant(m_contentList[index.row()]->value(
+    return QVariant(m_playlist->content()[index.row()]->value(
         m_header->usedHeader(index.column())));
   }
   return QVariant();
@@ -96,28 +96,30 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
   return m_headerTrans[m_header->usedHeader(section)];
 }
 
-int PlaylistModel::count() const { return m_contentList.length(); }
+int PlaylistModel::count() const { return m_playlist->content().length(); }
 
 void PlaylistModel::addContent(PlayContent *content) {
   reloadPlayContentInfo(content);
   beginResetModel();
-  m_contentList.append(content);
+  m_playlist->appendContent(content);
   endResetModel();
-  m_listInfo.setInfo(
+  m_playlist->setInfo(
       PLAYLIST_INFO_COUNT,
-      QString::number(m_listInfo.info(PLAYLIST_INFO_COUNT).toInt() + 1));
+      QString::number(m_playlist->info().info(PLAYLIST_INFO_COUNT).toInt() +
+                      1));
 }
 
 bool PlaylistModel::removeContent(QList<int> indexes) {
   std::sort(indexes.begin(), indexes.end());
   QList<int>::const_reverse_iterator it = indexes.crbegin();
   while (it != indexes.crend()) {
-    if (m_contentList.size() <= *it) {
-      qDebug() << "remove content out of index" << m_contentList.size() << *it;
+    if (m_playlist->content().size() <= *it) {
+      qDebug() << "remove content out of index" << m_playlist->content().size()
+               << *it;
       return false;
     }
     beginResetModel();
-    m_contentList.removeAt(*it);
+    m_playlist->removeContentAt(*it);
     endResetModel();
     it++;
   }
@@ -126,65 +128,66 @@ bool PlaylistModel::removeContent(QList<int> indexes) {
 
 void PlaylistModel::setPlaylistName(const QString &name) {
   m_playlistName = name;
-  m_listInfo.setInfo(PLAYLIST_INFO_NAME, m_playlistName);
+  m_playlist->setInfo(PLAYLIST_INFO_NAME, m_playlistName);
 }
 
 QString PlaylistModel::playlistName() const { return m_playlistName; }
 
 PlayContentPos PlaylistModel::currentPlayContent() const {
-  return PlayContentPos{m_contentList.indexOf(m_currentPlayContent),
+  return PlayContentPos{m_playlist->content().indexOf(m_currentPlayContent),
                         m_currentPlayContent};
 }
 
 void PlaylistModel::setCurrentPlayContent(const int &index) {
-  if (m_contentList.length() <= index) {
+  if (m_playlist->content().length() <= index) {
     qDebug() << "can not set current play content out of index";
     return;
   }
-  m_currentPlayContent = m_contentList[index];
+  m_currentPlayContent = m_playlist->content()[index];
 }
 
 PlayContentPos PlaylistModel::findNextContent() const {
-  if (m_contentList.length() == 0) {
+  if (m_playlist->content().length() == 0) {
     return PlayContentPos{-1, nullptr};
   }
-  const int i = m_contentList.indexOf(m_currentPlayContent);
-  if (i == m_contentList.length() - 1) {
-    return PlayContentPos{0, m_contentList[0]};
+  const int i = m_playlist->content().indexOf(m_currentPlayContent);
+  if (i == m_playlist->content().length() - 1) {
+    return PlayContentPos{0, m_playlist->content()[0]};
   }
-  return PlayContentPos{i + 1, m_contentList[i + 1]};
+  return PlayContentPos{i + 1, m_playlist->content()[i + 1]};
 }
 
 PlayContentPos PlaylistModel::findPreContent() const {
-  if (m_contentList.length() == 0) {
+  if (m_playlist->content().length() == 0) {
     return PlayContentPos{-1, nullptr};
   }
-  const int i = m_contentList.indexOf(m_currentPlayContent);
+  const int i = m_playlist->content().indexOf(m_currentPlayContent);
   if (i == 0) {
-    return PlayContentPos{m_contentList.length() - 1,
-                          m_contentList[m_contentList.length() - 1]};
+    return PlayContentPos{
+        m_playlist->content().length() - 1,
+        m_playlist->content()[m_playlist->content().length() - 1]};
   }
-  return PlayContentPos{i - 1, m_contentList[i - 1]};
+  return PlayContentPos{i - 1, m_playlist->content()[i - 1]};
 }
 
 bool PlaylistModel::contains(PlayContent *content) const {
-  return m_contentList.contains(content);
+  return m_playlist->content().contains(content);
 }
 
 int PlaylistModel::indexOf(PlayContent *content) const {
-  return m_contentList.indexOf(content);
+  return m_playlist->content().indexOf(content);
 }
 
 PlayContentPos PlaylistModel::content(const int &index) const {
-  if (m_contentList.length() <= index) {
+  if (m_playlist->content().length() <= index) {
     return PlayContentPos{-1, nullptr};
   }
-  return PlayContentPos{index, m_contentList[index]};
+  return PlayContentPos{index, m_playlist->content()[index]};
 }
 
 PlayContentPos PlaylistModel::content(const QString &contentPath) const {
   int i = 0;
-  for (auto c : m_contentList) {
+  for (auto c : m_playlist->content()) {
     if (c->contentPath == contentPath) {
       return PlayContentPos{i, c};
     }
@@ -193,9 +196,7 @@ PlayContentPos PlaylistModel::content(const QString &contentPath) const {
   return PlayContentPos{-1, nullptr};
 }
 
-Playlist PlaylistModel::list() const {
-  return Playlist(m_listInfo, m_contentList);
-}
+Playlist PlaylistModel::list() const { return *m_playlist; }
 
 void PlaylistModel::reloadPlayContentInfo() {
   // FIXME: Do not use the latter one which will cause OOM.
@@ -206,7 +207,7 @@ void PlaylistModel::reloadPlayContentInfo() {
   connect(progressTimer, &QTimer::timeout, this,
           [this, reloadWatcher, t, progressTimer]() {
             emit this->reloadInfoStatusChanged(
-                m_listInfo.info(PLAYLIST_INFO_NAME),
+                m_playlist->info().info(PLAYLIST_INFO_NAME),
                 reloadWatcher->isFinished(), reloadWatcher->progressValue(),
                 t->elapsed());
             if (reloadWatcher->isFinished()) {
@@ -219,13 +220,15 @@ void PlaylistModel::reloadPlayContentInfo() {
           });
   progressTimer->start(100);
   t->start();
+  PlayContentList contentList = m_playlist->content();
   QFuture<void> reloadFuture = QtConcurrent::map(
-      m_contentList, [&](PlayContent *content) -> PlayContent * {
+      contentList, [&](PlayContent *content) -> PlayContent * {
         AudioInfo::readAudioInfo(content->contentPath, content,
                                  AudioInfo::InfoOption::NoAlbumCover);
         return content;
       });
   reloadWatcher->setFuture(reloadFuture);
+  m_playlist->setContent(&contentList);
 #else
   AudioInfo *reloader = new AudioInfo;
   connect(reloader, &AudioInfo::reloadInfoStatusChanged, this,
@@ -248,19 +251,13 @@ void PlaylistModel::reloadPlayContentInfo(PlayContent *content) {
 
 void PlaylistModel::reloadPlaylistWithOrder(const int &column,
                                             Qt::SortOrder order) {
-  Playlist *playlist = new Playlist(m_listInfo, m_contentList);
+  beginResetModel();
   if (!PlaylistSql::getInstance()->loadPlaylistWithOrder(
-          playlist, m_header->usedHeader(column), order)) {
+          m_playlist, m_header->usedHeader(column), order)) {
     qDebug() << "failed to reload playlist with order";
     return;
   }
-  beginResetModel();
-  m_contentList.clear();
-  for (auto t : *(playlist->content())) {
-    m_contentList.append(t);
-  }
   endResetModel();
-  delete playlist;
 }
 
 void PlaylistModel::setHeader(const PLModel::PlaylistModelHeader *header) {

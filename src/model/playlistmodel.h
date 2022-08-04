@@ -61,7 +61,7 @@ class PlaylistModel : public QAbstractItemModel {
  private:
   QString m_playlistName;
   // TODO: Combine PlaylistInfo and PlayContentList to PlayContentList.
-  PlaylistInfo m_listInfo;
+  Playlist *m_playlist;
   PlayContentList m_contentList;
   // Copy of PlaylistWidget::m_header.
   const PLModel::PlaylistModelHeader *m_header;

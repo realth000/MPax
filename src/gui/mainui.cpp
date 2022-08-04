@@ -281,10 +281,10 @@ void MainUI::scanAudioDir() {
         timer.start(100);
         QStringList scannedPathList = scanner->audioFileList();
         if (ui->listTabWidget->CurrentPlaylist() != nullptr) {
-          const PlayContentList *currentContentList =
+          const PlayContentList currentContentList =
               ui->listTabWidget->CurrentPlaylist()->list().content();
           QStringList contentPathList;
-          for (const auto content : *currentContentList) {
+          for (const auto content : currentContentList) {
             contentPathList.append(content->contentPath);
           }
           for (const auto &contentPath : contentPathList) {
