@@ -139,6 +139,10 @@ void MainUI::InitConnections() {
           &MainUI::updateReloadInfoStatus);
   connect(ui->playlistWidget, &PlaylistWidget::playlistOrderChanged,
           ui->listTabWidget, &ListTabWidget::saveCurrentPlaylist);
+  connect(m_searchDialog, &PlaylistSearchDialog::deleteTriggered,
+          ui->playlistWidget, &PlaylistWidget::removeContents);
+  connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
+          ui->playlistWidget, &PlaylistWidget::openFileInDir);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {

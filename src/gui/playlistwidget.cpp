@@ -293,3 +293,11 @@ void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
   m_tableViewContextMenu->popup(QCursor().pos());
 }
+
+void PlaylistWidget::removeContents(const QList<int> &indexes) {
+  m_showingModel->removeContent(indexes);
+}
+
+void PlaylistWidget::openFileInDir(const int &row) {
+  util::openFileInDir(m_showingModel->content(row).content->contentPath);
+}

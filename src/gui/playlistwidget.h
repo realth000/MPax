@@ -43,6 +43,8 @@ class PlaylistWidget : public QWidget {
   void updateConfig();
   int countShowing() const;
   void updatePlayingModel();
+  void removeContents(const QList<int> &indexes);
+  void openFileInDir(const int &row);
 
  private:
   Ui::PlaylistWidget *ui;
