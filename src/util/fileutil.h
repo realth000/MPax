@@ -15,7 +15,7 @@ void openFileInDir(const QString &filePath) {
   const QString fileManagerType = p.readLine().simplified();
   // KDE
   if (fileManagerType == "org.kde.dolphin.desktop" &&
-      QProcess::startDetached("dolphin", {filePath})) {
+      QProcess::startDetached("dolphin", {"--select", filePath})) {
     return;
   }
   // GNOME

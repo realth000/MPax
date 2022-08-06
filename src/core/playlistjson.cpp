@@ -72,13 +72,13 @@ QString PlaylistJson::toJsonString(const QList<Playlist> &playlist) {
     // Read info.
     QJsonObject playlistInfoObj;
     playlistInfoObj.insert(PLAYLIST_INFO_NAME,
-                           it.i->t().info()->info(PLAYLIST_INFO_NAME));
+                           it.i->t().info().info(PLAYLIST_INFO_NAME));
     playlistInfoObj.insert(PLAYLIST_INFO_COUNT,
-                           it.i->t().info()->info(PLAYLIST_INFO_COUNT));
+                           it.i->t().info().info(PLAYLIST_INFO_COUNT));
     // Read content.
-    PlayContentList::const_iterator itt = it.i->t().content()->constBegin();
+    PlayContentList::const_iterator itt = it.i->t().content().constBegin();
     QJsonArray arr;
-    while (itt != it.i->t().content()->constEnd()) {
+    while (itt != it.i->t().content().constEnd()) {
       arr.append(itt.i->t()->value("ContentPath").toString());
       itt++;
     }

@@ -82,10 +82,10 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   }
   for (const auto& playlist : playlists) {
     // Insert playlist info.
-    const PlaylistInfo* info = playlist.info();
+    const PlaylistInfo info = playlist.info();
     const QString tableName =
         QString("playlist_%1_table").arg(SQL_RANDOM_NAME(playlistCount));
-    const QString playlistName = info->info(PLAYLIST_INFO_NAME);
+    const QString playlistName = info.info(PLAYLIST_INFO_NAME);
     query.prepare(SQL_SAVE_PLAYLIST);
     query.bindValue(QStringLiteral(":v_id"), playlistCount);
     query.bindValue(QStringLiteral(":v_sort"), playlistCount);
@@ -115,7 +115,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     }
     // Insert playlist data.
     int contentCount = 0;
-    for (auto c : *playlist.content()) {
+    for (auto c : playlist.content()) {
       query.prepare(QString("INSERT INTO %1(id  "
                             ", path, title, artist, album_title) "
                             "VALUES(:v_id, :v_path, :v_title, :v_artist, "
@@ -212,7 +212,7 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     m_database.rollback();
     goto exit;
   }
-  for (auto c : *playlist.content()) {
+  for (auto c : playlist.content()) {
     query.prepare(QString("INSERT INTO %1(id  "
                           ", path, title, artist, album_title) "
                           "VALUES(:v_id, :v_path, :v_title, :v_artist, "
@@ -342,7 +342,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     qDebug() << "can not load playlist with order, database failed to open";
     return false;
   }
-  const QString playlistName = playlist->info()->info(PLAYLIST_INFO_NAME);
+  const QString playlistName = playlist->info().info(PLAYLIST_INFO_NAME);
   if (playlistName.isEmpty()) {
     qDebug() << "can not load playlist with order, empty playlist name";
     return false;

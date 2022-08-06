@@ -33,10 +33,14 @@ class Playlist {
   explicit Playlist(const PlaylistInfo &playlistInfo,
                     const PlayContentList &playContentList);
   virtual ~Playlist();
-  const PlaylistInfo *info() const;
-  const PlayContentList *content() const;
+  PlaylistInfo info() const;
+  PlayContentList content() const;
   void setContent(PlayContentList *list);
   bool contains(const QString &contentPath) const;
+  void setInfo(const QString &infoName, const QString &infoValue);
+  void appendContent(PlayContent *playContent);
+  void removeContentAt(const int &index);
+  void clearContent();
 
  private:
   PlaylistInfo *m_playListInfo;

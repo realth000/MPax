@@ -6,7 +6,9 @@ PlaylistInfo::PlaylistInfo() : m_info(new QMap<QString, QString>()) {}
 PlaylistInfo::PlaylistInfo(const QMap<QString, QString>& info)
     : m_info(new QMap<QString, QString>(info)) {}
 
-PlaylistInfo::~PlaylistInfo() { delete m_info; }
+PlaylistInfo::~PlaylistInfo() {
+  // delete m_info;
+}
 
 const QMap<QString, QString>* PlaylistInfo::info() const { return m_info; }
 
@@ -51,14 +53,14 @@ Playlist::~Playlist() {
   //  delete m_playContentList;
 }
 
-const PlayContentList* Playlist::content() const { return m_playContentList; }
+PlayContentList Playlist::content() const { return *m_playContentList; }
 
 void Playlist::setContent(PlayContentList* list) {
   delete m_playContentList;
   m_playContentList = list;
 }
 
-const PlaylistInfo* Playlist::info() const { return m_playListInfo; }
+PlaylistInfo Playlist::info() const { return *m_playListInfo; }
 
 bool Playlist::contains(const QString& contentPath) const {
   for (auto c : *m_playContentList) {
@@ -68,3 +70,17 @@ bool Playlist::contains(const QString& contentPath) const {
   }
   return false;
 }
+
+void Playlist::setInfo(const QString& infoName, const QString& infoValue) {
+  m_playListInfo->setInfo(infoName, infoValue);
+}
+
+void Playlist::appendContent(PlayContent* playContent) {
+  m_playContentList->append(playContent);
+}
+
+void Playlist::removeContentAt(const int& index) {
+  m_playContentList->removeAt(index);
+}
+
+void Playlist::clearContent() { m_playContentList->clear(); }

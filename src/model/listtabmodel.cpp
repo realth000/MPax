@@ -81,7 +81,8 @@ void ListTabModel::addContent(PlayContent *playContent) {
      */
     m_currentPlayListModel = new PlaylistModel(
         DEFAULT_PLAYLIST_NAME,
-        QList<PlaylistHeaderItem>{PlaylistModelHeader::defaultHeaderList()});
+        QList<PLModel::HeaderItem>{
+            PLModel::PlaylistModelHeader::defaultHeaderList()});
     // Add playlist to ListTabWidget.
     addPlaylist(m_currentPlayListModel);
   }
