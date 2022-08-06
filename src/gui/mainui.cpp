@@ -2,6 +2,7 @@
 
 #include <QtConcurrent/QtConcurrentRun>
 #include <QtCore/QFutureWatcher>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -242,8 +243,12 @@ void MainUI::playNext() {
 }
 
 void MainUI::scanAudioDir() {
-  const QString dirPath =
-      QFileDialog::getExistingDirectory(this, tr("Scan directory"));
+  const QString dirPath = QFileDialog::getExistingDirectory(
+      this, tr("Scan directory"),
+      QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
+                  .length() > 0
+          ? QStandardPaths::standardLocations(QStandardPaths::MusicLocation)[0]
+          : "");
   if (dirPath.isEmpty()) {
     return;
   }
