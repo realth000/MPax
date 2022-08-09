@@ -55,6 +55,7 @@ bool checkFormat(const QString &rawString) {
       }
       paPartTmpList.last().end = i;
       paPartTmpList.removeLast();
+      // Add operation in () here.
       continue;
     }
     /**
@@ -69,6 +70,7 @@ bool checkFormat(const QString &rawString) {
       const QString pePartWord =
           rawString.mid(currentPe.start + 1, i - currentPe.start - 1);
       qDebug() << "catch keyword inside '%': " << pePartWord;
+      // Parse keyword here.
       currentPe.start = -1;
       currentPe.end = -1;
       continue;
@@ -76,12 +78,23 @@ bool checkFormat(const QString &rawString) {
     /**
      * Check '\\'.
      * Not allowed to be nested.
-     * End until space.
+     * End until space.\n
+     * The character or word after '\\' should in:\n
+     * 1. a '\\'
+     * 2. a '%'
+     * 3. a keyword: HAS, AND
+     * 4. a metadata keyword: title album_title
      */
     if (rawString[i] == '\\') {
       // Skip next character.
       if (i < rawString.length() - 1) {
-        i++;
+        QString escapedWord;
+        escapedWord.append(rawString[i++]);
+        while (i < rawString.length() && rawString[i] != ' ') {
+          escapedWord.append(rawString[i]);
+          i++;
+        }
+        qDebug().noquote() << "catch escape word: " << escapedWord;
       } else {
         // Last character is '\\'
         qDebug() << "invalid format: unexpected escape symbol '\\' at end of "
