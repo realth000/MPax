@@ -26,6 +26,10 @@ typedef MarkPart ParenthesesPart;
 typedef MarkPart EscapePart;
 
 bool checkFormat(const QString &rawString) {
+  qDebug() << "checkFormat:" << rawString;
+  Tokenizer t;
+  bool ok = false;
+  QString errString;
   //  QString
   if (rawString.isEmpty()) {
     return false;
@@ -54,8 +58,20 @@ bool checkFormat(const QString &rawString) {
         return false;
       }
       paPartTmpList.last().end = i;
-      paPartTmpList.removeLast();
       // Add operation in () here.
+      // FIXME: Not support nested () here yet.
+      TokenFormat tf =
+          t.tokenize(rawString.mid(paPartTmpList.last().start + 1,
+                                   paPartTmpList.last().end -
+                                       paPartTmpList.last().start - 1),
+                     &ok, &errString);
+      if (ok) {
+        qDebug() << "tokenize result:" << tf.keyword << tf.metadataKeyWord
+                 << tf.text;
+      } else {
+        qDebug() << "tokenize result: failed;" << errString;
+      }
+      paPartTmpList.removeLast();
       continue;
     }
     /**
