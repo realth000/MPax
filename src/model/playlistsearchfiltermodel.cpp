@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include "core/searchparser/parser.h"
+
 Model::PlaylistSearchFilterModel::PlaylistSearchFilterModel(QObject *parent)
     : PlaylistFilterModel(parent) {}
 
@@ -12,6 +14,10 @@ void Model::PlaylistSearchFilterModel::setFilterExp(
   m_filterMode = mode;
   setFilterRegExp(filter);
   emit rowCountChanged(QSortFilterProxyModel::rowCount(QModelIndex()));
+  // Check format;
+  bool ok = false;
+  QString errString;
+  SearchParser::parse(m_filterExp.pattern(), &ok, &errString);
 }
 
 bool Model::PlaylistSearchFilterModel::filterAcceptsRow(
