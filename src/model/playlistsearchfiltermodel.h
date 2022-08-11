@@ -3,6 +3,7 @@
 
 #include <QtCore/QRegExp>
 
+#include "core/searchparser/parser.h"
 #include "model/playlistfiltermodel.h"
 
 namespace Model {
@@ -28,6 +29,7 @@ class PlaylistSearchFilterModel : public PlaylistFilterModel {
  private:
   QRegExp m_filterExp;
   FilterMode m_filterMode;
+  SearchParser::Parser m_parser;
 };
 }  // namespace Model
 

@@ -5,10 +5,19 @@
 #include <QtCore/QString>
 #include <functional>
 
-namespace SearchParser {
+#include "analyzer.h"
+#include "core/playcontent.h"
 
-QList<std::function<bool(QString)>> parse(const QString &rawString, bool *ok,
-                                          QString *errString);
+namespace SearchParser {
+class Parser {
+ public:
+  explicit Parser();
+  bool init(const QString &rawString, bool *ok, QString *errString);
+  bool parse(const PlayContent *playContent) const;
+
+ private:
+  AST m_ast;
+};
 }  // namespace SearchParser
 
 #endif  // MPAX_PARSER_H
