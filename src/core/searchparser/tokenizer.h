@@ -7,20 +7,20 @@
 
 namespace SearchParser {
 
-enum TokenType {
+enum TokenType : int {
   Word,
-  Space,
-  Percent,
+  Keyword,
+  OpeKeyword,
+  MetaKeyword,
   LeftParentheses,
   RightParentheses,
-  Escape,
-  Unknown
+  Unknown = -1
 };
 
 class Token {
  public:
   Token() {
-    type = Unknown;
+    type = TokenType::Unknown;
     content = "";
     start = -1;
     end = -1;

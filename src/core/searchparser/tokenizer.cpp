@@ -8,9 +8,8 @@ namespace SearchParser {
 
 namespace {
 bool isKeyword(const QString& s) { return keywords.contains(s); }
-bool isMetadataKeyword(const QString& s) {
-  return metadataKeywords.contains(s);
-}
+bool isOpeKeyword(const QString& s) { return operatorKeywords.contains(s); }
+bool isMetaKeyword(const QString& s) { return metaKeywords.contains(s); }
 }  // namespace
 
 Tokenizer::Tokenizer() {}
@@ -60,7 +59,7 @@ TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
       continue;
     }
 
-    // Record keyword between %.
+    // Record metaKeyword between %.
     if (rawString[i] == '%') {
       if (i == end - 1) {
         *ok = false;
@@ -73,7 +72,7 @@ TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
         return {};
       }
       Token t;
-      t.type = TokenType::Percent;
+      t.type = TokenType::MetaKeyword;
       t.start = i;
       while (i < end) {
         if (rawString[i] == '%') {
@@ -83,6 +82,12 @@ TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
             return {};
           }
           t.end = i - 1;
+          if (!isMetaKeyword(t.content)) {
+            *ok = false;
+            *errString =
+                QString("invalid metaKeyword '%1' at pos %2").arg(t.content, i);
+            return {};
+          }
           tokenList.append(t);
           i++;
           break;
@@ -107,12 +112,19 @@ TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
     Token t;
     t.type = TokenType::Word;
     t.start = i;
-    while (i < end && rawString[i] != ' ') {
+    while (i < end && rawString[i] != ' ' && rawString[i] != ')') {
       t.content.append(rawString[i]);
       i++;
     }
     t.end = i;
     if (!t.content.isEmpty()) {
+      if (isKeyword(t.content)) {
+        t.type = TokenType::Keyword;
+      } else if (isOpeKeyword(t.content)) {
+        t.type = TokenType::OpeKeyword;
+      } else if (isMetaKeyword(t.content)) {
+        t.type = TokenType::MetaKeyword;
+      }
       tokenList.append(t);
     }
   }

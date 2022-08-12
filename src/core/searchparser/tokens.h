@@ -9,12 +9,17 @@ static const QStringList keywords = {
     "HAS", "IS",
     "GREATER", "LESS",   "EQUAL",
     "MISSING", "PRESENT",
-    "BEFORE", "AFTER", "SINCE", "DURING",
-    "AND", "OR", "NOT"
+    "BEFORE", "AFTER", "SINCE", "DURING"
 };
 // clang-format on
 
-static const QMap<QString, QString> metadataKeywords =
+static const QStringList operatorKeywords = {"AND", "OR"
+#if 0
+                                             ,"NOT"
+#endif
+};
+
+static const QMap<QString, QString> metaKeywords =
     QMap<QString, QString>{{"title", "title"},
                            {"artist", "artist"},
                            {"album", "AlbumTitle"},
