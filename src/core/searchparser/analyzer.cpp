@@ -69,7 +69,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         currentNode->metaKeyword == metaKeywords[t.content];
       } break;
       case TokenType::LeftParentheses: {
-        if (currentNode->type != ASTType::Unknown) {
+        if (currentNode->type == ASTType::Statement) {
           // ERROR: type should not set yet.
           *errString = "analyze error: error parsing '(', type already set";
           goto failed;
@@ -78,12 +78,14 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         if (currentNode->leftChild == nullptr) {
           ASTNode *node = new ASTNode;
           currentNode->leftChild = node;
-          currentNode = node;
+          node->parent = currentNode;
+          currentNode = currentNode->leftChild;
           rootNode = node;
         } else if (currentNode->rightChild == nullptr) {
           ASTNode *node = new ASTNode;
           currentNode->rightChild = node;
-          currentNode = node;
+          node->parent = currentNode;
+          currentNode = currentNode->rightChild;
           rootNode = node;
         } else {
           // ERROR: all children were set.
