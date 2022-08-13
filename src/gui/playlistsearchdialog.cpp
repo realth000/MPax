@@ -11,7 +11,8 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
       m_model(new Model::PlaylistSearchFilterModel),
       m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}),
       m_rowCount(-1),
-      m_rowPos(-1) {
+      m_rowPos(-1),
+      m_tableViewContextMenu(initTableViewContextMenu()) {
   ui->setupUi(this);
   this->setWindowTitle(tr("Search in playlist"));
   ui->searchTableView->verticalHeader()->setHidden(true);
@@ -41,6 +42,8 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
           &PlaylistSearchDialog::updateRowCountAfterFilter);
   connect(ui->searchTableView, &QTableView::pressed, this,
           [this](const QModelIndex &index) { this->m_rowPos = index.row(); });
+  connect(ui->searchTableView, &QTableView::customContextMenuRequested, this,
+          &PlaylistSearchDialog::openTableViewContextMenu);
 }
 
 PlaylistSearchDialog::~PlaylistSearchDialog() {}
@@ -123,4 +126,64 @@ void PlaylistSearchDialog::updatePlayContent(const QModelIndex &index) {
 
 void PlaylistSearchDialog::updatePlayContent(const int &row) {
   updatePlayContent(m_model->index(row, 0));
+}
+
+void PlaylistSearchDialog::openTableViewContextMenu(const QPoint &pos) {
+  m_tableViewSelectedRows =
+      ui->searchTableView->selectionModel()->selectedRows();
+  m_tableViewContextMenu->popup(QCursor().pos());
+}
+
+QMenu *PlaylistSearchDialog::initTableViewContextMenu() {
+  QMenu *m = new QMenu(this);
+  QAction *actionDelete = new QAction(tr("Delete"));
+  connect(actionDelete, &QAction::triggered, this,
+          &PlaylistSearchDialog::actionDelete);
+  QAction *actionPlay = new QAction(tr("Play"));
+  connect(actionPlay, &QAction::triggered, this,
+          &PlaylistSearchDialog::actionPlay);
+  QAction *actionOpen = new QAction(tr("Open in folder"));
+  connect(actionOpen, &QAction::triggered, this,
+          &PlaylistSearchDialog::actionOpenInFolder);
+  m->addAction(actionDelete);
+  m->addSeparator();
+  m->addAction(actionOpen);
+  m->addAction(actionPlay);
+  return m;
+}
+
+void PlaylistSearchDialog::actionDelete() {
+  if (m_model->sourceModel() == nullptr) {
+    return;
+  }
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  QList<int> indexes;
+  for (auto t : m_tableViewSelectedRows) {
+    const int tt = m_model->mapToSource(t).row();
+    indexes.append(tt);
+  }
+  emit deleteTriggered(indexes);
+}
+
+void PlaylistSearchDialog::actionPlay() {
+  if (m_model->sourceModel() == nullptr) {
+    return;
+  }
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  updatePlayContent(m_tableViewSelectedRows[0]);
+}
+
+void PlaylistSearchDialog::actionOpenInFolder() {
+  if (m_model->sourceModel() == nullptr) {
+    return;
+  }
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  emit openFileInDirTriggered(
+      m_model->mapToSource(m_tableViewSelectedRows[0]).row());
 }

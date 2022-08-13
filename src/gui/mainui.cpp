@@ -2,6 +2,7 @@
 
 #include <QtConcurrent/QtConcurrentRun>
 #include <QtCore/QFutureWatcher>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -138,6 +139,10 @@ void MainUI::InitConnections() {
           &MainUI::updateReloadInfoStatus);
   connect(ui->playlistWidget, &PlaylistWidget::playlistOrderChanged,
           ui->listTabWidget, &ListTabWidget::saveCurrentPlaylist);
+  connect(m_searchDialog, &PlaylistSearchDialog::deleteTriggered,
+          ui->playlistWidget, &PlaylistWidget::removeContents);
+  connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
+          ui->playlistWidget, &PlaylistWidget::openFileInDir);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -242,8 +247,12 @@ void MainUI::playNext() {
 }
 
 void MainUI::scanAudioDir() {
-  const QString dirPath =
-      QFileDialog::getExistingDirectory(this, tr("Scan directory"));
+  const QString dirPath = QFileDialog::getExistingDirectory(
+      this, tr("Scan directory"),
+      QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
+                  .length() > 0
+          ? QStandardPaths::standardLocations(QStandardPaths::MusicLocation)[0]
+          : "");
   if (dirPath.isEmpty()) {
     return;
   }

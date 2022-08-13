@@ -5,6 +5,7 @@
 #include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QKeyEvent>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QMenu>
 
 #include "core/playcontent.h"
 #include "model/playlistsearchfiltermodel.h"
@@ -22,6 +23,8 @@ class PlaylistSearchDialog : public QDialog {
 
  signals:
   void playContentChanged(const int &row);
+  void deleteTriggered(const QList<int> &indexes);
+  void openFileInDirTriggered(const int &row);
 
  public slots:
   void setModel(QAbstractItemModel *model);
@@ -35,16 +38,23 @@ class PlaylistSearchDialog : public QDialog {
   QList<qreal> m_tableViewWidthRadio;
   int m_rowCount;
   int m_rowPos;
+  QModelIndexList m_tableViewSelectedRows;
+  QMenu *m_tableViewContextMenu;
 
   Qt::CaseSensitivity caseSensitivity();
   void selectPre();
   void selectNext();
+  QMenu *initTableViewContextMenu();
 
  private slots:
   void updateRowCountAfterFilter(const int newCount);
   void updateSearchFilter(const QString &filterString);
   void updatePlayContent(const QModelIndex &index);
   void updatePlayContent(const int &row);
+  void openTableViewContextMenu(const QPoint &pos);
+  void actionDelete();
+  void actionPlay();
+  void actionOpenInFolder();
 };
 
 #endif  // PLAYLISTSEARCHDIALOG_H
