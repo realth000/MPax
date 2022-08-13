@@ -65,6 +65,7 @@ class AST {
   ~AST();
   bool parse(const PlayContent *playContent) const;
   void setRootNode(ASTNode *node);
+  ASTNode *rootNode() const;
 
  private:
   ASTNode *m_rootNode;

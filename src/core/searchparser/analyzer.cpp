@@ -122,10 +122,99 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   }
   qDebug() << "----------";
   ast.setRootNode(rootNode);
+  if (!validate(ast, ok, errString)) {
+    *errString = "analyze error: " + *errString;
+    goto failed;
+  }
   return ast;
 
 failed:
   *ok = false;
   return AST();
 }
+
+bool Analyzer::validate(const AST &a, bool *ok, QString *errString) {
+  if (ok == nullptr || errString == nullptr) {
+    qDebug() << "validating failed, null feedback not allowed";
+    return false;
+  }
+  ASTNode *rootNode = a.rootNode();
+  ASTNode *currentNode = nullptr;
+
+  QList<ASTNode *> nodeList;
+  nodeList.append(rootNode);
+  while (!nodeList.isEmpty()) {
+    currentNode = nodeList.last();
+    if (currentNode == nullptr) {
+      *errString = "validating failed, null node";
+      goto failed;
+    }
+    // Check current node.
+    if (!isValidASTNode(currentNode, ok, errString)) {
+      *errString = "validating failed, " + *errString;
+      goto failed;
+    }
+    nodeList.pop_back();
+    if (currentNode->rightChild != nullptr) {
+      nodeList.push_back(currentNode->rightChild);
+    }
+    if (currentNode->leftChild != nullptr) {
+      nodeList.push_back(currentNode->leftChild);
+    }
+
+    break;
+  }
+  *ok = true;
+  *errString = "";
+  return true;
+
+failed:
+  *ok = false;
+  return false;
+}
+
+bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok,
+                              QString *errString) const {
+  switch (node->type) {
+    case ASTType::Statement: {
+      if (node->leftChild != nullptr || node->rightChild != nullptr) {
+        *errString = "statement type node has child";
+        goto failed;
+      }
+      const QString metaKeyword = node->metaKeyword;
+      const ASTKeyword keyword = node->keyword;
+      const QString word = node->word;
+      if (node->keyword == ASTKeyword::Unknown) {
+        *errString = "unknown keyword in statement type node";
+        goto failed;
+      }
+      if (word.isEmpty()) {
+        *errString = "empty query text";
+        goto failed;
+      }
+    } break;
+    case ASTType::Branch: {
+      if (node->leftChild == nullptr || node->rightChild == nullptr) {
+        *errString = "branch type node has null child";
+        goto failed;
+      }
+      if (node->opeKeyword == ASTOpe::None) {
+        *errString = "operate not set";
+        goto failed;
+      }
+    } break;
+    case ASTType::Unknown:
+    default:
+      *errString = "unknown node type";
+      goto failed;
+  }
+
+  *ok = true;
+  return true;
+
+failed:
+  *ok = false;
+  return false;
+}
+
 }  // namespace SearchParser

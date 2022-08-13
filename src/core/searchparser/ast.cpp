@@ -12,4 +12,6 @@ bool AST::parse(const PlayContent *playContent) const { return false; }
 
 void AST::setRootNode(ASTNode *node) { m_rootNode = node; }
 
+ASTNode *AST::rootNode() const { return m_rootNode; }
+
 }  // namespace SearchParser
