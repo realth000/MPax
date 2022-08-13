@@ -112,7 +112,11 @@ TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
     Token t;
     t.type = TokenType::Word;
     t.start = i;
-    while (i < end && rawString[i] != ' ' && rawString[i] != ')') {
+    while (i < end) {
+      if (rawString[i] == ' ' || rawString[i] == ')') {
+        i--;
+        break;
+      }
       t.content.append(rawString[i]);
       i++;
     }

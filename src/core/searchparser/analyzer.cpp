@@ -96,19 +96,19 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
       case TokenType::RightParentheses: {
         if (currentNode->parent == nullptr) {
           // ERROR: parent should not be null.
-          *errString = "analyze error: error parsing '(', null parent";
+          *errString = "analyze error: error parsing ')', null parent";
+          goto failed;
+        }
+        if (currentNode != currentNode->parent->leftChild &&
+            currentNode->parent->leftChild == nullptr) {
+          // ERROR: children should not be null.
+          *errString = "analyze error: error parsing ')', null left child";
           goto failed;
         }
         currentNode = currentNode->parent;
-        if (currentNode->leftChild == nullptr ||
-            currentNode->rightChild == nullptr) {
-          // ERROR: children should not be null.
-          *errString = "analyze error: error parsing '(', null children";
-          goto failed;
-        }
         if (currentNode->type != ASTType::Branch) {
           // ERROR: type should be branch type.
-          *errString = "analyze error: error parsing '(', not a branch type";
+          *errString = "analyze error: error parsing ')', not a branch type";
           goto failed;
         }
       } break;
@@ -129,6 +129,10 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   return ast;
 
 failed:
+  for (auto &t : tf) {
+    qDebug() << t.start << t.end << t.type << t.content;
+  }
+  qDebug() << "----------";
   *ok = false;
   return AST();
 }
