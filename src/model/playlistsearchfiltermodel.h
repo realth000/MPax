@@ -30,6 +30,7 @@ class PlaylistSearchFilterModel : public PlaylistFilterModel {
   QRegExp m_filterExp;
   FilterMode m_filterMode;
   SearchParser::Parser m_parser;
+  bool m_validSyntax;
 };
 }  // namespace Model
 

@@ -7,12 +7,12 @@
 namespace SearchParser {
 Analyzer::Analyzer() {}
 
-AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
+AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   if (ok == nullptr || errString == nullptr) {
     qDebug() << "analyze error: null feedback not allowed in this step";
-    return AST();
+    return nullptr;
   }
-  AST ast;
+  AST *ast = new AST();
   ASTNode *rootNode = new ASTNode;
   ASTNode *currentNode = rootNode;
   if (tf.isEmpty()) {
@@ -22,6 +22,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   for (auto &t : tf) {
     switch (t.type) {
       case TokenType::Word: {
+        qDebug() << "analyzing: [word] =" << t.content << currentNode;
         if (currentNode->type == ASTType::Branch) {
           *errString = "analyze error: empty token list";
           goto failed;
@@ -30,6 +31,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         currentNode->word = t.content;
       } break;
       case TokenType::Keyword: {
+        qDebug() << "analyzing: [keyword] =" << t.content << currentNode;
         if (currentNode->type != ASTType::Statement) {
           // ERROR: should be statement type;
           *errString = "analyze error: should be statement type";
@@ -43,6 +45,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         currentNode->keyword = ASTKeywordMap[t.content];
       } break;
       case TokenType::OpeKeyword: {
+        qDebug() << "analyzing: [opeKeyword] =" << t.content << currentNode;
         if (currentNode->parent != nullptr) {
           currentNode = currentNode->parent;
         }
@@ -59,6 +62,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         currentNode->opeKeyword = ASTOpeMap[t.content];
       } break;
       case TokenType::MetaKeyword: {
+        qDebug() << "analyzing: [metaKeyword] =" << t.content << currentNode;
         if (currentNode->type != ASTType::Unknown) {
           // ERROR: type should not set yet.
           *errString =
@@ -66,7 +70,8 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           goto failed;
         }
         currentNode->type = ASTType::Statement;
-        currentNode->metaKeyword == metaKeywords[t.content];
+        qDebug() << "<<<<< set metaKeyword =" << metaKeywords[t.content];
+        currentNode->metaKeyword = metaKeywords[t.content];
       } break;
       case TokenType::LeftParentheses: {
         if (currentNode->type == ASTType::Statement) {
@@ -80,13 +85,11 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           currentNode->leftChild = node;
           node->parent = currentNode;
           currentNode = currentNode->leftChild;
-          rootNode = node;
         } else if (currentNode->rightChild == nullptr) {
           ASTNode *node = new ASTNode;
           currentNode->rightChild = node;
           node->parent = currentNode;
           currentNode = currentNode->rightChild;
-          rootNode = node;
         } else {
           // ERROR: all children were set.
           *errString = "analyze error: all children were set";
@@ -121,7 +124,7 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
     qDebug() << t.start << t.end << t.type << t.content;
   }
   qDebug() << "----------";
-  ast.setRootNode(rootNode);
+  ast->setRootNode(rootNode);
   if (!validate(ast, ok, errString)) {
     *errString = "analyze error: " + *errString;
     goto failed;
@@ -129,25 +132,27 @@ AST Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   return ast;
 
 failed:
-  for (auto &t : tf) {
-    qDebug() << t.start << t.end << t.type << t.content;
-  }
-  qDebug() << "----------";
+  //  for (auto &t : tf) {
+  //    qDebug() << t.start << t.end << t.type << t.content;
+  //  }
+  //  qDebug() << "----------";
   *ok = false;
-  return AST();
+  return nullptr;
 }
 
-bool Analyzer::validate(const AST &a, bool *ok, QString *errString) {
+bool Analyzer::validate(const AST *a, bool *ok, QString *errString) {
   if (ok == nullptr || errString == nullptr) {
     qDebug() << "validating failed, null feedback not allowed";
     return false;
   }
-  ASTNode *rootNode = a.rootNode();
+  ASTNode *rootNode = a->rootNode();
   ASTNode *currentNode = nullptr;
 
   QList<ASTNode *> nodeList;
   nodeList.append(rootNode);
+  int checkCount = 0;
   while (!nodeList.isEmpty()) {
+    checkCount++;
     currentNode = nodeList.last();
     if (currentNode == nullptr) {
       *errString = "validating failed, null node";
@@ -165,15 +170,15 @@ bool Analyzer::validate(const AST &a, bool *ok, QString *errString) {
     if (currentNode->leftChild != nullptr) {
       nodeList.push_back(currentNode->leftChild);
     }
-
-    break;
   }
   *ok = true;
   *errString = "";
+  qDebug() << "check node count =" << checkCount;
   return true;
 
 failed:
   *ok = false;
+  qDebug() << "check node count =" << checkCount;
   return false;
 }
 

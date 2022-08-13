@@ -20,8 +20,8 @@ static const QStringList operatorKeywords = {"AND", "OR"
 };
 
 static const QMap<QString, QString> metaKeywords =
-    QMap<QString, QString>{{"title", "title"},
-                           {"artist", "artist"},
+    QMap<QString, QString>{{"title", "Title"},
+                           {"artist", "Artist"},
                            {"album", "AlbumTitle"},
                            {"album_artist", "AlbumArtist"}
 #if 0

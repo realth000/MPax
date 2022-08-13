@@ -23,7 +23,7 @@ typedef MarkPart EscapePart;
 
 }  // namespace
 
-Parser::Parser() {}
+Parser::Parser() : m_ast(nullptr) {}
 
 bool Parser::init(const QString &rawString, bool *ok, QString *errString) {
   if (ok == nullptr || errString == nullptr) {
@@ -37,7 +37,7 @@ bool Parser::init(const QString &rawString, bool *ok, QString *errString) {
     return false;
   }
   Analyzer analyzer;
-  AST ast = analyzer.analyze(tokenList, ok, errString);
+  AST *ast = analyzer.analyze(tokenList, ok, errString);
   if (!*ok) {
     return false;
   }
@@ -45,7 +45,8 @@ bool Parser::init(const QString &rawString, bool *ok, QString *errString) {
   return true;
 }
 
-bool Parser::parse(const PlayContent *playContent) const {
-  return m_ast.parse(playContent);
+bool Parser::parse(const PlayContent *playContent,
+                   Qt::CaseSensitivity caseSensitivity) const {
+  return m_ast->parse(playContent, caseSensitivity);
 }
 }  // namespace SearchParser

@@ -11,10 +11,10 @@ namespace SearchParser {
 class Analyzer {
  public:
   explicit Analyzer();
-  AST analyze(const TokenList &tf, bool *ok, QString *errString);
+  AST *analyze(const TokenList &tf, bool *ok, QString *errString);
 
  private:
-  bool validate(const AST &a, bool *ok, QString *errString);
+  bool validate(const AST *a, bool *ok, QString *errString);
   bool isValidASTNode(const ASTNode *node, bool *ok, QString *errString) const;
 };
 
