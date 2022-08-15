@@ -11,7 +11,7 @@
             <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux"/></a>
         <a href="https://github.com/realth000/MPax/releases">
             <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
-        <img src="https://img.shields.io/badge/Qt-5.12+-blue"/>
+        <img src="https://img.shields.io/badge/Qt-5.9+-blue"/>
         <a href="https://github.com/realth000/MPax/blob/master/LICENSE">
             <img src="https://img.shields.io/github/license/realth000/MPax"/></a>
     </p>
@@ -58,14 +58,14 @@ MPax is a simple and easy-to-use music player.
 
 ### Dependencies
 
-* Qt5 >= 5.12
+* Qt5 >= 5.9
 * GCC >= 4.7 (C++ 11)
 * CMake >= 3.13
 
 ### Build steps
 
 1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204 or Debian11)
-   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Debian10)
+   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804 or Debian10)
 3. ``mkdir cmake-build-release && cd cmake-build-release``
 4. ``cmake ../ && cmake --build . -j $(nproc)``
 5. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``
