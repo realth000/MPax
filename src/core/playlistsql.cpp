@@ -4,7 +4,6 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QtCore/QRandomGenerator>
 #include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 

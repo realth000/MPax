@@ -1,6 +1,8 @@
 #include "playlistwidget.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QtCore/QRandomGenerator>
+#endif
 #include <QtCore/QtDebug>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QScrollBar>
@@ -271,8 +273,14 @@ PlayContentPos PlaylistWidget::randomContent() const {
   if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
   return m_playingModel->content(
       QRandomGenerator::securelySeeded().bounded(0, m_playingModel->count()));
+#else
+  const QTime t = QTime::currentTime();
+  qsrand(t.msec() + t.second() * 1000);
+  return m_playingModel->content(qrand() % m_playingModel->count());
+#endif
 }
 
 PlayContentPos PlaylistWidget::currentPlayContent() const {

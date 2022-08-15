@@ -345,17 +345,17 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="170"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="172"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="173"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="175"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="175"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="177"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>

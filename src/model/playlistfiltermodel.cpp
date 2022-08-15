@@ -52,7 +52,11 @@ QModelIndex PlaylistFilterModel::seekSourceRow(const QModelIndex &proxyIndex,
   if (nIndex >= sourceModel()->rowCount() || nIndex < 0) {
     return mapToSource(index(0, 0));
   }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
   return mapToSource(proxyIndex.siblingAtRow(nIndex));
+#else
+  return mapToSource(proxyIndex.sibling(nIndex, proxyIndex.column()));
+#endif
 }
 
 void PlaylistFilterModel::setSourceModel(QAbstractItemModel *sourceModel) {
