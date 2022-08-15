@@ -35,7 +35,7 @@ cp -rf ../packaging/debian/ "${build_dir}"/DEBIAN
 sed -i "s/@@deb_version@@/${pkg_version}-${release_count}${distro_type}/1" "${build_dir}"/DEBIAN/control
 cp -rf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
 cp -rf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
-cp -rf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/
+cp -rf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/ || exit 0
 cp -rf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
 chown -R root.root "${build_dir}"
 chmod -R 755 "${build_dir}"/DEBIAN
