@@ -75,10 +75,14 @@ void PlayControlWidget::InitConfig() {
 void PlayControlWidget::InitConnections() {
   connect(ui->preButton, &QPushButton::clicked, this,
           &PlayControlWidget::playPre);
+  connect(ui->preButton, &QPushButton::clicked, this,
+          [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   connect(ui->playButton, &QPushButton::clicked, this,
           &PlayControlWidget::updatePlay);
   connect(ui->nextButton, &QPushButton::clicked, this,
           &PlayControlWidget::playNext);
+  connect(ui->nextButton, &QPushButton::clicked, this,
+          [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   connect(ui->stopButton, &QPushButton::clicked, this,
           &PlayControlWidget::stopPlay);
   connect(ui->playModeButton, &QPushButton::clicked, this,
