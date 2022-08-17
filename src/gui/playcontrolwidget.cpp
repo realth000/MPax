@@ -340,6 +340,7 @@ void PlayControlWidget::handleMediaStatusChanged(
         emit playInvalid();
         emit playNext();
       }
+      emit currentPlayContentChanged(m_currentContentUrl);
     } break;
     case QMediaPlayer::UnknownMediaStatus:
       qDebug() << "UnknownMediaStatus" << m_currentContentUrl;

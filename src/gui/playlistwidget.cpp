@@ -309,3 +309,27 @@ void PlaylistWidget::removeContents(const QList<int> &indexes) {
 void PlaylistWidget::openFileInDir(const int &row) {
   util::openFileInDir(m_showingModel->content(row).content->contentPath);
 }
+
+void PlaylistWidget::scrollToContent(const QString &contentPath) {
+  if (contentPath.isEmpty()) {
+    return;
+  }
+
+  // If selected rows is more than one, do not scroll, otherwise may get a bad
+  // experience.
+  if (ui->tableView->selectionModel()->selectedRows().count() > 1) {
+    return;
+  }
+  // Only scroll to current play contentPath when showing the current
+  // playlist.
+  if (m_showingModel != m_playingModel) {
+    return;
+  }
+  const QModelIndex showIndex =
+      m_showingFilterModel->mapFromSource(m_showingModel->find(contentPath));
+  if (!showIndex.isValid()) {
+    return;
+  }
+  ui->tableView->scrollTo(showIndex, QAbstractItemView::PositionAtCenter);
+  ui->tableView->selectRow(showIndex.row());
+}

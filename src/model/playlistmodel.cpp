@@ -263,3 +263,12 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
 void PlaylistModel::setHeader(const PLModel::PlaylistModelHeader *header) {
   m_header = header;
 }
+
+const QModelIndex PlaylistModel::find(const QString &contentPath) const {
+  for (int i = 0; i < m_playlist->content().length(); i++) {
+    if (m_playlist->content()[i]->contentPath == contentPath) {
+      return index(i, 0);
+    }
+  }
+  return QModelIndex();
+}

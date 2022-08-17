@@ -26,6 +26,7 @@ class MainUI : public QMainWindow {
 
  signals:
   void updateConfig();
+  void scrollToContent(const QString &contentPath);
 
  protected:
   void keyPressEvent(QKeyEvent *event) override;
@@ -62,5 +63,6 @@ class MainUI : public QMainWindow {
   void showAboutQtInfo();
   void updateReloadInfoStatus(const QString &playlistName, bool finished,
                               int count, qint64 time);
+  void handleCurrentPlayContentChanged(const QUrl &contentUrl);
 };
 #endif  // MAINUI_H

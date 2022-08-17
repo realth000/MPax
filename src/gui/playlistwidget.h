@@ -45,6 +45,7 @@ class PlaylistWidget : public QWidget {
   void updatePlayingModel();
   void removeContents(const QList<int> &indexes);
   void openFileInDir(const int &row);
+  void scrollToContent(const QString &contentPath);
 
  private:
   Ui::PlaylistWidget *ui;

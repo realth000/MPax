@@ -26,6 +26,7 @@ class PlayControlWidget : public QWidget {
   void playPre();
   void playNext();
   void playInvalid();
+  void currentPlayContentChanged(const QUrl &m_currentContentUrl);
 
  public slots:
   void setContent(const PlayContent *content);

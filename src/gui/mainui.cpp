@@ -143,6 +143,10 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::removeContents);
   connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
           ui->playlistWidget, &PlaylistWidget::openFileInDir);
+  connect(ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged,
+          this, &MainUI::handleCurrentPlayContentChanged);
+  connect(this, &MainUI::scrollToContent, ui->playlistWidget,
+          &PlaylistWidget::scrollToContent);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -421,4 +425,11 @@ void MainUI::updateReloadInfoStatus(const QString &playlistName, bool finished,
         QString(tr("reloaded audio info") + " %1/%2ms")
             .arg(QString::number(count), QString::number(time)));
   }
+}
+
+void MainUI::handleCurrentPlayContentChanged(const QUrl &contentUrl) {
+  if (!contentUrl.isValid()) {
+    return;
+  }
+  emit scrollToContent(contentUrl.toLocalFile());
 }
