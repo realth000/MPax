@@ -46,6 +46,8 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   playContent->albumTitle = tag->album().toCString(true);
   playContent->albumYear = int(tag->year());
   playContent->trackNumber = int(tag->track());
+  playContent->genre = tag->genre().toCString(true);
+  playContent->comment = tag->comment().toCString(true);
 
   // Replace empty info.
   if (playContent->title.isEmpty()) {
@@ -53,29 +55,15 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   }
 
   TagLib::PropertyMap tags = f.file()->properties();
-
-  unsigned int longest = 0;
-  for (TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end();
-       ++i) {
-    if (i->first.size() > longest) {
-      longest = i->first.size();
-    }
-  }
-  for (TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end();
-       ++i) {
-    for (TagLib::StringList::ConstIterator j = i->second.begin();
-         j != i->second.end(); ++j) {
-      const QString t(i->first.toCString(true));
-      if (t == "ALBUMARTIST") {
-        playContent->albumArtist = i->second.toString().toCString(true);
-      }
-    }
-  }
+  playContent->albumArtist = tags["ALBUMARTIST"].toString().toCString(true);
   if (f.isNull() || !f.audioProperties()) {
     return false;
   }
   TagLib::AudioProperties* properties = f.audioProperties();
-  playContent->audioBitRate = properties->bitrate();
+  playContent->bitRate = properties->bitrate();
+  playContent->sampleRate = properties->sampleRate();
+  playContent->channels = properties->channels();
+  playContent->length = properties->length();
   return true;
 }
 

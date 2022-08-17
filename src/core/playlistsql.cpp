@@ -28,11 +28,27 @@
 #define SQL_CLEAR_PLAYLIST_INFO \
   QString("DELETE FROM %1;").arg(SQL_MASTER_TABLE_NAME)
 
-#define SQL_SAVE_PLAYLIST                                                   \
+#define SQL_SAVE_INFO_TABLE                                                 \
   QString(                                                                  \
       "REPLACE INTO %1(id, sort, playlist_name, table_name) VALUES(:v_id, " \
       ":v_sort, :v_playlist_name, :v_table_name);")                         \
       .arg(SQL_MASTER_TABLE_NAME)
+
+#define SQL_INIT_PLAYLIST_TABLE                                           \
+  "CREATE TABLE %1(id INT NOT NULL "                                      \
+  "PRIMARY KEY, path TEXT, title TEXT, artist "                           \
+  "TEXT, album_title TEXT, album_artist, album_year, album_track_count, " \
+  "track_number, bit_rate, sample_rate, genre, comment, channels, length);"
+
+#define SQL_SAVE_PLAYLIST_TABLE                                    \
+  "INSERT INTO %1(id  "                                            \
+  ", path, title, artist, album_title, album_artist, album_year, " \
+  "album_track_count, track_number, bit_rate, sample_rate, "       \
+  "genre, comment, channels, length) "                             \
+  "VALUES(:v_id, :v_path, :v_title, :v_artist, "                   \
+  ":v_album_title, :v_album_artist, :v_album_year, "               \
+  ":v_album_track_count, :v_track_number, :v_bit_rate, "           \
+  ":v_sample_rate, :v_genre, :v_comment, :v_channels, :v_length);"
 
 PlaylistSql* PlaylistSql::getInstance() {
   static PlaylistSql ps;
@@ -85,7 +101,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     const QString tableName =
         QString("playlist_%1_table").arg(SQL_RANDOM_NAME(playlistCount));
     const QString playlistName = info.info(PLAYLIST_INFO_NAME);
-    query.prepare(SQL_SAVE_PLAYLIST);
+    query.prepare(SQL_SAVE_INFO_TABLE);
     query.bindValue(QStringLiteral(":v_id"), playlistCount);
     query.bindValue(QStringLiteral(":v_sort"), playlistCount);
     query.bindValue(QStringLiteral(":v_playlist_name"), playlistName);
@@ -100,10 +116,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       goto exit;
     }
     // Create playlist table.
-    query.prepare(QString("CREATE TABLE %1(id INT NOT NULL "
-                          "PRIMARY KEY, path TEXT, title TEXT, artist "
-                          "TEXT, album_title TEXT);")
-                      .arg(tableName));
+    query.prepare(QString(SQL_INIT_PLAYLIST_TABLE).arg(tableName));
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
@@ -115,16 +128,24 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     // Insert playlist data.
     int contentCount = 0;
     for (auto c : playlist.content()) {
-      query.prepare(QString("INSERT INTO %1(id  "
-                            ", path, title, artist, album_title) "
-                            "VALUES(:v_id, :v_path, :v_title, :v_artist, "
-                            ":v_album_title);")
-                        .arg(tableName));
+      query.prepare(QString(SQL_SAVE_PLAYLIST_TABLE).arg(tableName));
       query.bindValue(QStringLiteral(":v_id"), contentCount);
       query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
       query.bindValue(QStringLiteral(":v_title"), c->value("Title"));
       query.bindValue(QStringLiteral(":v_artist"), c->value("Artist"));
       query.bindValue(QStringLiteral(":v_album_title"), c->value("AlbumTitle"));
+      query.bindValue(QStringLiteral(":v_album_artist"),
+                      c->value("AlbumArtist"));
+      query.bindValue(QStringLiteral(":v_album_year"), c->value("AlbumYear"));
+      query.bindValue(QStringLiteral(":v_album_track_count"),
+                      c->value("AlbumTrackCount"));
+      query.bindValue(QStringLiteral(":v_track_count"), c->value("TrackCount"));
+      query.bindValue(QStringLiteral(":v_bit_rate"), c->value("BitRate"));
+      query.bindValue(QStringLiteral(":v_sample_rate"), c->value("SampleRate"));
+      query.bindValue(QStringLiteral(":v_genre"), c->value("Genre"));
+      query.bindValue(QStringLiteral(":v_comment"), c->value("Comment"));
+      query.bindValue(QStringLiteral(":v_channels"), c->value("Channels"));
+      query.bindValue(QStringLiteral(":v_length"), c->value("Length"));
       ok = query.exec();
       if (!ok) {
         m_database.rollback();
@@ -212,16 +233,23 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     goto exit;
   }
   for (auto c : playlist.content()) {
-    query.prepare(QString("INSERT INTO %1(id  "
-                          ", path, title, artist, album_title) "
-                          "VALUES(:v_id, :v_path, :v_title, :v_artist, "
-                          ":v_album_title);")
-                      .arg(tableName));
+    query.prepare(QString(SQL_SAVE_PLAYLIST_TABLE).arg(tableName));
     query.bindValue(QStringLiteral(":v_id"), contentCount);
     query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
     query.bindValue(QStringLiteral(":v_title"), c->value("Title"));
     query.bindValue(QStringLiteral(":v_artist"), c->value("Artist"));
     query.bindValue(QStringLiteral(":v_album_title"), c->value("AlbumTitle"));
+    query.bindValue(QStringLiteral(":v_album_artist"), c->value("AlbumArtist"));
+    query.bindValue(QStringLiteral(":v_album_year"), c->value("AlbumYear"));
+    query.bindValue(QStringLiteral(":v_album_track_count"),
+                    c->value("AlbumTrackCount"));
+    query.bindValue(QStringLiteral(":v_track_count"), c->value("TrackCount"));
+    query.bindValue(QStringLiteral(":v_bit_rate"), c->value("BitRate"));
+    query.bindValue(QStringLiteral(":v_sample_rate"), c->value("SampleRate"));
+    query.bindValue(QStringLiteral(":v_genre"), c->value("Genre"));
+    query.bindValue(QStringLiteral(":v_comment"), c->value("Comment"));
+    query.bindValue(QStringLiteral(":v_channels"), c->value("Channels"));
+    query.bindValue(QStringLiteral(":v_length"), c->value("Length"));
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
@@ -300,9 +328,20 @@ exit:
 PlaylistSql::PlaylistSql()
     : m_database(
           QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)),
-      m_titleMap(QMap<QString, QString>{{"Title", "title"},
-                                        {"Artist", "artist"},
-                                        {"AlbumTitle", "album_title"}}) {
+      m_titleMap(
+          QMap<QString, QString>{{"Title", "title"},
+                                 {"Artist", "artist"},
+                                 {"AlbumTitle", "album_title"},
+                                 {"AlbumArtist", "album_artist"},
+                                 {"AlbumYear", "album_year"},
+                                 {"AlbumTrackCount", "album_track_count"},
+                                 {"TrackNumber", "track_number"},
+                                 {"BitRate", "bit_rate"},
+                                 {"SampleRate", "sample_rate"},
+                                 {"Genre", "genre"},
+                                 {"Comment", "comment"},
+                                 {"Channels", "channels"},
+                                 {"Length", "length"}}) {
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "can not open playlist database" << SQL_DB_NAME;
@@ -360,12 +399,16 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
       break;
     }
   }
+  if (tableName.isEmpty()) {
+    qDebug() << "can not load playlist with order for a null table name";
+    goto exit;
+  }
   ok = q.exec(QString("SELECT * FROM %1 ORDER BY %2 %3")
                   .arg(tableName, sqlColumnName,
                        order == Qt::DescendingOrder ? "DESC" : "ASC"));
   if (!ok) {
     qDebug() << "can not load playlist with order" << playlistName << ":"
-             << q.lastError();
+             << q.lastError() << tableName << sqlColumnName;
     goto exit;
   }
   while (q.next()) {
@@ -373,6 +416,16 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     playContent->title = q.value("title").toString();
     playContent->artist = q.value("artist").toString();
     playContent->albumTitle = q.value("album_title").toString();
+    playContent->albumArtist = q.value("album_artist").toString();
+    playContent->albumYear = q.value("album_year").toInt();
+    playContent->albumTrackCount = q.value("album_track_count").toInt();
+    playContent->trackNumber = q.value("track_number").toInt();
+    playContent->bitRate = q.value("bit_rate").toInt();
+    playContent->sampleRate = q.value("sample_rate").toInt();
+    playContent->genre = q.value("genre").toString();
+    playContent->comment = q.value("comment").toString();
+    playContent->channels = q.value("channels").toInt();
+    playContent->length = q.value("length").toInt();
     list->append(playContent);
   }
   playlist->setContent(list);
