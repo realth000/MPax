@@ -7,13 +7,13 @@
 
 #include "audio/coreplayer.h"
 #include "gui/playlistsearchdialog.h"
+#include "gui/systemtrayicon.h"
 #include "model/listtabmodel.h"
 #include "model/playlistmodel.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainUI;
-typedef QPair<int, PlayContent *> PlayContentPair;
+QT_BEGIN_NAMESPACE namespace Ui {
+  class MainUI;
+  typedef QPair<int, PlayContent *> PlayContentPair;
 }  // namespace Ui
 QT_END_NAMESPACE
 class MainUI : public QMainWindow {
@@ -37,6 +37,7 @@ class MainUI : public QMainWindow {
   int m_historyPos;
   PlaylistSearchDialog *m_searchDialog;
   QLabel *m_statusLabel;
+  SystemTrayIcon *m_trayIcon;
 
   PlayContent *addAudioFile(const QString &filePath);
   void addAudioFileList(const QStringList &filePathList,
@@ -64,5 +65,8 @@ class MainUI : public QMainWindow {
   void updateReloadInfoStatus(const QString &playlistName, bool finished,
                               int count, qint64 time);
   void handleCurrentPlayContentChanged(const QUrl &contentUrl);
+  void updateMainWindowVisible(bool toShow);
+  void exitApp();
+  void restartApp();
 };
 #endif  // MAINUI_H

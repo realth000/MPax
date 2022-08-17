@@ -99,7 +99,7 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="137"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="170"/>
-        <location filename="../../src/gui/mainui.cpp" line="185"/>
+        <location filename="../../src/gui/mainui.cpp" line="209"/>
         <source>Open audio</source>
         <translation>打开音频</translation>
     </message>
@@ -118,7 +118,7 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="152"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="173"/>
-        <location filename="../../src/gui/mainui.cpp" line="358"/>
+        <location filename="../../src/gui/mainui.cpp" line="382"/>
         <source>Save playlist</source>
         <translation>保存播放列表</translation>
     </message>
@@ -157,39 +157,39 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="187"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="180"/>
-        <location filename="../../src/gui/mainui.cpp" line="407"/>
+        <location filename="../../src/gui/mainui.cpp" line="431"/>
         <source>About MPax</source>
         <translation>关于MPax</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="192"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="181"/>
-        <location filename="../../src/gui/mainui.cpp" line="411"/>
+        <location filename="../../src/gui/mainui.cpp" line="435"/>
         <source>About Qt</source>
         <translation>关于Qt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="186"/>
+        <location filename="../../src/gui/mainui.cpp" line="210"/>
         <source>Audio files</source>
         <translation>音频文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="251"/>
+        <location filename="../../src/gui/mainui.cpp" line="275"/>
         <source>Scan directory</source>
         <translation>扫描文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="275"/>
+        <location filename="../../src/gui/mainui.cpp" line="299"/>
         <source>Loading audio info</source>
         <translation>正在加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="417"/>
+        <location filename="../../src/gui/mainui.cpp" line="441"/>
         <source>reloading audio info</source>
         <translation>正在重新加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="421"/>
+        <location filename="../../src/gui/mainui.cpp" line="445"/>
         <source>reloaded audio info</source>
         <translation>已重新加载音频信息</translation>
     </message>
@@ -376,6 +376,34 @@
         <location filename="../../external/QHotkey/qhotkey.cpp" line="314"/>
         <source>Failed to unregister %1. Error: %2</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>SystemTrayIcon</name>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="19"/>
+        <source>Show/Hide main window</source>
+        <translation>显示/隐藏主窗口</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="20"/>
+        <source>Exit app</source>
+        <translation>退出程序</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="21"/>
+        <source>Restart app</source>
+        <translation>重启程序</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="34"/>
+        <source>Hide main window</source>
+        <translation>隐藏主窗口</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="35"/>
+        <source>Show main window</source>
+        <translation>显示主窗口</translation>
     </message>
 </context>
 </TS>
