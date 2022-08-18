@@ -13,6 +13,8 @@
 #include "taglib/tag.h"
 #include "tpropertymap.h"
 
+#define CSTR(QSTR) QSTR.toStdString().c_str()
+
 bool AudioInfo::readAudioInfo(const QString& audioPath,
                               PlayContent* playContent, InfoOption infoOption) {
   TagLib::FileRef f(audioPath.toUtf8().constData());
@@ -64,6 +66,42 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   playContent->sampleRate = properties->sampleRate();
   playContent->channels = properties->channels();
   playContent->length = properties->length();
+  return true;
+}
+
+bool AudioInfo::writeAudioInfo(const QString& audioPath,
+                               const PlayContent* playContent) {
+  if (audioPath.isEmpty()) {
+    qDebug()
+        << "error writing audio info: intend to save audio info in empty path";
+    return false;
+  }
+  if (playContent == nullptr) {
+    qDebug() << "error writing audio info: intend to save audio info from a "
+                "null play content";
+    return false;
+  }
+
+  TagLib::FileRef f(audioPath.toUtf8().constData());
+  TagLib::ID3v2::Tag pf(f.file(), 0);
+
+  if (f.isNull() || !f.tag()) {
+    qDebug() << "error writing audio info: audio file not readable:"
+             << audioPath;
+    return false;
+  }
+  pf.setTitle(CSTR(playContent->title));
+  pf.setArtist(CSTR(playContent->artist));
+  pf.setAlbum(CSTR(playContent->albumTitle));
+  pf.setYear(playContent->albumYear);
+  pf.setTrack(playContent->trackNumber);
+  pf.setGenre(CSTR(playContent->genre));
+  pf.setComment(CSTR(playContent->comment));
+
+  TagLib::PropertyMap map;
+  map.insert("ALBUMARTIST", TagLib::StringList{CSTR(playContent->albumArtist)});
+  f.file()->setProperties(map);
+  f.file()->save();
   return true;
 }
 
