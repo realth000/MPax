@@ -362,8 +362,18 @@ void PlayControlWidget::InitShortcut() {
   connect(m_playPauseKey, &QHotkey::activated, this,
           &PlayControlWidget::updatePlay);
   connect(m_playPreKey, &QHotkey::activated, this, &PlayControlWidget::playPre);
+  connect(m_playPreKey, &QHotkey::activated, this, [this]() {
+    QTimer::singleShot(50, this, [this]() {
+      emit currentPlayContentChanged(m_currentContentUrl);
+    });
+  });
   connect(m_playNextKey, &QHotkey::activated, this,
           &PlayControlWidget::playNext);
+  connect(m_playNextKey, &QHotkey::activated, this, [this]() {
+    QTimer::singleShot(50, this, [this]() {
+      emit currentPlayContentChanged(m_currentContentUrl);
+    });
+  });
 }
 
 PlayControlWidget::PlayMode PlayControlWidget::playMode() const {
