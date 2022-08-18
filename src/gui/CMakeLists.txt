@@ -1,6 +1,7 @@
 add_subdirectory(widget)
 target_sources(MPax PRIVATE systemtrayicon.h systemtrayicon.cpp)
 target_sources(MPax PRIVATE progressdialog.h progressdialog.cpp progressdialog.ui)
+target_sources(MPax PRIVATE audioinfodialog.h audioinfodialog.cpp audioinfodialog.ui)
 target_sources(MPax PRIVATE playlistwidget.h playlistwidget.cpp playlistwidget.ui)
 target_sources(MPax PRIVATE listtabwidget.h listtabwidget.cpp listtabwidget.ui)
 target_sources(MPax PRIVATE playcontrolwidget.h playcontrolwidget.cpp playcontrolwidget.ui)

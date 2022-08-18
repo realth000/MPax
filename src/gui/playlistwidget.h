@@ -63,6 +63,7 @@ class PlaylistWidget : public QWidget {
   void actionDelete();
   void actionOpenInFolder();
   void actionPlay();
+  void actionShowPropertyDialog();
 
  private slots:
   void openTableViewContextMenu(const QPoint &pos);

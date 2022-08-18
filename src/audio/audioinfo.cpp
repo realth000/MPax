@@ -10,10 +10,12 @@
 #include "taglib/fileref.h"
 #include "taglib/mpeg/id3v2/frames/attachedpictureframe.h"
 #include "taglib/mpeg/id3v2/id3v2tag.h"
+#include "taglib/mpeg/mpegfile.h"
 #include "taglib/tag.h"
 #include "tpropertymap.h"
 
-#define CSTR(QSTR) QSTR.toStdString().c_str()
+#define TAGLIB_STR(QSTR) \
+  TagLib::String((QSTR).toUtf8().data(), TagLib::String::UTF8)
 
 bool AudioInfo::readAudioInfo(const QString& audioPath,
                               PlayContent* playContent, InfoOption infoOption) {
@@ -82,26 +84,33 @@ bool AudioInfo::writeAudioInfo(const QString& audioPath,
     return false;
   }
 
-  TagLib::FileRef f(audioPath.toUtf8().constData());
-  TagLib::ID3v2::Tag pf(f.file(), 0);
+  TagLib::ID3v2::FrameFactory::instance()->setDefaultTextEncoding(
+      TagLib::String::UTF8);
 
-  if (f.isNull() || !f.tag()) {
+  TagLib::MPEG::File f(audioPath.toUtf8().constData());
+
+  if (!f.tag()) {
     qDebug() << "error writing audio info: audio file not readable:"
              << audioPath;
     return false;
   }
-  pf.setTitle(CSTR(playContent->title));
-  pf.setArtist(CSTR(playContent->artist));
-  pf.setAlbum(CSTR(playContent->albumTitle));
-  pf.setYear(playContent->albumYear);
-  pf.setTrack(playContent->trackNumber);
-  pf.setGenre(CSTR(playContent->genre));
-  pf.setComment(CSTR(playContent->comment));
+  f.ID3v2Tag()->setTitle(TAGLIB_STR(playContent->title));
+  f.ID3v2Tag()->setArtist(TAGLIB_STR(playContent->artist));
+  f.ID3v2Tag()->setAlbum(TAGLIB_STR(playContent->albumTitle));
+  if (playContent->albumYear > 0) {
+    f.ID3v2Tag()->setYear(playContent->albumYear);
+  }
+  if (playContent->trackNumber > 0) {
+    f.ID3v2Tag()->setTrack(playContent->trackNumber);
+  }
+  f.ID3v2Tag()->setGenre(TAGLIB_STR(playContent->genre));
+  f.ID3v2Tag()->setComment(TAGLIB_STR(playContent->comment));
 
-  TagLib::PropertyMap map;
-  map.insert("ALBUMARTIST", TagLib::StringList{CSTR(playContent->albumArtist)});
-  f.file()->setProperties(map);
-  f.file()->save();
+  TagLib::PropertyMap map = f.properties();
+  map.replace("ALBUMARTIST",
+              TagLib::StringList{TAGLIB_STR(playContent->albumArtist)});
+  //  f.file()->setProperties(map);
+  f.save(TagLib::MPEG::File::ID3v2);
   return true;
 }
 

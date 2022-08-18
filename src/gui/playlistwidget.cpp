@@ -7,6 +7,7 @@
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QScrollBar>
 
+#include "audioinfodialog.h"
 #include "config/appconfig.h"
 #include "model/playlistmodelheader.h"
 #include "ui_playlistwidget.h"
@@ -177,10 +178,15 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   QAction *actionOpen = new QAction(tr("Open in folder"));
   connect(actionOpen, &QAction::triggered, this,
           &PlaylistWidget::actionOpenInFolder);
+  QAction *actionProperty = new QAction(tr("Property"));
+  connect(actionProperty, &QAction::triggered, this,
+          &PlaylistWidget::actionShowPropertyDialog);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
   m->addAction(actionPlay);
+  m->addSeparator();
+  m->addAction(actionProperty);
   return m;
 }
 
@@ -333,4 +339,18 @@ void PlaylistWidget::scrollToContent(const QString &contentPath) {
   ui->tableView->scrollTo(showIndex, QAbstractItemView::PositionAtCenter);
   ui->tableView->clearSelection();
   ui->tableView->selectRow(showIndex.row());
+}
+
+void PlaylistWidget::actionShowPropertyDialog() {
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  const QModelIndex i = m_tableViewSelectedRows[0];
+  PlayContentPos c =
+      m_showingModel->content(m_showingFilterModel->mapToSource(i).row());
+  if (c.index < 0 || c.content == nullptr) {
+    return;
+  }
+  AudioInfoDialog *dialog = new AudioInfoDialog(c.content, this);
+  dialog->exec();
 }
