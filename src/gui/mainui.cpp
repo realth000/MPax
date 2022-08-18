@@ -78,6 +78,7 @@ MainUI::MainUI(QWidget *parent)
   }
   appendHistory(cp);
   playAudioInShowingList(cp.index, cp.content);
+  emit scrollToContent(cp.content->contentPath);
 }
 
 MainUI::~MainUI() {

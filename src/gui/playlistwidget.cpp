@@ -331,5 +331,6 @@ void PlaylistWidget::scrollToContent(const QString &contentPath) {
     return;
   }
   ui->tableView->scrollTo(showIndex, QAbstractItemView::PositionAtCenter);
+  ui->tableView->clearSelection();
   ui->tableView->selectRow(showIndex.row());
 }
