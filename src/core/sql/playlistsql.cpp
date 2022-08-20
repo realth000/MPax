@@ -124,7 +124,18 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       goto exit;
     }
     // Create playlist table.
+#if 1
+    ok = prepareSql(&query, nullptr, tableName, SqlAction::Create,
+                    QStringList{});
+    if (!ok) {
+      m_database.rollback();
+      m_nameVector = nameVectorBackup;
+      qDebug() << "can not create playlist table: failed to prepare sql";
+      goto exit;
+    }
+#else
     query.prepare(QString(SQL_INIT_PLAYLIST_TABLE).arg(tableName));
+#endif
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
@@ -242,6 +253,11 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
   int contentCount = 0;
   const QString tableName = m_nameVector[index].first;
   const QString playlistName = m_nameVector[index].second;
+  const QStringList headerList =
+      QStringList{"ContentPath", "Title",      "Artist",          "AlbumTitle",
+                  "AlbumArtist", "AlbumYear",  "AlbumTrackCount", "TrackNumber",
+                  "BitRate",     "SampleRate", "Genre",           "Comment",
+                  "Channels",    "Length"};
   qDebug() << "update playlist" << tableName << playlistName;
   if (!tryOpenDatabase()) {
     qDebug() << "database not open, failed to update" << playlistName;
@@ -256,7 +272,17 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     m_database.rollback();
     goto exit;
   }
+
   for (auto c : playlist.content()) {
+#if 1
+    ok = prepareSql(&query, c, tableName, SqlAction::Insert, headerList,
+                    contentCount);
+    if (!ok) {
+      m_database.rollback();
+      qDebug() << "can not create playlist table: failed to prepare sql";
+      goto exit;
+    }
+#else
     query.prepare(QString(SQL_SAVE_PLAYLIST_TABLE).arg(tableName));
     query.bindValue(QStringLiteral(":v_id"), contentCount);
     query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
@@ -274,6 +300,7 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     query.bindValue(QStringLiteral(":v_comment"), c->value("Comment"));
     query.bindValue(QStringLiteral(":v_channels"), c->value("Channels"));
     query.bindValue(QStringLiteral(":v_length"), c->value("Length"));
+#endif
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
@@ -552,8 +579,12 @@ exit:
 bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
                              const QString& tableName, SqlAction action,
                              const QStringList& columnList, int id) {
-  if (query == nullptr || playContent == nullptr) {
-    qDebug() << "failed to generate sql: invalid query or play content";
+  if (query == nullptr) {
+    qDebug() << "failed to generate sql: null query";
+    return false;
+  }
+  if (action != SqlAction::Create && playContent == nullptr) {
+    qDebug() << "failed to generate sql: null play content";
     return false;
   }
   switch (action) {
@@ -571,15 +602,10 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
   switch (action) {
     case SqlAction::Create: {
       QString columnPart;
-      for (auto& column : columnList) {
-        if (!m_titleMap.contains(column)) {
-          qDebug() << "failed to generate sql: unknown column title " << column;
-          return false;
-        }
-        columnPart += QString("%1 %2 %3, ")
-                          .arg(m_titleMap.value(column).name,
-                               m_titleMap.value(column).type,
-                               m_titleMap.value(column).properties);
+      for (auto it = m_titleMap.cbegin(); it != m_titleMap.cend(); it++) {
+        columnPart +=
+            QString("%1 %2 %3, ")
+                .arg(it.value().name, it.value().type, it.value().properties);
       }
       columnPart.chop(2);
       queryStatement =
@@ -632,9 +658,11 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
   }
 
   query->prepare(queryStatement);
-  for (auto& column : columnList) {
-    query->bindValue(":v_" + m_titleMap.value(column).name,
-                     playContent->value(column));
+  if (action != SqlAction::Create) {
+    for (auto& column : columnList) {
+      query->bindValue(":v_" + m_titleMap.value(column).name,
+                       playContent->value(column));
+    }
   }
 
   if (id >= 0) {
