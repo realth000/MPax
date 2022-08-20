@@ -49,6 +49,19 @@ QLineEdit *AudioInfoDialog::readonlyLineEdit(const int &text,
 
 void AudioInfoDialog::initUi() {
   this->setWindowTitle(tr("Property - ") + m_content->title);
+
+  setTabOrder(ui->okButton, ui->cancelButton);
+  setTabOrder(ui->cancelButton, ui->okButton);
+
+  ui->statusBar->setVisible(false);
+
+  ui->metadataTab->setFocusPolicy(Qt::NoFocus);
+  ui->metadataTable->setFocusPolicy(Qt::NoFocus);
+  ui->detailTable->setFocusPolicy(Qt::NoFocus);
+  ui->coverTab->setFocusPolicy(Qt::NoFocus);
+  //  ui->cancelButton->setFocusPolicy(Qt::NoFocus);
+  ui->okButton->setFocus();
+
   ui->tab->setCurrentIndex(0);
   ui->tab->setTabText(0, tr("Meta data"));
   ui->tab->setTabText(1, tr("Detail"));
@@ -59,8 +72,6 @@ void AudioInfoDialog::initUi() {
 
   initMetadataTable();
   initDetailTable();
-
-  ui->okButton->setFocus();
 }
 
 void AudioInfoDialog::initConnections() {
@@ -115,9 +126,15 @@ void AudioInfoDialog::initMetadataTable() {
   m_artistItem->setText(m_content->artist);
   m_albumTitleItem->setText(m_content->albumTitle);
   m_albumArtistItem->setText(m_content->albumArtist);
-  m_albumYearItem->setText(QString::number(m_content->albumYear));
-  m_trackNumberItem->setText(QString::number(m_content->trackNumber));
-  m_albumTotalTrackItem->setText(QString::number(m_content->albumTrackCount));
+  if (m_content->albumYear > 0) {
+    m_albumYearItem->setText(QString::number(m_content->albumYear));
+  }
+  if (m_content->trackNumber > 0) {
+    m_trackNumberItem->setText(QString::number(m_content->trackNumber));
+  }
+  if (m_content->albumTrackCount > 0) {
+    m_albumTotalTrackItem->setText(QString::number(m_content->albumTrackCount));
+  }
   m_genreItem->setText(m_content->genre);
   m_commentItem->setText(m_content->comment);
 }
@@ -186,9 +203,15 @@ void AudioInfoDialog::saveAudioInfo() {
   m_content->artist = m_artistItem->text();
   m_content->albumTitle = m_albumTitleItem->text();
   m_content->albumArtist = m_albumArtistItem->text();
-  m_content->albumYear = m_albumYearItem->text().toInt();
-  m_content->trackNumber = m_trackNumberItem->text().toInt();
-  m_content->albumTrackCount = m_albumTotalTrackItem->text().toInt();
+  if (m_albumYearItem->text().toInt() > 0) {
+    m_content->albumYear = m_albumYearItem->text().toInt();
+  }
+  if (m_trackNumberItem->text().toInt() > 0) {
+    m_content->trackNumber = m_trackNumberItem->text().toInt();
+  }
+  if (m_albumTotalTrackItem->text().toInt() > 0) {
+    m_content->albumTrackCount = m_albumTotalTrackItem->text().toInt();
+  }
   m_content->genre = m_genreItem->text();
   m_content->comment = m_commentItem->text();
 
