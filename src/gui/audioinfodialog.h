@@ -34,6 +34,7 @@ class AudioInfoDialog : public QDialog {
   QTableWidgetItem *m_albumArtistItem;
   QTableWidgetItem *m_albumYearItem;
   QTableWidgetItem *m_trackNumberItem;
+  QTableWidgetItem *m_albumTotalTrackItem;
   QTableWidgetItem *m_genreItem;
   QTableWidgetItem *m_commentItem;
 

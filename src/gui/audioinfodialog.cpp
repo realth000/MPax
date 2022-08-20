@@ -20,6 +20,7 @@ AudioInfoDialog::AudioInfoDialog(PlayContent *playContent, QWidget *parent)
       m_albumArtistItem(new QTableWidgetItem()),
       m_albumYearItem(new QTableWidgetItem()),
       m_trackNumberItem(new QTableWidgetItem()),
+      m_albumTotalTrackItem(new QTableWidgetItem()),
       m_genreItem(new QTableWidgetItem()),
       m_commentItem(new QTableWidgetItem()) {
   ui->setupUi(this);
@@ -87,7 +88,7 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->horizontalHeader()->setStretchLastSection(true);
 
   ui->metadataTable->setHorizontalHeaderLabels(m_headerList);
-  ui->metadataTable->setRowCount(8);
+  ui->metadataTable->setRowCount(9);
 
   ui->metadataTable->setCellWidget(0, 0, readonlyLineEdit(tr("Title")));
   ui->metadataTable->setCellWidget(1, 0, readonlyLineEdit(tr("Artist")));
@@ -95,8 +96,10 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->setCellWidget(3, 0, readonlyLineEdit(tr("Album artist")));
   ui->metadataTable->setCellWidget(4, 0, readonlyLineEdit(tr("Album year")));
   ui->metadataTable->setCellWidget(5, 0, readonlyLineEdit(tr("Track number")));
-  ui->metadataTable->setCellWidget(6, 0, readonlyLineEdit(tr("Genre")));
-  ui->metadataTable->setCellWidget(7, 0, readonlyLineEdit(tr("Comment")));
+  ui->metadataTable->setCellWidget(6, 0,
+                                   readonlyLineEdit(tr("Album total tracks")));
+  ui->metadataTable->setCellWidget(7, 0, readonlyLineEdit(tr("Genre")));
+  ui->metadataTable->setCellWidget(8, 0, readonlyLineEdit(tr("Comment")));
 
   ui->metadataTable->setItem(0, 1, m_titleItem);
   ui->metadataTable->setItem(1, 1, m_artistItem);
@@ -104,8 +107,9 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->setItem(3, 1, m_albumArtistItem);
   ui->metadataTable->setItem(4, 1, m_albumYearItem);
   ui->metadataTable->setItem(5, 1, m_trackNumberItem);
-  ui->metadataTable->setItem(6, 1, m_genreItem);
-  ui->metadataTable->setItem(7, 1, m_commentItem);
+  ui->metadataTable->setItem(6, 1, m_albumTotalTrackItem);
+  ui->metadataTable->setItem(7, 1, m_genreItem);
+  ui->metadataTable->setItem(8, 1, m_commentItem);
 
   m_titleItem->setText(m_content->title);
   m_artistItem->setText(m_content->artist);
@@ -113,6 +117,7 @@ void AudioInfoDialog::initMetadataTable() {
   m_albumArtistItem->setText(m_content->albumArtist);
   m_albumYearItem->setText(QString::number(m_content->albumYear));
   m_trackNumberItem->setText(QString::number(m_content->trackNumber));
+  m_albumTotalTrackItem->setText(QString::number(m_content->albumTrackCount));
   m_genreItem->setText(m_content->genre);
   m_commentItem->setText(m_content->comment);
 }
@@ -183,6 +188,7 @@ void AudioInfoDialog::saveAudioInfo() {
   m_content->albumArtist = m_albumArtistItem->text();
   m_content->albumYear = m_albumYearItem->text().toInt();
   m_content->trackNumber = m_trackNumberItem->text().toInt();
+  m_content->albumTrackCount = m_albumTotalTrackItem->text().toInt();
   m_content->genre = m_genreItem->text();
   m_content->comment = m_commentItem->text();
 
