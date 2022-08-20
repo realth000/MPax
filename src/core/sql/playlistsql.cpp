@@ -34,11 +34,12 @@
       ":v_sort, :v_playlist_name, :v_table_name);")                         \
       .arg(SQL_MASTER_TABLE_NAME)
 
-#define SQL_INIT_PLAYLIST_TABLE                                           \
-  "CREATE TABLE %1(id INT NOT NULL "                                      \
-  "PRIMARY KEY, path TEXT, title TEXT, artist "                           \
-  "TEXT, album_title TEXT, album_artist, album_year, album_track_count, " \
-  "track_number, bit_rate, sample_rate, genre, comment, channels, length);"
+#define SQL_INIT_PLAYLIST_TABLE                                             \
+  "CREATE TABLE %1(id INT NOT NULL PRIMARY KEY, path TEXT, title TEXT, "    \
+  "artist TEXT, album_title TEXT, "                                         \
+  "album_artist TEXT, album_year INT, album_track_count INT, track_number " \
+  "INT, bit_rate INT, sample_rate INT, genre TEXT, comment "                \
+  "TEXT, channels INT, length INT);"
 
 #define SQL_SAVE_PLAYLIST_TABLE                                    \
   "INSERT INTO %1(id  "                                            \
@@ -293,7 +294,8 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
   const QString sortHeaderName =
       m_titleMap[Config::AppConfig::getInstance()
                      ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                     .value.toString()];
+                     .value.toString()]
+          .name;
   const int sortOrder = Config::AppConfig::getInstance()
                             ->config(CONFIG_PLAYLIST_SORT_ORDER)
                             .value.toInt();
@@ -350,22 +352,40 @@ exit:
 
 PlaylistSql::PlaylistSql()
     : m_database(
-          QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)),
-      m_titleMap(
+          QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)) {
+#if 1
+  m_titleMap.insert("ContentPath", ColumnHeader{"path", "TEXT"});
+  m_titleMap.insert("Title", ColumnHeader{"title", "TEXT"});
+  m_titleMap.insert("Artist", ColumnHeader{"artist", "TEXT"});
+  m_titleMap.insert("AlbumTitle", ColumnHeader{"album_title", "TEXT"});
+  m_titleMap.insert("AlbumArtist", ColumnHeader{"album_artist", "TEXT"});
+  m_titleMap.insert("AlbumYear", ColumnHeader{"album_year", "INT"});
+  m_titleMap.insert("AlbumTrackCount",
+                    ColumnHeader{"album_track_count", "INT"});
+  m_titleMap.insert("TrackNumber", ColumnHeader{"track_number", "INT"});
+  m_titleMap.insert("BitRate", ColumnHeader{"bit_rate", "INT"});
+  m_titleMap.insert("SampleRate", ColumnHeader{"sample_rate", "INT"});
+  m_titleMap.insert("Genre", ColumnHeader{"genre", "TEXT"});
+  m_titleMap.insert("Comment", ColumnHeader{"comment", "TEXT"});
+  m_titleMap.insert("Channels", ColumnHeader{"channels", "INT"});
+  m_titleMap.insert("Length", ColumnHeader{"length", "INT"});
+#else
+    m_titleMap(
           QMap<QString, QString>{{"ContentPath", "path"},
-                                 {"Title", "title"},
-                                 {"Artist", "artist"},
-                                 {"AlbumTitle", "album_title"},
-                                 {"AlbumArtist", "album_artist"},
-                                 {"AlbumYear", "album_year"},
-                                 {"AlbumTrackCount", "album_track_count"},
-                                 {"TrackNumber", "track_number"},
-                                 {"BitRate", "bit_rate"},
-                                 {"SampleRate", "sample_rate"},
-                                 {"Genre", "genre"},
-                                 {"Comment", "comment"},
-                                 {"Channels", "channels"},
-                                 {"Length", "length"}}) {
+        {"Title", "title"},
+        {"Artist", "artist"},
+        {"AlbumTitle", "album_title"},
+        {"AlbumArtist", "album_artist"},
+        {"AlbumYear", "album_year"},
+        {"AlbumTrackCount", "album_track_count"},
+        {"TrackNumber", "track_number"},
+        {"BitRate", "bit_rate"},
+        {"SampleRate", "sample_rate"},
+        {"Genre", "genre"},
+        {"Comment", "comment"},
+        {"Channels", "channels"},
+    {"Length", "length"}};
+#endif
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "can not open playlist database" << SQL_DB_NAME;
@@ -413,7 +433,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   QString tableName;
   bool ok;
   QSqlQuery q(m_database);
-  const QString sqlColumnName = m_titleMap[columnName];
+  const QString sqlColumnName = m_titleMap[columnName].name;
   if (sqlColumnName.isEmpty()) {
     goto exit;
   }
@@ -549,13 +569,24 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
   QString queryStatement;
 
   switch (action) {
-    case SqlAction::Create:
-      qDebug() << "create action not implemented yet";
-      return false;
-      //      queryStatement =
-      //          QString("CREATE TABLE %1(id INT NOT NULL PRIMARY
-      //          KEY").arg(tableName);
-      //      break;
+    case SqlAction::Create: {
+      QString columnPart;
+      for (auto& column : columnList) {
+        if (!m_titleMap.contains(column)) {
+          qDebug() << "failed to generate sql: unknown column title " << column;
+          return false;
+        }
+        columnPart += QString("%1 %2 %3, ")
+                          .arg(m_titleMap.value(column).name,
+                               m_titleMap.value(column).type,
+                               m_titleMap.value(column).properties);
+      }
+      columnPart.chop(2);
+      queryStatement =
+          QString("CREATE TABLE %1(id INT NOT NULL PRIMARY KEY, %2);")
+              .arg(tableName, columnPart);
+      break;
+    }
     case SqlAction::Insert: {
       QString columnNamesPart;
       QString columnValuePart;
@@ -564,8 +595,8 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
           qDebug() << "failed to generate sql: unknown column title " << column;
           return false;
         }
-        columnNamesPart += m_titleMap.value(column) + ", ";
-        columnValuePart += ":v_" + m_titleMap.value(column) + ", ";
+        columnNamesPart += m_titleMap.value(column).name + ", ";
+        columnValuePart += ":v_" + m_titleMap.value(column).name + ", ";
       }
       if (id >= 0) {
         columnNamesPart += "id, ";
@@ -584,8 +615,8 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
           qDebug() << "failed to generate sql: unknown column title " << column;
           return false;
         }
-        columnPart +=
-            m_titleMap.value(column) + "=:v_" + m_titleMap.value(column) + ", ";
+        columnPart += m_titleMap.value(column).name + "=:v_" +
+                      m_titleMap.value(column).name + ", ";
       }
       if (id >= 0) {
         columnPart += "id=:v_id, ";
@@ -602,7 +633,7 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
 
   query->prepare(queryStatement);
   for (auto& column : columnList) {
-    query->bindValue(":v_" + m_titleMap.value(column),
+    query->bindValue(":v_" + m_titleMap.value(column).name,
                      playContent->value(column));
   }
 

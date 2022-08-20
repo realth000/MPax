@@ -27,9 +27,16 @@ class PlaylistSql : public QObject {
 
  private:
   enum SqlAction : int { Create = 0, Insert, Update };
+
+  struct ColumnHeader {
+    QString name;
+    QString type;
+    QString properties;
+  };
+
   QSqlDatabase m_database;
   QVector<QPair<QString, QString>> m_nameVector;
-  QMap<QString, QString> m_titleMap;
+  QMap<QString, ColumnHeader> m_titleMap;
 
   PlaylistSql();
   ~PlaylistSql();
