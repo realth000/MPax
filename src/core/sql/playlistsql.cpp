@@ -337,7 +337,8 @@ PlaylistSql::PlaylistSql()
     : m_database(
           QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)),
       m_titleMap(
-          QMap<QString, QString>{{"Title", "title"},
+          QMap<QString, QString>{{"ContentPath", "path"},
+                                 {"Title", "title"},
                                  {"Artist", "artist"},
                                  {"AlbumTitle", "album_title"},
                                  {"AlbumArtist", "album_artist"},
@@ -472,6 +473,18 @@ void PlaylistSql::updatePlayContent(const Playlist* playlist,
   }
   m_database.transaction();
   QSqlQuery query(m_database);
+  bool ok = false;
+#if 1
+  ok = prepareSql(&query, playContent, tableName, SqlAction::Update,
+                  QStringList{"Title", "Artist", "AlbumTitle", "AlbumArtist",
+                              "AlbumYear", "AlbumTrackCount", "TrackNumber",
+                              "Genre", "Comment", "ContentPath"});
+  if (!ok) {
+    m_database.rollback();
+    qDebug() << __FUNCTION__ << " failed, can not prepare sql statement";
+    goto exit;
+  }
+#else
   query.prepare(QString(SQL_UPDATE_PLAYLIST_ROW).arg(tableName));
   query.bindValue(QStringLiteral(":v_title"), playContent->value("Title"));
   query.bindValue(QStringLiteral(":v_artist"), playContent->value("Artist"));
@@ -487,15 +500,94 @@ void PlaylistSql::updatePlayContent(const Playlist* playlist,
                   playContent->value("TrackNumber"));
   query.bindValue(QStringLiteral(":v_genre"), playContent->value("Genre"));
   query.bindValue(QStringLiteral(":v_comment"), playContent->value("Comment"));
-  query.bindValue(QStringLiteral(":v_path"), playContent->contentPath);
-  bool ok = query.exec();
+  query.bindValue(QStringLiteral(":v_path"), playContent->value("ContentPath"));
+#endif
+  ok = query.exec();
   if (!ok) {
+    m_database.rollback();
     qDebug() << "failed to update" << query.lastError() << query.lastQuery();
     goto exit;
   }
   m_database.commit();
 
 exit:
-  m_database.rollback();
   tryCloseDatabase();
+}
+
+bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
+                             const QString& tableName, SqlAction action,
+                             const QStringList& columnList, int id) {
+  if (query == nullptr || playContent == nullptr) {
+    qDebug() << "failed to generate sql: invalid query or play content";
+    return false;
+  }
+  switch (action) {
+    case SqlAction::Create:
+    case SqlAction::Insert:
+    case SqlAction::Update:
+      break;
+    default:
+      qDebug() << "failed to generate sql: unknown sql action " << action;
+      return false;
+  }
+
+  QString queryStatement;
+
+  switch (action) {
+    case SqlAction::Create:
+      qDebug() << "create action not implemented yet";
+      return false;
+      //      queryStatement =
+      //          QString("CREATE TABLE %1(id INT NOT NULL PRIMARY
+      //          KEY").arg(tableName);
+      //      break;
+    case SqlAction::Insert: {
+      QString columnNamesPart;
+      QString columnValuePart;
+      for (auto& column : columnList) {
+        if (!m_titleMap.contains(column)) {
+          qDebug() << "failed to generate sql: unknown column title " << column;
+          return false;
+        }
+        columnNamesPart += m_titleMap.value(column) + ", ";
+        columnValuePart += ":v_" + m_titleMap.value(column) + ", ";
+      }
+      columnNamesPart.chop(2);
+      columnValuePart.chop(2);
+      queryStatement = QString("INSERT INTO %1(%2) VALUES(%3);")
+                           .arg(tableName, columnNamesPart, columnValuePart);
+      break;
+    }
+    case SqlAction::Update: {
+      QString columnPart;
+      for (auto& column : columnList) {
+        if (!m_titleMap.contains(column)) {
+          qDebug() << "failed to generate sql: unknown column title " << column;
+          return false;
+        }
+        columnPart +=
+            m_titleMap.value(column) + "=:v_" + m_titleMap.value(column) + ", ";
+      }
+      columnPart.chop(2);
+      queryStatement = QString("UPDATE %1 SET %2 WHERE path=:v_path;")
+                           .arg(tableName, columnPart);
+      break;
+    }
+    default:
+      qDebug() << "failed to generate sql: unknown sql action " << action;
+      return false;
+  }
+
+  query->prepare(queryStatement);
+  for (auto& column : columnList) {
+    query->bindValue(":v_" + m_titleMap.value(column),
+                     playContent->value(column));
+  }
+  // Update action should restrict row.
+  // Current is by file path.
+  if (action == SqlAction::Update) {
+    query->bindValue(":v_path", playContent->value("ContentPath"));
+  }
+
+  return true;
 }

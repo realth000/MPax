@@ -26,6 +26,7 @@ class PlaylistSql : public QObject {
                          const PlayContent* playContent);
 
  private:
+  enum SqlAction : int { Create = 0, Insert, Update };
   QSqlDatabase m_database;
   QVector<QPair<QString, QString>> m_nameVector;
   QMap<QString, QString> m_titleMap;
@@ -34,6 +35,9 @@ class PlaylistSql : public QObject {
   ~PlaylistSql();
   bool tryOpenDatabase();
   void tryCloseDatabase();
+  bool prepareSql(QSqlQuery* query, const PlayContent* playContent,
+                  const QString& tableName, SqlAction action,
+                  const QStringList& columnList, int id = 0);
 };
 
 #endif  // MPAX_PLAYLISTSQL_H
