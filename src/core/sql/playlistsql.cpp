@@ -135,6 +135,20 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     // Insert playlist data.
     int contentCount = 0;
     for (auto c : playlist.content()) {
+#if 1
+      ok =
+          prepareSql(&query, c, tableName, SqlAction::Insert,
+                     QStringList{"ContentPath", "Title", "Artist", "AlbumTitle",
+                                 "AlbumArtist", "AlbumYear", "AlbumTrackCount",
+                                 "TrackNumber", "BitRate", "SampleRate",
+                                 "Genre", "Comment", "Channels", "Length"},
+                     contentCount);
+      if (!ok) {
+        m_database.rollback();
+        qDebug() << "can not create playlist table: failed to prepare sql";
+        goto exit;
+      }
+#else
       query.prepare(QString(SQL_SAVE_PLAYLIST_TABLE).arg(tableName));
       query.bindValue(QStringLiteral(":v_id"), contentCount);
       query.bindValue(QStringLiteral(":v_path"), c->value("ContentPath"));
@@ -154,6 +168,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       query.bindValue(QStringLiteral(":v_comment"), c->value("Comment"));
       query.bindValue(QStringLiteral(":v_channels"), c->value("Channels"));
       query.bindValue(QStringLiteral(":v_length"), c->value("Length"));
+#endif
       ok = query.exec();
       if (!ok) {
         m_database.rollback();
@@ -552,6 +567,10 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
         columnNamesPart += m_titleMap.value(column) + ", ";
         columnValuePart += ":v_" + m_titleMap.value(column) + ", ";
       }
+      if (id >= 0) {
+        columnNamesPart += "id, ";
+        columnValuePart += ":v_id, ";
+      }
       columnNamesPart.chop(2);
       columnValuePart.chop(2);
       queryStatement = QString("INSERT INTO %1(%2) VALUES(%3);")
@@ -568,6 +587,9 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
         columnPart +=
             m_titleMap.value(column) + "=:v_" + m_titleMap.value(column) + ", ";
       }
+      if (id >= 0) {
+        columnPart += "id=:v_id, ";
+      }
       columnPart.chop(2);
       queryStatement = QString("UPDATE %1 SET %2 WHERE path=:v_path;")
                            .arg(tableName, columnPart);
@@ -583,6 +605,11 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
     query->bindValue(":v_" + m_titleMap.value(column),
                      playContent->value(column));
   }
+
+  if (id >= 0) {
+    query->bindValue(":v_id", id);
+  }
+
   // Update action should restrict row.
   // Current is by file path.
   if (action == SqlAction::Update) {

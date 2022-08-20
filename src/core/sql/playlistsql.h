@@ -37,7 +37,7 @@ class PlaylistSql : public QObject {
   void tryCloseDatabase();
   bool prepareSql(QSqlQuery* query, const PlayContent* playContent,
                   const QString& tableName, SqlAction action,
-                  const QStringList& columnList, int id = 0);
+                  const QStringList& columnList, int id = -1);
 };
 
 #endif  // MPAX_PLAYLISTSQL_H
