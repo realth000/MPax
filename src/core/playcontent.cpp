@@ -27,6 +27,7 @@ PlayContent::PlayContent(const QString& filePath)
   const QFileInfo fileInfo(filePath);
   this->contentPath = fileInfo.absoluteFilePath();
   this->contentName = fileInfo.fileName();
+  this->contentSize = fileInfo.size();
 }
 
 QVariant PlayContent::value(const QString& propertyName) const {

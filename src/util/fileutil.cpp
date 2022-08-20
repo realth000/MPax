@@ -1,5 +1,6 @@
 #include "fileutil.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QProcess>
 #include <QtCore/QUrl>
@@ -57,8 +58,27 @@ qint64 toFileSize(const qint64 &fileSize, FileSizeLevel sizeLevel) {
       case FileSizeLevel::GB:
         level = FileSizeLevel::TB;
         break;
+      case FileSizeLevel::TB:
+      default:
+        break;
     }
   }
+  qDebug() << "return size =" << size << "level =" << level;
   return size;
+}
+
+QString toFormatTime(const qint64 &seconds) {
+  if (seconds < 60) {
+    return QString("00:00:%1").arg(seconds, 2, 10, QLatin1Char('0'));
+  }
+  if (seconds < 3600) {
+    return QString("00:%1:%2")
+        .arg(seconds / 60, 2, 10, QLatin1Char('0'))
+        .arg(seconds % 60, 2, 10, QLatin1Char('0'));
+  }
+  return QString("%1:%2:%3")
+      .arg(seconds / 3600, 2, 10, QLatin1Char('0'))
+      .arg(seconds % 3600 / 60, 2, 10, QLatin1Char('0'))
+      .arg((seconds % 3600) % 60, 2, 10, QLatin1Char('0'));
 }
 }  // namespace Util

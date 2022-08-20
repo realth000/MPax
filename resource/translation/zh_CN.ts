@@ -110,124 +110,134 @@
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="15"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="16"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="15"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="16"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="49"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="50"/>
         <source>Property - </source>
         <translation>属性 - </translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="51"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="52"/>
         <source>Meta data</source>
         <translation>元数据</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="52"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="53"/>
         <source>Detail</source>
         <translation>详细信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="53"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="54"/>
         <source>Cover</source>
         <translation>封面</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="91"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="92"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="92"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="93"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="93"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="94"/>
         <source>Album title</source>
         <translation>专辑名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="94"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="95"/>
         <source>Album artist</source>
         <translation>专辑艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="95"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="96"/>
         <source>Album year</source>
         <translation>专辑发行年份</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="96"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="97"/>
         <source>Track number</source>
         <translation>音轨号</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="97"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="98"/>
         <source>Genre</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="98"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="99"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="134"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="135"/>
         <source>File name</source>
         <translation>文件名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="135"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="136"/>
         <source>Folder name</source>
         <translation>文件夹名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="136"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="137"/>
         <source>File path</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="138"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="139"/>
         <source>Index</source>
         <translation>子曲目索引</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="139"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="140"/>
         <source>File size</source>
         <translation>文件大小</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="140"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="141"/>
         <source>Modified time</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="141"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="142"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="142"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="143"/>
         <source>Sample rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="143"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="144"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="144"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="145"/>
         <source>Bit rate</source>
         <translation>比特率</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="161"/>
+        <source>bytes</source>
+        <translation>字节</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="171"/>
+        <source>seconds</source>
+        <translation>秒</translation>
     </message>
 </context>
 <context>

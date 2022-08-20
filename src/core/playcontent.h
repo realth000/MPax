@@ -14,7 +14,7 @@ class PlayContent {
   void setValue(const QString &name, const QVariant &value);
   QString contentPath;
   QString contentName;
-  QString contentSize;
+  qint64 contentSize;
   QString artist;
   QString title;
   int trackNumber;
@@ -29,6 +29,7 @@ class PlayContent {
   int sampleRate;
   int channels;
   int length;
+  int duration;
   //  QMap<QString, QString> otherProperty;
 
   // private:

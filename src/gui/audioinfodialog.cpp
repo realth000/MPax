@@ -6,6 +6,7 @@
 
 #include "audio/audioinfo.h"
 #include "ui_audioinfodialog.h"
+#include "util/fileutil.h"
 
 AudioInfoDialog::AudioInfoDialog(PlayContent *playContent, QWidget *parent)
     : QDialog(parent),
@@ -152,13 +153,22 @@ void AudioInfoDialog::initDetailTable() {
                                  readonlyLineEdit(m_content->contentPath));
   // TODO: What's this index.
   ui->detailTable->setCellWidget(3, 1, readonlyLineEdit(0));
-  ui->detailTable->setCellWidget(4, 1,
-                                 readonlyLineEdit(m_content->contentSize));
+  ui->detailTable->setCellWidget(
+      4, 1,
+      readonlyLineEdit(
+          Util::toFileSize(m_content->contentSize, Util::FileSizeLevel::MB),
+          QString("MB (%1 %2)")
+              .arg(QString::number(m_content->contentSize), tr("bytes"))));
   ui->detailTable->setCellWidget(
       5, 1,
       readonlyLineEdit(info.lastModified().toString("yyyy-MM-dd hh:mm:ss")));
   // TODO: need record duration in state.
-  ui->detailTable->setCellWidget(6, 1, readonlyLineEdit(""));
+  ui->detailTable->setCellWidget(
+      6, 1,
+      readonlyLineEdit(
+          Util::toFormatTime(m_content->duration) +
+          QString(" (%1 %2)")
+              .arg(QString::number(m_content->duration), tr("seconds"))));
   ui->detailTable->setCellWidget(
       7, 1, readonlyLineEdit(m_content->sampleRate, " Hz"));
   ui->detailTable->setCellWidget(8, 1, readonlyLineEdit(m_content->channels));
