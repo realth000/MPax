@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.13)
 
-project(MPax VERSION 1.1.0 LANGUAGES C CXX)
+project(MPax VERSION 1.2.0 LANGUAGES C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
