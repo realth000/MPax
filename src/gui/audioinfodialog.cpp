@@ -1,6 +1,8 @@
 #include "audioinfodialog.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
 
 #include "audio/audioinfo.h"
 #include "ui_audioinfodialog.h"
@@ -30,7 +32,17 @@ QLineEdit *AudioInfoDialog::readonlyLineEdit(const QString &text) {
   QLineEdit *lineEdit = new QLineEdit(text);
   lineEdit->setReadOnly(true);
   lineEdit->setStyleSheet("background: transparent;");
+  lineEdit->setCursorPosition(0);
   return lineEdit;
+}
+
+QLineEdit *AudioInfoDialog::readonlyLineEdit(const int &text) {
+  return readonlyLineEdit(QString::number(text));
+}
+
+QLineEdit *AudioInfoDialog::readonlyLineEdit(const int &text,
+                                             const QString &suffix) {
+  return readonlyLineEdit(QString::number(text) + suffix);
 }
 
 void AudioInfoDialog::initUi() {
@@ -105,8 +117,53 @@ void AudioInfoDialog::initMetadataTable() {
 }
 
 void AudioInfoDialog::initDetailTable() {
+  ui->detailTable->verticalHeader()->setVisible(false);
+  ui->detailTable->setAlternatingRowColors(true);
+  ui->detailTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+  ui->detailTable->setSelectionMode(QAbstractItemView::SingleSelection);
+  //  ui->detailTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
   ui->detailTable->setColumnCount(2);
+  ui->detailTable->setColumnWidth(0, ui->detailTable->width() / 3);
+  //  ui->detailTable->setColumnWidth(1, ui->detailTable->width() / 3);
+  ui->detailTable->horizontalHeader()->setStretchLastSection(true);
+
   ui->detailTable->setHorizontalHeaderLabels(m_headerList);
+  ui->detailTable->setRowCount(10);
+
+  ui->detailTable->setCellWidget(0, 0, readonlyLineEdit(tr("File name")));
+  ui->detailTable->setCellWidget(1, 0, readonlyLineEdit(tr("Folder name")));
+  ui->detailTable->setCellWidget(2, 0, readonlyLineEdit(tr("File path")));
+  // TODO: What's this index.
+  ui->detailTable->setCellWidget(3, 0, readonlyLineEdit(tr("Index")));
+  ui->detailTable->setCellWidget(4, 0, readonlyLineEdit(tr("File size")));
+  ui->detailTable->setCellWidget(5, 0, readonlyLineEdit(tr("Modified time")));
+  ui->detailTable->setCellWidget(6, 0, readonlyLineEdit(tr("Duration")));
+  ui->detailTable->setCellWidget(7, 0, readonlyLineEdit(tr("Sample rate")));
+  ui->detailTable->setCellWidget(8, 0, readonlyLineEdit(tr("Channels")));
+  ui->detailTable->setCellWidget(9, 0, readonlyLineEdit(tr("Bit rate")));
+
+  QFileInfo info(m_content->contentPath);
+  ui->detailTable->setCellWidget(0, 1,
+                                 readonlyLineEdit(m_content->contentName));
+  ui->detailTable->setCellWidget(1, 1,
+                                 readonlyLineEdit(info.dir().absolutePath()));
+  ui->detailTable->setCellWidget(2, 1,
+                                 readonlyLineEdit(m_content->contentPath));
+  // TODO: What's this index.
+  ui->detailTable->setCellWidget(3, 1, readonlyLineEdit(0));
+  ui->detailTable->setCellWidget(4, 1,
+                                 readonlyLineEdit(m_content->contentSize));
+  ui->detailTable->setCellWidget(
+      5, 1,
+      readonlyLineEdit(info.lastModified().toString("yyyy-MM-dd hh:mm:ss")));
+  // TODO: need record duration in state.
+  ui->detailTable->setCellWidget(6, 1, readonlyLineEdit(""));
+  ui->detailTable->setCellWidget(
+      7, 1, readonlyLineEdit(m_content->sampleRate, " Hz"));
+  ui->detailTable->setCellWidget(8, 1, readonlyLineEdit(m_content->channels));
+  ui->detailTable->setCellWidget(9, 1,
+                                 readonlyLineEdit(m_content->bitRate, " kbps"));
 }
 
 void AudioInfoDialog::saveAudioInfo() {

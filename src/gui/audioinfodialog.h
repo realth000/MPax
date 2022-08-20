@@ -35,6 +35,8 @@ class AudioInfoDialog : public QDialog {
   QTableWidgetItem *m_commentItem;
 
   QLineEdit *readonlyLineEdit(const QString &text);
+  QLineEdit *readonlyLineEdit(const int &text);
+  QLineEdit *readonlyLineEdit(const int &text, const QString &suffix);
   void initUi();
   void initConnections();
   void initMetadataTable();
