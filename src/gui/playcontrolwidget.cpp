@@ -41,7 +41,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   ui->coverLabel->setScaledContents(true);
   DisableFocus();
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
   InitShortcut();
   InitConnections();

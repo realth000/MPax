@@ -33,7 +33,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
 }
 
@@ -217,7 +217,7 @@ void PlaylistWidget::actionOpenInFolder() {
   const QString path =
       m_showingModel->content(m_showingFilterModel->mapToSource(i).row())
           .content->contentPath;
-  util::openFileInDir(path);
+  Util::openFileInDir(path);
 }
 
 void PlaylistWidget::actionPlay() {
@@ -313,7 +313,7 @@ void PlaylistWidget::removeContents(const QList<int> &indexes) {
 }
 
 void PlaylistWidget::openFileInDir(const int &row) {
-  util::openFileInDir(m_showingModel->content(row).content->contentPath);
+  Util::openFileInDir(m_showingModel->content(row).content->contentPath);
 }
 
 void PlaylistWidget::scrollToContent(const QString &contentPath) {

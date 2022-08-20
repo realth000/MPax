@@ -10,9 +10,9 @@ AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
   ui->infoTextBrowser->verticalScrollBar()->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
   QString aboutText;
   const QString name = QString(
       "<h1><a href=\"https://github.com/realth000/MPax\">"

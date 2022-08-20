@@ -32,7 +32,7 @@ MainUI::MainUI(QWidget *parent)
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
-  this->setStyleSheet(util::loadCssFromFile(
+  this->setStyleSheet(Util::loadCssFromFile(
       {":/css/external/MaterialDark.css", ":/css/base.css"}));
   InitStatusBar();
   m_trayIcon->show();

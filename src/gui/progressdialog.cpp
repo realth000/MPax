@@ -14,7 +14,7 @@ ProgressDialog::ProgressDialog(const QString &workName, QWidget *parent)
       m_infinite(false),
       m_max(100) {
   ui->setupUi(this);
-  this->setStyleSheet(util::loadCssFromFile(
+  this->setStyleSheet(Util::loadCssFromFile(
       {":/css/external/MaterialDark.css", ":/css/base.css"}));
   ui->progressBar->setMaximum(m_max);
   ui->cancelButton->setFocusPolicy(Qt::NoFocus);
@@ -86,7 +86,7 @@ void ProgressDialog::keyPressEvent(QKeyEvent *event) {
 void ProgressDialog::successAndQuit() {
   ui->cancelButton->setEnabled(false);
   emit succeed();
-  util::zawarudo(300);
+  Util::zawarudo(300);
   this->close();
 }
 

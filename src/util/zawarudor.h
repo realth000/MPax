@@ -3,11 +3,11 @@
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 
-namespace util {
+namespace Util {
 static void zawarudo(const int &milliseconds) {
   QEventLoop loop;
   QTimer::singleShot(milliseconds, &loop, &QEventLoop::quit);
   loop.exec();
 }
-}  // namespace util
+}  // namespace Util
 #endif  // ZAWARUDOR_H

@@ -7,7 +7,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 
-namespace util {
+namespace Util {
 static QString loadCssFromFile(const QStringList &filePathList) {
   QString cssStr;
   for (const auto &filePath : filePathList) {
@@ -27,8 +27,8 @@ static QString loadCssFromFile(const QStringList &filePathList) {
 }
 
 static QString loadCssFromFile(const QString &filePath) {
-  return util::loadCssFromFile(QStringList{filePath});
+  return Util::loadCssFromFile(QStringList{filePath});
 }
-}  // namespace util
+}  // namespace Util
 
 #endif  // MPAX_CSSLOADER_H
