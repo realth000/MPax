@@ -155,6 +155,8 @@ void MainUI::InitConnections() {
   connect(this, &MainUI::scrollToContent, ui->playlistWidget,
           &PlaylistWidget::scrollToContent);
 
+  connect(ui->playlistWidget, &PlaylistWidget::playContentInfoChanged,
+          ui->playControlWidget, &PlayControlWidget::updatePlayContentInfo);
   // Connect system tray icon signals.
   connect(m_trayIcon, &SystemTrayIcon::mainWindowVisibleRequested, this,
           &MainUI::updateMainWindowVisible);

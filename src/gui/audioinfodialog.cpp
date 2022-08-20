@@ -166,9 +166,9 @@ void AudioInfoDialog::initDetailTable() {
   ui->detailTable->setCellWidget(
       6, 1,
       readonlyLineEdit(
-          Util::toFormatTime(m_content->duration) +
+          Util::toFormatTime(m_content->length) +
           QString(" (%1 %2)")
-              .arg(QString::number(m_content->duration), tr("seconds"))));
+              .arg(QString::number(m_content->length), tr("seconds"))));
   ui->detailTable->setCellWidget(
       7, 1, readonlyLineEdit(m_content->sampleRate, " Hz"));
   ui->detailTable->setCellWidget(8, 1, readonlyLineEdit(m_content->channels));
@@ -186,5 +186,7 @@ void AudioInfoDialog::saveAudioInfo() {
   m_content->genre = m_genreItem->text();
   m_content->comment = m_commentItem->text();
 
-  qDebug() << AudioInfo::writeAudioInfo(m_content->contentPath, m_content);
+  if (AudioInfo::writeAudioInfo(m_content->contentPath, m_content)) {
+    emit updatePlayContentRequested(m_content);
+  }
 }

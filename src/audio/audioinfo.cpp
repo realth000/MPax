@@ -64,11 +64,10 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
     return false;
   }
   TagLib::AudioProperties* properties = f.audioProperties();
-  playContent->duration = properties->lengthInSeconds();
   playContent->bitRate = properties->bitrate();
   playContent->sampleRate = properties->sampleRate();
   playContent->channels = properties->channels();
-  playContent->length = properties->length();
+  playContent->length = properties->lengthInSeconds();
   return true;
 }
 

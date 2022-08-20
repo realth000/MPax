@@ -50,6 +50,14 @@
   ":v_album_track_count, :v_track_number, :v_bit_rate, "           \
   ":v_sample_rate, :v_genre, :v_comment, :v_channels, :v_length);"
 
+#define SQL_UPDATE_PLAYLIST_ROW                                        \
+  "UPDATE %1 SET title=:v_title, artist=:v_artist, "                   \
+  "album_title=:v_album_title, album_artist=:v_album_artist, "         \
+  "album_year=:v_album_year, album_track_count=:v_album_track_count, " \
+  "track_number=:v_track_number, bit_rate=:v_bit_rate, "               \
+  "sample_rate=v:_sample_rate, genre=:v_genre, comment=v:_comment, "   \
+  "channels=v:_channels, length=:v_length"
+
 PlaylistSql* PlaylistSql::getInstance() {
   static PlaylistSql ps;
   return &ps;
@@ -434,4 +442,25 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
 exit:
   tryCloseDatabase();
   return false;
+}
+
+void PlaylistSql::updatePlayContent(const Playlist* playlist,
+                                    const PlayContent* playContent) {
+  if (playlist == nullptr || playContent == nullptr) {
+    qDebug() << __FUNCTION__ << " failed, null playlist or null play content";
+    return;
+  }
+
+  if (!playlist->contains(playContent->contentPath)) {
+    qDebug() << __FUNCTION__ << " failed, playlist not contains play content";
+    return;
+  }
+  if (!tryOpenDatabase()) {
+    qDebug() << __FUNCTION__ << " failed, can not open database";
+    return;
+  }
+  m_database.transaction();
+  // TODO: update content here.
+  m_database.commit();
+  tryCloseDatabase();
 }

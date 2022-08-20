@@ -49,6 +49,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos content(const int &index) const;
   PlayContentPos content(const QString &contentPath) const;
   Playlist list() const;
+  void updatePlayContent(const PlayContent *playContent) const;
 
  public slots:
   void reloadPlayContentInfo();

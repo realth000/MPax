@@ -29,7 +29,6 @@ class PlayContent {
   int sampleRate;
   int channels;
   int length;
-  int duration;
   //  QMap<QString, QString> otherProperty;
 
   // private:

@@ -386,6 +386,10 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     return;
   }
   AudioInfo::readAudioInfo(content->contentPath, content);
+  updatePlayInfoToUI(content);
+}
+
+void PlayControlWidget::updatePlayInfoToUI(PlayContent *content) {
   const QStringList nameInfo = content->contentName.split(" - ");
   if (!content->title.isEmpty()) {
     ui->titleButton->setText(content->title);
@@ -406,6 +410,13 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     ui->albumButton->setText(content->albumTitle);
   } else {
     ui->albumButton->setText(content->contentPath);
+  }
+  // When update audio info after modified, assume content cover not changed
+  // because not supported yet.
+  // This can avoid a null cover image when image was cleared before due to
+  // memory policy.
+  if (m_currentContentUrl.toLocalFile() == content->contentPath) {
+    return;
   }
   if (!content->albumCover.isNull()) {
     ui->coverLabel->setPixmap(
@@ -436,4 +447,8 @@ void PlayControlWidget::updateConfig() {
                                  ->config(CONFIG_SHORTCUT_PLAY_NEXT)
                                  .value.toString(),
                              true);
+}
+
+void PlayControlWidget::updatePlayContentInfo(PlayContent *playContent) {
+  updatePlayInfoToUI(playContent);
 }

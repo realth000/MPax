@@ -24,6 +24,7 @@ class PlaylistWidget : public QWidget {
 
  signals:
   void playContentChanged(const int &row, PlayContent *content);
+  void playContentInfoChanged(PlayContent *content);
   void playlistChanged();
   void playingListChanged(PlaylistModel *playlistModel);
   void playlistOrderChanged();

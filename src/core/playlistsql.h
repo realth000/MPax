@@ -22,6 +22,8 @@ class PlaylistSql : public QObject {
   QList<Playlist> loadPlaylist();
   bool loadPlaylistWithOrder(Playlist* playlist, const QString& columnName,
                              Qt::SortOrder order);
+  void updatePlayContent(const Playlist* playlist,
+                         const PlayContent* playContent);
 
  private:
   QSqlDatabase m_database;

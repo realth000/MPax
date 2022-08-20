@@ -32,10 +32,12 @@ class PlayControlWidget : public QWidget {
   void setContent(const PlayContent *content);
   void setContentPath(const QString &contentPath);
   void updatePlayInfo(PlayContent *content);
+  void updatePlayInfoToUI(PlayContent *content);
   void updateConfig();
   void updatePlay();
   void updatePlaySeekForward(const int &msec);
   void updatePlaySeekBackward(const int &msec);
+  void updatePlayContentInfo(PlayContent *playContent);
 
  private:
   Ui::PlayControlWidget *ui;

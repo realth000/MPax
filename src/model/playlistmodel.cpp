@@ -272,3 +272,7 @@ const QModelIndex PlaylistModel::find(const QString &contentPath) const {
   }
   return QModelIndex();
 }
+
+void PlaylistModel::updatePlayContent(const PlayContent *playContent) const {
+  PlaylistSql::getInstance()->updatePlayContent(m_playlist, playContent);
+}

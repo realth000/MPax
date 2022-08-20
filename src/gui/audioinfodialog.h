@@ -18,6 +18,9 @@ class AudioInfoDialog : public QDialog {
   explicit AudioInfoDialog(PlayContent *playContent, QWidget *parent = nullptr);
   ~AudioInfoDialog();
 
+ signals:
+  void updatePlayContentRequested(PlayContent *playContent);
+
  private:
   Ui::AudioInfoDialog *ui;
   PlayContent *m_content;
