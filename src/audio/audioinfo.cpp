@@ -49,7 +49,7 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   playContent->artist = tag->artist().toCString(true);
   playContent->albumTitle = tag->album().toCString(true);
   playContent->albumYear = int(tag->year());
-  playContent->trackNumber = int(tag->track());
+  //  playContent->trackNumber = int(tag->track());
   playContent->genre = tag->genre().toCString(true);
   playContent->comment = tag->comment().toCString(true);
 
@@ -60,6 +60,19 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
 
   TagLib::PropertyMap tags = f.file()->properties();
   playContent->albumArtist = tags["ALBUMARTIST"].toString().toCString(true);
+
+  playContent->trackNumber = 0;
+  playContent->albumTrackCount = 0;
+  const QString trackNumberString =
+      tags["TRACKNUMBER"].toString().toCString(true);
+  if (!trackNumberString.isEmpty()) {
+    const QStringList trackNumberStringList = trackNumberString.split('/');
+    if (trackNumberStringList.length() == 2) {
+      playContent->trackNumber = trackNumberStringList[0].toInt();
+      playContent->albumTrackCount = trackNumberStringList[1].toInt();
+    }
+  }
+
   if (f.isNull() || !f.audioProperties()) {
     return false;
   }
