@@ -52,6 +52,200 @@
     </message>
 </context>
 <context>
+    <name>AudioInfoDialog</name>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="14"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="131"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="131"/>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="24"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="132"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="132"/>
+        <source>Tab 1</source>
+        <translation>Tab 1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="34"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="133"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="133"/>
+        <source>Tab 2</source>
+        <translation>Tab 2</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="44"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="134"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="134"/>
+        <source>页</source>
+        <translation>页</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="60"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="135"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="135"/>
+        <source>tool</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="86"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="136"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="136"/>
+        <source>Confirm</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="99"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="137"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="137"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.ui" line="112"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="138"/>
+        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="138"/>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="16"/>
+        <source>Name</source>
+        <translation>名称</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="16"/>
+        <source>Value</source>
+        <translation>值</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="51"/>
+        <source>Property - </source>
+        <translation>属性 - </translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="53"/>
+        <source>Meta data</source>
+        <translation>元数据</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="54"/>
+        <source>Detail</source>
+        <translation>详细信息</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="55"/>
+        <source>Cover</source>
+        <translation>封面</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="93"/>
+        <source>Title</source>
+        <translation>标题</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="94"/>
+        <source>Artist</source>
+        <translation>艺术家</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="95"/>
+        <source>Album title</source>
+        <translation>专辑名</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="96"/>
+        <source>Album artist</source>
+        <translation>专辑艺术家</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="97"/>
+        <source>Album year</source>
+        <translation>专辑发行年份</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="98"/>
+        <source>Track number</source>
+        <translation>音轨号</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="100"/>
+        <source>Album total tracks</source>
+        <translation>专辑合计音轨</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="101"/>
+        <source>Genre</source>
+        <translation>流派</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="102"/>
+        <source>Comment</source>
+        <translation>注释</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="140"/>
+        <source>File name</source>
+        <translation>文件名</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="141"/>
+        <source>Folder name</source>
+        <translation>文件夹名</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="142"/>
+        <source>File path</source>
+        <translation>文件路径</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="144"/>
+        <source>Index</source>
+        <translation>子曲目索引</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="145"/>
+        <source>File size</source>
+        <translation>文件大小</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="146"/>
+        <source>Modified time</source>
+        <translation>修改时间</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="147"/>
+        <source>Duration</source>
+        <translation>持续时间</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="148"/>
+        <source>Sample rate</source>
+        <translation>采样率</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="149"/>
+        <source>Channels</source>
+        <translation>声道</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="150"/>
+        <source>Bit rate</source>
+        <translation>比特率</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="166"/>
+        <source>bytes</source>
+        <translation>字节</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="176"/>
+        <source>seconds</source>
+        <translation>秒</translation>
+    </message>
+</context>
+<context>
     <name>ListTabWidget</name>
     <message>
         <location filename="../../src/gui/listtabwidget.ui" line="14"/>
@@ -107,7 +301,7 @@
         <location filename="../../src/gui/mainui.ui" line="137"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="170"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="170"/>
-        <location filename="../../src/gui/mainui.cpp" line="185"/>
+        <location filename="../../src/gui/mainui.cpp" line="212"/>
         <source>Open audio</source>
         <translation>打开音频</translation>
     </message>
@@ -129,7 +323,7 @@
         <location filename="../../src/gui/mainui.ui" line="152"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="173"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="173"/>
-        <location filename="../../src/gui/mainui.cpp" line="358"/>
+        <location filename="../../src/gui/mainui.cpp" line="385"/>
         <source>Save playlist</source>
         <translation>保存播放列表</translation>
     </message>
@@ -175,7 +369,7 @@
         <location filename="../../src/gui/mainui.ui" line="187"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="180"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="180"/>
-        <location filename="../../src/gui/mainui.cpp" line="407"/>
+        <location filename="../../src/gui/mainui.cpp" line="434"/>
         <source>About MPax</source>
         <translation>关于MPax</translation>
     </message>
@@ -183,32 +377,32 @@
         <location filename="../../src/gui/mainui.ui" line="192"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="181"/>
         <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="181"/>
-        <location filename="../../src/gui/mainui.cpp" line="411"/>
+        <location filename="../../src/gui/mainui.cpp" line="438"/>
         <source>About Qt</source>
         <translation>关于Qt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="186"/>
+        <location filename="../../src/gui/mainui.cpp" line="213"/>
         <source>Audio files</source>
         <translation>音频文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="251"/>
+        <location filename="../../src/gui/mainui.cpp" line="278"/>
         <source>Scan directory</source>
         <translation>扫描文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="275"/>
+        <location filename="../../src/gui/mainui.cpp" line="302"/>
         <source>Loading audio info</source>
         <translation>正在加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="417"/>
+        <location filename="../../src/gui/mainui.cpp" line="444"/>
         <source>reloading audio info</source>
         <translation>正在重新加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="421"/>
+        <location filename="../../src/gui/mainui.cpp" line="448"/>
         <source>reloaded audio info</source>
         <translation>已重新加载音频信息</translation>
     </message>
@@ -345,19 +539,24 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="172"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="173"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="175"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="176"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="177"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="178"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="181"/>
+        <source>Property</source>
+        <translation>属性</translation>
     </message>
 </context>
 <context>
@@ -409,6 +608,34 @@
         <location filename="../../external/QHotkey/qhotkey.cpp" line="314"/>
         <source>Failed to unregister %1. Error: %2</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>SystemTrayIcon</name>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="19"/>
+        <source>Show/Hide main window</source>
+        <translation>显示/隐藏主窗口</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="20"/>
+        <source>Exit app</source>
+        <translation>退出程序</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="21"/>
+        <source>Restart app</source>
+        <translation>重启程序</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="34"/>
+        <source>Hide main window</source>
+        <translation>隐藏主窗口</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/systemtrayicon.cpp" line="35"/>
+        <source>Show main window</source>
+        <translation>显示主窗口</translation>
     </message>
 </context>
 </TS>

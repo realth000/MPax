@@ -6,7 +6,7 @@
 #include <QtGui/QFont>
 #endif
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   QApplication a(argc, argv);
 #ifdef Q_OS_WINDOWS
   QFont appFont;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
                          "/translation/en.qm");
   }
   QCoreApplication::installTranslator(&appTranslator);
-  MainUI w;
-  w.show();
+  MainUI* w = new MainUI();
+  w->show();
   return a.exec();
 }

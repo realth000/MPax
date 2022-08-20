@@ -5,7 +5,7 @@
 
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
-#include "core/playlistsql.h"
+#include "core/sql/playlistsql.h"
 
 ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
   connect(this, &ListTabModel::dataChanged, this,

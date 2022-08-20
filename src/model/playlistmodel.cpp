@@ -8,7 +8,7 @@
 #include <QtCore/QTimer>
 
 #include "audio/audioinfo.h"
-#include "core/playlistsql.h"
+#include "core/sql/playlistsql.h"
 
 // clang-format off
 #define MODEL_ALL_HEADER                                   \
@@ -262,4 +262,17 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
 
 void PlaylistModel::setHeader(const PLModel::PlaylistModelHeader *header) {
   m_header = header;
+}
+
+const QModelIndex PlaylistModel::find(const QString &contentPath) const {
+  for (int i = 0; i < m_playlist->content().length(); i++) {
+    if (m_playlist->content()[i]->contentPath == contentPath) {
+      return index(i, 0);
+    }
+  }
+  return QModelIndex();
+}
+
+void PlaylistModel::updatePlayContent(const PlayContent *playContent) const {
+  PlaylistSql::getInstance()->updatePlayContent(m_playlist, playContent);
 }

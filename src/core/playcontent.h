@@ -10,19 +10,29 @@
 class PlayContent {
  public:
   explicit PlayContent(const QString &filePath);
-  QVariant value(const QString &headerName) const;
+  QVariant value(const QString &propertyName) const;
+  void setValue(const QString &name, const QVariant &value);
   QString contentPath;
   QString contentName;
-  QString contentSize;
+  qint64 contentSize;
   QString artist;
   QString title;
   int trackNumber;
-  int audioBitRate;
+  int bitRate;
   QString albumArtist;
   QString albumTitle;
   QImage albumCover;
   int albumYear;
   int albumTrackCount;
+  QString genre;
+  QString comment;
+  int sampleRate;
+  int channels;
+  int length;
+  //  QMap<QString, QString> otherProperty;
+
+  // private:
+  //  QMap<QString, QVariant> property;
 };
 
 typedef QList<PlayContent *> PlayContentList;

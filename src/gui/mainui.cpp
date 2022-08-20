@@ -2,8 +2,10 @@
 
 #include <QtConcurrent/QtConcurrentRun>
 #include <QtCore/QFutureWatcher>
+#include <QtCore/QProcess>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
+#include <QtGui/QGuiApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
@@ -12,7 +14,7 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
-#include "core/playlistsql.h"
+#include "core/sql/playlistsql.h"
 #include "gui/aboutdialog.h"
 #include "gui/progressdialog.h"
 #include "util/cssloader.h"
@@ -23,14 +25,18 @@ MainUI::MainUI(QWidget *parent)
       m_history(new QList<Ui::PlayContentPair>),
       m_historyPos(0),
       m_searchDialog(new PlaylistSearchDialog(this)),
-      m_statusLabel(new QLabel) {
+      m_statusLabel(new QLabel),
+      m_trayIcon(new SystemTrayIcon(this)) {
+  this->setAttribute(Qt::WA_DeleteOnClose);
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
-  this->setStyleSheet(util::loadCssFromFile(
+  this->setStyleSheet(Util::loadCssFromFile(
       {":/css/external/MaterialDark.css", ":/css/base.css"}));
   InitStatusBar();
+  m_trayIcon->show();
+
   Config::AppConfig::getInstance()->loadConfig();
   //  QList<Playlist> playlistList =
   //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
@@ -72,6 +78,7 @@ MainUI::MainUI(QWidget *parent)
   }
   appendHistory(cp);
   playAudioInShowingList(cp.index, cp.content);
+  emit scrollToContent(cp.content->contentPath);
 }
 
 MainUI::~MainUI() {
@@ -143,6 +150,26 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::removeContents);
   connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
           ui->playlistWidget, &PlaylistWidget::openFileInDir);
+  connect(ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged,
+          this, &MainUI::handleCurrentPlayContentChanged);
+  connect(this, &MainUI::scrollToContent, ui->playlistWidget,
+          &PlaylistWidget::scrollToContent);
+
+  connect(ui->playlistWidget, &PlaylistWidget::playContentInfoChanged,
+          ui->playControlWidget, &PlayControlWidget::updatePlayContentInfo);
+  // Connect system tray icon signals.
+  connect(m_trayIcon, &SystemTrayIcon::mainWindowVisibleRequested, this,
+          &MainUI::updateMainWindowVisible);
+  connect(m_trayIcon, &SystemTrayIcon::appExitRequested, this,
+          &MainUI::exitApp);
+  connect(m_trayIcon, &SystemTrayIcon::appRestartRequested, this,
+          &MainUI::restartApp);
+  //  connect(qApp, &QGuiApplication::applicationStateChanged,
+  //          [this](Qt::ApplicationState state) {
+  //            state == Qt::ApplicationActive
+  //                ? m_trayIcon->updateMainWindowActiveState(true)
+  //                : m_trayIcon->updateMainWindowActiveState(false);
+  //          });
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -421,4 +448,31 @@ void MainUI::updateReloadInfoStatus(const QString &playlistName, bool finished,
         QString(tr("reloaded audio info") + " %1/%2ms")
             .arg(QString::number(count), QString::number(time)));
   }
+}
+
+void MainUI::handleCurrentPlayContentChanged(const QUrl &contentUrl) {
+  if (!contentUrl.isValid()) {
+    return;
+  }
+  emit scrollToContent(contentUrl.toLocalFile());
+}
+
+void MainUI::updateMainWindowVisible(bool toShow) {
+  // Use isMinimized() as actual adjust.
+  if (this->isMinimized()) {
+    qApp->activeWindow();
+    this->setWindowState((this->windowState() & ~Qt::WindowMinimized) |
+                         Qt::WindowActive);
+    this->raise();
+  } else {
+    this->showMinimized();
+  }
+  m_trayIcon->updateMainWindowActiveState(this->isMinimized());
+}
+
+void MainUI::exitApp() { qApp->exit(0); }
+
+void MainUI::restartApp() {
+  QApplication::closeAllWindows();
+  QProcess::startDetached(qApp->applicationFilePath(), QStringList());
 }

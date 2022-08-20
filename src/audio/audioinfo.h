@@ -14,6 +14,8 @@ class AudioInfo : public QObject {
 
   static bool readAudioInfo(const QString &audioPath, PlayContent *playContent,
                             InfoOption infoOption = InfoOption::All);
+  static bool writeAudioInfo(const QString &audioPath,
+                             const PlayContent *playContent);
 #if 0
   bool readAudioInfoList(PlayContentList *playContentList,
                          InfoOption infoOption = InfoOption::All);

@@ -14,7 +14,7 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->listView->setFocusPolicy(Qt::NoFocus);
   InitConnections();
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
 }
 
 ListTabWidget::~ListTabWidget() { delete ui; }

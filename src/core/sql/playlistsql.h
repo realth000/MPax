@@ -22,16 +22,29 @@ class PlaylistSql : public QObject {
   QList<Playlist> loadPlaylist();
   bool loadPlaylistWithOrder(Playlist* playlist, const QString& columnName,
                              Qt::SortOrder order);
+  void updatePlayContent(const Playlist* playlist,
+                         const PlayContent* playContent);
 
  private:
+  enum SqlAction : int { Create = 0, Insert, Update };
+
+  struct ColumnHeader {
+    QString name;
+    QString type;
+    QString properties;
+  };
+
   QSqlDatabase m_database;
   QVector<QPair<QString, QString>> m_nameVector;
-  QMap<QString, QString> m_titleMap;
+  QMap<QString, ColumnHeader> m_titleMap;
 
   PlaylistSql();
   ~PlaylistSql();
   bool tryOpenDatabase();
   void tryCloseDatabase();
+  bool prepareSql(QSqlQuery* query, const PlayContent* playContent,
+                  const QString& tableName, SqlAction action,
+                  const QStringList& columnList, int id = -1);
 };
 
 #endif  // MPAX_PLAYLISTSQL_H

@@ -10,8 +10,12 @@
 #include "taglib/fileref.h"
 #include "taglib/mpeg/id3v2/frames/attachedpictureframe.h"
 #include "taglib/mpeg/id3v2/id3v2tag.h"
+#include "taglib/mpeg/mpegfile.h"
 #include "taglib/tag.h"
 #include "tpropertymap.h"
+
+#define TAGLIB_STR(QSTR) \
+  TagLib::String((QSTR).toUtf8().data(), TagLib::String::UTF8)
 
 bool AudioInfo::readAudioInfo(const QString& audioPath,
                               PlayContent* playContent, InfoOption infoOption) {
@@ -45,7 +49,9 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   playContent->artist = tag->artist().toCString(true);
   playContent->albumTitle = tag->album().toCString(true);
   playContent->albumYear = int(tag->year());
-  playContent->trackNumber = int(tag->track());
+  //  playContent->trackNumber = int(tag->track());
+  playContent->genre = tag->genre().toCString(true);
+  playContent->comment = tag->comment().toCString(true);
 
   // Replace empty info.
   if (playContent->title.isEmpty()) {
@@ -53,29 +59,82 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   }
 
   TagLib::PropertyMap tags = f.file()->properties();
+  playContent->albumArtist = tags["ALBUMARTIST"].toString().toCString(true);
 
-  unsigned int longest = 0;
-  for (TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end();
-       ++i) {
-    if (i->first.size() > longest) {
-      longest = i->first.size();
+  playContent->trackNumber = 0;
+  playContent->albumTrackCount = 0;
+  const QString trackNumberString =
+      tags["TRACKNUMBER"].toString().toCString(true);
+  if (!trackNumberString.isEmpty()) {
+    const QStringList trackNumberStringList = trackNumberString.split('/');
+    if (trackNumberStringList.length() == 2) {
+      playContent->trackNumber = trackNumberStringList[0].toInt();
+      playContent->albumTrackCount = trackNumberStringList[1].toInt();
+    } else {
+      playContent->trackNumber = trackNumberString.toInt();
+      playContent->albumTrackCount = 0;
     }
   }
-  for (TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end();
-       ++i) {
-    for (TagLib::StringList::ConstIterator j = i->second.begin();
-         j != i->second.end(); ++j) {
-      const QString t(i->first.toCString(true));
-      if (t == "ALBUMARTIST") {
-        playContent->albumArtist = i->second.toString().toCString(true);
-      }
-    }
-  }
+
   if (f.isNull() || !f.audioProperties()) {
     return false;
   }
   TagLib::AudioProperties* properties = f.audioProperties();
-  playContent->audioBitRate = properties->bitrate();
+  playContent->bitRate = properties->bitrate();
+  playContent->sampleRate = properties->sampleRate();
+  playContent->channels = properties->channels();
+  playContent->length = properties->lengthInSeconds();
+  return true;
+}
+
+bool AudioInfo::writeAudioInfo(const QString& audioPath,
+                               const PlayContent* playContent) {
+  if (audioPath.isEmpty()) {
+    qDebug()
+        << "error writing audio info: intend to save audio info in empty path";
+    return false;
+  }
+  if (playContent == nullptr) {
+    qDebug() << "error writing audio info: intend to save audio info from a "
+                "null play content";
+    return false;
+  }
+
+  TagLib::ID3v2::FrameFactory::instance()->setDefaultTextEncoding(
+      TagLib::String::UTF8);
+
+  TagLib::MPEG::File f(audioPath.toUtf8().constData());
+
+  if (!f.tag()) {
+    qDebug() << "error writing audio info: audio file not readable:"
+             << audioPath;
+    return false;
+  }
+  f.ID3v2Tag()->setTitle(TAGLIB_STR(playContent->title));
+  f.ID3v2Tag()->setArtist(TAGLIB_STR(playContent->artist));
+  f.ID3v2Tag()->setAlbum(TAGLIB_STR(playContent->albumTitle));
+  if (playContent->albumYear > 0) {
+    f.ID3v2Tag()->setYear(playContent->albumYear);
+  }
+  f.ID3v2Tag()->setGenre(TAGLIB_STR(playContent->genre));
+  f.ID3v2Tag()->setComment(TAGLIB_STR(playContent->comment));
+
+  TagLib::PropertyMap map = f.properties();
+  map.replace("ALBUMARTIST",
+              TagLib::StringList{TAGLIB_STR(playContent->albumArtist)});
+  if (playContent->trackNumber > 0) {
+    if (playContent->albumTrackCount > 0) {
+      map.replace("TRACKNUMBER",
+                  TagLib::StringList{TAGLIB_STR(QString("%1/%2").arg(
+                      QString::number(playContent->trackNumber),
+                      QString::number(playContent->albumTrackCount)))});
+    } else {
+      map.replace("TRACKNUMBER", TagLib::StringList{TAGLIB_STR(QString::number(
+                                     playContent->trackNumber))});
+    }
+  }
+  //  f.file()->setProperties(map);
+  f.save(TagLib::MPEG::File::ID3v2);
   return true;
 }
 

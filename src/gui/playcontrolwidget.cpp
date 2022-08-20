@@ -41,7 +41,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   ui->coverLabel->setScaledContents(true);
   DisableFocus();
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
   InitShortcut();
   InitConnections();
@@ -75,10 +75,14 @@ void PlayControlWidget::InitConfig() {
 void PlayControlWidget::InitConnections() {
   connect(ui->preButton, &QPushButton::clicked, this,
           &PlayControlWidget::playPre);
+  connect(ui->preButton, &QPushButton::clicked, this,
+          [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   connect(ui->playButton, &QPushButton::clicked, this,
           &PlayControlWidget::updatePlay);
   connect(ui->nextButton, &QPushButton::clicked, this,
           &PlayControlWidget::playNext);
+  connect(ui->nextButton, &QPushButton::clicked, this,
+          [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   connect(ui->stopButton, &QPushButton::clicked, this,
           &PlayControlWidget::stopPlay);
   connect(ui->playModeButton, &QPushButton::clicked, this,
@@ -340,6 +344,7 @@ void PlayControlWidget::handleMediaStatusChanged(
         emit playInvalid();
         emit playNext();
       }
+      emit currentPlayContentChanged(m_currentContentUrl);
     } break;
     case QMediaPlayer::UnknownMediaStatus:
       qDebug() << "UnknownMediaStatus" << m_currentContentUrl;
@@ -357,8 +362,18 @@ void PlayControlWidget::InitShortcut() {
   connect(m_playPauseKey, &QHotkey::activated, this,
           &PlayControlWidget::updatePlay);
   connect(m_playPreKey, &QHotkey::activated, this, &PlayControlWidget::playPre);
+  connect(m_playPreKey, &QHotkey::activated, this, [this]() {
+    QTimer::singleShot(50, this, [this]() {
+      emit currentPlayContentChanged(m_currentContentUrl);
+    });
+  });
   connect(m_playNextKey, &QHotkey::activated, this,
           &PlayControlWidget::playNext);
+  connect(m_playNextKey, &QHotkey::activated, this, [this]() {
+    QTimer::singleShot(50, this, [this]() {
+      emit currentPlayContentChanged(m_currentContentUrl);
+    });
+  });
 }
 
 PlayControlWidget::PlayMode PlayControlWidget::playMode() const {
@@ -371,6 +386,10 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     return;
   }
   AudioInfo::readAudioInfo(content->contentPath, content);
+  updatePlayInfoToUI(content);
+}
+
+void PlayControlWidget::updatePlayInfoToUI(PlayContent *content) {
   const QStringList nameInfo = content->contentName.split(" - ");
   if (!content->title.isEmpty()) {
     ui->titleButton->setText(content->title);
@@ -391,6 +410,13 @@ void PlayControlWidget::updatePlayInfo(PlayContent *content) {
     ui->albumButton->setText(content->albumTitle);
   } else {
     ui->albumButton->setText(content->contentPath);
+  }
+  // When update audio info after modified, assume content cover not changed
+  // because not supported yet.
+  // This can avoid a null cover image when image was cleared before due to
+  // memory policy.
+  if (m_currentContentUrl.toLocalFile() == content->contentPath) {
+    return;
   }
   if (!content->albumCover.isNull()) {
     ui->coverLabel->setPixmap(
@@ -421,4 +447,8 @@ void PlayControlWidget::updateConfig() {
                                  ->config(CONFIG_SHORTCUT_PLAY_NEXT)
                                  .value.toString(),
                              true);
+}
+
+void PlayControlWidget::updatePlayContentInfo(PlayContent *playContent) {
+  updatePlayInfoToUI(playContent);
 }

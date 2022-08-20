@@ -35,6 +35,7 @@ class PlaylistModel : public QAbstractItemModel {
 
   int count() const;
   bool contains(PlayContent *content) const;
+  const QModelIndex find(const QString &contentPath) const;
   int indexOf(PlayContent *content) const;
   void addContent(PlayContent *content);
   bool removeContent(QList<int> indexes);
@@ -48,6 +49,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos content(const int &index) const;
   PlayContentPos content(const QString &contentPath) const;
   Playlist list() const;
+  void updatePlayContent(const PlayContent *playContent) const;
 
  public slots:
   void reloadPlayContentInfo();

@@ -7,6 +7,7 @@
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QScrollBar>
 
+#include "audioinfodialog.h"
 #include "config/appconfig.h"
 #include "model/playlistmodelheader.h"
 #include "ui_playlistwidget.h"
@@ -32,7 +33,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   this->setStyleSheet(
-      util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
+      Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
 }
 
@@ -177,10 +178,15 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   QAction *actionOpen = new QAction(tr("Open in folder"));
   connect(actionOpen, &QAction::triggered, this,
           &PlaylistWidget::actionOpenInFolder);
+  QAction *actionProperty = new QAction(tr("Property"));
+  connect(actionProperty, &QAction::triggered, this,
+          &PlaylistWidget::actionShowPropertyDialog);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
   m->addAction(actionPlay);
+  m->addSeparator();
+  m->addAction(actionProperty);
   return m;
 }
 
@@ -211,7 +217,7 @@ void PlaylistWidget::actionOpenInFolder() {
   const QString path =
       m_showingModel->content(m_showingFilterModel->mapToSource(i).row())
           .content->contentPath;
-  util::openFileInDir(path);
+  Util::openFileInDir(path);
 }
 
 void PlaylistWidget::actionPlay() {
@@ -307,5 +313,49 @@ void PlaylistWidget::removeContents(const QList<int> &indexes) {
 }
 
 void PlaylistWidget::openFileInDir(const int &row) {
-  util::openFileInDir(m_showingModel->content(row).content->contentPath);
+  Util::openFileInDir(m_showingModel->content(row).content->contentPath);
+}
+
+void PlaylistWidget::scrollToContent(const QString &contentPath) {
+  if (contentPath.isEmpty()) {
+    return;
+  }
+
+  // If selected rows is more than one, do not scroll, otherwise may get a bad
+  // experience.
+  if (ui->tableView->selectionModel()->selectedRows().count() > 1) {
+    return;
+  }
+  // Only scroll to current play contentPath when showing the current
+  // playlist.
+  if (m_showingModel != m_playingModel) {
+    return;
+  }
+  const QModelIndex showIndex =
+      m_showingFilterModel->mapFromSource(m_showingModel->find(contentPath));
+  if (!showIndex.isValid()) {
+    return;
+  }
+  ui->tableView->scrollTo(showIndex, QAbstractItemView::PositionAtCenter);
+  ui->tableView->clearSelection();
+  ui->tableView->selectRow(showIndex.row());
+}
+
+void PlaylistWidget::actionShowPropertyDialog() {
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  const QModelIndex i = m_tableViewSelectedRows[0];
+  PlayContentPos c =
+      m_showingModel->content(m_showingFilterModel->mapToSource(i).row());
+  if (c.index < 0 || c.content == nullptr) {
+    return;
+  }
+  AudioInfoDialog *dialog = new AudioInfoDialog(c.content, this);
+  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
+          [this](PlayContent *playContent) {
+            this->m_showingModel->updatePlayContent(playContent);
+            emit this->playContentInfoChanged(playContent);
+          });
+  dialog->exec();
 }

@@ -1,0 +1,1 @@
+target_sources(MPax PRIVATE playlistsql.h playlistsql.cpp)
