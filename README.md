@@ -47,9 +47,7 @@ MPax is a simple and easy-to-use music player.
   - [x] Manage audio file through playlists.
 * - [x] Search.
   - [x] Filter search with syntax statement (title HAS xxx).
-* - [ ] Manage id3v2/id3v1 info.
-  - [x] **Read id3v2/id3v1 info**.
-  - [ ] Modify id3v2/id3v1 info.
+* - [x] Manage id3v2/id3v1 info.
 * - [ ] Better encoding (if possible).
 
 ......
