@@ -50,13 +50,12 @@
   ":v_album_track_count, :v_track_number, :v_bit_rate, "           \
   ":v_sample_rate, :v_genre, :v_comment, :v_channels, :v_length);"
 
-#define SQL_UPDATE_PLAYLIST_ROW                                        \
-  "UPDATE %1 SET title=:v_title, artist=:v_artist, "                   \
-  "album_title=:v_album_title, album_artist=:v_album_artist, "         \
-  "album_year=:v_album_year, album_track_count=:v_album_track_count, " \
-  "track_number=:v_track_number, bit_rate=:v_bit_rate, "               \
-  "sample_rate=v:_sample_rate, genre=:v_genre, comment=v:_comment, "   \
-  "channels=v:_channels, length=:v_length"
+#define SQL_UPDATE_PLAYLIST_ROW                                             \
+  "UPDATE %1 SET title=:v_title, artist=:v_artist, "                        \
+  "album_title=:v_album_title, album_artist=:v_album_artist, "              \
+  "album_year=:v_album_year, album_track_count=:v_album_track_count, "      \
+  "track_number=:v_track_number, genre=:v_genre, comment=:v_comment WHERE " \
+  "path=:v_path"
 
 PlaylistSql* PlaylistSql::getInstance() {
   static PlaylistSql ps;
@@ -147,7 +146,8 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       query.bindValue(QStringLiteral(":v_album_year"), c->value("AlbumYear"));
       query.bindValue(QStringLiteral(":v_album_track_count"),
                       c->value("AlbumTrackCount"));
-      query.bindValue(QStringLiteral(":v_track_count"), c->value("TrackCount"));
+      query.bindValue(QStringLiteral(":v_track_number"),
+                      c->value("TrackNumber"));
       query.bindValue(QStringLiteral(":v_bit_rate"), c->value("BitRate"));
       query.bindValue(QStringLiteral(":v_sample_rate"), c->value("SampleRate"));
       query.bindValue(QStringLiteral(":v_genre"), c->value("Genre"));
@@ -459,8 +459,43 @@ void PlaylistSql::updatePlayContent(const Playlist* playlist,
     qDebug() << __FUNCTION__ << " failed, can not open database";
     return;
   }
+  QString tableName;
+  for (auto n : m_nameVector) {
+    if (n.second == playlist->info().info(PLAYLIST_INFO_NAME)) {
+      tableName = n.first;
+      break;
+    }
+  }
+  if (tableName.isEmpty()) {
+    qDebug() << __FUNCTION__ << " failed, can not find playlist table name";
+    return;
+  }
   m_database.transaction();
-  // TODO: update content here.
+  QSqlQuery query(m_database);
+  query.prepare(QString(SQL_UPDATE_PLAYLIST_ROW).arg(tableName));
+  query.bindValue(QStringLiteral(":v_title"), playContent->value("Title"));
+  query.bindValue(QStringLiteral(":v_artist"), playContent->value("Artist"));
+  query.bindValue(QStringLiteral(":v_album_title"),
+                  playContent->value("AlbumTitle"));
+  query.bindValue(QStringLiteral(":v_album_artist"),
+                  playContent->value("AlbumArtist"));
+  query.bindValue(QStringLiteral(":v_album_year"),
+                  playContent->value("AlbumYear"));
+  query.bindValue(QStringLiteral(":v_album_track_count"),
+                  playContent->value("AlbumTrackCount"));
+  query.bindValue(QStringLiteral(":v_track_number"),
+                  playContent->value("TrackNumber"));
+  query.bindValue(QStringLiteral(":v_genre"), playContent->value("Genre"));
+  query.bindValue(QStringLiteral(":v_comment"), playContent->value("Comment"));
+  query.bindValue(QStringLiteral(":v_path"), playContent->contentPath);
+  bool ok = query.exec();
+  if (!ok) {
+    qDebug() << "failed to update" << query.lastError() << query.lastQuery();
+    goto exit;
+  }
   m_database.commit();
+
+exit:
+  m_database.rollback();
   tryCloseDatabase();
 }
