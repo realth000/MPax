@@ -8,7 +8,7 @@
 #include <QtCore/QTimer>
 
 #include "audio/audioinfo.h"
-#include "core/playlistsql.h"
+#include "core/sql/playlistsql.h"
 
 // clang-format off
 #define MODEL_ALL_HEADER                                   \

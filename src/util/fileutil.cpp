@@ -63,7 +63,6 @@ qint64 toFileSize(const qint64 &fileSize, FileSizeLevel sizeLevel) {
         break;
     }
   }
-  qDebug() << "return size =" << size << "level =" << level;
   return size;
 }
 

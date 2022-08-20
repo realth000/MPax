@@ -14,7 +14,7 @@
 #include "config/appconfig.h"
 #include "config/appplaylist.h"
 #include "core/playlistjson.h"
-#include "core/playlistsql.h"
+#include "core/sql/playlistsql.h"
 #include "gui/aboutdialog.h"
 #include "gui/progressdialog.h"
 #include "util/cssloader.h"
