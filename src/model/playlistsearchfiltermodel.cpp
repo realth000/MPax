@@ -15,12 +15,6 @@ void Model::PlaylistSearchFilterModel::setFilterExp(
   QString errString;
   m_parser.init(filter.pattern(), &ok, &errString);
   m_validSyntax = ok;
-  if (!m_validSyntax) {
-    qDebug() << "failed to init search parser" << errString
-             << ", use plain search";
-  } else {
-    qDebug() << "init search parser";
-  }
   m_filterExp = filter;
   m_filterMode = mode;
   setFilterRegExp(filter);
