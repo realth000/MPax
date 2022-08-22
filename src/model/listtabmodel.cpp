@@ -7,13 +7,20 @@
 #include "core/playlistjson.h"
 #include "core/sql/playlistsql.h"
 
-ListTabModel::ListTabModel() : m_currentPlayListModel(nullptr) {
+ListTabModel::ListTabModel()
+    : m_currentPlayListModel(nullptr), m_reloadPlaylistTimer(new QTimer(this)) {
   connect(this, &ListTabModel::dataChanged, this,
           &ListTabModel::saveDefaultPlaylist);
   for (auto list : m_playlistList) {
     connect(list, &PlaylistModel::reloadInfoStatusChanged, this,
             &ListTabModel::reloadInfoStatusChanged);
   }
+  connect(this, &ListTabModel::reloadPlaylist, m_reloadPlaylistTimer,
+          QOverload<>::of(&QTimer::start));
+  m_reloadPlaylistTimer->setInterval(20);
+  m_reloadPlaylistTimer->setSingleShot(true);
+  connect(m_reloadPlaylistTimer, &QTimer::timeout, this,
+          [this]() { emit currentPlaylistChanged(m_currentPlayListModel); });
 }
 
 int ListTabModel::rowCount(const QModelIndex &parent) const {
@@ -38,7 +45,7 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel) {
   endResetModel();
   if (m_currentPlayListModel == nullptr) {
     m_currentPlayListModel = m_playlistList[m_playlistList.length() - 1];
-    emit currentPlaylistChanged(m_currentPlayListModel);
+    emit reloadPlaylist();
   }
   connect(playlistModel, &PlaylistModel::reloadInfoStatusChanged, this,
           &ListTabModel::reloadInfoStatusChanged);
@@ -64,7 +71,7 @@ void ListTabModel::setCurrentPlaylist(const int &index) {
     return;
   }
   m_currentPlayListModel = m_playlistList[index];
-  emit currentPlaylistChanged(m_currentPlayListModel);
+  emit reloadPlaylist();
 }
 
 PlaylistModel *ListTabModel::currentPlaylist() const {
@@ -88,7 +95,7 @@ void ListTabModel::addContent(PlayContent *playContent) {
   }
   m_currentPlayListModel->addContent(playContent);
   // Sync playlist content to PlaylistWidget.
-  emit currentPlaylistChanged(m_currentPlayListModel);
+  emit reloadPlaylist();
 }
 
 bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,

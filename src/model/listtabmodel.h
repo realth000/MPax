@@ -3,6 +3,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QStringListModel>
+#include <QtCore/QTimer>
 
 #include "model/playlistmodel.h"
 
@@ -24,6 +25,7 @@ class ListTabModel : public QStringListModel {
   void dataChanged();
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
                                qint64 time);
+  void reloadPlaylist();
 
  public slots:
   void addContent(PlayContent *playContent);
@@ -40,6 +42,7 @@ class ListTabModel : public QStringListModel {
  private:
   QList<PlaylistModel *> m_playlistList;
   PlaylistModel *m_currentPlayListModel;
+  QTimer *m_reloadPlaylistTimer;
 };
 
 #endif  // LISTTABMODEL_H
