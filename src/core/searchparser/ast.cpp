@@ -27,14 +27,29 @@ bool ASTNode::parse(const PlayContent *content,
   switch (type) {
     case ASTType::Statement: {
       if (metaKeyword.isEmpty()) {
-        return content->title.contains(word, caseSensitivity) ||
-               content->artist.contains(word, caseSensitivity) ||
-               content->albumTitle.contains(word, caseSensitivity) ||
-               content->albumArtist.contains(word, caseSensitivity);
+        for (auto &w : word) {
+          if (content->title.contains(w, caseSensitivity) ||
+              content->artist.contains(w, caseSensitivity) ||
+              content->albumTitle.contains(w, caseSensitivity) ||
+              content->albumArtist.contains(w, caseSensitivity)) {
+            continue;
+          }
+          return false;
+        }
+        return true;
       }
-      return content->value(metaKeyword)
-          .toString()
-          .contains(word, caseSensitivity);
+      if (word.isEmpty()) {
+        return false;
+      }
+      for (auto &w : word) {
+        if (content->value(metaKeyword)
+                .toString()
+                .contains(w, caseSensitivity)) {
+          continue;
+        }
+        return false;
+      }
+      return true;
     }
     case ASTType::Branch: {
       if (leftChild == nullptr || rightChild == nullptr) {

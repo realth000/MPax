@@ -44,7 +44,7 @@ struct ASTNode {
     opeKeyword = ASTOpe::None;
     metaKeyword = "";
     keyword = ASTKeyword::Unknown;
-    word = "";
+    word = QStringList{};
     parent = nullptr;
     leftChild = nullptr;
     rightChild = nullptr;
@@ -55,7 +55,7 @@ struct ASTNode {
   ASTOpe opeKeyword;
   QString metaKeyword;
   ASTKeyword keyword;
-  QString word;
+  QStringList word;
   ASTNode *parent;
   ASTNode *leftChild;
   ASTNode *rightChild;

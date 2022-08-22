@@ -28,8 +28,9 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           goto failed;
         }
         currentNode->type = ASTType::Statement;
-        currentNode->word = t.content;
-      } break;
+        currentNode->word.append(t.content);
+        break;
+      }
       case TokenType::Keyword: {
         qDebug() << "analyzing: [keyword] =" << t.content << currentNode;
         if (currentNode->type != ASTType::Statement) {
@@ -43,7 +44,8 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           goto failed;
         }
         currentNode->keyword = ASTKeywordMap[t.content];
-      } break;
+        break;
+      }
       case TokenType::OpeKeyword: {
         qDebug() << "analyzing: [opeKeyword] =" << t.content << currentNode;
         if (currentNode->parent != nullptr) {
@@ -60,7 +62,8 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           goto failed;
         }
         currentNode->opeKeyword = ASTOpeMap[t.content];
-      } break;
+        break;
+      }
       case TokenType::MetaKeyword: {
         qDebug() << "analyzing: [metaKeyword] =" << t.content << currentNode;
         if (currentNode->type != ASTType::Unknown) {
@@ -72,7 +75,8 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         currentNode->type = ASTType::Statement;
         qDebug() << "<<<<< set metaKeyword =" << metaKeywords[t.content];
         currentNode->metaKeyword = metaKeywords[t.content];
-      } break;
+        break;
+      }
       case TokenType::LeftParentheses: {
         if (currentNode->type == ASTType::Statement) {
           // ERROR: type should not set yet.
@@ -95,7 +99,8 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           *errString = "analyze error: all children were set";
           goto failed;
         }
-      } break;
+        break;
+      }
       case TokenType::RightParentheses: {
         if (currentNode->parent == nullptr) {
           // ERROR: parent should not be null.
@@ -114,7 +119,8 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           *errString = "analyze error: error parsing ')', not a branch type";
           goto failed;
         }
-      } break;
+        break;
+      }
       case TokenType::Unknown:
       default:
         break;
@@ -192,7 +198,7 @@ bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok,
       }
       const QString metaKeyword = node->metaKeyword;
       const ASTKeyword keyword = node->keyword;
-      const QString word = node->word;
+      const QStringList word = node->word;
       if (node->keyword == ASTKeyword::Unknown) {
         *errString = "unknown keyword in statement type node";
         goto failed;
