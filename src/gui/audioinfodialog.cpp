@@ -24,6 +24,10 @@ AudioInfoDialog::~AudioInfoDialog() { delete ui; }
 
 void AudioInfoDialog::initUi() {
   this->setWindowTitle(tr("Property - ") + m_content->title);
+  Util::loadCssFromFile(":/css/base.css");
+
+  ui->detailTable->setShowGrid(false);
+  ui->metadataTable->setShowGrid(false);
 
   setTabOrder(ui->okButton, ui->cancelButton);
   setTabOrder(ui->cancelButton, ui->okButton);

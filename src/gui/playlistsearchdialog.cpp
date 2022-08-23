@@ -23,6 +23,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   //  ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->searchTableView->setFocusPolicy(Qt::NoFocus);
+  ui->searchTableView->setAlternatingRowColors(true);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   //  m_model->setSourceModel(model);
