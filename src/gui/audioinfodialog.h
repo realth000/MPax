@@ -27,20 +27,6 @@ class AudioInfoDialog : public QDialog {
   bool m_modified;
   const QStringList m_headerList;
 
-  // Metadata table item
-  QTableWidgetItem *m_titleItem;
-  QTableWidgetItem *m_artistItem;
-  QTableWidgetItem *m_albumTitleItem;
-  QTableWidgetItem *m_albumArtistItem;
-  QTableWidgetItem *m_albumYearItem;
-  QTableWidgetItem *m_trackNumberItem;
-  QTableWidgetItem *m_albumTotalTrackItem;
-  QTableWidgetItem *m_genreItem;
-  QTableWidgetItem *m_commentItem;
-
-  QLineEdit *readonlyLineEdit(const QString &text);
-  QLineEdit *readonlyLineEdit(const int &text);
-  QLineEdit *readonlyLineEdit(const int &text, const QString &suffix);
   void initUi();
   void initConnections();
   void initMetadataTable();
