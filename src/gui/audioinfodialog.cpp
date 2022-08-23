@@ -101,19 +101,22 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->setItem(2, 1, new QTableWidgetItem(m_content->albumTitle));
   ui->metadataTable->setItem(3, 1,
                              new QTableWidgetItem(m_content->albumArtist));
-  if (m_content->albumYear > 0) {
-    ui->metadataTable->setItem(
-        4, 1, new QTableWidgetItem(QString::number(m_content->albumYear)));
-  }
-  if (m_content->trackNumber > 0) {
-    ui->metadataTable->setItem(
-        5, 1, new QTableWidgetItem(QString::number(m_content->trackNumber)));
-  }
-  if (m_content->albumTrackCount > 0) {
-    ui->metadataTable->setItem(
-        6, 1,
-        new QTableWidgetItem(QString::number(m_content->albumTrackCount)));
-  }
+  ui->metadataTable->setItem(
+      4, 1,
+      new QTableWidgetItem(m_content->albumYear > 0
+                               ? QString::number(m_content->albumYear)
+                               : ""));
+  ui->metadataTable->setItem(
+      5, 1,
+      new QTableWidgetItem(m_content->trackNumber > 0
+                               ? QString::number(m_content->trackNumber)
+                               : ""));
+  ui->metadataTable->setItem(
+      6, 1,
+      new QTableWidgetItem(m_content->albumTrackCount > 0
+                               ? QString::number(m_content->albumTrackCount)
+                               : ""));
+
   ui->metadataTable->setItem(7, 1, new QTableWidgetItem(m_content->genre));
   ui->metadataTable->setItem(8, 1, new QTableWidgetItem(m_content->comment));
 }
