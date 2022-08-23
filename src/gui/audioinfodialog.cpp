@@ -91,6 +91,11 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->setItem(7, 0, new QTableWidgetItem(tr("Genre")));
   ui->metadataTable->setItem(8, 0, new QTableWidgetItem(tr("Comment")));
 
+  for (int i = 0; i < ui->metadataTable->rowCount(); i++) {
+    ui->metadataTable->item(i, 0)->setFlags(
+        ui->metadataTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
+  }
+
   ui->metadataTable->setItem(0, 1, new QTableWidgetItem(m_content->title));
   ui->metadataTable->setItem(1, 1, new QTableWidgetItem(m_content->artist));
   ui->metadataTable->setItem(2, 1, new QTableWidgetItem(m_content->albumTitle));
@@ -172,8 +177,12 @@ void AudioInfoDialog::initDetailTable() {
   ui->detailTable->setItem(
       9, 1,
       new QTableWidgetItem(QString::number(m_content->bitRate) + " kbps"));
-  qDebug("sample rate=%d, bit rate=%d, time=%d\n", m_content->sampleRate,
-         m_content->bitRate, m_content->length);
+  for (int i = 0; i < ui->detailTable->rowCount(); i++) {
+    ui->detailTable->item(i, 0)->setFlags(ui->detailTable->item(i, 0)->flags() &
+                                          ~Qt::ItemIsEditable);
+    ui->detailTable->item(i, 1)->setFlags(ui->detailTable->item(i, 1)->flags() &
+                                          ~Qt::ItemIsEditable);
+  }
 }
 
 void AudioInfoDialog::saveAudioInfo() {
