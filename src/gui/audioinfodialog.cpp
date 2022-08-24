@@ -155,7 +155,7 @@ void AudioInfoDialog::initDetailTable() {
                            new QTableWidgetItem(info.dir().absolutePath()));
   ui->detailTable->setItem(2, 1, new QTableWidgetItem(m_content->contentPath));
   // TODO: What's this index.
-  ui->detailTable->setItem(3, 1, new QTableWidgetItem(0));
+  ui->detailTable->setItem(3, 1, new QTableWidgetItem(QString::number(0)));
   ui->detailTable->setItem(
       4, 1,
       new QTableWidgetItem(
@@ -176,7 +176,8 @@ void AudioInfoDialog::initDetailTable() {
   ui->detailTable->setItem(
       7, 1,
       new QTableWidgetItem(QString::number(m_content->sampleRate) + " Hz"));
-  ui->detailTable->setItem(8, 1, new QTableWidgetItem(m_content->channels));
+  ui->detailTable->setItem(
+      8, 1, new QTableWidgetItem(QString::number(m_content->channels)));
   ui->detailTable->setItem(
       9, 1,
       new QTableWidgetItem(QString::number(m_content->bitRate) + " kbps"));
