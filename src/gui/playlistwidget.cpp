@@ -356,7 +356,10 @@ void PlaylistWidget::actionShowPropertyDialog() {
   connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
           [this](PlayContent *playContent) {
             this->m_showingModel->updatePlayContent(playContent);
-            emit this->playContentInfoChanged(playContent);
+            if (playContent->contentPath ==
+                m_playingModel->currentPlayContent().content->contentPath) {
+              emit this->playContentInfoChanged(playContent);
+            }
           });
   dialog->exec();
 }
