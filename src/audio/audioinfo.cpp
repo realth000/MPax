@@ -133,7 +133,7 @@ bool AudioInfo::writeAudioInfo(const QString& audioPath,
                                      playContent->trackNumber))});
     }
   }
-  //  f.file()->setProperties(map);
+  f.setProperties(map);
   f.save(TagLib::MPEG::File::ID3v2);
   return true;
 }
