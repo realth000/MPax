@@ -32,6 +32,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->setSortingEnabled(true);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
+  ui->tableView->setAlternatingRowColors(true);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
@@ -355,7 +356,10 @@ void PlaylistWidget::actionShowPropertyDialog() {
   connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
           [this](PlayContent *playContent) {
             this->m_showingModel->updatePlayContent(playContent);
-            emit this->playContentInfoChanged(playContent);
+            if (playContent->contentPath ==
+                m_playingModel->currentPlayContent().content->contentPath) {
+              emit this->playContentInfoChanged(playContent);
+            }
           });
   dialog->exec();
 }

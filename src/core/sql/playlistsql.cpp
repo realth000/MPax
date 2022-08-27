@@ -368,6 +368,16 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
       playContent->title = q.value("title").toString();
       playContent->artist = q.value("artist").toString();
       playContent->albumTitle = q.value("album_title").toString();
+      playContent->albumArtist = q.value("album_artist").toString();
+      playContent->albumYear = q.value("album_year").toInt();
+      playContent->albumTrackCount = q.value("album_track_count").toInt();
+      playContent->trackNumber = q.value("track_number").toInt();
+      playContent->bitRate = q.value("bit_rate").toInt();
+      playContent->sampleRate = q.value("sample_rate").toInt();
+      playContent->genre = q.value("genre").toString();
+      playContent->comment = q.value("comment").toString();
+      playContent->channels = q.value("channels").toInt();
+      playContent->length = q.value("length").toInt();
       list->append(playContent);
     }
     allList.append(Playlist(info, list));

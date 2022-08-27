@@ -1,5 +1,6 @@
 QScrollBar:vertical {
-    border: 1px solid #3e3d53;
+    /*border: 1px solid #3e3d53;*/
+    border: none;
     background-color: transparent;
     width: 17px;
     margin: 15px 0 15px 0;
@@ -102,7 +103,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 QScrollBar:horizontal {
-    border: 1px solid #3e3d53;
+    /*border: 1px solid #3e3d53;*/
+    border: none;
     background-color: transparent;
     height: 17px;
     margin: 0 15px 0 15px;
@@ -219,11 +221,18 @@ QTableView {
     background-color: #1e1d23;
     border: 1px solid #2f2e33;
     selection-background-color: #007b50;
+    alternate-background-color: #222128;
+}
+
+QTableWidget::item:read-only {
+    border: 1px solid red;
+    background-color: red;
 }
 
 QHeaderView {
     color: #a9b7c6;
-    background-color: #272632;
+    /*background-color: #272632;*/
+    background-color: transparent;
     border: 1px solid #2f2e33;
 }
 
@@ -232,7 +241,7 @@ QHeaderView::section {
     border-top: none;
     border-bottom: none;
     border-left: none;
-    border-right: 1px solid #a9b7c6;
+    border-right: 1px solid #2f2e33;
     selection-background-color: #007b50;
     padding-left: 5px;
 }
@@ -255,6 +264,11 @@ QTableView::item:hover {
     border-left-color: #04b97f;
     border-bottom-color: transparent;
     border-left-width: 2px;
+}
+
+QTableView::item:read-only {
+    color: #ff0000;
+    border: 1px solid red;
 }
 
 QTableView::item:selected {
@@ -352,16 +366,9 @@ QListView::item:selected:!active {
     background: #222b2e;
 }
 
-QLineEdit {
-    border-radius: none;
-    border: none;
-    background-color: #222b2e;
-    selection-background-color: #007b50;
-    color: #d3dae3;
-}
-
 QTextBrowser {
     border: 1px solid #2f2e33;
     selection-background-color: #007b50;
     color: #d3dae3;
 }
+
