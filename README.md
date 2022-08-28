@@ -11,9 +11,12 @@
             <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux"/></a>
         <a href="https://github.com/realth000/MPax/releases">
             <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
-        <img src="https://img.shields.io/badge/Qt-5.9+-blue"/>
+        <a href="https://www.qt.io/">
+            <img src="https://img.shields.io/badge/Qt-5.9+-blue"/></a>
         <a href="https://github.com/realth000/MPax/blob/master/LICENSE">
             <img src="https://img.shields.io/github/license/realth000/MPax"/></a>
+        <a href="https://www.codacy.com/">
+            <img src="https://app.codacy.com/project/badge/Grade/e84cd3b100f24444ac1ac2ddb8d946c0"/></a>
     </p>
 </div>
 
