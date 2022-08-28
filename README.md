@@ -22,6 +22,8 @@ English|[简体中文](./docs/README_zh_CN.md)
 
 ## Introduction
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/268156a9ba91463d92835bb2f0f84cb4)](https://app.codacy.com/gh/realth000/MPax?utm_source=github.com&utm_medium=referral&utm_content=realth000/MPax&utm_campaign=Badge_Grade_Settings)
+
 MPax is a simple and easy-to-use music player.
 
 ![UI](./docs/images/ui_02.png)
