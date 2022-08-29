@@ -37,7 +37,6 @@ MainUI::MainUI(QWidget *parent)
   InitStatusBar();
   m_trayIcon->show();
 
-  Config::AppConfig::getInstance()->loadConfig();
   //  QList<Playlist> playlistList =
   //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
   QList<Playlist> playlistList = PlaylistSql::getInstance()->loadPlaylist();

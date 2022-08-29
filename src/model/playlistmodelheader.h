@@ -37,12 +37,11 @@ class PlaylistModelHeader : public QObject {
   void updateSort(int logicalIndex, int oldVisualIndex, int newVisualIndex);
 
  private:
-  QList<PlaylistHeaderItem> m_headerList;
-  QList<PlaylistHeaderItem> m_usedHeaderList;
+  QVector<PlaylistHeaderItem> m_headerVector;
 
   explicit PlaylistModelHeader();
   ~PlaylistModelHeader();
-  static QList<HeaderItem> defaultHeaderList();
+  static QVector<HeaderItem> defaultHeaderVector();
 };
 }  // namespace PLModel
 

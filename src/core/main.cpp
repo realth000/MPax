@@ -1,6 +1,7 @@
 ﻿#include <QtCore/QTranslator>
 #include <QtWidgets/QApplication>
 
+#include "config/appconfig.h"
 #include "gui/mainui.h"
 #ifdef Q_OS_WINDOWS
 #include <QtGui/QFont>
@@ -30,6 +31,7 @@ int main(int argc, char* argv[]) {
       appTranslator.load(QCoreApplication::applicationDirPath() +
                          "/translation/en.qm");
   }
+  Config::AppConfig::getInstance()->loadConfig();
   QCoreApplication::installTranslator(&appTranslator);
   MainUI* w = new MainUI();
   w->show();
