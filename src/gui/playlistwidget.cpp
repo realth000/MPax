@@ -33,6 +33,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setAlternatingRowColors(true);
+  ui->tableView->horizontalHeader()->setSectionsMovable(true);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
@@ -156,6 +157,9 @@ void PlaylistWidget::InitConnections() {
             Config::AppConfig::getInstance()->setConfig(
                 CONFIG_PLAYLIST_SORT_ORDER, order);
           });
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
+          PLModel::PlaylistModelHeader::getInstance(),
+          &PLModel::PlaylistModelHeader::updateSort);
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
