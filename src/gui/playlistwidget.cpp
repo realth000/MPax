@@ -40,19 +40,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
 
 PlaylistWidget::~PlaylistWidget() { delete ui; }
 
-void PlaylistWidget::setHeader(const PLModel::PlaylistModelHeader *header) {
-  if (m_header != nullptr) {
-    delete m_header;
-    m_header = nullptr;
-  }
-  m_header = header;
-}
-
 void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   m_showingModel = playlistModel;
-  if (m_showingModel != nullptr) {
-    m_showingModel->setHeader(m_header);
-  }
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
@@ -271,9 +260,6 @@ void PlaylistWidget::updateConfig() {
     }
     it++;
   }
-  const PLModel::PlaylistModelHeader *header = new PLModel::PlaylistModelHeader(
-      noHeader ? PLModel::PlaylistModelHeader::defaultHeaderList() : list);
-  setHeader(header);
 }
 
 PlayContentPos PlaylistWidget::randomContent() const {
