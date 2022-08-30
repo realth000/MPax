@@ -87,4 +87,7 @@ void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
                                               toSaveSort);
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
+QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const {
+  return m_headerVector;
+}
 }  // namespace PLModel

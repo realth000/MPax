@@ -28,7 +28,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->setSelectionBehavior(QTableView::SelectRows);
-  ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
+  //  ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->tableView->setSortingEnabled(true);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
@@ -56,6 +56,12 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   for (int i = 0; i < m_header->headerCount(); i++) {
     if (m_header->usedHeader(i) == sortHeader) {
       ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
+    }
+  }
+  auto headerVector = m_header->headerVector();
+  for (auto &h : headerVector) {
+    if (0 <= h.index && h.index < m_header->headerCount()) {
+      ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
 }
