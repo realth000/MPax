@@ -61,8 +61,8 @@ void ListTabWidget::removePlaylist() {
   emit currentPlaylistChanged(m_listTabModel->currentPlaylist());
 }
 
-void ListTabWidget::saveAllPlaylist(const QString &filePath) {
-  m_listTabModel->saveAllPlaylist(filePath);
+void ListTabWidget::saveAllPlaylist(const QString &dirPath) {
+  m_listTabModel->saveAllPlaylist(dirPath);
 }
 
 void ListTabWidget::setCurrentPlaylist(const int &index) {

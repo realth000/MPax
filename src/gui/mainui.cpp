@@ -378,12 +378,12 @@ void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
 }
 
 void MainUI::saveAllPlaylist() {
-  const QString filePath =
-      QFileDialog::getSaveFileName(this, tr("Save playlist"));
-  if (filePath.isEmpty()) {
+  const QString dirPath =
+      QFileDialog::getExistingDirectory(this, tr("Save playlist"));
+  if (dirPath.isEmpty()) {
     return;
   }
-  ui->listTabWidget->saveAllPlaylist(filePath);
+  ui->listTabWidget->saveAllPlaylist(dirPath);
 }
 
 void MainUI::saveConfig() {

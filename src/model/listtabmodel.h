@@ -33,7 +33,7 @@ class ListTabModel : public QStringListModel {
   void removePlaylist(const int &index);
   void setCurrentPlaylist(const int &index);
   PlaylistModel *currentPlaylist() const;
-  void saveAllPlaylist(const QString &filePath) const;
+  void saveAllPlaylist(const QString &dirPath) const;
   void saveAllPlaylist() const;
   void saveDefaultPlaylist() const;
   int indexOf(PlaylistModel *playlistModel) const;

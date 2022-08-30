@@ -1,6 +1,7 @@
 #include "listtabmodel.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtCore/QtDebug>
 
 #include "config/appplaylist.h"
@@ -109,8 +110,23 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
   return QStringListModel::setData(index, value, role);
 }
 
-void ListTabModel::saveAllPlaylist(const QString &filePath) const {
-  PlaylistSql::getInstance()->savePlaylist(filePath);
+void ListTabModel::saveAllPlaylist(const QString &dirPath) const {
+  for (auto playlist : m_playlistList) {
+    QFile f(dirPath + "/" + playlist->playlistName() + ".m3u8");
+    QTextStream stream;
+    stream.setCodec("UTF-8");
+    stream.setDevice(&f);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+      qDebug() << "can not save playlist to " << f.fileName();
+      continue;
+    }
+    stream << "#"
+           << "\n";
+    for (auto content : playlist->list().content()) {
+      stream << content->contentPath << "\n";
+    }
+    f.close();
+  }
 }
 
 void ListTabModel::saveAllPlaylist() const {
