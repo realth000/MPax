@@ -48,7 +48,9 @@ PlaylistModelHeader::PlaylistModelHeader() {
         break;
       }
       m_headerVector[j.value().toInt()].name = i.key();
-      m_headerVector[j.value().toInt()].width = i.value().toInt();
+      if (i.value().toInt() > 0) {
+        m_headerVector[j.value().toInt()].width = i.value().toInt();
+      }
       m_headerVector[j.value().toInt()].index = j.value().toInt();
     }
   }
@@ -63,11 +65,6 @@ QVector<HeaderItem> PlaylistModelHeader::defaultHeaderVector() {
 }
 void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
                                      int newVisualIndex) {
-  QMap<QString, QVariant> toSave;
-  QMap<QString, QVariant> toSaveSort;
-  for (auto& h : m_headerVector) {
-    toSave.insert(h.name, h.width);
-  }
   for (int i = 0; i < m_headerVector.length(); i++) {
     if (i == logicalIndex) {
       m_headerVector[i].index = newVisualIndex;
@@ -80,14 +77,35 @@ void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
                m_headerVector[i].index < oldVisualIndex) {
       m_headerVector[i].index++;
     }
-    toSaveSort.insert(m_headerVector[i].name, m_headerVector[i].index);
   }
+  saveConfig();
+}
+
+void PlaylistModelHeader::updateWidth(int logicalIndex, int oldSize,
+                                      int newSize) {
+  for (auto& h : m_headerVector) {
+    if (h.index == logicalIndex) {
+      h.width = newSize;
+    }
+  }
+  saveConfig();
+}
+
+QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const {
+  return m_headerVector;
+}
+
+void PlaylistModelHeader::saveConfig() {
+  QMap<QString, QVariant> toSave;
+  QMap<QString, QVariant> toSaveSort;
+  for (auto& h : m_headerVector) {
+    toSave.insert(h.name, h.width);
+    toSaveSort.insert(h.name, h.index);
+  }
+
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER, toSave);
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_SORT,
                                               toSaveSort);
   Config::AppConfig::getInstance()->saveConfigDefer();
-}
-QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const {
-  return m_headerVector;
 }
 }  // namespace PLModel

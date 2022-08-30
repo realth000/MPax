@@ -15,9 +15,7 @@ class PlaylistWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit PlaylistWidget(QWidget *parent = nullptr,
-                          const PLModel::PlaylistModelHeader *header =
-                              PLModel::PlaylistModelHeader::getInstance());
+  explicit PlaylistWidget(QWidget *parent = nullptr);
   ~PlaylistWidget();
 
  signals:

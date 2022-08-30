@@ -36,6 +36,8 @@ class PlaylistModelHeader : public QObject {
 
  public slots:
   void updateSort(int logicalIndex, int oldVisualIndex, int newVisualIndex);
+  void updateWidth(int logicalIndex, int oldSize, int newSize);
+  void saveConfig();
 
  private:
   QVector<PlaylistHeaderItem> m_headerVector;

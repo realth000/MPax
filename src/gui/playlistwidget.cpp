@@ -14,11 +14,10 @@
 #include "util/cssloader.h"
 #include "util/fileutil.h"
 
-PlaylistWidget::PlaylistWidget(QWidget *parent,
-                               const PLModel::PlaylistModelHeader *header)
+PlaylistWidget::PlaylistWidget(QWidget *parent)
     : QWidget(parent),
       ui(new Ui::PlaylistWidget),
-      m_header(header),
+      m_header(PLModel::PlaylistModelHeader::getInstance()),
       m_showingModel(nullptr),
       m_showingFilterModel(new PlaylistFilterModel),
       m_playingModel(nullptr),
@@ -37,6 +36,13 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
+
+  auto headerVector = m_header->headerVector();
+  for (auto &h : headerVector) {
+    if (0 <= h.index && h.index < m_header->headerCount()) {
+      ui->tableView->setColumnWidth(h.index, h.width);
+    }
+  }
 }
 
 PlaylistWidget::~PlaylistWidget() { delete ui; }
@@ -166,6 +172,8 @@ void PlaylistWidget::InitConnections() {
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
           PLModel::PlaylistModelHeader::getInstance(),
           &PLModel::PlaylistModelHeader::updateSort);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized,
+          m_header, &PLModel::PlaylistModelHeader::updateWidth);
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
