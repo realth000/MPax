@@ -169,6 +169,8 @@ void MainUI::InitConnections() {
   //                ? m_trayIcon->updateMainWindowActiveState(true)
   //                : m_trayIcon->updateMainWindowActiveState(false);
   //          });
+  connect(ui->importPlaylistAction, &QAction::triggered, this,
+          &MainUI::importPlaylist);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -375,6 +377,16 @@ void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
   ui->playlistWidget->setPlayingListCurrentContent(content);
   Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT,
                                               content->contentPath);
+}
+
+void MainUI::importPlaylist() {
+  const QStringList files = QFileDialog::getOpenFileNames(
+      this, tr("Import playlist"), "",
+      "*.m3u8(*.m3u8);;" + tr("All files") + "(*)");
+  if (files.isEmpty()) {
+    return;
+  }
+  ui->listTabWidget->importPlaylist(files);
 }
 
 void MainUI::saveAllPlaylist() {

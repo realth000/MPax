@@ -1,5 +1,7 @@
 #include "listtabwidget.h"
 
+#include <QtCore/QDir>
+
 #include "ui_listtabwidget.h"
 #include "util/cssloader.h"
 
@@ -59,6 +61,30 @@ QMenu *ListTabWidget::InitListViewContextMenu() {
 void ListTabWidget::removePlaylist() {
   m_listTabModel->removePlaylist(ui->listView->currentIndex().row());
   emit currentPlaylistChanged(m_listTabModel->currentPlaylist());
+}
+
+void ListTabWidget::importPlaylist(const QStringList &fileList) {
+  qDebug() << "!!!!" << fileList;
+  for (auto &f : fileList) {
+    QFile ff(f);
+    if (!ff.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      qDebug() << "can not open playlist file " << ff;
+      continue;
+    }
+    const QStringList audioList =
+        QString(ff.readAll()).split("\n", Qt::SkipEmptyParts);
+    ff.close();
+    const QString playlistName = QFileInfo(f).baseName();
+    PlaylistModel *playlistModel = new PlaylistModel(playlistName);
+    for (auto &a : audioList) {
+      if (!QFileInfo::exists(a)) {
+        continue;
+      }
+      playlistModel->addContent(new PlayContent(a));
+    }
+    m_listTabModel->addPlaylist(playlistModel);
+  }
+  m_listTabModel->saveAllPlaylist();
 }
 
 void ListTabWidget::saveAllPlaylist(const QString &dirPath) {

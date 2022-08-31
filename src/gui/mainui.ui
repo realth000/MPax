@@ -93,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -108,7 +108,10 @@
      <string>Playlist</string>
     </property>
     <addaction name="playlistAddAction"/>
+    <addaction name="separator"/>
+    <addaction name="importPlaylistAction"/>
     <addaction name="saveAllPlaylistAction"/>
+    <addaction name="separator"/>
     <addaction name="searchPlaylistAction"/>
    </widget>
    <widget class="QMenu" name="settingsMenu">
@@ -190,6 +193,11 @@
   <action name="aboutQtAction">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="importPlaylistAction">
+   <property name="text">
+    <string>Import playlist</string>
    </property>
   </action>
  </widget>
