@@ -36,13 +36,13 @@ MPax is a simple and easy-to-use music player.
   * [x] Support .mp3/.flac/.wav.
   * [ ] **Support .cue**.
   * [ ] Show lyric.
-  * [ ] **A "small window" mode**.
+  * [ ] **Mini window mode**.
   * [x] **Custom global shortcut**.
   * [ ] **Custom global shortcut in UI settings.**
   * [ ] Show music in different groups (artists, albums and so on).
 * - [ ] Playlist management.
   - [x] Add/Save/Delete playlist.
-  - [ ] **Export and import playlist.**
+  - [x] **Export and import playlist.**
   - [x] Play history.
   - [ ] Custom playlist header.
   - [x] **Sort by custom header**.
@@ -65,14 +65,16 @@ MPax is a simple and easy-to-use music player.
 
 ### Build steps
 
-1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204 or Debian11)
-   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804 or Debian10)
+1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204)
+   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804)
 3. ``mkdir cmake-build-release && cd cmake-build-release``
 4. ``cmake ../ && cmake --build . -j $(nproc)``
 5. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``
 
-### Build package
-* Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
+5. * Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
+
+   * Ubuntu2004: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2004``
+   * Ubuntu1804: ``cd scripts && sudo ./build_deb.sh -d Ubuntu1804``
 
 ## Releases
 
