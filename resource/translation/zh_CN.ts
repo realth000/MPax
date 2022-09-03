@@ -522,22 +522,22 @@
         <translation>区分大小写</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="17"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="19"/>
         <source>Search in playlist</source>
         <translation>播放列表中搜索</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="139"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="166"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="142"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="169"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="145"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="172"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
