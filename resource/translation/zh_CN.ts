@@ -407,7 +407,7 @@
     <message>
         <location filename="../../src/gui/mainui.cpp" line="385"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>所有文件</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.cpp" line="453"/>
