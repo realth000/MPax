@@ -7,6 +7,7 @@
 
 #define DEFAULT_PLAYLIST_NAME "default"
 #define PLAYLIST_INFO_NAME "name"
+#define PLAYLIST_INFO_TABLE_NAME "table_name"
 #define PLAYLIST_INFO_COUNT "count"
 
 class PlaylistInfo {

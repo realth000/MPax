@@ -61,9 +61,8 @@ void ListTabModel::removePlaylist(const int &index) {
     return;
   }
   m_currentPlayListModel = nullptr;
-  // FIXME: Memory leak and shared PlayContent!
+  PlaylistSql::getInstance()->removePlaylist(m_playlistList[index]->list());
   m_playlistList.removeAt(index);
-  PlaylistSql::getInstance()->removePlaylist(index);
 }
 
 void ListTabModel::setCurrentPlaylist(const int &index) {
@@ -144,7 +143,7 @@ int ListTabModel::indexOf(PlaylistModel *playlistModel) const {
 }
 
 void ListTabModel::saveCurrentPlaylist() {
-  PlaylistSql::getInstance()->updatePlaylist(
-      m_playlistList.indexOf(m_currentPlayListModel),
-      m_currentPlayListModel->list());
+  auto playlist =
+      m_playlistList[m_playlistList.indexOf(m_currentPlayListModel)]->list();
+  PlaylistSql::getInstance()->updatePlaylist(&playlist);
 }
