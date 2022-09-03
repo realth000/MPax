@@ -2,6 +2,7 @@
 #define MPAX_PLAYLISTMODELHEADER_H
 
 #include <QtCore/QList>
+#include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QString>
 
@@ -11,21 +12,39 @@ namespace PLModel {
  * .first: header name
  * .second: header width
  */
-typedef QPair<QString, int> PlaylistHeaderItem;
+struct PlaylistHeaderItem {
+  QString name;
+  int width;
+  int index;
+};
+
 using HeaderItem = PlaylistHeaderItem;
 
-class PlaylistModelHeader {
+class PlaylistModelHeader : public QObject {
+  Q_OBJECT
+
  public:
-  explicit PlaylistModelHeader(const QList<HeaderItem> &headerList);
+  static PlaylistModelHeader *getInstance();
+  PlaylistModelHeader(const PlaylistModelHeader &) = delete;
+  PlaylistModelHeader &operator=(const PlaylistModelHeader &) = delete;
+
   int headerCount() const;
   int usedHeaderCount() const;
   QString header(const int &index) const;
   QString usedHeader(const int &index) const;
-  static QList<HeaderItem> defaultHeaderList();
+  QVector<PlaylistHeaderItem> headerVector() const;
+
+ public slots:
+  void updateSort(int logicalIndex, int oldVisualIndex, int newVisualIndex);
+  void updateWidth(int logicalIndex, int oldSize, int newSize);
+  void saveConfig();
 
  private:
-  QList<QPair<QString, int>> m_headerList;
-  QList<QPair<QString, int>> m_usedHeaderList;
+  QVector<PlaylistHeaderItem> m_headerVector;
+
+  explicit PlaylistModelHeader();
+  ~PlaylistModelHeader();
+  static QVector<HeaderItem> defaultHeaderVector();
 };
 }  // namespace PLModel
 

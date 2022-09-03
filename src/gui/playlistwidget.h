@@ -15,11 +15,7 @@ class PlaylistWidget : public QWidget {
   Q_OBJECT
 
  public:
-  explicit PlaylistWidget(
-      QWidget *parent = nullptr,
-      const PLModel::PlaylistModelHeader *header =
-          new PLModel::PlaylistModelHeader(
-              PLModel::PlaylistModelHeader::defaultHeaderList()));
+  explicit PlaylistWidget(QWidget *parent = nullptr);
   ~PlaylistWidget();
 
  signals:
@@ -30,7 +26,6 @@ class PlaylistWidget : public QWidget {
   void playlistOrderChanged();
 
  public slots:
-  void setHeader(const PLModel::PlaylistModelHeader *header);
   void setModel(PlaylistModel *playlistModel);
   PlayContentPos nextContent() const;
   PlayContentPos preContent() const;

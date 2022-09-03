@@ -70,8 +70,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   }
   int playlistCount = 0;
   QStringList tableNames;
-  QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
-  m_nameVector.clear();
   m_database.transaction();
   QSqlQuery query(m_database);
   // Delete old playlist data.
@@ -80,7 +78,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   bool ok = query.exec();
   if (!ok) {
     m_database.rollback();
-    m_nameVector = nameVectorBackup;
     qDebug() << "can not get table name data" << query.lastError();
     goto exit;
   }
@@ -91,7 +88,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     ok = query.exec(QString("DROP TABLE %1").arg(t));
     if (!ok) {
       m_database.rollback();
-      m_nameVector = nameVectorBackup;
       qDebug() << "can not delete old playlist table" << query.lastError();
       goto exit;
     }
@@ -99,7 +95,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   ok = query.exec(SQL_CLEAR_PLAYLIST_INFO);
   if (!ok) {
     m_database.rollback();
-    m_nameVector = nameVectorBackup;
     qDebug() << "can not erase old playlist info" << query.lastError();
     goto exit;
   }
@@ -118,7 +113,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
-      m_nameVector = nameVectorBackup;
       qDebug() << "can not save playlist info:" << playlistName << ":"
                << query.lastError() << query.lastQuery();
       goto exit;
@@ -129,7 +123,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
                     QStringList{});
     if (!ok) {
       m_database.rollback();
-      m_nameVector = nameVectorBackup;
       qDebug() << "can not create playlist table: failed to prepare sql";
       goto exit;
     }
@@ -139,7 +132,6 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     ok = query.exec();
     if (!ok) {
       m_database.rollback();
-      m_nameVector = nameVectorBackup;
       qDebug() << "can not create playlist table:" << playlistName << ":"
                << query.lastError();
       goto exit;
@@ -184,15 +176,14 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
       ok = query.exec();
       if (!ok) {
         m_database.rollback();
-        m_nameVector = nameVectorBackup;
         qDebug() << "can not save playlist data:" << playlistName << ":"
                  << query.lastError();
         goto exit;
       }
       contentCount++;
     }
-    m_nameVector.append(QPair<QString, QString>(tableName, playlistName));
     playlistCount++;
+    playlist.info().setInfo(PLAYLIST_INFO_TABLE_NAME, tableName);
   }
   m_database.commit();
 exit:
@@ -203,18 +194,13 @@ void PlaylistSql::savePlaylist(const QString& dbPath) {
   QFile::copy(SQL_DB_NAME, dbPath);
 }
 
-void PlaylistSql::removePlaylist(const int& index) {
-  if (m_nameVector.length() <= index) {
-    qDebug() << "playlist index intended to delete is out of range";
-    return;
-  }
-  const QString tableName = m_nameVector[index].first;
-  const QString playlistName = m_nameVector[index].second;
+void PlaylistSql::removePlaylist(const Playlist& playlist) {
+  const QString tableName = playlist.info().info(PLAYLIST_INFO_TABLE_NAME);
+  const QString playlistName = playlist.info().info(PLAYLIST_INFO_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "database not open, failed to delete" << playlistName;
     return;
   }
-  QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
   m_database.transaction();
   QSqlQuery query(m_database);
   // Delete playlist info.
@@ -224,7 +210,6 @@ void PlaylistSql::removePlaylist(const int& index) {
   bool ok = query.exec();
   if (!ok) {
     m_database.rollback();
-    m_nameVector = nameVectorBackup;
     qDebug() << "can not delete playlist info for " << playlistName
              << query.lastError();
     goto exit;
@@ -233,26 +218,19 @@ void PlaylistSql::removePlaylist(const int& index) {
   ok = query.exec(QString("DROP TABLE %1").arg(tableName));
   if (!ok) {
     m_database.rollback();
-    m_nameVector = nameVectorBackup;
     qDebug() << "can not delete playlist data for" << playlistName
              << query.lastError();
     goto exit;
   }
   m_database.commit();
-  m_nameVector.removeAt(index);
 exit:
   tryCloseDatabase();
 }
 
-void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
-  if (m_nameVector.length() <= index) {
-    qDebug() << "update Playlist index out of range" << index
-             << m_nameVector.length();
-    return;
-  }
+void PlaylistSql::updatePlaylist(Playlist* playlist) {
   int contentCount = 0;
-  const QString tableName = m_nameVector[index].first;
-  const QString playlistName = m_nameVector[index].second;
+  const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
+  const QString playlistName = playlist->info().info(PLAYLIST_INFO_NAME);
   const QStringList headerList =
       QStringList{"ContentPath", "Title",      "Artist",          "AlbumTitle",
                   "AlbumArtist", "AlbumYear",  "AlbumTrackCount", "TrackNumber",
@@ -273,7 +251,7 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     goto exit;
   }
 
-  for (auto c : playlist.content()) {
+  for (auto c : playlist->content()) {
 #if 1
     ok = prepareSql(&query, c, tableName, SqlAction::Insert, headerList,
                     contentCount);
@@ -310,13 +288,13 @@ void PlaylistSql::updatePlaylist(const int& index, const Playlist& playlist) {
     }
     contentCount++;
   }
+  playlist->info().setInfo(PLAYLIST_INFO_COUNT, QString::number(contentCount));
 exit:
   tryCloseDatabase();
 }
 
 QList<Playlist> PlaylistSql::loadPlaylist() {
   QList<Playlist> allList;
-  QVector<QPair<QString, QString>> nameVectorBackup = m_nameVector;
   // Load playlist sort from config
   const QString sortHeaderName =
       m_titleMap[Config::AppConfig::getInstance()
@@ -326,7 +304,6 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
   const int sortOrder = Config::AppConfig::getInstance()
                             ->config(CONFIG_PLAYLIST_SORT_ORDER)
                             .value.toInt();
-  m_nameVector.clear();
   if (!tryOpenDatabase()) {
     qDebug() << "can not load playlist, database failed to open";
     return QList<Playlist>{};
@@ -340,6 +317,7 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
   while (query.next()) {
     PlaylistInfo* info = new PlaylistInfo;
     PlayContentList* list = new PlayContentList;
+    int count = 0;
 
     int id = query.value("id").toInt();
     const QString tableName = query.value("table_name").toString();
@@ -356,12 +334,10 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     if (!ok) {
       qDebug() << "can not load playlist" << playlistName << ":"
                << q.lastError();
-      m_nameVector = nameVectorBackup;
       goto exit;
     }
     info->setInfo(PLAYLIST_INFO_NAME, playlistName);
-    m_nameVector.append(QPair<QString, QString>(tableName, playlistName));
-
+    info->setInfo(PLAYLIST_INFO_TABLE_NAME, tableName);
     while (q.next()) {
       //      qDebug() << q.value("path").toString();
       PlayContent* playContent = new PlayContent(q.value("path").toString());
@@ -379,7 +355,9 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
       playContent->channels = q.value("channels").toInt();
       playContent->length = q.value("length").toInt();
       list->append(playContent);
+      count++;
     }
+    info->setInfo(PLAYLIST_INFO_COUNT, QString::number(count));
     allList.append(Playlist(info, list));
   }
 exit:
@@ -461,24 +439,19 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     qDebug() << "can not load playlist with order, database failed to open";
     return false;
   }
+  int count = 0;
   const QString playlistName = playlist->info().info(PLAYLIST_INFO_NAME);
   if (playlistName.isEmpty()) {
     qDebug() << "can not load playlist with order, empty playlist name";
     return false;
   }
   PlayContentList* list = new PlayContentList;
-  QString tableName;
+  const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   bool ok;
   QSqlQuery q(m_database);
   const QString sqlColumnName = m_titleMap[columnName].name;
   if (sqlColumnName.isEmpty()) {
     goto exit;
-  }
-  for (const auto& p : m_nameVector) {
-    if (p.second == playlistName) {
-      tableName = p.first;
-      break;
-    }
   }
   if (tableName.isEmpty()) {
     qDebug() << "can not load playlist with order for a null table name";
@@ -508,7 +481,9 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     playContent->channels = q.value("channels").toInt();
     playContent->length = q.value("length").toInt();
     list->append(playContent);
+    count++;
   }
+  playlist->setInfo(PLAYLIST_INFO_COUNT, QString::number(count));
   playlist->setContent(list);
   return true;
 
@@ -532,13 +507,7 @@ void PlaylistSql::updatePlayContent(const Playlist* playlist,
     qDebug() << __FUNCTION__ << " failed, can not open database";
     return;
   }
-  QString tableName;
-  for (auto n : m_nameVector) {
-    if (n.second == playlist->info().info(PLAYLIST_INFO_NAME)) {
-      tableName = n.first;
-      break;
-    }
-  }
+  const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   if (tableName.isEmpty()) {
     qDebug() << __FUNCTION__ << " failed, can not find playlist table name";
     return;

@@ -20,7 +20,7 @@ class PlaylistModel : public QAbstractItemModel {
   // Translation need this marco!!!
   Q_OBJECT
  public:
-  explicit PlaylistModel(const QString &playlistName, QList<PlaylistHeaderItem>,
+  explicit PlaylistModel(const QString &playlistName,
                          QObject *parent = nullptr);
   explicit PlaylistModel(const Playlist &playlist, QObject *parent = nullptr);
   QModelIndex parent(const QModelIndex &index) const override;
@@ -40,7 +40,6 @@ class PlaylistModel : public QAbstractItemModel {
   void addContent(PlayContent *content);
   bool removeContent(QList<int> indexes);
   void setPlaylistName(const QString &name);
-  void setHeader(const PLModel::PlaylistModelHeader *header);
   QString playlistName() const;
   PlayContentPos currentPlayContent() const;
   void setCurrentPlayContent(const int &index);
@@ -66,7 +65,6 @@ class PlaylistModel : public QAbstractItemModel {
   Playlist *m_playlist;
   PlayContentList m_contentList;
   // Copy of PlaylistWidget::m_header.
-  const PLModel::PlaylistModelHeader *m_header;
   PlayContent *m_currentPlayContent;
   QMap<QString, QString> m_headerTrans;
 };

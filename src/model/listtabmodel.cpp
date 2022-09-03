@@ -1,6 +1,7 @@
 #include "listtabmodel.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtCore/QtDebug>
 
 #include "config/appplaylist.h"
@@ -60,9 +61,8 @@ void ListTabModel::removePlaylist(const int &index) {
     return;
   }
   m_currentPlayListModel = nullptr;
-  // FIXME: Memory leak and shared PlayContent!
+  PlaylistSql::getInstance()->removePlaylist(m_playlistList[index]->list());
   m_playlistList.removeAt(index);
-  PlaylistSql::getInstance()->removePlaylist(index);
 }
 
 void ListTabModel::setCurrentPlaylist(const int &index) {
@@ -86,10 +86,7 @@ void ListTabModel::addContent(PlayContent *playContent) {
      * there is at least one playlist.
      * Create a playlist here may lose some initialization.
      */
-    m_currentPlayListModel = new PlaylistModel(
-        DEFAULT_PLAYLIST_NAME,
-        QList<PLModel::HeaderItem>{
-            PLModel::PlaylistModelHeader::defaultHeaderList()});
+    m_currentPlayListModel = new PlaylistModel(DEFAULT_PLAYLIST_NAME);
     // Add playlist to ListTabWidget.
     addPlaylist(m_currentPlayListModel);
   }
@@ -112,8 +109,23 @@ bool ListTabModel::setData(const QModelIndex &index, const QVariant &value,
   return QStringListModel::setData(index, value, role);
 }
 
-void ListTabModel::saveAllPlaylist(const QString &filePath) const {
-  PlaylistSql::getInstance()->savePlaylist(filePath);
+void ListTabModel::saveAllPlaylist(const QString &dirPath) const {
+  for (auto playlist : m_playlistList) {
+    QFile f(dirPath + "/" + playlist->playlistName() + ".m3u8");
+    QTextStream stream;
+    stream.setCodec("UTF-8");
+    stream.setDevice(&f);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+      qDebug() << "can not save playlist to " << f.fileName();
+      continue;
+    }
+    stream << "#"
+           << "\n";
+    for (auto content : playlist->list().content()) {
+      stream << content->contentPath << "\n";
+    }
+    f.close();
+  }
 }
 
 void ListTabModel::saveAllPlaylist() const {
@@ -131,7 +143,7 @@ int ListTabModel::indexOf(PlaylistModel *playlistModel) const {
 }
 
 void ListTabModel::saveCurrentPlaylist() {
-  PlaylistSql::getInstance()->updatePlaylist(
-      m_playlistList.indexOf(m_currentPlayListModel),
-      m_currentPlayListModel->list());
+  auto playlist =
+      m_playlistList[m_playlistList.indexOf(m_currentPlayListModel)]->list();
+  PlaylistSql::getInstance()->updatePlaylist(&playlist);
 }

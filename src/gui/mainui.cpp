@@ -37,7 +37,6 @@ MainUI::MainUI(QWidget *parent)
   InitStatusBar();
   m_trayIcon->show();
 
-  Config::AppConfig::getInstance()->loadConfig();
   //  QList<Playlist> playlistList =
   //      Config::AppPlaylist::loadPlaylist(CONFIG_PLAYLIST_FILE_PATH);
   QList<Playlist> playlistList = PlaylistSql::getInstance()->loadPlaylist();
@@ -170,6 +169,8 @@ void MainUI::InitConnections() {
   //                ? m_trayIcon->updateMainWindowActiveState(true)
   //                : m_trayIcon->updateMainWindowActiveState(false);
   //          });
+  connect(ui->importPlaylistAction, &QAction::triggered, this,
+          &MainUI::importPlaylist);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -220,9 +221,7 @@ void MainUI::openAudio() {
 }
 
 void MainUI::addPlaylist() {
-  ui->listTabWidget->addPlaylist(
-      new PlaylistModel(DEFAULT_PLAYLIST_NAME,
-                        PLModel::PlaylistModelHeader::defaultHeaderList()));
+  ui->listTabWidget->addPlaylist(new PlaylistModel(DEFAULT_PLAYLIST_NAME));
   // This will save empty default playlist.
   // This one is not ui->listTabWidget->addPlaylist, will not cause large IO.
   ui->listTabWidget->saveDefaultPlaylist();
@@ -380,13 +379,23 @@ void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
                                               content->contentPath);
 }
 
-void MainUI::saveAllPlaylist() {
-  const QString filePath =
-      QFileDialog::getSaveFileName(this, tr("Save playlist"));
-  if (filePath.isEmpty()) {
+void MainUI::importPlaylist() {
+  const QStringList files = QFileDialog::getOpenFileNames(
+      this, tr("Import playlist"), "",
+      "*.m3u8(*.m3u8);;" + tr("All files") + "(*)");
+  if (files.isEmpty()) {
     return;
   }
-  ui->listTabWidget->saveAllPlaylist(filePath);
+  ui->listTabWidget->importPlaylist(files);
+}
+
+void MainUI::saveAllPlaylist() {
+  const QString dirPath =
+      QFileDialog::getExistingDirectory(this, tr("Save playlist"));
+  if (dirPath.isEmpty()) {
+    return;
+  }
+  ui->listTabWidget->saveAllPlaylist(dirPath);
 }
 
 void MainUI::saveConfig() {

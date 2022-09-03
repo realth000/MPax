@@ -14,11 +14,10 @@
 #include "util/cssloader.h"
 #include "util/fileutil.h"
 
-PlaylistWidget::PlaylistWidget(QWidget *parent,
-                               const PLModel::PlaylistModelHeader *header)
+PlaylistWidget::PlaylistWidget(QWidget *parent)
     : QWidget(parent),
       ui(new Ui::PlaylistWidget),
-      m_header(header),
+      m_header(PLModel::PlaylistModelHeader::getInstance()),
       m_showingModel(nullptr),
       m_showingFilterModel(new PlaylistFilterModel),
       m_playingModel(nullptr),
@@ -28,31 +27,28 @@ PlaylistWidget::PlaylistWidget(QWidget *parent,
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
   ui->tableView->setSelectionBehavior(QTableView::SelectRows);
-  ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
+  //  ui->tableView->setColumnWidthRatio(m_tableViewWidthRadio);
   ui->tableView->setSortingEnabled(true);
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setAlternatingRowColors(true);
+  ui->tableView->horizontalHeader()->setSectionsMovable(true);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
+
+  auto headerVector = m_header->headerVector();
+  for (auto &h : headerVector) {
+    if (0 <= h.index && h.index < m_header->headerCount()) {
+      ui->tableView->setColumnWidth(h.index, h.width);
+    }
+  }
 }
 
 PlaylistWidget::~PlaylistWidget() { delete ui; }
 
-void PlaylistWidget::setHeader(const PLModel::PlaylistModelHeader *header) {
-  if (m_header != nullptr) {
-    delete m_header;
-    m_header = nullptr;
-  }
-  m_header = header;
-}
-
 void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   m_showingModel = playlistModel;
-  if (m_showingModel != nullptr) {
-    m_showingModel->setHeader(m_header);
-  }
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
@@ -66,6 +62,12 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   for (int i = 0; i < m_header->headerCount(); i++) {
     if (m_header->usedHeader(i) == sortHeader) {
       ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
+    }
+  }
+  auto headerVector = m_header->headerVector();
+  for (auto &h : headerVector) {
+    if (0 <= h.index && h.index < m_header->headerCount()) {
+      ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
 }
@@ -167,6 +169,11 @@ void PlaylistWidget::InitConnections() {
             Config::AppConfig::getInstance()->setConfig(
                 CONFIG_PLAYLIST_SORT_ORDER, order);
           });
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
+          PLModel::PlaylistModelHeader::getInstance(),
+          &PLModel::PlaylistModelHeader::updateSort);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized,
+          m_header, &PLModel::PlaylistModelHeader::updateWidth);
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
@@ -271,9 +278,6 @@ void PlaylistWidget::updateConfig() {
     }
     it++;
   }
-  const PLModel::PlaylistModelHeader *header = new PLModel::PlaylistModelHeader(
-      noHeader ? PLModel::PlaylistModelHeader::defaultHeaderList() : list);
-  setHeader(header);
 }
 
 PlayContentPos PlaylistWidget::randomContent() const {

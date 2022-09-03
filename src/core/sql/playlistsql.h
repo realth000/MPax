@@ -17,8 +17,8 @@ class PlaylistSql : public QObject {
  public slots:
   void savePlaylist(const QList<Playlist>& playlists);
   static void savePlaylist(const QString& filePath);
-  void removePlaylist(const int& index);
-  void updatePlaylist(const int& index, const Playlist& playlist);
+  void removePlaylist(const Playlist& playlist);
+  void updatePlaylist(Playlist* playlist);
   QList<Playlist> loadPlaylist();
   bool loadPlaylistWithOrder(Playlist* playlist, const QString& columnName,
                              Qt::SortOrder order);
@@ -35,7 +35,6 @@ class PlaylistSql : public QObject {
   };
 
   QSqlDatabase m_database;
-  QVector<QPair<QString, QString>> m_nameVector;
   QMap<QString, ColumnHeader> m_titleMap;
 
   PlaylistSql();

@@ -20,9 +20,7 @@
   }
 // clang-format on
 
-PlaylistModel::PlaylistModel(const QString &playlistName,
-                             QList<PlaylistHeaderItem> headerList,
-                             QObject *parent)
+PlaylistModel::PlaylistModel(const QString &playlistName, QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlistName),
       m_playlist(new Playlist(PlaylistInfo(QMap<QString, QString>{
@@ -59,7 +57,7 @@ int PlaylistModel::rowCount(const QModelIndex &parent) const {
 
 int PlaylistModel::columnCount(const QModelIndex &parent) const {
   // Only shows used column
-  return m_header->usedHeaderCount();
+  return PLModel::PlaylistModelHeader::getInstance()->usedHeaderCount();
 }
 
 QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
@@ -71,7 +69,8 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
   }
   if (role == Qt::DisplayRole) {
     return QVariant(m_playlist->content()[index.row()]->value(
-        m_header->usedHeader(index.column())));
+        PLModel::PlaylistModelHeader::getInstance()->usedHeader(
+            index.column())));
   }
   return QVariant();
 }
@@ -93,7 +92,8 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
   }
-  return m_headerTrans[m_header->usedHeader(section)];
+  return m_headerTrans[PLModel::PlaylistModelHeader::getInstance()->usedHeader(
+      section)];
 }
 
 int PlaylistModel::count() const { return m_playlist->content().length(); }
@@ -253,15 +253,13 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
                                             Qt::SortOrder order) {
   beginResetModel();
   if (!PlaylistSql::getInstance()->loadPlaylistWithOrder(
-          m_playlist, m_header->usedHeader(column), order)) {
+          m_playlist,
+          PLModel::PlaylistModelHeader::getInstance()->usedHeader(column),
+          order)) {
     qDebug() << "failed to reload playlist with order";
     return;
   }
   endResetModel();
-}
-
-void PlaylistModel::setHeader(const PLModel::PlaylistModelHeader *header) {
-  m_header = header;
 }
 
 const QModelIndex PlaylistModel::find(const QString &contentPath) const {

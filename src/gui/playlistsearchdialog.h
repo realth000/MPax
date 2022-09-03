@@ -8,6 +8,7 @@
 #include <QtWidgets/QMenu>
 
 #include "core/playcontent.h"
+#include "model/playlistmodelheader.h"
 #include "model/playlistsearchfiltermodel.h"
 
 namespace Ui {
@@ -40,6 +41,7 @@ class PlaylistSearchDialog : public QDialog {
   int m_rowPos;
   QModelIndexList m_tableViewSelectedRows;
   QMenu *m_tableViewContextMenu;
+  const PLModel::PlaylistModelHeader *m_header;
 
   Qt::CaseSensitivity caseSensitivity();
   void selectPre();
