@@ -1,7 +1,7 @@
 #ifndef MPAX_PLAYLISTMODELHEADER_H
 #define MPAX_PLAYLISTMODELHEADER_H
 
-#include <QtCore/QList>
+#include <QtCore/QVector>
 #include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QString>

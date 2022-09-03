@@ -72,7 +72,11 @@ void ListTabWidget::importPlaylist(const QStringList &fileList) {
       continue;
     }
     const QStringList audioList =
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         QString(ff.readAll()).split("\n", Qt::SkipEmptyParts);
+#else
+        QString(ff.readAll()).split("\n", QString::SkipEmptyParts);
+#endif
     ff.close();
     const QString playlistName = QFileInfo(f).baseName();
     PlaylistModel *playlistModel = new PlaylistModel(playlistName);
