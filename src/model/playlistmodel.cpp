@@ -264,3 +264,9 @@ const QModelIndex PlaylistModel::find(const QString &contentPath) const {
 void PlaylistModel::updatePlayContent(const PlayContent *playContent) const {
   PlaylistSql::getInstance()->updatePlayContent(m_playlist, playContent);
 }
+
+void PlaylistModel::setUsedHeader(const QString &header, bool used) {
+  beginResetModel();
+  PLModel::PlaylistModelHeader::getInstance()->setUsedHeader(header, used);
+  endResetModel();
+}

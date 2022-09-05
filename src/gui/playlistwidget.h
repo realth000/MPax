@@ -45,7 +45,7 @@ class PlaylistWidget : public QWidget {
 
  private:
   Ui::PlaylistWidget *ui;
-  const PLModel::PlaylistModelHeader *m_header;
+  PLModel::PlaylistModelHeader *m_header;
   PlaylistModel *m_showingModel;
   PlaylistFilterModel *m_showingFilterModel;
   PlaylistModel *m_playingModel;

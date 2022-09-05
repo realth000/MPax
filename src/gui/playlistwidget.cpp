@@ -337,7 +337,7 @@ int PlaylistWidget::countShowing() const {
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
-  m_tableViewContextMenu->popup(QCursor().pos());
+  m_tableViewContextMenu->popup(QCursor::pos());
 }
 
 void PlaylistWidget::openTableHeaderContextMenu(const QPoint &pos) {
@@ -350,6 +350,10 @@ void PlaylistWidget::updateColumns(bool checked) {
     return;
   }
   qDebug() << action->text() << "checked =" << checked;
+  // Do NOT use PlaylistModelHeader::setUsedHeader to change used header here
+  // directly Use PlaylistModel::setUsedHeader, which has beginResetModel() and
+  // endResetModel(), to ensure a refresh on view after changed used headers.
+  m_showingModel->setUsedHeader(action->text(), checked);
 }
 
 void PlaylistWidget::removeContents(const QList<int> &indexes) {

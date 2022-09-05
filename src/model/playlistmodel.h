@@ -8,21 +8,6 @@
 #include "core/playlist.h"
 #include "playlistmodelheader.h"
 
-// clang-format off
-#define MODEL_ALL_HEADER                                            \
-  QMap<QString, QString> {                                          \
-    {"Title", PlaylistModel::tr("Title")},                          \
-    {"Artist", PlaylistModel::tr("Artist")},                        \
-    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},                \
-    {"ContentName", PlaylistModel::tr("ContentName")},              \
-    {"AlbumArtist", PlaylistModel::tr("AlbumArtist")},              \
-    {"AlbumYear", PlaylistModel::tr("AlbumYear")},                  \
-    {"AlbumTrackCount", PlaylistModel::tr("AlbumTrackCount")},      \
-    {"TrackNumber", PlaylistModel::tr("TrackNumber")},              \
-    {"Length", PlaylistModel::tr("Length")},                        \
-  }
-// clang-format on
-
 // QPair<Name, Width>, width is temporary deprecated.
 typedef QPair<QString, int> PlaylistHeaderItem;
 
@@ -64,6 +49,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos content(const QString &contentPath) const;
   Playlist list() const;
   void updatePlayContent(const PlayContent *playContent) const;
+  void setUsedHeader(const QString &header, bool used);
 
  public slots:
   void reloadPlayContentInfo();
@@ -81,6 +67,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentList m_contentList;
   // Copy of PlaylistWidget::m_header.
   PlayContent *m_currentPlayContent;
+  // FIXME: Duplicate with PlaylistModelHeader::m_headerTrans
   QMap<QString, QString> m_headerTrans;
 };
 #endif  // PLAYLISTMODEL_H
