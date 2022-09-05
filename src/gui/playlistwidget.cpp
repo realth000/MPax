@@ -220,6 +220,10 @@ QMenu *PlaylistWidget::initSetTableColumnContextMenu() {
     QAction *a = new QAction(tr(i.value().toStdString().c_str()));
     a->setCheckable(true);
     connect(a, &QAction::triggered, this, &PlaylistWidget::updateColumns);
+    auto header = m_header->usedHeader(i.value());
+    if (header != nullptr && header->used) {
+      a->setChecked(true);
+    }
     m->addAction(a);
   }
   return m;

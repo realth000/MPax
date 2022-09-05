@@ -49,6 +49,20 @@ QString PlaylistModelHeader::usedHeader(const int& index) const {
   return m_usedHeaderVector[index]->name;
 }
 
+PlaylistHeaderItem* PlaylistModelHeader::usedHeader(
+    const QString& header) const {
+  const auto t = m_headerTrans.key(header);
+  if (t.isEmpty()) {
+    return nullptr;
+  }
+  for (const auto& h : m_usedHeaderVector) {
+    if (h->name == t) {
+      return h;
+    }
+  }
+  return nullptr;
+}
+
 PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
   // TODO: This should in somewhere else.
   //  PlaylistSql::getInstance();

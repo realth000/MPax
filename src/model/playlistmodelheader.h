@@ -51,6 +51,7 @@ class PlaylistModelHeader : public QObject {
   QString header(const int &index) const;
   void setUsedHeader(const QString &header, bool used);
   QString usedHeader(const int &index) const;
+  PlaylistHeaderItem *usedHeader(const QString &header) const;
   QVector<PlaylistHeaderItem> headerVector() const;
 
  public slots:
