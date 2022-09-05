@@ -485,24 +485,49 @@
 <context>
     <name>PlaylistModel</name>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="16"/>
+        <location filename="../../src/model/playlistmodel.h" line="14"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="17"/>
+        <location filename="../../src/model/playlistmodel.h" line="15"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="18"/>
+        <location filename="../../src/model/playlistmodel.h" line="16"/>
         <source>AlbumTitle</source>
         <translation>专辑名</translation>
     </message>
     <message>
-        <location filename="../../src/model/playlistmodel.cpp" line="19"/>
+        <location filename="../../src/model/playlistmodel.h" line="17"/>
         <source>ContentName</source>
         <translation>标题</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.h" line="18"/>
+        <source>AlbumArtist</source>
+        <translation>专辑艺术家</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.h" line="19"/>
+        <source>AlbumYear</source>
+        <translation>专辑发行年份</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.h" line="20"/>
+        <source>AlbumTrackCount</source>
+        <translation>专辑合计音轨</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.h" line="21"/>
+        <source>TrackNumber</source>
+        <translation>音轨号</translation>
+    </message>
+    <message>
+        <location filename="../../src/model/playlistmodel.h" line="22"/>
+        <source>Length</source>
+        <translation>持续时间</translation>
     </message>
 </context>
 <context>
@@ -552,24 +577,29 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="181"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="187"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="184"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="190"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="186"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="192"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="189"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="195"/>
         <source>Property</source>
         <translation>属性</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/playlistwidget.cpp" line="217"/>
+        <source>Set columns</source>
+        <translation>设置列</translation>
     </message>
 </context>
 <context>

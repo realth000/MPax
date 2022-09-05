@@ -10,16 +10,6 @@
 #include "audio/audioinfo.h"
 #include "core/sql/playlistsql.h"
 
-// clang-format off
-#define MODEL_ALL_HEADER                                   \
-  QMap<QString, QString> {                                 \
-    {"Title", PlaylistModel::tr("Title")},                 \
-    {"Artist", PlaylistModel::tr("Artist")},               \
-    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},       \
-    { "ContentName", PlaylistModel::tr("ContentName") }    \
-  }
-// clang-format on
-
 PlaylistModel::PlaylistModel(const QString &playlistName, QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlistName),

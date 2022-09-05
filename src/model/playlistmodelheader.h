@@ -1,10 +1,10 @@
 #ifndef MPAX_PLAYLISTMODELHEADER_H
 #define MPAX_PLAYLISTMODELHEADER_H
 
-#include <QtCore/QVector>
 #include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QString>
+#include <QtCore/QVector>
 
 namespace PLModel {
 /**
@@ -41,6 +41,7 @@ class PlaylistModelHeader : public QObject {
 
  private:
   QVector<PlaylistHeaderItem> m_headerVector;
+  QVector<PlaylistHeaderItem> m_usedHeaderVector;
 
   explicit PlaylistModelHeader();
   ~PlaylistModelHeader();

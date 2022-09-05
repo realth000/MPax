@@ -8,6 +8,21 @@
 #include "core/playlist.h"
 #include "playlistmodelheader.h"
 
+// clang-format off
+#define MODEL_ALL_HEADER                                            \
+  QMap<QString, QString> {                                          \
+    {"Title", PlaylistModel::tr("Title")},                          \
+    {"Artist", PlaylistModel::tr("Artist")},                        \
+    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},                \
+    {"ContentName", PlaylistModel::tr("ContentName")},              \
+    {"AlbumArtist", PlaylistModel::tr("AlbumArtist")},              \
+    {"AlbumYear", PlaylistModel::tr("AlbumYear")},                  \
+    {"AlbumTrackCount", PlaylistModel::tr("AlbumTrackCount")},      \
+    {"TrackNumber", PlaylistModel::tr("TrackNumber")},              \
+    {"Length", PlaylistModel::tr("Length")},                        \
+  }
+// clang-format on
+
 // QPair<Name, Width>, width is temporary deprecated.
 typedef QPair<QString, int> PlaylistHeaderItem;
 

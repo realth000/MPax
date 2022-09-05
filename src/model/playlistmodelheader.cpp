@@ -21,7 +21,7 @@ QString PlaylistModelHeader::header(const int& index) const {
 }
 
 QString PlaylistModelHeader::usedHeader(const int& index) const {
-  return m_headerVector[index].name;
+  return m_usedHeaderVector[index].name;
 }
 
 PlaylistModelHeader::PlaylistModelHeader() {
@@ -54,6 +54,7 @@ PlaylistModelHeader::PlaylistModelHeader() {
       m_headerVector[j.value().toInt()].index = j.value().toInt();
     }
   }
+  m_usedHeaderVector = m_headerVector;
 }
 
 PlaylistModelHeader::~PlaylistModelHeader() {}

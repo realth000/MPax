@@ -51,11 +51,14 @@ class PlaylistWidget : public QWidget {
   PlaylistModel *m_playingModel;
   PlaylistFilterModel *m_playingFilterModel;
   QMenu *m_tableViewContextMenu;
+  QMenu *m_tableHeaderContextMenu;
   QModelIndexList m_tableViewSelectedRows;
   QList<qreal> m_tableViewWidthRadio;
 
   void InitConnections();
   QMenu *InitTableViewContextMenu();
+  QMenu *initTableHeaderContextMenu();
+  QMenu *initSetTableColumnContextMenu();
   void actionDelete();
   void actionOpenInFolder();
   void actionPlay();
@@ -63,6 +66,8 @@ class PlaylistWidget : public QWidget {
 
  private slots:
   void openTableViewContextMenu(const QPoint &pos);
+  void openTableHeaderContextMenu(const QPoint &pos);
+  void updateColumns(bool checked);
 };
 
 #endif  // PLAYLISTWIDGET_H

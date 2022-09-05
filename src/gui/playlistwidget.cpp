@@ -23,6 +23,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
       m_playingModel(nullptr),
       m_playingFilterModel(new PlaylistFilterModel),
       m_tableViewContextMenu(InitTableViewContextMenu()),
+      m_tableHeaderContextMenu(initTableHeaderContextMenu()),
       m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
@@ -33,6 +34,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setAlternatingRowColors(true);
   ui->tableView->horizontalHeader()->setSectionsMovable(true);
+  ui->tableView->horizontalHeader()->setContextMenuPolicy(
+      Qt::CustomContextMenu);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
@@ -174,6 +177,9 @@ void PlaylistWidget::InitConnections() {
           &PLModel::PlaylistModelHeader::updateSort);
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized,
           m_header, &PLModel::PlaylistModelHeader::updateWidth);
+  connect(ui->tableView->horizontalHeader(),
+          &QHeaderView::customContextMenuRequested, this,
+          &PlaylistWidget::openTableHeaderContextMenu);
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
@@ -195,6 +201,27 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   m->addAction(actionPlay);
   m->addSeparator();
   m->addAction(actionProperty);
+  return m;
+}
+
+QMenu *PlaylistWidget::initTableHeaderContextMenu() {
+  QMenu *m = new QMenu(this);
+  m->setMinimumWidth(150);
+  QMenu *menuSetColumn = initSetTableColumnContextMenu();
+  m->addMenu(menuSetColumn);
+  return m;
+}
+
+QMenu *PlaylistWidget::initSetTableColumnContextMenu() {
+  QMenu *m = new QMenu(this);
+  m->setTitle(tr("Set columns"));
+  auto s = MODEL_ALL_HEADER;
+  for (auto i = s.constBegin(); i != s.constEnd(); i++) {
+    QAction *a = new QAction(tr(i.value().toStdString().c_str()));
+    a->setCheckable(true);
+    connect(a, &QAction::triggered, this, &PlaylistWidget::updateColumns);
+    m->addAction(a);
+  }
   return m;
 }
 
@@ -311,6 +338,18 @@ int PlaylistWidget::countShowing() const {
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
   m_tableViewContextMenu->popup(QCursor().pos());
+}
+
+void PlaylistWidget::openTableHeaderContextMenu(const QPoint &pos) {
+  m_tableHeaderContextMenu->popup(QCursor::pos());
+}
+
+void PlaylistWidget::updateColumns(bool checked) {
+  auto *action = dynamic_cast<QAction *>(sender());
+  if (action == nullptr) {
+    return;
+  }
+  qDebug() << action->text() << "checked =" << checked;
 }
 
 void PlaylistWidget::removeContents(const QList<int> &indexes) {
