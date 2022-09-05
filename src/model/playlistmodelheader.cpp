@@ -13,15 +13,12 @@ PlaylistModelHeader* PlaylistModelHeader::getInstance() {
 int PlaylistModelHeader::headerCount() const { return m_headerVector.count(); }
 
 int PlaylistModelHeader::usedHeaderCount() const {
-  return m_usedHeaderVector.count();
-}
-
-QString PlaylistModelHeader::header(const int& index) const {
-  return m_headerVector[index].name;
+  return m_visibleHeaderVector.count();
 }
 
 void PlaylistModelHeader::setUsedHeader(const QString& header, bool used) {
   const QString name = m_headerTrans.key(header);
+  qDebug() << "TRANS AME + " << name;
   if (name.isEmpty()) {
     return;
   }
@@ -29,38 +26,38 @@ void PlaylistModelHeader::setUsedHeader(const QString& header, bool used) {
     for (auto& i : m_headerVector) {
       if (i.name == name) {
         i.used = true;
-        m_usedHeaderVector.append(&i);
+        m_visibleHeaderVector.append(&i);
       }
     }
   } else {
-    for (int i = 0; i < m_usedHeaderVector.length(); i++) {
-      if (m_usedHeaderVector[i]->name == name) {
-        m_usedHeaderVector[i]->used = false;
-        m_usedHeaderVector.remove(i);
+    for (int i = 0; i < m_visibleHeaderVector.length(); i++) {
+      if (m_visibleHeaderVector[i]->name == name) {
+        m_visibleHeaderVector[i]->used = false;
+        m_visibleHeaderVector.remove(i);
       }
     }
   }
 }
 
 QString PlaylistModelHeader::usedHeader(const int& index) const {
-  if (m_usedHeaderVector.length() <= index) {
+  if (m_visibleHeaderVector.length() <= index) {
     return "";
   }
-  return m_usedHeaderVector[index]->name;
+  return m_visibleHeaderVector[index]->name;
 }
 
-PlaylistHeaderItem* PlaylistModelHeader::usedHeader(
+PlaylistHeaderItem PlaylistModelHeader::usedHeader(
     const QString& header) const {
   const auto t = m_headerTrans.key(header);
   if (t.isEmpty()) {
-    return nullptr;
+    return {};
   }
-  for (const auto& h : m_usedHeaderVector) {
+  for (auto& h : m_visibleHeaderVector) {
     if (h->name == t) {
-      return h;
+      return *h;
     }
   }
-  return nullptr;
+  return {};
 }
 
 PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
@@ -73,30 +70,36 @@ PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
       Config::AppConfig::getInstance()
           ->config(CONFIG_PLAYLIST_HEADER_SORT)
           .value.toMap();
+  auto configHeaderUsed = Config::AppConfig::getInstance()
+                              ->config(CONFIG_PLAYLIST_HEADER_USED)
+                              .value.toMap();
 
   if (configHeaderSort.isEmpty() || configHeader.isEmpty() ||
       configHeaderSort.count() != configHeader.count()) {
     m_headerVector = defaultHeaderVector();
   } else {
-    m_headerVector.fill(PlaylistHeaderItem(), configHeader.size());
-    for (auto i = configHeader.constBegin(), j = configHeaderSort.constBegin();
-         i != configHeader.constEnd() && j != configHeaderSort.constEnd();
-         i++, j++) {
-      if (j.value().toInt() >= m_headerVector.length()) {
-        m_headerVector = defaultHeaderVector();
-        break;
-      }
-      m_headerVector[j.value().toInt()].name = i.key();
-      if (i.value().toInt() > 0) {
-        m_headerVector[j.value().toInt()].width = i.value().toInt();
-      }
-      m_headerVector[j.value().toInt()].index = j.value().toInt();
+    for (auto i = configHeader.constBegin(); i != configHeader.constEnd();
+         i++) {
+      m_headerVector.push_back(PlaylistHeaderItem());
+      m_headerVector.last().name = i.key();
+      m_headerVector.last().width = i.value().toInt();
+      m_headerVector.last().index = configHeaderSort[i.key()].toInt();
+      m_headerVector.last().used = configHeaderUsed[i.key()].toBool();
     }
   }
-  for (auto& v : m_headerVector) {
-    if (v.used) {
-      m_usedHeaderVector.append(&v);
+  for (auto& h : m_headerVector) {
+    if (h.used) {
+      m_visibleHeaderVector.append(&h);
     }
+  }
+  std::stable_sort(
+      m_visibleHeaderVector.first(), m_visibleHeaderVector.last(),
+      [](const PlaylistHeaderItem& i, const PlaylistHeaderItem& j) -> bool {
+        return i.index < j.index;
+      });
+  qDebug() << "--------------------------------";
+  for (auto& h : m_visibleHeaderVector) {
+    qDebug() << "load" << h->name << h->width << h->index << h->used;
   }
 }
 
@@ -108,26 +111,26 @@ QVector<HeaderItem> PlaylistModelHeader::defaultHeaderVector() {
       HeaderItem{"Artist", 100, 1, true},
       HeaderItem{"AlbumTitle", 130, 2, true},
       HeaderItem{"ContentName", 100, 3, false},
-      HeaderItem{"AlbumArtist", 100, 3, false},
-      HeaderItem{"AlbumYear", 100, 3, false},
-      HeaderItem{"AlbumTrackCount", 100, 3, false},
-      HeaderItem{"TrackNumber", 100, 3, false},
-      HeaderItem{"Length  ", 100, 3, false},
+      HeaderItem{"AlbumArtist", 100, 4, false},
+      HeaderItem{"AlbumYear", 100, 5, false},
+      HeaderItem{"AlbumTrackCount", 100, 6, false},
+      HeaderItem{"TrackNumber", 100, 7, false},
+      HeaderItem{"Length", 100, 8, false},
   };
 }
 void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
                                      int newVisualIndex) {
-  for (int i = 0; i < m_headerVector.length(); i++) {
+  for (int i = 0; i < m_visibleHeaderVector.length(); i++) {
     if (i == logicalIndex) {
-      m_headerVector[i].index = newVisualIndex;
+      m_visibleHeaderVector[i]->index = newVisualIndex;
     } else if (oldVisualIndex < newVisualIndex &&
-               oldVisualIndex < m_headerVector[i].index &&
-               m_headerVector[i].index <= newVisualIndex) {
-      m_headerVector[i].index--;
+               oldVisualIndex < m_visibleHeaderVector[i]->index &&
+               m_visibleHeaderVector[i]->index <= newVisualIndex) {
+      m_visibleHeaderVector[i]->index--;
     } else if (newVisualIndex < oldVisualIndex &&
-               newVisualIndex <= m_headerVector[i].index &&
-               m_headerVector[i].index < oldVisualIndex) {
-      m_headerVector[i].index++;
+               newVisualIndex <= m_visibleHeaderVector[i]->index &&
+               m_visibleHeaderVector[i]->index < oldVisualIndex) {
+      m_visibleHeaderVector[i]->index++;
     }
   }
   saveConfig();
@@ -150,14 +153,21 @@ QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const {
 void PlaylistModelHeader::saveConfig() {
   QMap<QString, QVariant> toSave;
   QMap<QString, QVariant> toSaveSort;
+  QMap<QString, QVariant> toSaveUsed;
+  qDebug() << "save"
+           << "_--------------------";
   for (auto& h : m_headerVector) {
     toSave.insert(h.name, h.width);
     toSaveSort.insert(h.name, h.index);
+    toSaveUsed.insert(h.name, h.used);
+    qDebug() << "save" << h.name << h.width << h.index << h.used;
   }
 
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER, toSave);
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_SORT,
                                               toSaveSort);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_USED,
+                                              toSaveUsed);
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
 }  // namespace PLModel

@@ -12,6 +12,7 @@
 #define TYPE_BOOL "bool"
 #define TYPE_MAP "QMap"
 #define TYPE_MAP_STRING_INT "QMap<QString, int>"
+#define TYPE_MAP_STRING_BOOL "QMap<QString, bool>"
 
 #define COMPARE_ZERO(VALUE, TYPE, IS)                       \
   if (TYPE == TYPE_STRING_LIST) {                           \
@@ -75,6 +76,8 @@ Config::AppConfig::AppConfig()
             TYPE_MAP_STRING_INT);
   addConfig(CONFIG_PLAYLIST_HEADER_SORT, QMap<QString, QVariant>(),
             TYPE_MAP_STRING_INT);
+  addConfig(CONFIG_PLAYLIST_HEADER_USED, QMap<QString, QVariant>(),
+            TYPE_MAP_STRING_BOOL);
   addConfig(CONFIG_PLAYLIST_SORT_HEADER, "Title", TYPE_STRING);
   addConfig(CONFIG_PLAYLIST_SORT_ORDER, 0, TYPE_INT);
   addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);

@@ -616,27 +616,27 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="187"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="188"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="190"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="191"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="192"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="193"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="195"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="196"/>
         <source>Property</source>
         <translation>属性</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistwidget.cpp" line="217"/>
+        <location filename="../../src/gui/playlistwidget.cpp" line="218"/>
         <source>Set columns</source>
         <translation>设置列</translation>
     </message>

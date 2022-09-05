@@ -42,7 +42,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
 
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
-    if (0 <= h.index && h.index < m_header->headerCount()) {
+    if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
       ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
@@ -69,7 +69,7 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   }
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
-    if (0 <= h.index && h.index < m_header->headerCount()) {
+    if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
       ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
@@ -168,7 +168,8 @@ void PlaylistWidget::InitConnections() {
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
           this, [this](int logicalIndex, Qt::SortOrder order) {
             Config::AppConfig::getInstance()->setConfig(
-                CONFIG_PLAYLIST_SORT_HEADER, m_header->header(logicalIndex));
+                CONFIG_PLAYLIST_SORT_HEADER,
+                m_header->usedHeader(logicalIndex));
             Config::AppConfig::getInstance()->setConfig(
                 CONFIG_PLAYLIST_SORT_ORDER, order);
           });
@@ -221,7 +222,7 @@ QMenu *PlaylistWidget::initSetTableColumnContextMenu() {
     a->setCheckable(true);
     connect(a, &QAction::triggered, this, &PlaylistWidget::updateColumns);
     auto header = m_header->usedHeader(i.value());
-    if (header != nullptr && header->used) {
+    if (header.name != "" && header.used) {
       a->setChecked(true);
     }
     m->addAction(a);
