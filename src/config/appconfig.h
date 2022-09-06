@@ -55,7 +55,6 @@ class AppConfig : public QObject {
   ~AppConfig();
   void addConfig(const QString &name, const QVariant &value,
                  const QString &type);
-  void loadConfig(const QString &filePath);
   static void makeConfigDir();
 
  private slots:

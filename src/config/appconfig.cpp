@@ -3,13 +3,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
 
-#if defined(Q_OS_WINDOWS) || defined(Q_OS_WIN)
-#define CONFIG_FILE_PATH QCoreApplication::applicationDirPath() + "/mpax.conf"
-#else
-#define CONFIG_FILE_PATH "~/.config/MPax/mpax.conf"
-#endif
 #define TYPE_STRING_LIST "QStringList"
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
@@ -73,7 +69,20 @@ void Config::AppConfig::printConfig() {
 
 void Config::AppConfig::loadConfig() {
   makeConfigDir();
-  loadConfig(CONFIG_FILE_PATH);
+  QSettings* config = new QSettings(
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+          "/MPax/mpax.conf",
+      QSettings::IniFormat);
+  if (config == nullptr) {
+    qDebug() << "can not load config";
+    return;
+  }
+  ConfigPairMap::iterator it = m_configMap.begin();
+  while (it != m_configMap.end()) {
+    LOAD_CONFIG(config, it.key());
+    it++;
+  }
+  delete config;
 }
 
 Config::AppConfig::AppConfig()
@@ -114,26 +123,18 @@ void Config::AppConfig::addConfig(const QString& name, const QVariant& value,
   m_configMap.insert(config.name, config);
 }
 
-void Config::AppConfig::loadConfig(const QString& filePath) {
-  QSettings* config =
-      new QSettings(QDir::toNativeSeparators(filePath), QSettings::IniFormat);
-  if (config == nullptr) {
-    qDebug() << "can not load config";
-    return;
-  }
-  ConfigPairMap::iterator it = m_configMap.begin();
-  while (it != m_configMap.end()) {
-    LOAD_CONFIG(config, it.key());
-    it++;
-  }
-  delete config;
-}
-
 void Config::AppConfig::makeConfigDir() {
 #ifdef Q_OS_LINUX
-  const QDir d("~/.config/MPax");
-  if (!d.exists()) {
-    d.mkdir(d.path());
+  const QString configPath =
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+  if (configPath.isEmpty()) {
+    qDebug() << "config location not writable";
+    return;
+  }
+  QDir configDir(configPath);
+  if (!configDir.exists("MPax") && !configDir.mkdir("MPax")) {
+    qDebug() << "failed to create config path" << configDir.path() + "/MPax";
+    return;
   }
 #endif
 }
@@ -152,8 +153,10 @@ const Config::ConfigPair Config::AppConfig::config(
 }
 
 void Config::AppConfig::saveConfig() {
-  QSettings* config = new QSettings(QDir::toNativeSeparators(CONFIG_FILE_PATH),
-                                    QSettings::IniFormat);
+  QSettings* config = new QSettings(
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+          "/MPax/mpax.conf",
+      QSettings::IniFormat);
   if (config == nullptr) {
     qDebug() << "can not save config";
     return;

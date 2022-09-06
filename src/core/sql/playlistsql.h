@@ -2,16 +2,17 @@
 #define MPAX_PLAYLISTSQL_H
 
 #include <QtCore/QObject>
+#include <QtCore/QStandardPaths>
 #include <QtSql/QSqlDatabase>
 
 #include "core/playlist.h"
 
-#define SQL_DB_NAME
-
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_WIN)
 #define SQL_DB_NAME QCoreApplication::applicationDirPath() + "/playlist.db"
 #else
-#define SQL_DB_NAME "~/.config/MPax/playlist.db"
+#define SQL_DB_NAME                                                         \
+  QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + \
+      "/MPax/playlist.db"
 #endif
 
 class PlaylistSql : public QObject {

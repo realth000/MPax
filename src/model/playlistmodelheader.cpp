@@ -96,10 +96,6 @@ PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
                    [](PlaylistHeaderItem* i, PlaylistHeaderItem* j) -> bool {
                      return i->index < j->index;
                    });
-  qDebug() << "--------------------------------";
-  for (auto& h : m_visibleHeaderVector) {
-    qDebug() << "load" << h->name << h->width << h->index << h->used;
-  }
 }
 
 PlaylistModelHeader::~PlaylistModelHeader() {}
@@ -153,13 +149,10 @@ void PlaylistModelHeader::saveConfig() {
   QMap<QString, QVariant> toSave;
   QMap<QString, QVariant> toSaveSort;
   QMap<QString, QVariant> toSaveUsed;
-  qDebug() << "save"
-           << "_--------------------";
   for (auto& h : m_headerVector) {
     toSave.insert(h.name, h.width);
     toSaveSort.insert(h.name, h.index);
     toSaveUsed.insert(h.name, h.used);
-    qDebug() << "save" << h.name << h.width << h.index << h.used;
   }
 
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER, toSave);
