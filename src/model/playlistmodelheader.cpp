@@ -92,11 +92,10 @@ PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
       m_visibleHeaderVector.append(&h);
     }
   }
-  std::stable_sort(
-      m_visibleHeaderVector.first(), m_visibleHeaderVector.last(),
-      [](const PlaylistHeaderItem& i, const PlaylistHeaderItem& j) -> bool {
-        return i.index < j.index;
-      });
+  std::stable_sort(m_visibleHeaderVector.begin(), m_visibleHeaderVector.end(),
+                   [](PlaylistHeaderItem* i, PlaylistHeaderItem* j) -> bool {
+                     return i->index < j->index;
+                   });
   qDebug() << "--------------------------------";
   for (auto& h : m_visibleHeaderVector) {
     qDebug() << "load" << h->name << h->width << h->index << h->used;
