@@ -20,6 +20,7 @@
     </p>
 </div>
 
+
 [English](../README.md)|简体中文
 
 ## 介绍
@@ -83,9 +84,9 @@ MPax是一款简约易用的音乐播放器。
 3. ``cmake ../ && cmake --build . -j $(nproc)``
 4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # 拷贝翻译``
 5. 打包成*.deb
-   * Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
-   * Ubuntu2004: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2004``
-   * Ubuntu1804: ``cd scripts && sudo ./build_deb.sh -d Ubuntu1804``
+   * Ubuntu2204: ``cd scripts && ./build_deb.sh -d Ubuntu2204``
+   * Ubuntu2004: ``cd scripts && ./build_deb.sh -d Ubuntu2004``
+   * Ubuntu1804: ``cd scripts && ./build_deb.sh -d Ubuntu1804``
 
 ## 版本发布
 

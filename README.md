@@ -19,6 +19,8 @@
             <img src="https://app.codacy.com/project/badge/Grade/e84cd3b100f24444ac1ac2ddb8d946c0"/></a>
     </p>
 </div>
+
+
 English|[简体中文](./docs/README_zh_CN.md)
 
 ## Introduction
@@ -81,9 +83,9 @@ MPax is a simple and easy-to-use music player.
 4. ``cmake ../ && cmake --build . -j $(nproc)``
 4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``
 5. Build *.deb
-   * Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
-   * Ubuntu2004: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2004``
-   * Ubuntu1804: ``cd scripts && sudo ./build_deb.sh -d Ubuntu1804``
+   * Ubuntu2204: ``cd scripts && ./build_deb.sh -d Ubuntu2204``
+   * Ubuntu2004: ``cd scripts && ./build_deb.sh -d Ubuntu2004``
+   * Ubuntu1804: ``cd scripts && ./build_deb.sh -d Ubuntu1804``
 
 ## Releases
 
