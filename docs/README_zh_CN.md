@@ -8,17 +8,17 @@
     </p>
     <p>
         <a href="https://github.com/realth000/MPax/actions">
-            <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux"/></a>
+            <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux&logo=linux"/></a>
         <a href="https://github.com/realth000/MPax/releases">
             <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
-            <img src="https://img.shields.io/badge/Qt-5.12+-blue"/>
+        <a href="https://www.qt.io">
+            <img src="https://img.shields.io/badge/Qt-≥5.9-blue?logo=qt"/></a>
         <a href="https://github.com/realth000/MPax/blob/master/LICENSE">
             <img src="https://img.shields.io/github/license/realth000/MPax"/></a>
         <a href="https://www.codacy.com/">
             <img src="https://app.codacy.com/project/badge/Grade/e84cd3b100f24444ac1ac2ddb8d946c0"/></a>
     </p>
 </div>
-
 
 [English](../README.md)|简体中文
 
@@ -27,6 +27,18 @@
 MPax是一款简约易用的音乐播放器。
 
 ![UI](./images/ui_01.png)
+
+## 功能
+
+* 默认快捷键（Meta指开始菜单键、Win键）
+  - 播放/暂停：``Ctrl+Meta+B``
+  - 上一首：``Ctrl+Meta+Left``
+  - 下一首：``Ctrl+Meta+Right``
+  - 后退/前进：``Left``/``Right``
+  - 打开搜索窗口：``Ctrl+F``
+* 搜索语法（按音乐标签信息搜索）：
+  * 标题含有abc：``title HAS abc``
+  * 专辑含有abc和123：``album HAS abc 123``
 
 ## 计划要做的
 
@@ -49,7 +61,7 @@ MPax是一款简约易用的音乐播放器。
   - [ ] **播放列表中分组。**
   - [x] 在播放列表中管理文件。
 * - [x] 搜索。
-  - [x] 通过语句筛选搜索（title HAS xxx）。
+  - [x] 筛选搜索语法。
 * - [x] 管理id3v2/id3v1标签。
 * - [ ] 更好的解码（咕咕咕）。
 
@@ -67,18 +79,13 @@ MPax是一款简约易用的音乐播放器。
 
 1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204)
    * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804)
-
 2. ``mkdir cmake-build-release && cd cmake-build-release``
-
 3. ``cmake ../ && cmake --build . -j $(nproc)``
-
 4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # 拷贝翻译``
-
-5. * Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
+5. 打包成*.deb
+   * Ubuntu2204: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2204``
    * Ubuntu2004: ``cd scripts && sudo ./build_deb.sh -d Ubuntu2004``
    * Ubuntu1804: ``cd scripts && sudo ./build_deb.sh -d Ubuntu1804``
-
-   ## 
 
 ## 版本发布
 
