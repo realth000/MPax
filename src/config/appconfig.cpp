@@ -5,7 +5,11 @@
 #include <QtCore/QSettings>
 #include <QtCore/QtDebug>
 
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_WIN)
 #define CONFIG_FILE_PATH QCoreApplication::applicationDirPath() + "/mpax.conf"
+#else
+#define CONFIG_FILE_PATH "~/.config/MPax/mpax.conf"
+#endif
 #define TYPE_STRING_LIST "QStringList"
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
@@ -67,7 +71,10 @@ void Config::AppConfig::printConfig() {
   }
 }
 
-void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
+void Config::AppConfig::loadConfig() {
+  makeConfigDir();
+  loadConfig(CONFIG_FILE_PATH);
+}
 
 Config::AppConfig::AppConfig()
     : m_configMap(QMap<QString, ConfigPair>()),
@@ -122,8 +129,18 @@ void Config::AppConfig::loadConfig(const QString& filePath) {
   delete config;
 }
 
+void Config::AppConfig::makeConfigDir() {
+#ifdef Q_OS_LINUX
+  const QDir d("~/.config/MPax");
+  if (!d.exists()) {
+    d.mkdir(d.path());
+  }
+#endif
+}
+
 void Config::AppConfig::saveConfigSoon() {
   m_saveConfigDeferTimer->stop();
+  makeConfigDir();
   saveConfig();
 }
 

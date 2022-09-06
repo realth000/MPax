@@ -404,7 +404,7 @@ PlaylistSql::PlaylistSql()
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "can not open playlist database" << SQL_DB_NAME;
-    exit(1);
+    return;
   }
   QSqlQuery query(m_database);
   // Init playlist info table.

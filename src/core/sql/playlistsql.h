@@ -6,7 +6,13 @@
 
 #include "core/playlist.h"
 
+#define SQL_DB_NAME
+
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_WIN)
 #define SQL_DB_NAME QCoreApplication::applicationDirPath() + "/playlist.db"
+#else
+#define SQL_DB_NAME "~/.config/MPax/playlist.db"
+#endif
 
 class PlaylistSql : public QObject {
  public:
