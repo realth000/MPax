@@ -1,4 +1,6 @@
 #!/bin/bash
 
-chmod +x /opt/MPax/MPax
-chmod -R 777 /opt/MPax
+FILE_DIR="/opt/MPax"
+
+chown -R root.root ${FILE_DIR}
+chmod -R 755 ${FILE_DIR}

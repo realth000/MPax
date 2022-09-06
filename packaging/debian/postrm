@@ -1,5 +1,9 @@
 #/bin/bash
 
-if [ $1 != "upgrade" -a -e /opt/MPax ];then
-    rm -rf /opt/MPax
+FILE_DIR="/opt/MPax"
+
+if [ $1 != "upgrade" ];then
+    if [ -e "${FILE_DIR}" ];then
+        rm -rf "${FILE_DIR}"
+    fi
 fi

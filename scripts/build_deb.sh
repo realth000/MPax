@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-[ "$USER" != "root" ] && echo "need to run as root" >&2 && exit
+#[ "$USER" != "root" ] && echo "need to run as root" >&2 && exit
 
 while getopts d: OPT; do
   case ${OPT} in
@@ -31,13 +31,11 @@ fi
 
 mkdir -p "${build_dir}"/opt/MPax/translation
 mkdir -p "${build_dir}"/usr/share/applications/
-cp -rf ../packaging/debian/ "${build_dir}"/DEBIAN
+cp -raf ../packaging/debian/ "${build_dir}"/DEBIAN
 sed -i "s/@@deb_version@@/${pkg_version}-${release_count}${distro_type}/1" "${build_dir}"/DEBIAN/control
-cp -rf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
-cp -rf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
-cp -rf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/ || exit 0
-cp -rf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
-chown -R root.root "${build_dir}"
-chmod -R 755 "${build_dir}"/DEBIAN
+cp -raf ../packaging/assets/mpax.desktop "${build_dir}"/usr/share/applications/
+cp -raf ../cmake-build-release/MPax "${build_dir}"/opt/MPax/
+cp -raf ../cmake-build-release/translation/*.qm "${build_dir}"/opt/MPax/translation/ || exit 0
+cp -raf ../resource/pic/logo/* "${build_dir}"/opt/MPax/
 
 dpkg -b "${build_dir}" "${pkg_name}_${pkg_version}-${release_count}${distro_type}_amd64.deb"
