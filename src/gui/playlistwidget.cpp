@@ -354,6 +354,11 @@ void PlaylistWidget::updateColumns(bool checked) {
   if (action == nullptr) {
     return;
   }
+  // Do NOT allow to remove the last table column
+  if (m_header->usedHeaderCount() <= 1 && !checked) {
+    action->setChecked(true);
+    return;
+  }
   qDebug() << action->text() << "checked =" << checked;
   // Do NOT use PlaylistModelHeader::setUsedHeader to change used header here
   // directly Use PlaylistModel::setUsedHeader, which has beginResetModel() and
