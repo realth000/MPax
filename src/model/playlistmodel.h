@@ -59,6 +59,7 @@ class PlaylistModel : public QAbstractItemModel {
  signals:
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
                                qint64 time);
+  void currentPlayContentUpdated(PlayContentPos pos);
 
  private:
   QString m_playlistName;
@@ -69,5 +70,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContent *m_currentPlayContent;
   // FIXME: Duplicate with PlaylistModelHeader::m_headerTrans
   QMap<QString, QString> m_headerTrans;
+
+  void updatePlaylistState();
 };
 #endif  // PLAYLISTMODEL_H

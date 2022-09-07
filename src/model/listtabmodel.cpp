@@ -50,6 +50,8 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel) {
   }
   connect(playlistModel, &PlaylistModel::reloadInfoStatusChanged, this,
           &ListTabModel::reloadInfoStatusChanged);
+  connect(playlistModel, &PlaylistModel::currentPlayContentUpdated, this,
+          &ListTabModel::currentPlayContentUpdated);
 #if 0
   QMetaObject::invokeMethod(playlistModel, "reloadPlayContentInfo",
                             Qt::QueuedConnection);

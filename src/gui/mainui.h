@@ -66,6 +66,7 @@ class MainUI : public QMainWindow {
   void updateReloadInfoStatus(const QString &playlistName, bool finished,
                               int count, qint64 time);
   void handleCurrentPlayContentChanged(const QUrl &contentUrl);
+  void handleCurrentPlayContentChanged(PlayContentPos pos);
   void updateMainWindowVisible(bool toShow);
   void exitApp();
   void restartApp();

@@ -38,6 +38,8 @@ void ListTabWidget::InitConnections() {
           &ListTabWidget::openListViewContextMenu);
   connect(m_listTabModel, &ListTabModel::reloadInfoStatusChanged, this,
           &ListTabWidget::reloadInfoStatusChanged);
+  connect(m_listTabModel, &ListTabModel::currentPlayContentUpdated, this,
+          &ListTabWidget::currentPlayContentUpdated);
 }
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {

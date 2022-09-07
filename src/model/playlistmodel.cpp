@@ -124,8 +124,11 @@ void PlaylistModel::setPlaylistName(const QString &name) {
 QString PlaylistModel::playlistName() const { return m_playlistName; }
 
 PlayContentPos PlaylistModel::currentPlayContent() const {
-  return PlayContentPos{m_playlist->content().indexOf(m_currentPlayContent),
-                        m_currentPlayContent};
+  int i = m_playlist->content().indexOf(m_currentPlayContent);
+  if (i < 0) {
+    return PlayContentPos{-1, nullptr};
+  }
+  return PlayContentPos{i, m_currentPlayContent};
 }
 
 void PlaylistModel::setCurrentPlayContent(const int &index) {
@@ -250,6 +253,9 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
     return;
   }
   endResetModel();
+  // Playlist will be rebuilt here, everything about this playlist that requires
+  // update must be done.
+  updatePlaylistState();
 }
 
 const QModelIndex PlaylistModel::find(const QString &contentPath) const {
@@ -269,4 +275,16 @@ void PlaylistModel::setUsedHeader(const QString &header, bool used) {
   beginResetModel();
   PLModel::PlaylistModelHeader::getInstance()->setUsedHeader(header, used);
   endResetModel();
+}
+
+void PlaylistModel::updatePlaylistState() {
+  PlayContentList playContentList = m_playlist->content();
+  for (int i = 0; i < playContentList.length(); i++) {
+    if (m_currentPlayContent != nullptr &&
+        playContentList[i]->contentPath == m_currentPlayContent->contentPath) {
+      m_currentPlayContent = playContentList[i];
+      emit currentPlayContentUpdated(PlayContentPos{i, m_currentPlayContent});
+      break;
+    }
+  }
 }
