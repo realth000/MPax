@@ -6,6 +6,7 @@
 #include <QtCore/QFutureWatcher>
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
 
 #include "audio/audioinfo.h"
 #include "core/sql/playlistsql.h"
@@ -287,4 +288,85 @@ void PlaylistModel::updatePlaylistState() {
       break;
     }
   }
+}
+
+Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const {
+  if (index.isValid()) {
+    return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
+           QAbstractItemModel::flags(index);
+  }
+  return QAbstractItemModel::flags(index);
+}
+
+Qt::DropActions PlaylistModel::supportedDropActions() const {
+  return Qt::MoveAction | QAbstractItemModel::supportedDropActions();
+}
+
+QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexList) const {
+  QMimeData *data = QAbstractItemModel::mimeData(indexList);
+  if (data == nullptr) {
+    return QAbstractItemModel::mimeData(indexList);
+  }
+  QStringList oldRowsList;
+  QList<QUrl> urlList;
+  for (auto &index : indexList) {
+    PlayContentPos pc = this->content(index.row());
+    if (pc.index != -1 && pc.content != nullptr &&
+        !oldRowsList.contains(QString::number(pc.index))) {
+      oldRowsList.append(QString::number(pc.index));
+      urlList.append(QUrl("file://" + pc.content->contentPath));
+    }
+  }
+  data->setData("PlaylistTableName",
+                m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME).toUtf8());
+  data->setData("OldRows", oldRowsList.join(',').toUtf8());
+  data->setUrls(urlList);
+  return data;
+}
+
+bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                 int row, int column,
+                                 const QModelIndex &parent) {
+  if (data == nullptr ||
+      (action != Qt::MoveAction && action != Qt::CopyAction)) {
+    return false;
+  }
+
+  const QString oldPlaylistName =
+      QString::fromUtf8(data->data("PlaylistTableName"));
+  const QStringList oldRowsStrList =
+      QString::fromUtf8(data->data("OldRows")).split(',');
+  const QList<QUrl> urlList = data->urls();
+
+  // Probably not happen but check to ensure.
+  if (oldPlaylistName.isEmpty() || oldRowsStrList.isEmpty() ||
+      urlList.isEmpty() || oldRowsStrList.count() != urlList.count()) {
+    return false;
+  };
+
+  QList<int> oldRows;
+  for (auto &t : oldRowsStrList) {
+    oldRows.append(t.toInt());
+  }
+  std::sort(oldRows.begin(), oldRows.end(),
+            [](int a, int b) -> bool { return a > b; });
+
+  beginResetModel();
+  if (oldPlaylistName == m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME)) {
+    // Move and resort
+    int countBefore = -1;
+    QList<PlayContent *> contentList;
+    for (auto &r : oldRows) {
+      contentList.append(m_playlist->takeContent(r));
+      if (r <= parent.row()) {
+        countBefore++;
+      }
+    }
+    for (auto &p : contentList) {
+      m_playlist->insertContent(parent.row() - countBefore, p);
+    }
+  } else {
+  }
+  endResetModel();
+  return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
 }

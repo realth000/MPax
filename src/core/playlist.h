@@ -42,6 +42,8 @@ class Playlist {
   void appendContent(PlayContent *playContent);
   void removeContentAt(const int &index);
   void clearContent();
+  bool insertContent(int index, PlayContent *playContent);
+  PlayContent *takeContent(int index);
 
  private:
   PlaylistInfo *m_playListInfo;

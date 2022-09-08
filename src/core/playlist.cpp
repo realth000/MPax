@@ -84,3 +84,19 @@ void Playlist::removeContentAt(const int& index) {
 }
 
 void Playlist::clearContent() { m_playContentList->clear(); }
+
+PlayContent* Playlist::takeContent(int index) {
+  if (m_playContentList->count() <= index) {
+    return nullptr;
+  }
+  return m_playContentList->takeAt(index);
+}
+
+bool Playlist::insertContent(int index, PlayContent* playContent) {
+  // Count can equal index, because will insert after the last item.
+  if (index < 0 || m_playContentList->count() < index) {
+    return false;
+  }
+  m_playContentList->insert(index, playContent);
+  return true;
+}

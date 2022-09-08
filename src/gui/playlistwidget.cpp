@@ -33,6 +33,12 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setAlternatingRowColors(true);
+  ui->tableView->setDragEnabled(true);
+  ui->tableView->setAcceptDrops(true);
+  //  ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
+  ui->tableView->setDragDropMode(QAbstractItemView::InternalMove);
+  ui->tableView->setDragDropOverwriteMode(false);
+  ui->tableView->setDropIndicatorShown(true);
   ui->tableView->horizontalHeader()->setSectionsMovable(true);
   ui->tableView->horizontalHeader()->setContextMenuPolicy(
       Qt::CustomContextMenu);

@@ -2,6 +2,7 @@
 #define PLAYLISTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
+#include <QtCore/QMimeData>
 #include <QtCore/QObject>
 
 #include "core/playcontent.h"
@@ -32,6 +33,11 @@ class PlaylistModel : public QAbstractItemModel {
                 int role = Qt::DisplayRole) const override;
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role = Qt::DisplayRole) const override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  Qt::DropActions supportedDropActions() const override;
+  QMimeData *mimeData(const QModelIndexList &indexList) const override;
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row,
+                    int column, const QModelIndex &parent) override;
 
   int count() const;
   bool contains(PlayContent *content) const;
