@@ -77,15 +77,16 @@ MPax is a simple and easy-to-use music player.
 
 ### Build steps
 
-1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204)
-   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804)
-3. ``mkdir cmake-build-release && cd cmake-build-release``
-4. ``cmake ../ && cmake --build . -j $(nproc)``
-4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # Install translations.``
+1. * Ubuntu2204: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``
+   * Ubuntu2004/Ubuntu1804: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``
+   
 5. Build *.deb
-   * Ubuntu2204: ``cd scripts && ./build_deb.sh -d Ubuntu2204``
-   * Ubuntu2004: ``cd scripts && ./build_deb.sh -d Ubuntu2004``
-   * Ubuntu1804: ``cd scripts && ./build_deb.sh -d Ubuntu1804``
+   
+   * Ubuntu2204: ``./scripts/build_deb.sh -d Ubuntu2204``
+   
+   * Ubuntu2004: ``./scripts/build_deb.sh -d Ubuntu2004``
+   * Ubuntu1804: ``./scripts/build_deb.sh -d Ubuntu1804``
+   
 
 ## Releases
 

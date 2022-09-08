@@ -78,15 +78,12 @@ MPax是一款简约易用的音乐播放器。
 
 ### 编译步骤
 
-1. * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``(Ubuntu2204)
-   * ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``(Ubuntu2004 or Ubuntu1804)
-2. ``mkdir cmake-build-release && cd cmake-build-release``
-3. ``cmake ../ && cmake --build . -j $(nproc)``
-4. ``mkdir translation && cp -af ../resource/translation/*.qm translation/ # 拷贝翻译``
-5. 打包成*.deb
-   * Ubuntu2204: ``cd scripts && ./build_deb.sh -d Ubuntu2204``
-   * Ubuntu2004: ``cd scripts && ./build_deb.sh -d Ubuntu2004``
-   * Ubuntu1804: ``cd scripts && ./build_deb.sh -d Ubuntu1804``
+1. * Ubuntu2204: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``
+   * Ubuntu2004/Ubuntu1804: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``
+5. 打包成*.deb:
+   * Ubuntu2204: ``./scripts/build_deb.sh -d Ubuntu2204``
+   * Ubuntu2004: ``./scripts/build_deb.sh -d Ubuntu2004``
+   * Ubuntu1804: ``./scripts/build_deb.sh -d Ubuntu1804``
 
 ## 版本发布
 
