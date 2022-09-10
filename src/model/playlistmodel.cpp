@@ -368,5 +368,6 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   } else {
   }
   endResetModel();
+  emit playlistChanged(m_playlist);
   return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
 }

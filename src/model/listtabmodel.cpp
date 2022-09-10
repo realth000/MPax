@@ -52,6 +52,8 @@ void ListTabModel::addPlaylist(PlaylistModel *playlistModel) {
           &ListTabModel::reloadInfoStatusChanged);
   connect(playlistModel, &PlaylistModel::currentPlayContentUpdated, this,
           &ListTabModel::currentPlayContentUpdated);
+  connect(playlistModel, &PlaylistModel::playlistChanged, this,
+          &ListTabModel::savePlaylist);
 #if 0
   QMetaObject::invokeMethod(playlistModel, "reloadPlayContentInfo",
                             Qt::QueuedConnection);
@@ -148,4 +150,8 @@ void ListTabModel::saveCurrentPlaylist() {
   auto playlist =
       m_playlistList[m_playlistList.indexOf(m_currentPlayListModel)]->list();
   PlaylistSql::getInstance()->updatePlaylist(&playlist);
+}
+
+void ListTabModel::savePlaylist(Playlist *playlist) {
+  PlaylistSql::getInstance()->updatePlaylist(playlist);
 }

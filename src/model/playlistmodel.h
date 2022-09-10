@@ -66,6 +66,7 @@ class PlaylistModel : public QAbstractItemModel {
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
                                qint64 time);
   void currentPlayContentUpdated(PlayContentPos pos);
+  void playlistChanged(Playlist *playlist);
 
  private:
   QString m_playlistName;
