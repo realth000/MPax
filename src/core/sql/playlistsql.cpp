@@ -297,14 +297,6 @@ exit:
 QList<Playlist> PlaylistSql::loadPlaylist() {
   QList<Playlist> allList;
   // Load playlist sort from config
-  const QString sortHeaderName =
-      m_titleMap[Config::AppConfig::getInstance()
-                     ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                     .value.toString()]
-          .name;
-  const int sortOrder = Config::AppConfig::getInstance()
-                            ->config(CONFIG_PLAYLIST_SORT_ORDER)
-                            .value.toInt();
   if (!tryOpenDatabase()) {
     qDebug() << "can not load playlist, database failed to open";
     return QList<Playlist>{};

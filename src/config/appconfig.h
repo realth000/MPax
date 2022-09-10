@@ -9,8 +9,6 @@
 #define CONFIG_PLAYLIST_HEADER "PlaylistHeader"  // Header name and width
 #define CONFIG_PLAYLIST_HEADER_SORT "PlaylistHeaderSort"  // Header sort
 #define CONFIG_PLAYLIST_HEADER_USED "PlaylistHeaderUsed"
-#define CONFIG_PLAYLIST_SORT_HEADER "PlaylistSortHeader"  // Sort by what header
-#define CONFIG_PLAYLIST_SORT_ORDER "PlaylistSortOrder"    // Sort in what order
 #define CONFIG_CUR_PLAYLIST "CurrentPlaylist"
 #define CONFIG_CUR_PLAYCONTENT "CurrentPlayContent"
 #define CONFIG_PLAY_MODE "PlayMode"

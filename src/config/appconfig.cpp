@@ -94,8 +94,6 @@ Config::AppConfig::AppConfig()
             TYPE_MAP_STRING_INT);
   addConfig(CONFIG_PLAYLIST_HEADER_USED, QMap<QString, QVariant>(),
             TYPE_MAP_STRING_BOOL);
-  addConfig(CONFIG_PLAYLIST_SORT_HEADER, "Title", TYPE_STRING);
-  addConfig(CONFIG_PLAYLIST_SORT_ORDER, 0, TYPE_INT);
   addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);
   addConfig(CONFIG_CUR_PLAYCONTENT, 0, TYPE_STRING);
   addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);

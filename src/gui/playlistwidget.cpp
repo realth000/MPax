@@ -68,21 +68,6 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
-  const QString sortHeader = Config::AppConfig::getInstance()
-                                 ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                                 .value.toString();
-  const Qt::SortOrder sortOrder =
-      static_cast<Qt::SortOrder>(Config::AppConfig::getInstance()
-                                     ->config(CONFIG_PLAYLIST_SORT_ORDER)
-                                     .value.toInt());
-  // As we save the sorted playlist in database, no need to set order.
-#if 0
-  for (int i = 0; i < m_header->headerCount(); i++) {
-    if (m_header->usedHeader(i) == sortHeader) {
-      ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
-    }
-  }
-#endif
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
     if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
@@ -181,14 +166,6 @@ void PlaylistWidget::InitConnections() {
   //  connect(ui->tableView->horizontalHeader(),
   //  &QHeaderView::sortIndicatorChanged,
   //          this, &PlaylistWidget::playlistOrderChanged);
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-          this, [this](int logicalIndex, Qt::SortOrder order) {
-            Config::AppConfig::getInstance()->setConfig(
-                CONFIG_PLAYLIST_SORT_HEADER,
-                m_header->usedHeader(logicalIndex));
-            Config::AppConfig::getInstance()->setConfig(
-                CONFIG_PLAYLIST_SORT_ORDER, order);
-          });
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
           PLModel::PlaylistModelHeader::getInstance(),
           &PLModel::PlaylistModelHeader::updateSort);
