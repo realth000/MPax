@@ -38,6 +38,8 @@ void ListTabWidget::InitConnections() {
           &ListTabWidget::openListViewContextMenu);
   connect(m_listTabModel, &ListTabModel::reloadInfoStatusChanged, this,
           &ListTabWidget::reloadInfoStatusChanged);
+  connect(m_listTabModel, &ListTabModel::currentPlayContentUpdated, this,
+          &ListTabWidget::currentPlayContentUpdated);
 }
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
@@ -68,7 +70,7 @@ void ListTabWidget::importPlaylist(const QStringList &fileList) {
   for (auto &f : fileList) {
     QFile ff(f);
     if (!ff.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      qDebug() << "can not open playlist file " << ff;
+      qDebug() << "can not open playlist file " << ff.fileName();
       continue;
     }
     const QStringList audioList =

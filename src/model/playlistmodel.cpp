@@ -6,19 +6,10 @@
 #include <QtCore/QFutureWatcher>
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
 
 #include "audio/audioinfo.h"
 #include "core/sql/playlistsql.h"
-
-// clang-format off
-#define MODEL_ALL_HEADER                                   \
-  QMap<QString, QString> {                                 \
-    {"Title", PlaylistModel::tr("Title")},                 \
-    {"Artist", PlaylistModel::tr("Artist")},               \
-    {"AlbumTitle", PlaylistModel::tr("AlbumTitle")},       \
-    { "ContentName", PlaylistModel::tr("ContentName") }    \
-  }
-// clang-format on
 
 PlaylistModel::PlaylistModel(const QString &playlistName, QObject *parent)
     : QAbstractItemModel{parent},
@@ -134,8 +125,11 @@ void PlaylistModel::setPlaylistName(const QString &name) {
 QString PlaylistModel::playlistName() const { return m_playlistName; }
 
 PlayContentPos PlaylistModel::currentPlayContent() const {
-  return PlayContentPos{m_playlist->content().indexOf(m_currentPlayContent),
-                        m_currentPlayContent};
+  int i = m_playlist->content().indexOf(m_currentPlayContent);
+  if (i < 0) {
+    return PlayContentPos{-1, nullptr};
+  }
+  return PlayContentPos{i, m_currentPlayContent};
 }
 
 void PlaylistModel::setCurrentPlayContent(const int &index) {
@@ -260,6 +254,9 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
     return;
   }
   endResetModel();
+  // Playlist will be rebuilt here, everything about this playlist that requires
+  // update must be done.
+  updatePlaylistState();
 }
 
 const QModelIndex PlaylistModel::find(const QString &contentPath) const {
@@ -273,4 +270,102 @@ const QModelIndex PlaylistModel::find(const QString &contentPath) const {
 
 void PlaylistModel::updatePlayContent(const PlayContent *playContent) const {
   PlaylistSql::getInstance()->updatePlayContent(m_playlist, playContent);
+}
+
+void PlaylistModel::setUsedHeader(const QString &header, bool used) {
+  beginResetModel();
+  PLModel::PlaylistModelHeader::getInstance()->setUsedHeader(header, used);
+  endResetModel();
+}
+
+void PlaylistModel::updatePlaylistState() {
+  PlayContentList playContentList = m_playlist->content();
+  for (int i = 0; i < playContentList.length(); i++) {
+    if (m_currentPlayContent != nullptr &&
+        playContentList[i]->contentPath == m_currentPlayContent->contentPath) {
+      m_currentPlayContent = playContentList[i];
+      emit currentPlayContentUpdated(PlayContentPos{i, m_currentPlayContent});
+      break;
+    }
+  }
+}
+
+Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const {
+  if (index.isValid()) {
+    return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
+           QAbstractItemModel::flags(index);
+  }
+  return QAbstractItemModel::flags(index);
+}
+
+Qt::DropActions PlaylistModel::supportedDropActions() const {
+  return Qt::MoveAction | QAbstractItemModel::supportedDropActions();
+}
+
+QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexList) const {
+  QMimeData *data = QAbstractItemModel::mimeData(indexList);
+  if (data == nullptr) {
+    return QAbstractItemModel::mimeData(indexList);
+  }
+  QStringList oldRowsList;
+  QList<QUrl> urlList;
+  for (auto &index : indexList) {
+    PlayContentPos pc = this->content(index.row());
+    if (pc.index != -1 && pc.content != nullptr &&
+        !oldRowsList.contains(QString::number(pc.index))) {
+      oldRowsList.append(QString::number(pc.index));
+      urlList.append(QUrl("file://" + pc.content->contentPath));
+    }
+  }
+  data->setData("PlaylistTableName",
+                m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME).toUtf8());
+  data->setData("OldRows", oldRowsList.join(',').toUtf8());
+  data->setUrls(urlList);
+  return data;
+}
+
+bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                 int row, int column,
+                                 const QModelIndex &parent) {
+  if (data == nullptr ||
+      (action != Qt::MoveAction && action != Qt::CopyAction)) {
+    return false;
+  }
+
+  const QString oldPlaylistName =
+      QString::fromUtf8(data->data("PlaylistTableName"));
+  const QStringList oldRowsStrList =
+      QString::fromUtf8(data->data("OldRows")).split(',');
+  const QList<QUrl> urlList = data->urls();
+
+  // Probably not happen but check to ensure.
+  if (oldPlaylistName.isEmpty() || oldRowsStrList.isEmpty() ||
+      urlList.isEmpty() || oldRowsStrList.count() != urlList.count()) {
+    return false;
+  };
+
+  QList<int> oldRows;
+  for (auto &t : oldRowsStrList) {
+    oldRows.append(t.toInt());
+  }
+  std::sort(oldRows.begin(), oldRows.end(),
+            [](int a, int b) -> bool { return a > b; });
+
+  if (oldPlaylistName == m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME)) {
+    // Move and resort
+    int countBefore = -1;
+    QList<PlayContent *> contentList;
+    for (auto &r : oldRows) {
+      contentList.append(m_playlist->takeContent(r));
+      if (r <= parent.row()) {
+        countBefore++;
+      }
+    }
+    for (auto &p : contentList) {
+      m_playlist->insertContent(parent.row() - countBefore, p);
+    }
+  } else {
+  }
+  emit playlistChanged(m_playlist);
+  return true;
 }

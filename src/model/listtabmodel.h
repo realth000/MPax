@@ -25,6 +25,7 @@ class ListTabModel : public QStringListModel {
   void dataChanged();
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
                                qint64 time);
+  void currentPlayContentUpdated(PlayContentPos pos);
   void reloadPlaylist();
 
  public slots:
@@ -38,6 +39,7 @@ class ListTabModel : public QStringListModel {
   void saveDefaultPlaylist() const;
   int indexOf(PlaylistModel *playlistModel) const;
   void saveCurrentPlaylist();
+  static void savePlaylist(Playlist *playlist);
 
  private:
   QList<PlaylistModel *> m_playlistList;

@@ -3,15 +3,16 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
 
-#define CONFIG_FILE_PATH QCoreApplication::applicationDirPath() + "/mpax.conf"
 #define TYPE_STRING_LIST "QStringList"
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
 #define TYPE_BOOL "bool"
 #define TYPE_MAP "QMap"
 #define TYPE_MAP_STRING_INT "QMap<QString, int>"
+#define TYPE_MAP_STRING_BOOL "QMap<QString, bool>"
 
 #define COMPARE_ZERO(VALUE, TYPE, IS)                       \
   if (TYPE == TYPE_STRING_LIST) {                           \
@@ -66,7 +67,23 @@ void Config::AppConfig::printConfig() {
   }
 }
 
-void Config::AppConfig::loadConfig() { loadConfig(CONFIG_FILE_PATH); }
+void Config::AppConfig::loadConfig() {
+  makeConfigDir();
+  QSettings* config = new QSettings(
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+          "/MPax/mpax.conf",
+      QSettings::IniFormat);
+  if (config == nullptr) {
+    qDebug() << "can not load config";
+    return;
+  }
+  ConfigPairMap::iterator it = m_configMap.begin();
+  while (it != m_configMap.end()) {
+    LOAD_CONFIG(config, it.key());
+    it++;
+  }
+  delete config;
+}
 
 Config::AppConfig::AppConfig()
     : m_configMap(QMap<QString, ConfigPair>()),
@@ -75,8 +92,8 @@ Config::AppConfig::AppConfig()
             TYPE_MAP_STRING_INT);
   addConfig(CONFIG_PLAYLIST_HEADER_SORT, QMap<QString, QVariant>(),
             TYPE_MAP_STRING_INT);
-  addConfig(CONFIG_PLAYLIST_SORT_HEADER, "Title", TYPE_STRING);
-  addConfig(CONFIG_PLAYLIST_SORT_ORDER, 0, TYPE_INT);
+  addConfig(CONFIG_PLAYLIST_HEADER_USED, QMap<QString, QVariant>(),
+            TYPE_MAP_STRING_BOOL);
   addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);
   addConfig(CONFIG_CUR_PLAYCONTENT, 0, TYPE_STRING);
   addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);
@@ -104,23 +121,25 @@ void Config::AppConfig::addConfig(const QString& name, const QVariant& value,
   m_configMap.insert(config.name, config);
 }
 
-void Config::AppConfig::loadConfig(const QString& filePath) {
-  QSettings* config =
-      new QSettings(QDir::toNativeSeparators(filePath), QSettings::IniFormat);
-  if (config == nullptr) {
-    qDebug() << "can not load config";
+void Config::AppConfig::makeConfigDir() {
+#ifdef Q_OS_LINUX
+  const QString configPath =
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+  if (configPath.isEmpty()) {
+    qDebug() << "config location not writable";
     return;
   }
-  ConfigPairMap::iterator it = m_configMap.begin();
-  while (it != m_configMap.end()) {
-    LOAD_CONFIG(config, it.key());
-    it++;
+  QDir configDir(configPath);
+  if (!configDir.exists("MPax") && !configDir.mkdir("MPax")) {
+    qDebug() << "failed to create config path" << configDir.path() + "/MPax";
+    return;
   }
-  delete config;
+#endif
 }
 
 void Config::AppConfig::saveConfigSoon() {
   m_saveConfigDeferTimer->stop();
+  makeConfigDir();
   saveConfig();
 }
 
@@ -132,8 +151,10 @@ const Config::ConfigPair Config::AppConfig::config(
 }
 
 void Config::AppConfig::saveConfig() {
-  QSettings* config = new QSettings(QDir::toNativeSeparators(CONFIG_FILE_PATH),
-                                    QSettings::IniFormat);
+  QSettings* config = new QSettings(
+      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+          "/MPax/mpax.conf",
+      QSettings::IniFormat);
   if (config == nullptr) {
     qDebug() << "can not save config";
     return;

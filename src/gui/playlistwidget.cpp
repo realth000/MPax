@@ -23,6 +23,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
       m_playingModel(nullptr),
       m_playingFilterModel(new PlaylistFilterModel),
       m_tableViewContextMenu(InitTableViewContextMenu()),
+      m_tableHeaderContextMenu(initTableHeaderContextMenu()),
       m_tableViewWidthRadio(QList<qreal>{0.5, 0.2, 0.3}) {
   ui->setupUi(this);
   ui->tableView->verticalHeader()->setHidden(true);
@@ -32,14 +33,29 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tableView->setFocusPolicy(Qt::NoFocus);
   ui->tableView->setAlternatingRowColors(true);
+  ui->tableView->setDragEnabled(true);
+  ui->tableView->setAcceptDrops(true);
+  //  ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
+  ui->tableView->setDragDropMode(QAbstractItemView::InternalMove);
+  ui->tableView->setDragDropOverwriteMode(false);
+  ui->tableView->setDropIndicatorShown(true);
+  // Sort indicators only shown for a short when sort changed by user,
+  // indicating the order and the sort has applied.
+  // Turn off to default.
+  ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
   ui->tableView->horizontalHeader()->setSectionsMovable(true);
+  ui->tableView->horizontalHeader()->setContextMenuPolicy(
+      Qt::CustomContextMenu);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
+  // When this timer timeout, hide sort indicator. The sort indicator only used
+  // to indicate the just changed sort for a short time.
+  m_indicatorVisibleTimer.setSingleShot(true);
 
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
-    if (0 <= h.index && h.index < m_header->headerCount()) {
+    if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
       ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
@@ -52,21 +68,9 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
   //  ui->tableView->setModel(m_playlistModel);
   m_showingFilterModel->setSourceModel(m_showingModel);
   ui->tableView->setModel(m_showingFilterModel);
-  const QString sortHeader = Config::AppConfig::getInstance()
-                                 ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                                 .value.toString();
-  const Qt::SortOrder sortOrder =
-      static_cast<Qt::SortOrder>(Config::AppConfig::getInstance()
-                                     ->config(CONFIG_PLAYLIST_SORT_ORDER)
-                                     .value.toInt());
-  for (int i = 0; i < m_header->headerCount(); i++) {
-    if (m_header->usedHeader(i) == sortHeader) {
-      ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
-    }
-  }
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
-    if (0 <= h.index && h.index < m_header->headerCount()) {
+    if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
       ui->tableView->setColumnWidth(h.index, h.width);
     }
   }
@@ -162,18 +166,24 @@ void PlaylistWidget::InitConnections() {
   //  connect(ui->tableView->horizontalHeader(),
   //  &QHeaderView::sortIndicatorChanged,
   //          this, &PlaylistWidget::playlistOrderChanged);
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-          this, [this](int logicalIndex, Qt::SortOrder order) {
-            Config::AppConfig::getInstance()->setConfig(
-                CONFIG_PLAYLIST_SORT_HEADER, m_header->header(logicalIndex));
-            Config::AppConfig::getInstance()->setConfig(
-                CONFIG_PLAYLIST_SORT_ORDER, order);
-          });
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
           PLModel::PlaylistModelHeader::getInstance(),
           &PLModel::PlaylistModelHeader::updateSort);
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized,
           m_header, &PLModel::PlaylistModelHeader::updateWidth);
+  connect(ui->tableView->horizontalHeader(),
+          &QHeaderView::customContextMenuRequested, this,
+          &PlaylistWidget::openTableHeaderContextMenu);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          m_showingFilterModel, &PlaylistFilterModel::reloadPlaylistByOrder);
+  connect(&m_indicatorVisibleTimer, &QTimer::timeout, this, [this]() {
+    ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
+  });
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          this, [this]() {
+            ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
+            m_indicatorVisibleTimer.start(5000);
+          });
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
@@ -195,6 +205,31 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   m->addAction(actionPlay);
   m->addSeparator();
   m->addAction(actionProperty);
+  return m;
+}
+
+QMenu *PlaylistWidget::initTableHeaderContextMenu() {
+  QMenu *m = new QMenu(this);
+  m->setMinimumWidth(150);
+  QMenu *menuSetColumn = initSetTableColumnContextMenu();
+  m->addMenu(menuSetColumn);
+  return m;
+}
+
+QMenu *PlaylistWidget::initSetTableColumnContextMenu() {
+  QMenu *m = new QMenu(this);
+  m->setTitle(tr("Set columns"));
+  auto s = MODEL_ALL_HEADER;
+  for (auto i = s.constBegin(); i != s.constEnd(); i++) {
+    QAction *a = new QAction(tr(i.value().toStdString().c_str()));
+    a->setCheckable(true);
+    connect(a, &QAction::triggered, this, &PlaylistWidget::updateColumns);
+    auto header = m_header->usedHeader(i.value());
+    if (header.name != "" && header.used) {
+      a->setChecked(true);
+    }
+    m->addAction(a);
+  }
   return m;
 }
 
@@ -310,7 +345,28 @@ int PlaylistWidget::countShowing() const {
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
-  m_tableViewContextMenu->popup(QCursor().pos());
+  m_tableViewContextMenu->popup(QCursor::pos());
+}
+
+void PlaylistWidget::openTableHeaderContextMenu(const QPoint &pos) {
+  m_tableHeaderContextMenu->popup(QCursor::pos());
+}
+
+void PlaylistWidget::updateColumns(bool checked) {
+  auto *action = dynamic_cast<QAction *>(sender());
+  if (action == nullptr) {
+    return;
+  }
+  // Do NOT allow to remove the last table column
+  if (m_header->usedHeaderCount() <= 1 && !checked) {
+    action->setChecked(true);
+    return;
+  }
+  qDebug() << action->text() << "checked =" << checked;
+  // Do NOT use PlaylistModelHeader::setUsedHeader to change used header here
+  // directly Use PlaylistModel::setUsedHeader, which has beginResetModel() and
+  // endResetModel(), to ensure a refresh on view after changed used headers.
+  m_showingModel->setUsedHeader(action->text(), checked);
 }
 
 void PlaylistWidget::removeContents(const QList<int> &indexes) {

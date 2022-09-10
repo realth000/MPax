@@ -1,6 +1,7 @@
 #ifndef PLAYLISTWIDGET_H
 #define PLAYLISTWIDGET_H
 
+#include <QtCore/QTimer>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QWidget>
 
@@ -45,17 +46,21 @@ class PlaylistWidget : public QWidget {
 
  private:
   Ui::PlaylistWidget *ui;
-  const PLModel::PlaylistModelHeader *m_header;
+  PLModel::PlaylistModelHeader *m_header;
   PlaylistModel *m_showingModel;
   PlaylistFilterModel *m_showingFilterModel;
   PlaylistModel *m_playingModel;
   PlaylistFilterModel *m_playingFilterModel;
   QMenu *m_tableViewContextMenu;
+  QMenu *m_tableHeaderContextMenu;
   QModelIndexList m_tableViewSelectedRows;
   QList<qreal> m_tableViewWidthRadio;
+  QTimer m_indicatorVisibleTimer;
 
   void InitConnections();
   QMenu *InitTableViewContextMenu();
+  QMenu *initTableHeaderContextMenu();
+  QMenu *initSetTableColumnContextMenu();
   void actionDelete();
   void actionOpenInFolder();
   void actionPlay();
@@ -63,6 +68,8 @@ class PlaylistWidget : public QWidget {
 
  private slots:
   void openTableViewContextMenu(const QPoint &pos);
+  void openTableHeaderContextMenu(const QPoint &pos);
+  void updateColumns(bool checked);
 };
 
 #endif  // PLAYLISTWIDGET_H

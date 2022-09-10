@@ -149,8 +149,13 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::removeContents);
   connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
           ui->playlistWidget, &PlaylistWidget::openFileInDir);
-  connect(ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged,
-          this, &MainUI::handleCurrentPlayContentChanged);
+  connect(
+      ui->listTabWidget, &ListTabWidget::currentPlayContentUpdated, this,
+      QOverload<PlayContentPos>::of(&MainUI::handleCurrentPlayContentChanged));
+  connect(
+      ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged,
+      this,
+      QOverload<const QUrl &>::of(&MainUI::handleCurrentPlayContentChanged));
   connect(this, &MainUI::scrollToContent, ui->playlistWidget,
           &PlaylistWidget::scrollToContent);
 
@@ -464,6 +469,12 @@ void MainUI::handleCurrentPlayContentChanged(const QUrl &contentUrl) {
     return;
   }
   emit scrollToContent(contentUrl.toLocalFile());
+}
+
+void MainUI::handleCurrentPlayContentChanged(PlayContentPos pos) {
+  if (pos.index > 0 && pos.content != nullptr) {
+    emit scrollToContent(pos.content->contentPath);
+  }
 }
 
 void MainUI::updateMainWindowVisible(bool toShow) {

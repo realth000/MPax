@@ -60,18 +60,6 @@ PlaylistSearchDialog::~PlaylistSearchDialog() {}
 
 void PlaylistSearchDialog::setModel(QAbstractItemModel *model) {
   m_model->setSourceModel(model);
-  const QString sortHeader = Config::AppConfig::getInstance()
-                                 ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                                 .value.toString();
-  const Qt::SortOrder sortOrder =
-      static_cast<Qt::SortOrder>(Config::AppConfig::getInstance()
-                                     ->config(CONFIG_PLAYLIST_SORT_ORDER)
-                                     .value.toInt());
-  for (int i = 0; i < m_header->headerCount(); i++) {
-    if (m_header->usedHeader(i) == sortHeader) {
-      ui->searchTableView->horizontalHeader()->setSortIndicator(i, sortOrder);
-    }
-  }
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
     if (0 <= h.index && h.index < m_header->headerCount()) {

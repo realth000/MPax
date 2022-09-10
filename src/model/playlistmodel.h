@@ -2,6 +2,7 @@
 #define PLAYLISTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
+#include <QtCore/QMimeData>
 #include <QtCore/QObject>
 
 #include "core/playcontent.h"
@@ -32,6 +33,11 @@ class PlaylistModel : public QAbstractItemModel {
                 int role = Qt::DisplayRole) const override;
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role = Qt::DisplayRole) const override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  Qt::DropActions supportedDropActions() const override;
+  QMimeData *mimeData(const QModelIndexList &indexList) const override;
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row,
+                    int column, const QModelIndex &parent) override;
 
   int count() const;
   bool contains(PlayContent *content) const;
@@ -49,6 +55,7 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentPos content(const QString &contentPath) const;
   Playlist list() const;
   void updatePlayContent(const PlayContent *playContent) const;
+  void setUsedHeader(const QString &header, bool used);
 
  public slots:
   void reloadPlayContentInfo();
@@ -58,6 +65,8 @@ class PlaylistModel : public QAbstractItemModel {
  signals:
   void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
                                qint64 time);
+  void currentPlayContentUpdated(PlayContentPos pos);
+  void playlistChanged(Playlist *playlist);
 
  private:
   QString m_playlistName;
@@ -66,6 +75,9 @@ class PlaylistModel : public QAbstractItemModel {
   PlayContentList m_contentList;
   // Copy of PlaylistWidget::m_header.
   PlayContent *m_currentPlayContent;
+  // FIXME: Duplicate with PlaylistModelHeader::m_headerTrans
   QMap<QString, QString> m_headerTrans;
+
+  void updatePlaylistState();
 };
 #endif  // PLAYLISTMODEL_H

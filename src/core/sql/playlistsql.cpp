@@ -288,6 +288,7 @@ void PlaylistSql::updatePlaylist(Playlist* playlist) {
     }
     contentCount++;
   }
+  m_database.commit();
   playlist->info().setInfo(PLAYLIST_INFO_COUNT, QString::number(contentCount));
 exit:
   tryCloseDatabase();
@@ -296,14 +297,6 @@ exit:
 QList<Playlist> PlaylistSql::loadPlaylist() {
   QList<Playlist> allList;
   // Load playlist sort from config
-  const QString sortHeaderName =
-      m_titleMap[Config::AppConfig::getInstance()
-                     ->config(CONFIG_PLAYLIST_SORT_HEADER)
-                     .value.toString()]
-          .name;
-  const int sortOrder = Config::AppConfig::getInstance()
-                            ->config(CONFIG_PLAYLIST_SORT_ORDER)
-                            .value.toInt();
   if (!tryOpenDatabase()) {
     qDebug() << "can not load playlist, database failed to open";
     return QList<Playlist>{};
@@ -323,13 +316,7 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     const QString tableName = query.value("table_name").toString();
     const QString playlistName = query.value("playlist_name").toString();
     QSqlQuery q(m_database);
-    if (!sortHeaderName.isEmpty()) {
-      ok = q.exec(QString("SELECT * FROM %1 ORDER BY %2 %3")
-                      .arg(tableName, sortHeaderName,
-                           sortOrder == Qt::DescendingOrder ? "DESC" : "ASC"));
-    } else {
-      ok = q.exec(QString("SELECT * FROM %1").arg(tableName));
-    }
+    ok = q.exec(QString("SELECT * FROM %1 ORDER BY id").arg(tableName));
 
     if (!ok) {
       qDebug() << "can not load playlist" << playlistName << ":"
@@ -404,7 +391,7 @@ PlaylistSql::PlaylistSql()
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
     qDebug() << "can not open playlist database" << SQL_DB_NAME;
-    exit(1);
+    return;
   }
   QSqlQuery query(m_database);
   // Init playlist info table.
@@ -448,6 +435,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   PlayContentList* list = new PlayContentList;
   const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   bool ok;
+  QList<Playlist> ll;
   QSqlQuery q(m_database);
   const QString sqlColumnName = m_titleMap[columnName].name;
   if (sqlColumnName.isEmpty()) {
@@ -485,6 +473,8 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   }
   playlist->setInfo(PLAYLIST_INFO_COUNT, QString::number(count));
   playlist->setContent(list);
+  ll.append(*playlist);
+  savePlaylist(ll);
   return true;
 
 exit:
