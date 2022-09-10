@@ -288,6 +288,7 @@ void PlaylistSql::updatePlaylist(Playlist* playlist) {
     }
     contentCount++;
   }
+  m_database.commit();
   playlist->info().setInfo(PLAYLIST_INFO_COUNT, QString::number(contentCount));
 exit:
   tryCloseDatabase();
