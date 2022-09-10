@@ -324,13 +324,7 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     const QString tableName = query.value("table_name").toString();
     const QString playlistName = query.value("playlist_name").toString();
     QSqlQuery q(m_database);
-    if (!sortHeaderName.isEmpty()) {
-      ok = q.exec(QString("SELECT * FROM %1 ORDER BY %2 %3")
-                      .arg(tableName, sortHeaderName,
-                           sortOrder == Qt::DescendingOrder ? "DESC" : "ASC"));
-    } else {
-      ok = q.exec(QString("SELECT * FROM %1").arg(tableName));
-    }
+    ok = q.exec(QString("SELECT * FROM %1 ORDER BY id").arg(tableName));
 
     if (!ok) {
       qDebug() << "can not load playlist" << playlistName << ":"
@@ -449,6 +443,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   PlayContentList* list = new PlayContentList;
   const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   bool ok;
+  QList<Playlist> ll;
   QSqlQuery q(m_database);
   const QString sqlColumnName = m_titleMap[columnName].name;
   if (sqlColumnName.isEmpty()) {
@@ -486,6 +481,8 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   }
   playlist->setInfo(PLAYLIST_INFO_COUNT, QString::number(count));
   playlist->setContent(list);
+  ll.append(*playlist);
+  savePlaylist(ll);
   return true;
 
 exit:

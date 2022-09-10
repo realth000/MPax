@@ -1,6 +1,7 @@
 #ifndef PLAYLISTWIDGET_H
 #define PLAYLISTWIDGET_H
 
+#include <QtCore/QTimer>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QWidget>
 
@@ -54,6 +55,7 @@ class PlaylistWidget : public QWidget {
   QMenu *m_tableHeaderContextMenu;
   QModelIndexList m_tableViewSelectedRows;
   QList<qreal> m_tableViewWidthRadio;
+  QTimer m_indicatorVisibleTimer;
 
   void InitConnections();
   QMenu *InitTableViewContextMenu();

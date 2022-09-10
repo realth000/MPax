@@ -39,12 +39,19 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
   ui->tableView->setDragDropMode(QAbstractItemView::InternalMove);
   ui->tableView->setDragDropOverwriteMode(false);
   ui->tableView->setDropIndicatorShown(true);
+  // Sort indicators only shown for a short when sort changed by user,
+  // indicating the order and the sort has applied.
+  // Turn off to default.
+  ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
   ui->tableView->horizontalHeader()->setSectionsMovable(true);
   ui->tableView->horizontalHeader()->setContextMenuPolicy(
       Qt::CustomContextMenu);
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
+  // When this timer timeout, hide sort indicator. The sort indicator only used
+  // to indicate the just changed sort for a short time.
+  m_indicatorVisibleTimer.setSingleShot(true);
 
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
@@ -68,11 +75,14 @@ void PlaylistWidget::setModel(PlaylistModel *playlistModel) {
       static_cast<Qt::SortOrder>(Config::AppConfig::getInstance()
                                      ->config(CONFIG_PLAYLIST_SORT_ORDER)
                                      .value.toInt());
+  // As we save the sorted playlist in database, no need to set order.
+#if 0
   for (int i = 0; i < m_header->headerCount(); i++) {
     if (m_header->usedHeader(i) == sortHeader) {
       ui->tableView->horizontalHeader()->setSortIndicator(i, sortOrder);
     }
   }
+#endif
   auto headerVector = m_header->headerVector();
   for (auto &h : headerVector) {
     if (0 <= h.index && h.index < m_header->usedHeaderCount()) {
@@ -187,6 +197,16 @@ void PlaylistWidget::InitConnections() {
   connect(ui->tableView->horizontalHeader(),
           &QHeaderView::customContextMenuRequested, this,
           &PlaylistWidget::openTableHeaderContextMenu);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          m_showingFilterModel, &PlaylistFilterModel::reloadPlaylistByOrder);
+  connect(&m_indicatorVisibleTimer, &QTimer::timeout, this, [this]() {
+    ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
+  });
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          this, [this]() {
+            ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
+            m_indicatorVisibleTimer.start(5000);
+          });
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
