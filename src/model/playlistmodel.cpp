@@ -351,7 +351,6 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   std::sort(oldRows.begin(), oldRows.end(),
             [](int a, int b) -> bool { return a > b; });
 
-  beginResetModel();
   if (oldPlaylistName == m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME)) {
     // Move and resort
     int countBefore = -1;
@@ -367,7 +366,6 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     }
   } else {
   }
-  endResetModel();
   emit playlistChanged(m_playlist);
-  return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
+  return true;
 }
