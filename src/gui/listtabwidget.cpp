@@ -70,7 +70,7 @@ void ListTabWidget::importPlaylist(const QStringList &fileList) {
   for (auto &f : fileList) {
     QFile ff(f);
     if (!ff.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      qDebug() << "can not open playlist file " << ff;
+      qDebug() << "can not open playlist file " << ff.fileName();
       continue;
     }
     const QStringList audioList =
