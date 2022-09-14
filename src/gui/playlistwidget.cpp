@@ -345,6 +345,9 @@ int PlaylistWidget::countShowing() const {
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
+  if (m_tableViewSelectedRows.isEmpty()) {
+    return;
+  }
   m_tableViewContextMenu->popup(QCursor::pos());
 }
 

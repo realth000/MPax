@@ -148,6 +148,9 @@ void PlaylistSearchDialog::updatePlayContent(const int &row) {
 void PlaylistSearchDialog::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows =
       ui->searchTableView->selectionModel()->selectedRows();
+  if (m_tableViewSelectedRows.isEmpty()) {
+    return;
+  }
   m_tableViewContextMenu->popup(QCursor().pos());
 }
 
