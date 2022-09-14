@@ -149,6 +149,8 @@ void MainUI::InitConnections() {
           ui->playlistWidget, &PlaylistWidget::removeContents);
   connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
           ui->playlistWidget, &PlaylistWidget::openFileInDir);
+  connect(m_searchDialog, &PlaylistSearchDialog::playContentInfoChanged,
+          ui->playControlWidget, &PlayControlWidget::updatePlayContentInfo);
   connect(
       ui->listTabWidget, &ListTabWidget::currentPlayContentUpdated, this,
       QOverload<PlayContentPos>::of(&MainUI::handleCurrentPlayContentChanged));

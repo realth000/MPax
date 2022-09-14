@@ -2,7 +2,9 @@
 
 #include <QtCore/QDebug>
 
+#include "audioinfodialog.h"
 #include "config/appconfig.h"
+#include "model/playlistmodel.h"
 #include "ui_playlistsearchdialog.h"
 #include "util/cssloader.h"
 
@@ -160,10 +162,14 @@ QMenu *PlaylistSearchDialog::initTableViewContextMenu() {
   QAction *actionOpen = new QAction(tr("Open in folder"));
   connect(actionOpen, &QAction::triggered, this,
           &PlaylistSearchDialog::actionOpenInFolder);
+  QAction *actionProperty = new QAction(tr("Property"));
+  connect(actionProperty, &QAction::triggered, this,
+          &PlaylistSearchDialog::actionShowPropertyDialog);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
   m->addAction(actionPlay);
+  m->addAction(actionProperty);
   return m;
 }
 
@@ -201,4 +207,30 @@ void PlaylistSearchDialog::actionOpenInFolder() {
   }
   emit openFileInDirTriggered(
       m_model->mapToSource(m_tableViewSelectedRows[0]).row());
+}
+
+void PlaylistSearchDialog::actionShowPropertyDialog() {
+  if (m_tableViewSelectedRows.count() <= 0) {
+    return;
+  }
+  auto sourceModel = dynamic_cast<PlaylistModel *>(m_model->sourceModel());
+  if (sourceModel == nullptr) {
+    return;
+  }
+  const QModelIndex i = m_tableViewSelectedRows[0];
+  PlayContentPos c = sourceModel->content(m_model->mapToSource(i).row());
+  if (c.index < 0 || c.content == nullptr) {
+    return;
+  }
+  AudioInfoDialog *dialog = new AudioInfoDialog(c.content, this);
+
+  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
+          [this, sourceModel](PlayContent *playContent) {
+            sourceModel->updatePlayContent(playContent);
+            if (playContent->contentPath ==
+                sourceModel->currentPlayContent().content->contentPath) {
+              emit this->playContentInfoChanged(playContent);
+            }
+          });
+  dialog->exec();
 }
