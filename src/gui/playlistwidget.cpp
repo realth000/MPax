@@ -3,7 +3,9 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QtCore/QRandomGenerator>
 #endif
+#include <QtCore/QUrl>
 #include <QtCore/QtDebug>
+#include <QtGui/QClipboard>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QScrollBar>
 
@@ -199,10 +201,14 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   QAction *actionProperty = new QAction(tr("Property"));
   connect(actionProperty, &QAction::triggered, this,
           &PlaylistWidget::actionShowPropertyDialog);
+  QAction *actionCopyToClipBoard = new QAction(tr("Copy to clipboard"));
+  connect(actionCopyToClipBoard, &QAction::triggered, this,
+          &PlaylistWidget::actionCopyToClipBoard);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
   m->addAction(actionPlay);
+  m->addAction(actionCopyToClipBoard);
   m->addSeparator();
   m->addAction(actionProperty);
   return m;
@@ -275,6 +281,31 @@ void PlaylistWidget::actionPlay() {
   // Click event on current showing model, update m_playingModel.
   updatePlayingModel();
   emit playContentChanged(pc.index, pc.content);
+}
+
+void PlaylistWidget::actionCopyToClipBoard() {
+  if (m_showingModel == nullptr) {
+    return;
+  }
+  if (m_tableViewSelectedRows.count() < 0) {
+    return;
+  }
+  QList<QUrl> urlList;
+  for (auto &r : m_tableViewSelectedRows) {
+    PlayContentPos pc =
+        m_showingModel->content(m_showingFilterModel->mapToSource(r).row());
+    if (pc.index < 0 || pc.content == nullptr) {
+      continue;
+    }
+    QUrl u;
+    u.setScheme("file");
+    u.setPath(pc.content->contentPath);
+    urlList.append(u);
+  }
+  QClipboard *c = QApplication::clipboard();
+  QMimeData *d = new QMimeData();
+  d->setUrls(urlList);
+  c->setMimeData(d);
 }
 
 void PlaylistWidget::updatePlayingModel() {
