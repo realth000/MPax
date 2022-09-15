@@ -230,8 +230,11 @@ void PlaylistSearchDialog::actionShowPropertyDialog() {
   connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
           [this, sourceModel](PlayContent *playContent) {
             sourceModel->updatePlayContent(playContent);
-            if (playContent->contentPath ==
-                sourceModel->currentPlayContent().content->contentPath) {
+            if (sourceModel != nullptr &&
+                sourceModel->currentPlayContent().index >= 0 &&
+                sourceModel->currentPlayContent().content != nullptr &&
+                playContent->contentPath ==
+                    sourceModel->currentPlayContent().content->contentPath) {
               emit this->playContentInfoChanged(playContent);
             }
           });
