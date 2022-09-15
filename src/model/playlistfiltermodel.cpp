@@ -35,10 +35,13 @@ QModelIndex PlaylistFilterModel::sourceIndex(
 }
 QModelIndex PlaylistFilterModel::seekSourceRow(const QModelIndex &proxyIndex,
                                                const int &offset) const {
-  const int nIndex = proxyIndex.row() + offset;
-  if (nIndex >= sourceModel()->rowCount() || nIndex < 0) {
+  if (sourceModel()->rowCount() == 0) {
     return mapToSource(index(0, 0));
   }
+  const int nIndex = ((sourceModel()->rowCount() + offset + proxyIndex.row()) %
+                          sourceModel()->rowCount() +
+                      sourceModel()->rowCount()) %
+                     sourceModel()->rowCount();
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
   return mapToSource(proxyIndex.siblingAtRow(nIndex));
 #else
