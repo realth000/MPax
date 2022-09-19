@@ -1,7 +1,9 @@
 #include "listtabmodel.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QMimeData>
 #include <QtCore/QTextStream>
+#include <QtCore/QUrl>
 #include <QtCore/QtDebug>
 
 #include "config/appplaylist.h"
@@ -154,4 +156,57 @@ void ListTabModel::saveCurrentPlaylist() {
 
 void ListTabModel::savePlaylist(Playlist *playlist) {
   PlaylistSql::getInstance()->updatePlaylist(playlist);
+}
+
+Qt::ItemFlags ListTabModel::flags(const QModelIndex &index) const {
+  if (index.isValid()) {
+    return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
+           QAbstractItemModel::flags(index);
+  }
+  return QAbstractItemModel::flags(index);
+}
+
+Qt::DropActions ListTabModel::supportedDropActions() const {
+  return Qt::MoveAction | QAbstractItemModel::supportedDropActions();
+}
+
+QMimeData *ListTabModel::mimeData(const QModelIndexList &indexList) const {
+  return new QMimeData();
+}
+
+bool ListTabModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
+                                int row, int column,
+                                const QModelIndex &parent) {
+  if (data == nullptr) {
+    return false;
+  }
+  const QString oldPlaylistName =
+      QString::fromUtf8(data->data("PlaylistTableName"));
+  const QStringList oldRowsStrList =
+      QString::fromUtf8(data->data("OldRows")).split(',');
+  const QList<QUrl> urlList = data->urls();
+
+  PlaylistModel *acceptPlaylist = m_playlistList[parent.row()];
+  const QString acceptPlaylistTableName =
+      acceptPlaylist->list().info().info(PLAYLIST_INFO_TABLE_NAME);
+  PlaylistModel *oldPlaylist = nullptr;
+  for (auto &playlist : m_playlistList) {
+    if (playlist->list().info().info(PLAYLIST_INFO_TABLE_NAME) ==
+        oldPlaylistName) {
+      oldPlaylist = playlist;
+    }
+  }
+
+  if (oldPlaylist != nullptr && !oldPlaylistName.isEmpty() &&
+      !oldRowsStrList.isEmpty() && oldPlaylistName != acceptPlaylistTableName) {
+    //    Accept data from another playlist.
+    for (auto &url : urlList) {
+      acceptPlaylist->addContent(oldPlaylist->content(url.path()).content);
+    }
+    // TODO: Only save the playlist accepted.
+    saveAllPlaylist();
+    return true;
+  }
+
+  return false;
 }

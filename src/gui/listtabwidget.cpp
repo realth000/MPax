@@ -14,6 +14,11 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->listView->setModel(m_listTabModel);
   ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->listView->setFocusPolicy(Qt::NoFocus);
+  ui->listView->setDragEnabled(true);
+  ui->listView->setAcceptDrops(true);
+  ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
+  ui->listView->setDragDropOverwriteMode(false);
+  ui->listView->setDropIndicatorShown(true);
   InitConnections();
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
