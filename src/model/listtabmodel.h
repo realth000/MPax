@@ -24,6 +24,7 @@ class ListTabModel : public QStringListModel {
   QMimeData *mimeData(const QModelIndexList &indexList) const override;
   bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row,
                     int column, const QModelIndex &parent) override;
+  void renamePlaylist(int index, const QString &name);
 
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);

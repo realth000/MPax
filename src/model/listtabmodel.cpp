@@ -210,3 +210,12 @@ bool ListTabModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
   return false;
 }
+
+void ListTabModel::renamePlaylist(int index, const QString &name) {
+  if (m_playlistList.length() <= index || index < 0) {
+    return;
+  }
+  beginResetModel();
+  m_playlistList[index]->setPlaylistName(name);
+  endResetModel();
+}
