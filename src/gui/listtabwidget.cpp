@@ -81,7 +81,8 @@ void ListTabWidget::removePlaylist() {
 
 void ListTabWidget::openRenameDialog() {
   const int index = ui->listView->currentIndex().row();
-  RenameWidget *renameWidget = new RenameWidget();
+  RenameWidget *renameWidget =
+      new RenameWidget(m_listTabModel->index(index)->playlistName());
   connect(renameWidget, &RenameWidget::renamed, this,
           [this, index](const QString &name) { renamePlaylist(index, name); });
   renameWidget->exec();
@@ -152,9 +153,19 @@ void ListTabWidget::renamePlaylist(int index, const QString &name) {
   saveDefaultPlaylist();
 }
 
-RenameWidget::RenameWidget(QDialog *parent) : QDialog(parent) {
+PlaylistModel *ListTabModel::index(int index) const {
+  if (m_playlistList.length() <= index) {
+    return nullptr;
+  }
+  return m_playlistList[index];
+}
+
+RenameWidget::RenameWidget(const QString &currentName, QDialog *parent)
+    : QDialog(parent) {
   this->setWindowTitle(tr("Rename Playlist"));
   QLineEdit *lineEdit = new QLineEdit(this);
+  lineEdit->setText(currentName);
+  lineEdit->selectAll();
   QPushButton *pushButton = new QPushButton(this);
   pushButton->setText(tr("Yes"));
   QHBoxLayout *layout = new QHBoxLayout(this);

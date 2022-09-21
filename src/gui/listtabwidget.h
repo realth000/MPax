@@ -57,7 +57,7 @@ class RenameWidget : public QDialog {
   Q_OBJECT
 
  public:
-  explicit RenameWidget(QDialog *parent = nullptr);
+  explicit RenameWidget(const QString &currentName, QDialog *parent = nullptr);
 
  signals:
   void renamed(const QString &name);
