@@ -26,7 +26,8 @@ MainUI::MainUI(QWidget *parent)
       m_historyPos(0),
       m_searchDialog(new PlaylistSearchDialog(this)),
       m_statusLabel(new QLabel),
-      m_trayIcon(new SystemTrayIcon(this)) {
+      m_trayIcon(new SystemTrayIcon(this)),
+      m_lastOpenPath("") {
   this->setAttribute(Qt::WA_DeleteOnClose);
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
@@ -217,11 +218,12 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
 
 void MainUI::openAudio() {
   const QString filePath = QFileDialog::getOpenFileName(
-      this, tr("Open audio"), QCoreApplication::applicationFilePath(),
+      this, tr("Open audio"), getFileDialogOpenPath(),
       tr("Audio files") + "(*.mp3 *.flac *.wav);;");
   if (filePath.isEmpty()) {
     return;
   }
+  m_lastOpenPath = QFileInfo(filePath).dir().path();
   playAudioInShowingList(ui->playlistWidget->countShowing() - 1,
                          addAudioFile(filePath));
   ui->listTabWidget->saveDefaultPlaylist();
@@ -281,14 +283,11 @@ void MainUI::playNext() {
 
 void MainUI::scanAudioDir() {
   const QString dirPath = QFileDialog::getExistingDirectory(
-      this, tr("Scan directory"),
-      QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
-                  .length() > 0
-          ? QStandardPaths::standardLocations(QStandardPaths::MusicLocation)[0]
-          : "");
+      this, tr("Scan directory"), getFileDialogOpenPath());
   if (dirPath.isEmpty()) {
     return;
   }
+  m_lastOpenPath = dirPath;
   AudioScanner *scanner = new AudioScanner;
   ProgressDialog *dialog = new ProgressDialog("Scanning directory");
   dialog->setInfinite(true);
@@ -428,6 +427,18 @@ void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
 
 void MainUI::InitStatusBar() {
   ui->statusbar->addPermanentWidget(m_statusLabel);
+}
+
+QString MainUI::getFileDialogOpenPath() const {
+  if (!m_lastOpenPath.isEmpty() && QFileInfo::exists(m_lastOpenPath)) {
+    return m_lastOpenPath;
+  }
+  if (QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
+          .length() > 0) {
+    return QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
+        .first();
+  }
+  return QCoreApplication::applicationFilePath();
 }
 
 void MainUI::appendHistory(const PlayContentPos &cp) {
