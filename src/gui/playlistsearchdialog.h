@@ -26,6 +26,7 @@ class PlaylistSearchDialog : public QDialog {
   void playContentChanged(const int &row);
   void deleteTriggered(const QList<int> &indexes);
   void openFileInDirTriggered(const int &row);
+  void playContentInfoChanged(PlayContent *playContent);
 
  public slots:
   void setModel(QAbstractItemModel *model);
@@ -57,6 +58,7 @@ class PlaylistSearchDialog : public QDialog {
   void actionDelete();
   void actionPlay();
   void actionOpenInFolder();
+  void actionShowPropertyDialog();
 };
 
 #endif  // PLAYLISTSEARCHDIALOG_H

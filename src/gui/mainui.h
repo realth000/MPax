@@ -38,6 +38,7 @@ class MainUI : public QMainWindow {
   PlaylistSearchDialog *m_searchDialog;
   QLabel *m_statusLabel;
   SystemTrayIcon *m_trayIcon;
+  QString m_lastOpenPath;
 
   PlayContent *addAudioFile(const QString &filePath);
   void addAudioFileList(const QStringList &filePathList,
@@ -45,6 +46,7 @@ class MainUI : public QMainWindow {
   void appendHistory(const PlayContentPos &cp);
   void prependHistory(const PlayContentPos &cp);
   void InitStatusBar();
+  QString getFileDialogOpenPath() const;
 
  private slots:
   void openAudio();

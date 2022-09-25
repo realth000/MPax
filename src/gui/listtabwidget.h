@@ -1,6 +1,7 @@
 #ifndef LISTTABWIDGET_H
 #define LISTTABWIDGET_H
 
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QWidget>
 
@@ -35,6 +36,7 @@ class ListTabWidget : public QWidget {
   PlaylistModel *CurrentPlaylist() const;
   int indexOf(PlaylistModel *playlistModel) const;
   void saveCurrentPlaylist();
+  void renamePlaylist(int index, const QString &name);
 
  private:
   Ui::ListTabWidget *ui;
@@ -48,6 +50,17 @@ class ListTabWidget : public QWidget {
   void updateCurrentPlaylist(const QModelIndex &index);
   void openListViewContextMenu();
   void removePlaylist();
+  void openRenameDialog();
+};
+
+class RenameWidget : public QDialog {
+  Q_OBJECT
+
+ public:
+  explicit RenameWidget(const QString &currentName, QDialog *parent = nullptr);
+
+ signals:
+  void renamed(const QString &name);
 };
 
 #endif  // LISTTABWIDGET_H

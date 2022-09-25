@@ -1,6 +1,9 @@
 #include "listtabwidget.h"
 
 #include <QtCore/QDir>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 #include "ui_listtabwidget.h"
 #include "util/cssloader.h"
@@ -14,6 +17,11 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->listView->setModel(m_listTabModel);
   ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->listView->setFocusPolicy(Qt::NoFocus);
+  ui->listView->setDragEnabled(true);
+  ui->listView->setAcceptDrops(true);
+  ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
+  ui->listView->setDragDropOverwriteMode(false);
+  ui->listView->setDropIndicatorShown(true);
   InitConnections();
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
@@ -53,9 +61,15 @@ void ListTabWidget::openListViewContextMenu() {
 
 QMenu *ListTabWidget::InitListViewContextMenu() {
   QMenu *m = new QMenu(this);
+  m->setMinimumWidth(150);
   QAction *actionDelete = new QAction(tr("Delete"));
   connect(actionDelete, &QAction::triggered, this,
           &ListTabWidget::removePlaylist);
+  QAction *actionRename = new QAction(tr("Rename"));
+  connect(actionRename, &QAction::triggered, this,
+          &ListTabWidget::openRenameDialog);
+  m->addAction(actionRename);
+  m->addSeparator();
   m->addAction(actionDelete);
   return m;
 }
@@ -63,6 +77,17 @@ QMenu *ListTabWidget::InitListViewContextMenu() {
 void ListTabWidget::removePlaylist() {
   m_listTabModel->removePlaylist(ui->listView->currentIndex().row());
   emit currentPlaylistChanged(m_listTabModel->currentPlaylist());
+}
+
+void ListTabWidget::openRenameDialog() {
+  const int index = ui->listView->currentIndex().row();
+  RenameWidget *renameWidget =
+      new RenameWidget(m_listTabModel->index(index)->playlistName());
+  connect(renameWidget, &RenameWidget::renamed, this,
+          [this, index](const QString &name) { renamePlaylist(index, name); });
+  renameWidget->exec();
+  delete renameWidget;
+  renameWidget = nullptr;
 }
 
 void ListTabWidget::importPlaylist(const QStringList &fileList) {
@@ -121,4 +146,36 @@ int ListTabWidget::indexOf(PlaylistModel *playlistModel) const {
 
 void ListTabWidget::saveCurrentPlaylist() {
   m_listTabModel->saveCurrentPlaylist();
+}
+
+void ListTabWidget::renamePlaylist(int index, const QString &name) {
+  m_listTabModel->renamePlaylist(index, name);
+  saveDefaultPlaylist();
+}
+
+PlaylistModel *ListTabModel::index(int index) const {
+  if (m_playlistList.length() <= index) {
+    return nullptr;
+  }
+  return m_playlistList[index];
+}
+
+RenameWidget::RenameWidget(const QString &currentName, QDialog *parent)
+    : QDialog(parent) {
+  this->setWindowTitle(tr("Rename Playlist"));
+  QLineEdit *lineEdit = new QLineEdit(this);
+  lineEdit->setText(currentName);
+  lineEdit->selectAll();
+  QPushButton *pushButton = new QPushButton(this);
+  pushButton->setText(tr("Yes"));
+  QHBoxLayout *layout = new QHBoxLayout(this);
+  connect(pushButton, &QPushButton::clicked, this, [this, lineEdit]() {
+    if (!lineEdit->text().isEmpty()) {
+      emit renamed(lineEdit->text());
+    }
+    this->close();
+  });
+  layout->addWidget(lineEdit);
+  layout->addWidget(pushButton);
+  this->setLayout(layout);
 }

@@ -3,7 +3,9 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QtCore/QRandomGenerator>
 #endif
+#include <QtCore/QUrl>
 #include <QtCore/QtDebug>
+#include <QtGui/QClipboard>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QScrollBar>
 
@@ -199,10 +201,14 @@ QMenu *PlaylistWidget::InitTableViewContextMenu() {
   QAction *actionProperty = new QAction(tr("Property"));
   connect(actionProperty, &QAction::triggered, this,
           &PlaylistWidget::actionShowPropertyDialog);
+  QAction *actionCopyToClipBoard = new QAction(tr("Copy to clipboard"));
+  connect(actionCopyToClipBoard, &QAction::triggered, this,
+          &PlaylistWidget::actionCopyToClipBoard);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
   m->addAction(actionPlay);
+  m->addAction(actionCopyToClipBoard);
   m->addSeparator();
   m->addAction(actionProperty);
   return m;
@@ -277,6 +283,31 @@ void PlaylistWidget::actionPlay() {
   emit playContentChanged(pc.index, pc.content);
 }
 
+void PlaylistWidget::actionCopyToClipBoard() {
+  if (m_showingModel == nullptr) {
+    return;
+  }
+  if (m_tableViewSelectedRows.count() < 0) {
+    return;
+  }
+  QList<QUrl> urlList;
+  for (auto &r : m_tableViewSelectedRows) {
+    PlayContentPos pc =
+        m_showingModel->content(m_showingFilterModel->mapToSource(r).row());
+    if (pc.index < 0 || pc.content == nullptr) {
+      continue;
+    }
+    QUrl u;
+    u.setScheme("file");
+    u.setPath(pc.content->contentPath);
+    urlList.append(u);
+  }
+  QClipboard *c = QApplication::clipboard();
+  QMimeData *d = new QMimeData();
+  d->setUrls(urlList);
+  c->setMimeData(d);
+}
+
 void PlaylistWidget::updatePlayingModel() {
   if (m_showingModel == nullptr || m_playingModel == m_showingModel) {
     return;
@@ -345,6 +376,9 @@ int PlaylistWidget::countShowing() const {
 
 void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewSelectedRows = ui->tableView->selectionModel()->selectedRows();
+  if (m_tableViewSelectedRows.isEmpty()) {
+    return;
+  }
   m_tableViewContextMenu->popup(QCursor::pos());
 }
 
@@ -416,8 +450,11 @@ void PlaylistWidget::actionShowPropertyDialog() {
   connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
           [this](PlayContent *playContent) {
             this->m_showingModel->updatePlayContent(playContent);
-            if (playContent->contentPath ==
-                m_playingModel->currentPlayContent().content->contentPath) {
+            if (m_playingModel != nullptr &&
+                m_playingModel->currentPlayContent().index >= 0 &&
+                m_playingModel->currentPlayContent().content != nullptr &&
+                playContent->contentPath ==
+                    m_playingModel->currentPlayContent().content->contentPath) {
               emit this->playContentInfoChanged(playContent);
             }
           });

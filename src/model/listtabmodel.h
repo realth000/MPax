@@ -19,6 +19,13 @@ class ListTabModel : public QStringListModel {
                 int role = Qt::DisplayRole) const override;
   bool setData(const QModelIndex &index, const QVariant &value,
                int role = Qt::EditRole) override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  Qt::DropActions supportedDropActions() const override;
+  QMimeData *mimeData(const QModelIndexList &indexList) const override;
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row,
+                    int column, const QModelIndex &parent) override;
+  void renamePlaylist(int index, const QString &name);
+  PlaylistModel *index(int index) const;
 
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);

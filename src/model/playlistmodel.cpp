@@ -90,6 +90,9 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
 int PlaylistModel::count() const { return m_playlist->content().length(); }
 
 void PlaylistModel::addContent(PlayContent *content) {
+  if (m_playlist->contains(content->contentPath)) {
+    return;
+  }
   reloadPlayContentInfo(content);
   beginResetModel();
   m_playlist->appendContent(content);
