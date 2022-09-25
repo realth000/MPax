@@ -52,13 +52,13 @@ MPax is a simple and easy-to-use music player.
   * [x] **Custom global shortcut**.
   * [ ] **Custom global shortcut in UI settings.**
   * [ ] Show music in different groups (artists, albums and so on).
-* - [ ] Playlist management.
+* - [x] Playlist management.
   - [x] Add/Save/Delete playlist.
   - [x] **Export and import playlist.**
   - [x] Play history.
   - [x] Custom playlist header.
   - [x] **Sort by custom header**.
-  - [ ] **Move audio between playlists**.
+  - [x] **Move audio between playlists**.
   - [x] Manage audio file through playlists.
 * - [x] Search.
   - [x] Filter search with syntax statement.
