@@ -100,7 +100,7 @@ qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 #qt5_add_translation(QM_FILES ${TS_FILES})
 
-target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey tag z Qt${QT_VERSION_MAJOR}::Concurrent)
+target_link_libraries(MPax PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia Qt${QT_VERSION_MAJOR}::Sql qhotkey tag Qt${QT_VERSION_MAJOR}::Concurrent)
 
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(MPax)
