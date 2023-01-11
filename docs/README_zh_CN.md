@@ -8,7 +8,7 @@
     </p>
     <p>
         <a href="https://github.com/realth000/MPax/actions">
-            <img src="https://img.shields.io/github/workflow/status/realth000/MPax/CMake?label=Linux&logo=linux"/></a>
+            <img src="https://img.shields.io/github/actions/workflow/status/realth000/MPax/build_ubuntu2204.yml?label=Linux&logo=linux"/></a>
         <a href="https://github.com/realth000/MPax/releases">
             <img src="https://img.shields.io/github/release/realth000/MPax"/></a>
         <a href="https://www.qt.io">
@@ -32,38 +32,43 @@ MPax是一款简约易用的音乐播放器。
 ## 功能
 
 * 默认快捷键（Meta指开始菜单键、Win键）
-  - 播放/暂停：``Ctrl+Meta+B``
-  - 上一首：``Ctrl+Meta+Left``
-  - 下一首：``Ctrl+Meta+Right``
-  - 后退/前进：``Left``/``Right``
-  - 打开搜索窗口：``Ctrl+F``
+    - 播放/暂停：``Ctrl+Meta+B``
+    - 上一首：``Ctrl+Meta+Left``
+    - 下一首：``Ctrl+Meta+Right``
+    - 后退/前进：``Left``/``Right``
+    - 打开搜索窗口：``Ctrl+F``
 * 搜索语法（按音乐标签信息搜索）：
-  * 标题含有abc：``title HAS abc``
-  * 专辑含有abc和123：``album HAS abc 123``
+    * 标题含有abc：``title HAS abc``
+    * 专辑含有abc和123：``album HAS abc 123``
 
 ## 计划要做的
 
-* * [ ] 音乐管理。
-  * [x] 基本的音乐播放。
-  * [x] 支持.mp3/.flac/.wav。
-  * [ ] **支持.cue。**
-  * [ ] 显示歌词。
-  * [ ] **小窗模式。**
-  * [x] **自定义全局快捷键。**
-  * [ ] **图形设置中修改全局快捷键。**
-  * [ ] 按组分组音乐（比如按歌手和专辑分类）。
-* - [x] 播放列表管理。
-  - [x] 添加/保存/删除播放列表。
-  - [x] **导出和导入播放列表。**
-  - [x] 自定义播放列表标题。
-  - [x] **播放历史。**
-  - [x] **根据播放列表标题排序。**
-  - [x] **在播放列表之间移动文件。**
-  - [x] 在播放列表中管理文件。
-* - [x] 搜索。
-  - [x] 筛选搜索语法。
-* - [x] 管理id3v2/id3v1标签。
-* - [ ] 更好的解码（咕咕咕）。
+*
+    * [ ] 音乐管理。
+    * [x] 基本的音乐播放。
+    * [x] 支持.mp3/.flac/.wav。
+    * [ ] **支持.cue。**
+    * [ ] 显示歌词。
+    * [ ] **小窗模式。**
+    * [x] **自定义全局快捷键。**
+    * [ ] **图形设置中修改全局快捷键。**
+    * [ ] 按组分组音乐（比如按歌手和专辑分类）。
+*
+    - [x] 播放列表管理。
+    - [x] 添加/保存/删除播放列表。
+    - [x] **导出和导入播放列表。**
+    - [x] 自定义播放列表标题。
+    - [x] **播放历史。**
+    - [x] **根据播放列表标题排序。**
+    - [x] **在播放列表之间移动文件。**
+    - [x] 在播放列表中管理文件。
+*
+    - [x] 搜索。
+    - [x] 筛选搜索语法。
+*
+    - [x] 管理id3v2/id3v1标签。
+*
+    - [ ] 更好的解码（咕咕咕）。
 
 ......
 
@@ -77,16 +82,19 @@ MPax是一款简约易用的音乐播放器。
 
 ### 编译步骤
 
-1. * Ubuntu2204: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``
-   * Ubuntu2004/Ubuntu1804: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``
+1.
+    *
+    Ubuntu2204: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools``
+    *
+    Ubuntu2004/Ubuntu1804: ``sudo apt install g++ cmake qtbase5-dev qttools5-dev qtmultimedia5-dev libqt5x11extras5-dev qt5-default``
 5. 打包成*.deb:
-   * Ubuntu2204: ``./scripts/build_deb.sh -d Ubuntu2204``
-   * Ubuntu2004: ``./scripts/build_deb.sh -d Ubuntu2004``
-   * Ubuntu1804: ``./scripts/build_deb.sh -d Ubuntu1804``
+    * Ubuntu2204: ``./scripts/build_deb.sh -d Ubuntu2204``
+    * Ubuntu2004: ``./scripts/build_deb.sh -d Ubuntu2004``
+    * Ubuntu1804: ``./scripts/build_deb.sh -d Ubuntu1804``
 
 ## 版本发布
 
- [在这里](https://github.com/realth000/MPax/releases)。
+[在这里](https://github.com/realth000/MPax/releases)。
 
 ## 开源许可
 
