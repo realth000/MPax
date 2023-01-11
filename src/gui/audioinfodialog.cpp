@@ -3,6 +3,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtWidgets/QLabel>
 
 #include "audio/audioinfo.h"
 #include "ui_audioinfodialog.h"
@@ -14,7 +15,8 @@ AudioInfoDialog::AudioInfoDialog(PlayContent *playContent, QWidget *parent)
       ui(new Ui::AudioInfoDialog),
       m_content(playContent),
       m_modified(false),
-      m_headerList(QStringList{tr("Name"), tr("Value")}) {
+      m_headerList(QStringList{tr("Name"), tr("Value")}),
+      m_coverHeaderList(QStringList{tr("Name"), tr("Image"), tr("Info")}) {
   ui->setupUi(this);
   initUi();
   initConnections();
@@ -28,6 +30,7 @@ void AudioInfoDialog::initUi() {
 
   ui->detailTable->setShowGrid(false);
   ui->metadataTable->setShowGrid(false);
+  ui->coverTable->setShowGrid(false);
 
   setTabOrder(ui->okButton, ui->cancelButton);
   setTabOrder(ui->cancelButton, ui->okButton);
@@ -38,6 +41,7 @@ void AudioInfoDialog::initUi() {
   ui->metadataTable->setFocusPolicy(Qt::NoFocus);
   ui->detailTable->setFocusPolicy(Qt::NoFocus);
   ui->coverTab->setFocusPolicy(Qt::NoFocus);
+  ui->coverTable->setFocusPolicy(Qt::NoFocus);
   //  ui->cancelButton->setFocusPolicy(Qt::NoFocus);
   ui->okButton->setFocus();
 
@@ -51,6 +55,7 @@ void AudioInfoDialog::initUi() {
 
   initMetadataTable();
   initDetailTable();
+  initCoverTable();
 }
 
 void AudioInfoDialog::initConnections() {
@@ -186,6 +191,79 @@ void AudioInfoDialog::initDetailTable() {
         ~Qt::ItemIsEditable);
     ui->detailTable->item(i, 1)->setFlags(ui->detailTable->item(i, 1)->flags() &
         ~Qt::ItemIsEditable);
+  }
+}
+
+void AudioInfoDialog::initCoverTable() {
+  ui->coverTable->verticalHeader()->setVisible(false);
+  ui->coverTable->setAlternatingRowColors(true);
+  ui->coverTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+  ui->coverTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+  ui->coverTable->setColumnCount(3);
+  ui->coverTable->setColumnWidth(0, 70);
+  ui->coverTable->setColumnWidth(1, 100);
+  ui->coverTable->horizontalHeader()->setStretchLastSection(true);
+
+  ui->coverTable->setHorizontalHeaderLabels(m_coverHeaderList);
+  ui->coverTable->setRowCount(5);
+  for (int i = 0; i < ui->coverTable->rowCount(); i++) {
+    ui->coverTable->setRowHeight(i, 100);
+    ui->coverTable->item(i, 0)->setFlags(ui->coverTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
+  }
+
+  ui->coverTable->setItem(0, 0, new QTableWidgetItem(tr("Front Cover")));
+  ui->coverTable->setItem(1, 0, new QTableWidgetItem(tr("Back Cover")));
+  ui->coverTable->setItem(2, 0, new QTableWidgetItem(tr("Artist")));
+  ui->coverTable->setItem(3, 0, new QTableWidgetItem(tr("Disc")));
+  ui->coverTable->setItem(4, 0, new QTableWidgetItem(tr("Icon")));
+
+  for (auto cover : m_content->coverList) {
+    if (cover == nullptr || cover->image == nullptr) {
+      continue;
+    }
+    auto img = *cover->image;
+    auto coverLabel = new QLabel();
+    coverLabel->setPixmap(QPixmap::fromImage(img).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    auto infoString = QString("%1 B\n").arg(img.sizeInBytes());
+    infoString.append(QString("%1 x %2\n").arg(img.width()).arg(img.height()));
+    infoString.append(cover->mimeType);
+
+    switch (cover->type) {
+      case CoverType::FrontCover: {
+        ui->coverTable->setCellWidget(0, 1, coverLabel);
+        ui->coverTable->setItem(0, 2, new QTableWidgetItem(infoString));
+        continue;
+      }
+      case CoverType::BackCover: {
+        ui->coverTable->setCellWidget(1, 1, coverLabel);
+        ui->coverTable->setItem(1, 2, new QTableWidgetItem(infoString));
+        continue;
+      }
+      case CoverType::Artist: {
+        ui->coverTable->setCellWidget(2, 1, coverLabel);
+        ui->coverTable->setItem(2, 2, new QTableWidgetItem(infoString));
+        continue;
+      }
+      case CoverType::Media: {
+        ui->coverTable->setCellWidget(3, 1, coverLabel);
+        ui->coverTable->setItem(3, 2, new QTableWidgetItem(infoString));
+        continue;
+      }
+      case CoverType::OtherFileIcon: {
+        ui->coverTable->setCellWidget(4, 1, coverLabel);
+        ui->coverTable->setItem(4, 2, new QTableWidgetItem(infoString));
+        continue;
+      }
+      default: {
+        break;
+      }
+    }
+    delete coverLabel;
+  }
+  for (int i = 0; i < ui->coverTable->rowCount(); i++) {
+    ui->coverTable->item(i, 2)->setFlags(ui->coverTable->item(i, 2)->flags() & ~Qt::ItemIsEditable);
   }
 }
 

@@ -26,6 +26,21 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
 #endif
   TagLib::ID3v2::Tag pf(f.file(), 0);
   if (infoOption != InfoOption::NoAlbumCover && !pf.isEmpty()) {
+    const auto frameListMap = pf.frameListMap();
+    if (!frameListMap["APIC"].isEmpty()) {
+      for (auto pic : frameListMap["APIC"]) {
+        auto cover = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(pic);
+        const auto vec = cover->picture().toBase64();
+        auto img = new QImage();
+        img->loadFromData(QByteArray::fromBase64(QByteArray::fromRawData(vec.data(), vec.size())));
+        playContent->coverList.append(new Cover{
+            CoverType(cover->type()),
+            cover->mimeType().toCString(true),
+            img,
+        });
+      }
+    }
+
     for (auto i : pf.frameList()) {
       if (QString(i->toString().toCString(true)).contains("[image/")) {
         auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);

@@ -26,11 +26,13 @@ class AudioInfoDialog : public QDialog {
   PlayContent *m_content;
   bool m_modified;
   const QStringList m_headerList;
+  const QStringList m_coverHeaderList;
 
   void initUi();
   void initConnections();
   void initMetadataTable();
   void initDetailTable();
+  void initCoverTable();
 
  private slots:
   void saveAudioInfo();

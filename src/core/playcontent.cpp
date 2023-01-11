@@ -30,6 +30,15 @@ PlayContent::PlayContent(const QString &filePath)
   this->contentSize = fileInfo.size();
 }
 
+PlayContent::~PlayContent() {
+  for (auto cover : coverList) {
+    if (cover->image != nullptr) {
+      delete cover->image;
+      cover->image == nullptr;
+    }
+  }
+}
+
 QVariant PlayContent::value(const QString &propertyName) const {
   //  qDebug() << "get" << propertyName << property[propertyName];
   //  return property[propertyName];
