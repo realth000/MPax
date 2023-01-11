@@ -31,8 +31,8 @@ void SystemTrayIcon::initContextMenu() {
           &SystemTrayIcon::appRestartRequested);
   connect(m_contextMenu, &QMenu::aboutToShow, this, [this, showWindowAction]() {
     !m_isMainWindowMinimized
-        ? showWindowAction->setText(tr("Hide main window"))
-        : showWindowAction->setText(tr("Show main window"));
+    ? showWindowAction->setText(tr("Hide main window"))
+    : showWindowAction->setText(tr("Show main window"));
   });
 }
 
@@ -45,10 +45,8 @@ void SystemTrayIcon::updateMainWindowActiveState(bool active) {
 }
 void SystemTrayIcon::onIconActivated(QSystemTrayIcon::ActivationReason reason) {
   switch (reason) {
-    case QSystemTrayIcon::Trigger:
-      showMainWindow(!m_isMainWindowMinimized);
+    case QSystemTrayIcon::Trigger:showMainWindow(!m_isMainWindowMinimized);
       break;
-    default:
-      break;
+    default:break;
   }
 }

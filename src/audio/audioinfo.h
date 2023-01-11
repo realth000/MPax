@@ -7,7 +7,7 @@
 #include "core/playcontent.h"
 
 class AudioInfo : public QObject {
-  Q_OBJECT
+ Q_OBJECT
  public:
   enum class InfoOption : int { All = 0, NoAlbumCover = 1 };
   Q_ENUM(InfoOption)

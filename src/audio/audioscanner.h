@@ -5,7 +5,7 @@
 #include <QtCore/QTimer>
 
 class AudioScanner : public QObject {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   QStringList audioFileList() const;

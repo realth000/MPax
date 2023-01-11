@@ -8,7 +8,7 @@
 
 namespace Model {
 class PlaylistSearchFilterModel : public PlaylistFilterModel {
-  Q_OBJECT
+ Q_OBJECT
  public:
   enum class FilterMode : int { Text = 0, Blob, Regexp };
   Q_ENUM(FilterMode)

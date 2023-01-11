@@ -12,7 +12,7 @@ class ListTabWidget;
 }
 
 class ListTabWidget : public QWidget {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit ListTabWidget(QWidget *parent = nullptr);
@@ -54,7 +54,7 @@ class ListTabWidget : public QWidget {
 };
 
 class RenameWidget : public QDialog {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit RenameWidget(const QString &currentName, QDialog *parent = nullptr);

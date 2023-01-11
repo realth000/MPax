@@ -7,7 +7,7 @@
 #include <QtGui/QFont>
 #endif
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 #ifdef Q_OS_WINDOWS
   QFont appFont;
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     case QLocale::SimplifiedChineseScript:
 #if 1
       appTranslator.load(QCoreApplication::applicationDirPath() +
-                         "/translation/zh_CN.qm");
+          "/translation/zh_CN.qm");
 #else
       appTranslator.load(QCoreApplication::applicationDirPath() +
                          "/translation/en.qm");
@@ -29,11 +29,11 @@ int main(int argc, char* argv[]) {
       break;
     default:
       appTranslator.load(QCoreApplication::applicationDirPath() +
-                         "/translation/en.qm");
+          "/translation/en.qm");
   }
   Config::AppConfig::getInstance()->loadConfig();
   QCoreApplication::installTranslator(&appTranslator);
-  MainUI* w = new MainUI();
+  MainUI *w = new MainUI();
   w->show();
   return a.exec();
 }

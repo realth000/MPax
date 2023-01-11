@@ -122,8 +122,7 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         break;
       }
       case TokenType::Unknown:
-      default:
-        break;
+      default:break;
     }
   }
   for (auto &t : tf) {
@@ -137,7 +136,7 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
   }
   return ast;
 
-failed:
+  failed:
   //  for (auto &t : tf) {
   //    qDebug() << t.start << t.end << t.type << t.content;
   //  }
@@ -182,7 +181,7 @@ bool Analyzer::validate(const AST *a, bool *ok, QString *errString) {
   qDebug() << "check node count =" << checkCount;
   return true;
 
-failed:
+  failed:
   *ok = false;
   qDebug() << "check node count =" << checkCount;
   return false;
@@ -207,7 +206,8 @@ bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok,
         *errString = "empty query text";
         goto failed;
       }
-    } break;
+    }
+      break;
     case ASTType::Branch: {
       if (node->leftChild == nullptr || node->rightChild == nullptr) {
         *errString = "branch type node has null child";
@@ -217,17 +217,17 @@ bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok,
         *errString = "operate not set";
         goto failed;
       }
-    } break;
+    }
+      break;
     case ASTType::Unknown:
-    default:
-      *errString = "unknown node type";
+    default:*errString = "unknown node type";
       goto failed;
   }
 
   *ok = true;
   return true;
 
-failed:
+  failed:
   *ok = false;
   return false;
 }

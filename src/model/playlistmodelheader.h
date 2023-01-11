@@ -39,7 +39,7 @@ struct PlaylistHeaderItem {
 using HeaderItem = PlaylistHeaderItem;
 
 class PlaylistModelHeader : public QObject {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   static PlaylistModelHeader *getInstance();

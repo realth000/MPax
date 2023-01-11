@@ -7,15 +7,15 @@
 namespace SearchParser {
 
 namespace {
-bool isKeyword(const QString& s) { return keywords.contains(s); }
-bool isOpeKeyword(const QString& s) { return operatorKeywords.contains(s); }
-bool isMetaKeyword(const QString& s) { return metaKeywords.contains(s); }
+bool isKeyword(const QString &s) { return keywords.contains(s); }
+bool isOpeKeyword(const QString &s) { return operatorKeywords.contains(s); }
+bool isMetaKeyword(const QString &s) { return metaKeywords.contains(s); }
 }  // namespace
 
 Tokenizer::Tokenizer() {}
 
-TokenList Tokenizer::tokenize(const QString& rawString, bool* ok,
-                              QString* errString) {
+TokenList Tokenizer::tokenize(const QString &rawString, bool *ok,
+                              QString *errString) {
   if (ok == nullptr || errString == nullptr) {
     qDebug() << "tokenize error: null feedback not allowed in this step";
     return TokenList{};

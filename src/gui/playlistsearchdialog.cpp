@@ -73,16 +73,13 @@ void PlaylistSearchDialog::setModel(QAbstractItemModel *model) {
 void PlaylistSearchDialog::keyPressEvent(QKeyEvent *event) {
   if (event->modifiers() == Qt::NoModifier) {
     switch (event->key()) {
-      case Qt::Key_Up:
-        selectPre();
+      case Qt::Key_Up:selectPre();
         event->accept();
         return;
-      case Qt::Key_Down:
-        selectNext();
+      case Qt::Key_Down:selectNext();
         event->accept();
         return;
-      case Qt::Key_Return:
-        updatePlayContent(m_rowPos);
+      case Qt::Key_Return:updatePlayContent(m_rowPos);
         return;
     }
   }

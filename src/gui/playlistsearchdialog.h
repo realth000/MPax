@@ -16,7 +16,7 @@ class PlaylistSearchDialog;
 }  // namespace Ui
 
 class PlaylistSearchDialog : public QDialog {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit PlaylistSearchDialog(QWidget *parent);

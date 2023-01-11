@@ -43,12 +43,12 @@ bool Model::PlaylistSearchFilterModel::filterAcceptsRow(
     for (int i = 0; i < columnCount; i++) {
       if (sourceModel()
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-              ->data(index0.siblingAtColumn(i))
+          ->data(index0.siblingAtColumn(i))
 #else
               ->data(index0.sibling(index0.row(), i))
 #endif
-              .toString()
-              .contains(m_filterExp)) {
+          .toString()
+          .contains(m_filterExp)) {
         return true;
       }
     }

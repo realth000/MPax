@@ -8,7 +8,7 @@
 #include <QtMultimedia/QMediaPlaylist>
 
 class CorePlayer : public QObject {
-  Q_OBJECT
+ Q_OBJECT
  public:
   explicit CorePlayer(QObject *parent = nullptr);
   virtual ~CorePlayer();

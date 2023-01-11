@@ -9,7 +9,7 @@ class ProgressDialog;
 }
 
 class ProgressDialog : public QDialog {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit ProgressDialog(const QString &workName, QWidget *parent = nullptr);

@@ -48,8 +48,8 @@ MainUI::MainUI(QWidget *parent)
   ui->listTabWidget->addPlaylist(playlistList);
   // Set current Playlist from config.
   const int playlist = Config::AppConfig::getInstance()
-                           ->config(CONFIG_CUR_PLAYLIST)
-                           .value.toInt();
+      ->config(CONFIG_CUR_PLAYLIST)
+      .value.toInt();
   if (playlist < 0) {
     qDebug() << "current playlist pos <0";
     return;
@@ -63,8 +63,8 @@ MainUI::MainUI(QWidget *parent)
   ui->playlistWidget->setModel(model);
   ui->playlistWidget->updatePlayingModel();
   const QString playContent = Config::AppConfig::getInstance()
-                                  ->config(CONFIG_CUR_PLAYCONTENT)
-                                  .value.toString();
+      ->config(CONFIG_CUR_PLAYCONTENT)
+      .value.toString();
   if (playContent.isEmpty()) {
     qDebug() << "empty current playContent";
     return;
@@ -191,8 +191,7 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
   }
   if (event->modifiers() == Qt::NoModifier) {
     switch (event->key()) {
-      case Qt::Key_Space:
-        ui->playControlWidget->updatePlay();
+      case Qt::Key_Space:ui->playControlWidget->updatePlay();
         event->accept();
         return;
       case Qt::Key_Left:
@@ -209,8 +208,7 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
                 .value.toInt());
         event->accept();
         return;
-      default:
-        break;
+      default:break;
     }
   }
   QMainWindow::keyPressEvent(event);
@@ -434,7 +432,7 @@ QString MainUI::getFileDialogOpenPath() const {
     return m_lastOpenPath;
   }
   if (QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
-          .length() > 0) {
+      .length() > 0) {
     return QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
         .first();
   }
@@ -495,7 +493,7 @@ void MainUI::updateMainWindowVisible(bool toShow) {
   if (this->isMinimized()) {
     qApp->activeWindow();
     this->setWindowState((this->windowState() & ~Qt::WindowMinimized) |
-                         Qt::WindowActive);
+        Qt::WindowActive);
     this->raise();
   } else {
     this->showMinimized();

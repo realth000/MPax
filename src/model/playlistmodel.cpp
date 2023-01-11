@@ -77,8 +77,7 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
       //      }
       return QVariant();
       break;
-    case Qt::TextAlignmentRole:
-      return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+    case Qt::TextAlignmentRole:return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
   }
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
@@ -100,7 +99,7 @@ void PlaylistModel::addContent(PlayContent *content) {
   m_playlist->setInfo(
       PLAYLIST_INFO_COUNT,
       QString::number(m_playlist->info().info(PLAYLIST_INFO_COUNT).toInt() +
-                      1));
+          1));
 }
 
 bool PlaylistModel::removeContent(QList<int> indexes) {
@@ -204,9 +203,9 @@ void PlaylistModel::reloadPlayContentInfo() {
   connect(progressTimer, &QTimer::timeout, this,
           [this, reloadWatcher, t, progressTimer]() {
             emit this->reloadInfoStatusChanged(
-                m_playlist->info().info(PLAYLIST_INFO_NAME),
-                reloadWatcher->isFinished(), reloadWatcher->progressValue(),
-                t->elapsed());
+              m_playlist->info().info(PLAYLIST_INFO_NAME),
+              reloadWatcher->isFinished(), reloadWatcher->progressValue(),
+              t->elapsed());
             if (reloadWatcher->isFinished()) {
               progressTimer->stop();
               progressTimer->deleteLater();
@@ -250,9 +249,9 @@ void PlaylistModel::reloadPlaylistWithOrder(const int &column,
                                             Qt::SortOrder order) {
   beginResetModel();
   if (!PlaylistSql::getInstance()->loadPlaylistWithOrder(
-          m_playlist,
-          PLModel::PlaylistModelHeader::getInstance()->usedHeader(column),
-          order)) {
+      m_playlist,
+      PLModel::PlaylistModelHeader::getInstance()->usedHeader(column),
+      order)) {
     qDebug() << "failed to reload playlist with order";
     return;
   }
@@ -296,7 +295,7 @@ void PlaylistModel::updatePlaylistState() {
 Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const {
   if (index.isValid()) {
     return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
-           QAbstractItemModel::flags(index);
+        QAbstractItemModel::flags(index);
   }
   return QAbstractItemModel::flags(index);
 }

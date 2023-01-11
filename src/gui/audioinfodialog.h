@@ -12,7 +12,7 @@ class AudioInfoDialog;
 }
 
 class AudioInfoDialog : public QDialog {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit AudioInfoDialog(PlayContent *playContent, QWidget *parent = nullptr);

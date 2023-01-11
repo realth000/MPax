@@ -29,7 +29,7 @@ struct ConfigPair {
 typedef QMap<QString, ConfigPair> ConfigPairMap;
 
 class AppConfig : public QObject {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   static AppConfig *getInstance();

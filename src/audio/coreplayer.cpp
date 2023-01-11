@@ -35,12 +35,10 @@ void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl) {
 void CorePlayer::updatePlayState(const QMediaPlayer::State &state) {
   emit playStateChanged(state);
   switch (state) {
-    case QMediaPlayer::PlayingState:
-      break;
+    case QMediaPlayer::PlayingState:break;
     case QMediaPlayer::PausedState:
     case QMediaPlayer::StoppedState:
-    default:
-      break;
+    default:break;
   }
 }
 

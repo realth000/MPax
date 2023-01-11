@@ -13,7 +13,7 @@ class PlaylistWidget;
 }
 
 class PlaylistWidget : public QWidget {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   explicit PlaylistWidget(QWidget *parent = nullptr);

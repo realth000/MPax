@@ -13,7 +13,7 @@ class PlayControlWidget;
 }
 
 class PlayControlWidget : public QWidget {
-  Q_OBJECT
+ Q_OBJECT
 
  public:
   enum class PlayMode { ListRepeat = 0, SingleRepeat, Random };

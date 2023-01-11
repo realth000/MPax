@@ -40,7 +40,7 @@
 #define SAVE_CONFIG(CONFIG, CONFIG_NAME) \
   CONFIG->setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
 
-Config::AppConfig* Config::AppConfig::getInstance() {
+Config::AppConfig *Config::AppConfig::getInstance() {
   static AppConfig ac;
   return &ac;
 }
@@ -49,7 +49,7 @@ const Config::ConfigPairMap Config::AppConfig::config() const {
   return m_configMap;
 }
 
-void Config::AppConfig::setConfig(const QString& name, const QVariant& value) {
+void Config::AppConfig::setConfig(const QString &name, const QVariant &value) {
   if (!m_configMap.contains(name)) {
     qDebug() << "set config failed, config not exists:" << name;
     return;
@@ -69,7 +69,7 @@ void Config::AppConfig::printConfig() {
 
 void Config::AppConfig::loadConfig() {
   makeConfigDir();
-  QSettings* config = new QSettings(
+  QSettings *config = new QSettings(
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
           "/MPax/mpax.conf",
       QSettings::IniFormat);
@@ -112,8 +112,8 @@ Config::AppConfig::AppConfig()
 
 Config::AppConfig::~AppConfig() {}
 
-void Config::AppConfig::addConfig(const QString& name, const QVariant& value,
-                                  const QString& type) {
+void Config::AppConfig::addConfig(const QString &name, const QVariant &value,
+                                  const QString &type) {
   ConfigPair config;
   config.name = name;
   config.value = value;
@@ -146,12 +146,12 @@ void Config::AppConfig::saveConfigSoon() {
 void Config::AppConfig::saveConfigDefer() { m_saveConfigDeferTimer->start(); }
 
 const Config::ConfigPair Config::AppConfig::config(
-    const QString& configName) const {
+    const QString &configName) const {
   return m_configMap[configName];
 }
 
 void Config::AppConfig::saveConfig() {
-  QSettings* config = new QSettings(
+  QSettings *config = new QSettings(
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
           "/MPax/mpax.conf",
       QSettings::IniFormat);

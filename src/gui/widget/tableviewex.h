@@ -4,7 +4,7 @@
 #include <QtWidgets/QTableView>
 
 class TableViewEx : public QTableView {
-  Q_OBJECT
+ Q_OBJECT
  public:
   explicit TableViewEx(QWidget *parent = nullptr);
 

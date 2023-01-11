@@ -25,18 +25,18 @@ AboutDialog::AboutDialog(QWidget *parent)
   const QString versionTagUrl =
       QString(
           tr("Version: ") +
-          "<a "
-          "href=\"https://github.com/realth000/MPax/releases/tag/v%1\"><font "
-          "color=#007b50>%1</font></a><br>")
+              "<a "
+              "href=\"https://github.com/realth000/MPax/releases/tag/v%1\"><font "
+              "color=#007b50>%1</font></a><br>")
           .arg(QString(APP_VERSION_TAG).replace("v", ""));
   const QString commitUrl =
       QString(tr("Build: ") +
-              "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
-              "<font color=#007b50>%2%3</font></a><br>")
+          "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
+          "<font color=#007b50>%2%3</font></a><br>")
           .arg(APP_COMMIT_LONG, APP_COMMIT,
                QString(APP_RELEASE_COUNT) != "1"
-                   ? "-release" + QString(APP_RELEASE_COUNT)
-                   : "");
+               ? "-release" + QString(APP_RELEASE_COUNT)
+               : "");
   const QString commitTime =
       QString(tr("Build time: ") + "%1").arg(APP_COMMIT_TIME);
   const QString depHead =
@@ -45,10 +45,10 @@ AboutDialog::AboutDialog(QWidget *parent)
       QString(
           "<h3><a href=\"https://www.qt.io\">"
           "<font color=#007b50>Qt" +
-          tr(": ") +
-          "%1</font></a></h3>Qt is the fastest and "
-          "smartest way to produce industry-leading "
-          "software that users love.<br>Qt is licensed under GNU (L)GPL.")
+              tr(": ") +
+              "%1</font></a></h3>Qt is the fastest and "
+              "smartest way to produce industry-leading "
+              "software that users love.<br>Qt is licensed under GNU (L)GPL.")
           .arg(QT_VERSION_STR);
   const QString depQHotKey = QString(
       "<h3><a href=\"https://github.com/Skycoder42/QHotkey\">"

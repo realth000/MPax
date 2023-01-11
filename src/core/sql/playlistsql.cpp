@@ -58,12 +58,12 @@
   "track_number=:v_track_number, genre=:v_genre, comment=:v_comment WHERE " \
   "path=:v_path"
 
-PlaylistSql* PlaylistSql::getInstance() {
+PlaylistSql *PlaylistSql::getInstance() {
   static PlaylistSql ps;
   return &ps;
 }
 
-void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
+void PlaylistSql::savePlaylist(const QList<Playlist> &playlists) {
   if (!tryOpenDatabase()) {
     qDebug() << "can not save playlist, database failed to open";
     return;
@@ -84,7 +84,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
   while (query.next()) {
     tableNames.append(query.value("table_name").toString());
   }
-  for (const auto& t : tableNames) {
+  for (const auto &t : tableNames) {
     ok = query.exec(QString("DROP TABLE %1").arg(t));
     if (!ok) {
       m_database.rollback();
@@ -98,7 +98,7 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     qDebug() << "can not erase old playlist info" << query.lastError();
     goto exit;
   }
-  for (const auto& playlist : playlists) {
+  for (const auto &playlist : playlists) {
     // Insert playlist info.
     const PlaylistInfo info = playlist.info();
     const QString tableName =
@@ -186,15 +186,15 @@ void PlaylistSql::savePlaylist(const QList<Playlist>& playlists) {
     playlist.info().setInfo(PLAYLIST_INFO_TABLE_NAME, tableName);
   }
   m_database.commit();
-exit:
+  exit:
   tryCloseDatabase();
 }
 
-void PlaylistSql::savePlaylist(const QString& dbPath) {
+void PlaylistSql::savePlaylist(const QString &dbPath) {
   QFile::copy(SQL_DB_NAME, dbPath);
 }
 
-void PlaylistSql::removePlaylist(const Playlist& playlist) {
+void PlaylistSql::removePlaylist(const Playlist &playlist) {
   const QString tableName = playlist.info().info(PLAYLIST_INFO_TABLE_NAME);
   const QString playlistName = playlist.info().info(PLAYLIST_INFO_NAME);
   if (!tryOpenDatabase()) {
@@ -223,19 +223,19 @@ void PlaylistSql::removePlaylist(const Playlist& playlist) {
     goto exit;
   }
   m_database.commit();
-exit:
+  exit:
   tryCloseDatabase();
 }
 
-void PlaylistSql::updatePlaylist(Playlist* playlist) {
+void PlaylistSql::updatePlaylist(Playlist *playlist) {
   int contentCount = 0;
   const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   const QString playlistName = playlist->info().info(PLAYLIST_INFO_NAME);
   const QStringList headerList =
-      QStringList{"ContentPath", "Title",      "Artist",          "AlbumTitle",
-                  "AlbumArtist", "AlbumYear",  "AlbumTrackCount", "TrackNumber",
-                  "BitRate",     "SampleRate", "Genre",           "Comment",
-                  "Channels",    "Length"};
+      QStringList{"ContentPath", "Title", "Artist", "AlbumTitle",
+                  "AlbumArtist", "AlbumYear", "AlbumTrackCount", "TrackNumber",
+                  "BitRate", "SampleRate", "Genre", "Comment",
+                  "Channels", "Length"};
   qDebug() << "update playlist" << tableName << playlistName;
   if (!tryOpenDatabase()) {
     qDebug() << "database not open, failed to update" << playlistName;
@@ -290,7 +290,7 @@ void PlaylistSql::updatePlaylist(Playlist* playlist) {
   }
   m_database.commit();
   playlist->info().setInfo(PLAYLIST_INFO_COUNT, QString::number(contentCount));
-exit:
+  exit:
   tryCloseDatabase();
 }
 
@@ -308,8 +308,8 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     goto exit;
   }
   while (query.next()) {
-    PlaylistInfo* info = new PlaylistInfo;
-    PlayContentList* list = new PlayContentList;
+    PlaylistInfo *info = new PlaylistInfo;
+    PlayContentList *list = new PlayContentList;
     int count = 0;
 
     int id = query.value("id").toInt();
@@ -327,7 +327,7 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     info->setInfo(PLAYLIST_INFO_TABLE_NAME, tableName);
     while (q.next()) {
       //      qDebug() << q.value("path").toString();
-      PlayContent* playContent = new PlayContent(q.value("path").toString());
+      PlayContent *playContent = new PlayContent(q.value("path").toString());
       playContent->title = q.value("title").toString();
       playContent->artist = q.value("artist").toString();
       playContent->albumTitle = q.value("album_title").toString();
@@ -347,14 +347,14 @@ QList<Playlist> PlaylistSql::loadPlaylist() {
     info->setInfo(PLAYLIST_INFO_COUNT, QString::number(count));
     allList.append(Playlist(info, list));
   }
-exit:
+  exit:
   tryCloseDatabase();
   return allList;
 }
 
 PlaylistSql::PlaylistSql()
     : m_database(
-          QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)) {
+    QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), SQL_DB_CONN)) {
 #if 1
   m_titleMap.insert("ContentPath", ColumnHeader{"path", "TEXT"});
   m_titleMap.insert("Title", ColumnHeader{"title", "TEXT"});
@@ -372,21 +372,21 @@ PlaylistSql::PlaylistSql()
   m_titleMap.insert("Channels", ColumnHeader{"channels", "INT"});
   m_titleMap.insert("Length", ColumnHeader{"length", "INT"});
 #else
-    m_titleMap(
-          QMap<QString, QString>{{"ContentPath", "path"},
-        {"Title", "title"},
-        {"Artist", "artist"},
-        {"AlbumTitle", "album_title"},
-        {"AlbumArtist", "album_artist"},
-        {"AlbumYear", "album_year"},
-        {"AlbumTrackCount", "album_track_count"},
-        {"TrackNumber", "track_number"},
-        {"BitRate", "bit_rate"},
-        {"SampleRate", "sample_rate"},
-        {"Genre", "genre"},
-        {"Comment", "comment"},
-        {"Channels", "channels"},
-    {"Length", "length"}};
+  m_titleMap(
+        QMap<QString, QString>{{"ContentPath", "path"},
+      {"Title", "title"},
+      {"Artist", "artist"},
+      {"AlbumTitle", "album_title"},
+      {"AlbumArtist", "album_artist"},
+      {"AlbumYear", "album_year"},
+      {"AlbumTrackCount", "album_track_count"},
+      {"TrackNumber", "track_number"},
+      {"BitRate", "bit_rate"},
+      {"SampleRate", "sample_rate"},
+      {"Genre", "genre"},
+      {"Comment", "comment"},
+      {"Channels", "channels"},
+  {"Length", "length"}};
 #endif
   m_database.setDatabaseName(SQL_DB_NAME);
   if (!tryOpenDatabase()) {
@@ -419,8 +419,8 @@ void PlaylistSql::tryCloseDatabase() {
   }
 }
 
-bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
-                                        const QString& columnName,
+bool PlaylistSql::loadPlaylistWithOrder(Playlist *playlist,
+                                        const QString &columnName,
                                         Qt::SortOrder order) {
   if (!tryOpenDatabase()) {
     qDebug() << "can not load playlist with order, database failed to open";
@@ -432,7 +432,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     qDebug() << "can not load playlist with order, empty playlist name";
     return false;
   }
-  PlayContentList* list = new PlayContentList;
+  PlayContentList *list = new PlayContentList;
   const QString tableName = playlist->info().info(PLAYLIST_INFO_TABLE_NAME);
   bool ok;
   QList<Playlist> ll;
@@ -454,7 +454,7 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
     goto exit;
   }
   while (q.next()) {
-    PlayContent* playContent = new PlayContent(q.value("path").toString());
+    PlayContent *playContent = new PlayContent(q.value("path").toString());
     playContent->title = q.value("title").toString();
     playContent->artist = q.value("artist").toString();
     playContent->albumTitle = q.value("album_title").toString();
@@ -477,13 +477,13 @@ bool PlaylistSql::loadPlaylistWithOrder(Playlist* playlist,
   savePlaylist(ll);
   return true;
 
-exit:
+  exit:
   tryCloseDatabase();
   return false;
 }
 
-void PlaylistSql::updatePlayContent(const Playlist* playlist,
-                                    const PlayContent* playContent) {
+void PlaylistSql::updatePlayContent(const Playlist *playlist,
+                                    const PlayContent *playContent) {
   if (playlist == nullptr || playContent == nullptr) {
     qDebug() << __FUNCTION__ << " failed, null playlist or null play content";
     return;
@@ -541,13 +541,13 @@ void PlaylistSql::updatePlayContent(const Playlist* playlist,
   }
   m_database.commit();
 
-exit:
+  exit:
   tryCloseDatabase();
 }
 
-bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
-                             const QString& tableName, SqlAction action,
-                             const QStringList& columnList, int id) {
+bool PlaylistSql::prepareSql(QSqlQuery *query, const PlayContent *playContent,
+                             const QString &tableName, SqlAction action,
+                             const QStringList &columnList, int id) {
   if (query == nullptr) {
     qDebug() << "failed to generate sql: null query";
     return false;
@@ -559,10 +559,8 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
   switch (action) {
     case SqlAction::Create:
     case SqlAction::Insert:
-    case SqlAction::Update:
-      break;
-    default:
-      qDebug() << "failed to generate sql: unknown sql action " << action;
+    case SqlAction::Update:break;
+    default:qDebug() << "failed to generate sql: unknown sql action " << action;
       return false;
   }
 
@@ -585,7 +583,7 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
     case SqlAction::Insert: {
       QString columnNamesPart;
       QString columnValuePart;
-      for (auto& column : columnList) {
+      for (auto &column : columnList) {
         if (!m_titleMap.contains(column)) {
           qDebug() << "failed to generate sql: unknown column title " << column;
           return false;
@@ -600,35 +598,34 @@ bool PlaylistSql::prepareSql(QSqlQuery* query, const PlayContent* playContent,
       columnNamesPart.chop(2);
       columnValuePart.chop(2);
       queryStatement = QString("INSERT INTO %1(%2) VALUES(%3);")
-                           .arg(tableName, columnNamesPart, columnValuePart);
+          .arg(tableName, columnNamesPart, columnValuePart);
       break;
     }
     case SqlAction::Update: {
       QString columnPart;
-      for (auto& column : columnList) {
+      for (auto &column : columnList) {
         if (!m_titleMap.contains(column)) {
           qDebug() << "failed to generate sql: unknown column title " << column;
           return false;
         }
         columnPart += m_titleMap.value(column).name + "=:v_" +
-                      m_titleMap.value(column).name + ", ";
+            m_titleMap.value(column).name + ", ";
       }
       if (id >= 0) {
         columnPart += "id=:v_id, ";
       }
       columnPart.chop(2);
       queryStatement = QString("UPDATE %1 SET %2 WHERE path=:v_path;")
-                           .arg(tableName, columnPart);
+          .arg(tableName, columnPart);
       break;
     }
-    default:
-      qDebug() << "failed to generate sql: unknown sql action " << action;
+    default:qDebug() << "failed to generate sql: unknown sql action " << action;
       return false;
   }
 
   query->prepare(queryStatement);
   if (action != SqlAction::Create) {
-    for (auto& column : columnList) {
+    for (auto &column : columnList) {
       query->bindValue(":v_" + m_titleMap.value(column).name,
                        playContent->value(column));
     }

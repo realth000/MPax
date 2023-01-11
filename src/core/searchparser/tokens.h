@@ -7,7 +7,7 @@
 // clang-format off
 static const QStringList keywords = {
     "HAS", "IS",
-    "GREATER", "LESS",   "EQUAL",
+    "GREATER", "LESS", "EQUAL",
     "MISSING", "PRESENT",
     "BEFORE", "AFTER", "SINCE", "DURING"
 };
@@ -15,7 +15,7 @@ static const QStringList keywords = {
 
 static const QStringList operatorKeywords = {"AND", "OR"
 #if 0
-                                             ,"NOT"
+    ,"NOT"
 #endif
 };
 
@@ -25,20 +25,20 @@ static const QMap<QString, QString> metaKeywords =
                            {"album", "AlbumTitle"},
                            {"album_artist", "AlbumArtist"}
 #if 0
-                           ,
-                           {"date", "date"},
-                           {"track_number", "TrackNumber"},
-                           {"track_total", "TrackTotal"},
-                           {"disc_number", "DiscNumber"},
-                           {"disc_total", "DiscTotal"},
-                           {"codec", "codec"},
-                           {"file_name", "FileName"},
-                           {"file_name_ext", "FileNameExt"},
-                           {"path", "FilePath"},
-                           {"length", "Length"},
-                           {"seconds", "Seconds"},
-                           {"bitrate", "Bitrate"},
-                           {"samplerate", "Samplerate"}
+        ,
+        {"date", "date"},
+        {"track_number", "TrackNumber"},
+        {"track_total", "TrackTotal"},
+        {"disc_number", "DiscNumber"},
+        {"disc_total", "DiscTotal"},
+        {"codec", "codec"},
+        {"file_name", "FileName"},
+        {"file_name_ext", "FileNameExt"},
+        {"path", "FilePath"},
+        {"length", "Length"},
+        {"seconds", "Seconds"},
+        {"bitrate", "Bitrate"},
+        {"samplerate", "Samplerate"}
 #endif
     };
 

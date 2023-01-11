@@ -34,7 +34,8 @@ static const QMap<QString, ASTKeyword> ASTKeywordMap = {
     {"HAS", ASTKeyword::Has}, {"IS", ASTKeyword::Is},
     {"GREATER", ASTKeyword::Greater}, {"LESS", ASTKeyword::Less}, {"EQUAL", ASTKeyword::Equal},
     {"MISSING", ASTKeyword::Missing}, {"PRESENT", ASTKeyword::Present},
-    {"BEFORE", ASTKeyword::Before}, {"AFTER", ASTKeyword::After}, {"SINCE", ASTKeyword::Since}, {"DURING", ASTKeyword::Since}
+    {"BEFORE", ASTKeyword::Before}, {"AFTER", ASTKeyword::After}, {"SINCE", ASTKeyword::Since},
+    {"DURING", ASTKeyword::Since}
 };
 // clang-format on
 

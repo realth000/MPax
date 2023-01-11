@@ -2,25 +2,25 @@
 
 #include <QtCore/QDebug>
 
-PlayContent::PlayContent(const QString& filePath)
+PlayContent::PlayContent(const QString &filePath)
 #if 0
-    : property(QMap<QString, QVariant*>{{"ContentPath", &contentPath},
-                                        {"ContentName", &contentName},
-                                        {"ContentSize", &contentSize},
-                                        {"Artist", &artist},
-                                        {"Title", &title},
-                                        {"TrackNumber", &trackNumber},
-                                        {"BitRate", &bitRate},
-                                        {"AlbumArtist", &albumArtist},
-                                        {"AlbumTitle", &albumTitle},
-                                        {"TrackCount", &albumTrackCount},
-                                        {"Year", &albumYear},
-                                        {"AlbumCover", &albumCover},
-                                        {"Genre", &genre},
-                                        {"Comment", &comment},
-                                        {"SampleRate", &sampleRate},
-                                        {"Channels", &channels},
-                                        {"Length", &length}}
+: property(QMap<QString, QVariant*>{{"ContentPath", &contentPath},
+                                    {"ContentName", &contentName},
+                                    {"ContentSize", &contentSize},
+                                    {"Artist", &artist},
+                                    {"Title", &title},
+                                    {"TrackNumber", &trackNumber},
+                                    {"BitRate", &bitRate},
+                                    {"AlbumArtist", &albumArtist},
+                                    {"AlbumTitle", &albumTitle},
+                                    {"TrackCount", &albumTrackCount},
+                                    {"Year", &albumYear},
+                                    {"AlbumCover", &albumCover},
+                                    {"Genre", &genre},
+                                    {"Comment", &comment},
+                                    {"SampleRate", &sampleRate},
+                                    {"Channels", &channels},
+                                    {"Length", &length}}
 )
 #endif
 {
@@ -30,7 +30,7 @@ PlayContent::PlayContent(const QString& filePath)
   this->contentSize = fileInfo.size();
 }
 
-QVariant PlayContent::value(const QString& propertyName) const {
+QVariant PlayContent::value(const QString &propertyName) const {
   //  qDebug() << "get" << propertyName << property[propertyName];
   //  return property[propertyName];
   // TODO: Need optimize
@@ -75,4 +75,4 @@ QVariant PlayContent::value(const QString& propertyName) const {
   return QVariant();
 }
 
-void PlayContent::setValue(const QString& name, const QVariant& value) {}
+void PlayContent::setValue(const QString &name, const QVariant &value) {}

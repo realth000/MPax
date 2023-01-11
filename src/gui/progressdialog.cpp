@@ -68,7 +68,7 @@ void ProgressDialog::updateProgress(const int &finishedCount) {
   }
   ui->progressBar->setValue(100 * finishedCount / m_max);
   ui->progressLabel->setText(QString::number(finishedCount) + "/" +
-                             QString::number(m_max));
+      QString::number(m_max));
   if (finishedCount >= m_max) {
     successAndQuit();
   }
