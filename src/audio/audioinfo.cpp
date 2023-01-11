@@ -17,14 +17,18 @@
 #define TAGLIB_STR(QSTR) \
   TagLib::String((QSTR).toUtf8().data(), TagLib::String::UTF8)
 
-bool AudioInfo::readAudioInfo(const QString& audioPath,
-                              PlayContent* playContent, InfoOption infoOption) {
+bool AudioInfo::readAudioInfo(const QString &audioPath,
+                              PlayContent *playContent, InfoOption infoOption) {
+#if defined(Q_OS_WIN) || defined(Q_OS_WINDOWS)
+  TagLib::FileRef f(reinterpret_cast<const wchar_t *>(audioPath.constData()));
+#else
   TagLib::FileRef f(audioPath.toUtf8().constData());
+#endif
   TagLib::ID3v2::Tag pf(f.file(), 0);
   if (infoOption != InfoOption::NoAlbumCover && !pf.isEmpty()) {
     for (auto i : pf.frameList()) {
       if (QString(i->toString().toCString(true)).contains("[image/")) {
-        auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame*>(i);
+        auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);
         if (p != nullptr) {
           const TagLib::ByteVector vector = p->picture().toBase64();
           QByteArray arr = QByteArray::fromBase64(
@@ -43,7 +47,7 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
     qDebug() << "audio info not readable:" << audioPath;
     return false;
   }
-  TagLib::Tag* tag = f.tag();
+  TagLib::Tag *tag = f.tag();
 
   playContent->title = tag->title().toCString(true);
   playContent->artist = tag->artist().toCString(true);
@@ -79,7 +83,7 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   if (f.isNull() || !f.audioProperties()) {
     return false;
   }
-  TagLib::AudioProperties* properties = f.audioProperties();
+  TagLib::AudioProperties *properties = f.audioProperties();
   playContent->bitRate = properties->bitrate();
   playContent->sampleRate = properties->sampleRate();
   playContent->channels = properties->channels();
@@ -87,8 +91,8 @@ bool AudioInfo::readAudioInfo(const QString& audioPath,
   return true;
 }
 
-bool AudioInfo::writeAudioInfo(const QString& audioPath,
-                               const PlayContent* playContent) {
+bool AudioInfo::writeAudioInfo(const QString &audioPath,
+                               const PlayContent *playContent) {
   if (audioPath.isEmpty()) {
     qDebug()
         << "error writing audio info: intend to save audio info in empty path";
@@ -130,7 +134,7 @@ bool AudioInfo::writeAudioInfo(const QString& audioPath,
                       QString::number(playContent->albumTrackCount)))});
     } else {
       map.replace("TRACKNUMBER", TagLib::StringList{TAGLIB_STR(QString::number(
-                                     playContent->trackNumber))});
+          playContent->trackNumber))});
     }
   }
   f.setProperties(map);
