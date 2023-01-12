@@ -78,7 +78,7 @@ void AudioInfoDialog::initMetadataTable() {
   //                                     QAbstractItemView::DoubleClicked);
 
   ui->metadataTable->setColumnCount(2);
-  ui->metadataTable->setColumnWidth(0, ui->metadataTable->width() / 3);
+  ui->metadataTable->setColumnWidth(0, 70);
   //  ui->metadataTable->setColumnWidth(1, ui->metadataTable->width() / 3);
   ui->metadataTable->horizontalHeader()->setStretchLastSection(true);
 
@@ -134,7 +134,7 @@ void AudioInfoDialog::initDetailTable() {
   //  ui->detailTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   ui->detailTable->setColumnCount(2);
-  ui->detailTable->setColumnWidth(0, ui->detailTable->width() / 3);
+  ui->detailTable->setColumnWidth(0, 70);
   //  ui->detailTable->setColumnWidth(1, ui->detailTable->width() / 3);
   ui->detailTable->horizontalHeader()->setStretchLastSection(true);
 
