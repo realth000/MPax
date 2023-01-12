@@ -207,16 +207,16 @@ void AudioInfoDialog::initCoverTable() {
 
   ui->coverTable->setHorizontalHeaderLabels(m_coverHeaderList);
   ui->coverTable->setRowCount(5);
-  for (int i = 0; i < ui->coverTable->rowCount(); i++) {
-    ui->coverTable->setRowHeight(i, 100);
-    ui->coverTable->item(i, 0)->setFlags(ui->coverTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
-  }
 
   ui->coverTable->setItem(0, 0, new QTableWidgetItem(tr("Front Cover")));
   ui->coverTable->setItem(1, 0, new QTableWidgetItem(tr("Back Cover")));
   ui->coverTable->setItem(2, 0, new QTableWidgetItem(tr("Artist")));
   ui->coverTable->setItem(3, 0, new QTableWidgetItem(tr("Disc")));
   ui->coverTable->setItem(4, 0, new QTableWidgetItem(tr("Icon")));
+  for (int i = 0; i < ui->coverTable->rowCount(); i++) {
+    ui->coverTable->setRowHeight(i, 100);
+    ui->coverTable->item(i, 0)->setFlags(ui->coverTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
+  }
 
   for (auto cover : m_content->coverList) {
     if (cover == nullptr || cover->image == nullptr) {
