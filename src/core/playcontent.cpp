@@ -39,6 +39,28 @@ PlayContent::~PlayContent() {
   }
 }
 
+void PlayContent::reset() {
+  const QFileInfo fileInfo(contentPath);
+  this->contentName = fileInfo.fileName();
+  this->contentSize = fileInfo.size();
+  this->artist.clear();
+  this->title.clear();
+  this->trackNumber = 0;
+  this->bitRate = 0;
+  this->albumArtist.clear();
+  this->albumTitle.clear();
+  this->albumCover = QImage();
+  qDeleteAll(this->coverList);
+  this->coverList.clear();
+  this->albumYear = 0;
+  this->albumTrackCount = 0;
+  this->genre.clear();
+  this->comment.clear();
+  this->sampleRate = 0;
+  this->channels = 0;
+  this->length = 0;
+}
+
 QVariant PlayContent::value(const QString &propertyName) const {
   //  qDebug() << "get" << propertyName << property[propertyName];
   //  return property[propertyName];

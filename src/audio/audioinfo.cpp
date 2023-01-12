@@ -19,6 +19,7 @@
 
 bool AudioInfo::readAudioInfo(const QString &audioPath,
                               PlayContent *playContent, InfoOption infoOption) {
+  playContent->reset();
 #if defined(Q_OS_WIN) || defined(Q_OS_WINDOWS)
   TagLib::FileRef f(reinterpret_cast<const wchar_t *>(audioPath.constData()));
 #else

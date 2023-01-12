@@ -66,6 +66,8 @@ class PlayContent {
  public:
   explicit PlayContent(const QString &filePath);
   ~PlayContent();
+  void reset();
+
   QVariant value(const QString &propertyName) const;
   void setValue(const QString &name, const QVariant &value);
   QString contentPath;
