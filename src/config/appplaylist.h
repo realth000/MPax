@@ -12,7 +12,7 @@
 namespace Config {
 
 class AppPlaylist : public QObject {
- Q_OBJECT
+  Q_OBJECT
  public:
   static void savePlaylist(const QString &filePath, const QString &data);
   static QList<Playlist> loadPlaylist(const QString &filePath);

@@ -6,7 +6,6 @@
     <message>
         <location filename="../../src/gui/aboutdialog.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_aboutdialog.h" line="73"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_aboutdialog.h" line="73"/>
         <source>Dialog</source>
         <translation>Dialog</translation>
     </message>
@@ -55,194 +54,218 @@
     <name>AudioInfoDialog</name>
     <message>
         <location filename="../../src/gui/audioinfodialog.ui" line="14"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="131"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="131"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="140"/>
         <source>Dialog</source>
         <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../../src/gui/audioinfodialog.ui" line="24"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="132"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="132"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="141"/>
         <source>Tab 1</source>
         <translation>Tab 1</translation>
     </message>
     <message>
         <location filename="../../src/gui/audioinfodialog.ui" line="34"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="133"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="133"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="142"/>
         <source>Tab 2</source>
         <translation>Tab 2</translation>
     </message>
     <message>
         <location filename="../../src/gui/audioinfodialog.ui" line="44"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="134"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="134"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="143"/>
         <source>页</source>
         <translation>页</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.ui" line="60"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="135"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="135"/>
+        <location filename="../../src/gui/audioinfodialog.ui" line="65"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="144"/>
         <source>tool</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.ui" line="86"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="136"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="136"/>
+        <location filename="../../src/gui/audioinfodialog.ui" line="91"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="145"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.ui" line="99"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="137"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="137"/>
+        <location filename="../../src/gui/audioinfodialog.ui" line="104"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="146"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.ui" line="112"/>
-        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="138"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_audioinfodialog.h" line="138"/>
+        <location filename="../../src/gui/audioinfodialog.ui" line="117"/>
+        <location filename="../../cmake-build-debug/MPax_autogen/include/ui_audioinfodialog.h" line="147"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="17"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="18"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="19"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="17"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="18"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="26"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="19"/>
+        <source>Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="19"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="28"/>
         <source>Property - </source>
         <translation>属性 - </translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="45"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="49"/>
         <source>Meta data</source>
         <translation>元数据</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="46"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="50"/>
         <source>Detail</source>
         <translation>详细信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="47"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="51"/>
         <source>Cover</source>
         <translation>封面</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="83"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="88"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="84"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="89"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="213"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="85"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="90"/>
         <source>Album title</source>
         <translation>专辑名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="86"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="91"/>
         <source>Album artist</source>
         <translation>专辑艺术家</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="87"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="92"/>
         <source>Album year</source>
         <translation>专辑发行年份</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="88"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="93"/>
         <source>Track number</source>
         <translation>音轨号</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="90"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="95"/>
         <source>Album total tracks</source>
         <translation>专辑合计音轨</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="91"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="96"/>
         <source>Genre</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="92"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="97"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="139"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="144"/>
         <source>File name</source>
         <translation>文件名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="141"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="146"/>
         <source>Folder name</source>
         <translation>文件夹名</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="142"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="147"/>
         <source>File path</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="144"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="149"/>
         <source>Index</source>
         <translation>子曲目索引</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="145"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="150"/>
         <source>File size</source>
         <translation>文件大小</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="146"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="151"/>
         <source>Modified time</source>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="147"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="152"/>
         <source>Duration</source>
         <translation>持续时间</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="148"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="153"/>
         <source>Sample rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="149"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="154"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="150"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="155"/>
         <source>Bit rate</source>
         <translation>比特率</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="165"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="170"/>
         <source>bytes</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../../src/gui/audioinfodialog.cpp" line="175"/>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="180"/>
         <source>seconds</source>
         <translation>秒</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="211"/>
+        <source>Front Cover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="212"/>
+        <source>Back Cover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="214"/>
+        <source>Disc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/audioinfodialog.cpp" line="215"/>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -250,7 +273,6 @@
     <message>
         <location filename="../../src/gui/listtabwidget.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_listtabwidget.h" line="46"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_listtabwidget.h" line="46"/>
         <source>Form</source>
         <translation></translation>
     </message>
@@ -270,93 +292,80 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="175"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="175"/>
         <source>MainUI</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="101"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="189"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="189"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="108"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="190"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="190"/>
         <source>Playlist</source>
         <translation>播放列表</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="119"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="191"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="191"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="126"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="192"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="192"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="140"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="176"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="176"/>
-        <location filename="../../src/gui/mainui.cpp" line="221"/>
+        <location filename="../../src/gui/mainui.cpp" line="219"/>
         <source>Open audio</source>
         <translation>打开音频</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="145"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="177"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="177"/>
         <source>New playlist</source>
         <translation>新建播放列表</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="150"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="178"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="178"/>
         <source>Scan dir</source>
         <translation>扫描文件夹</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="155"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="179"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="179"/>
-        <location filename="../../src/gui/mainui.cpp" line="400"/>
+        <location filename="../../src/gui/mainui.cpp" line="398"/>
         <source>Save playlist</source>
         <translation>保存播放列表</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="160"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="180"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="180"/>
         <source>Save all playlist</source>
         <translation>保存所有播放列表</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="165"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="181"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="181"/>
         <source>Save setting</source>
         <translation>保存设置</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="170"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="182"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="182"/>
         <source>Load settings</source>
         <translation>加载设置</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="175"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="183"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="183"/>
         <source>Save settings</source>
         <translation>保存设置</translation>
     </message>
@@ -365,62 +374,57 @@
         <location filename="../../src/gui/mainui.ui" line="185"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="184"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="185"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="184"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="185"/>
         <source>Search in playlist</source>
         <translation>播放列表中搜索</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="190"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="186"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="186"/>
-        <location filename="../../src/gui/mainui.cpp" line="461"/>
+        <location filename="../../src/gui/mainui.cpp" line="459"/>
         <source>About MPax</source>
         <translation>关于MPax</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="195"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="187"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="187"/>
-        <location filename="../../src/gui/mainui.cpp" line="465"/>
+        <location filename="../../src/gui/mainui.cpp" line="463"/>
         <source>About Qt</source>
         <translation>关于Qt</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="200"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="188"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_mainui.h" line="188"/>
-        <location filename="../../src/gui/mainui.cpp" line="390"/>
+        <location filename="../../src/gui/mainui.cpp" line="388"/>
         <source>Import playlist</source>
         <translation>导入播放列表</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="222"/>
+        <location filename="../../src/gui/mainui.cpp" line="220"/>
         <source>Audio files</source>
         <translation>音频文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="286"/>
+        <location filename="../../src/gui/mainui.cpp" line="284"/>
         <source>Scan directory</source>
         <translation>扫描文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="307"/>
+        <location filename="../../src/gui/mainui.cpp" line="305"/>
         <source>Loading audio info</source>
         <translation>正在加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="391"/>
+        <location filename="../../src/gui/mainui.cpp" line="389"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="471"/>
+        <location filename="../../src/gui/mainui.cpp" line="469"/>
         <source>reloading audio info</source>
         <translation>正在重新加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="475"/>
+        <location filename="../../src/gui/mainui.cpp" line="473"/>
         <source>reloaded audio info</source>
         <translation>已重新加载音频信息</translation>
     </message>
@@ -478,35 +482,30 @@
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="20"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="214"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="214"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="158"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="220"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="220"/>
         <source>Pre</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="183"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="221"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="221"/>
         <source>Play</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="208"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="222"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="222"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="233"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="223"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="223"/>
         <source>Stop</source>
         <translation></translation>
     </message>
@@ -515,22 +514,18 @@
         <location filename="../../src/gui/playcontrolwidget.ui" line="293"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="224"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="225"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="224"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="225"/>
         <source>--:--:--</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="321"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="226"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="226"/>
         <source>Mode</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playcontrolwidget.ui" line="346"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playcontrolwidget.h" line="227"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playcontrolwidget.h" line="227"/>
         <source>Mute</source>
         <translation>静音</translation>
     </message>
@@ -579,14 +574,12 @@
     <message>
         <location filename="../../src/gui/playlistsearchdialog.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearchdialog.h" line="72"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playlistsearchdialog.h" line="72"/>
         <source>Dialog</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/playlistsearchdialog.ui" line="26"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistsearchdialog.h" line="74"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playlistsearchdialog.h" line="74"/>
         <source>Case sensitivity</source>
         <translation>区分大小写</translation>
     </message>
@@ -596,22 +589,22 @@
         <translation>播放列表中搜索</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="159"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="156"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="162"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="159"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="165"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="162"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="168"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="165"/>
         <source>Property</source>
         <translation>属性</translation>
     </message>
@@ -621,7 +614,6 @@
     <message>
         <location filename="../../src/gui/playlistwidget.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_playlistwidget.h" line="47"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_playlistwidget.h" line="47"/>
         <source>Form</source>
         <translation>Form</translation>
     </message>
@@ -661,14 +653,12 @@
     <message>
         <location filename="../../src/gui/progressdialog.ui" line="14"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_progressdialog.h" line="111"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_progressdialog.h" line="111"/>
         <source>Dialog</source>
         <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../../src/gui/progressdialog.ui" line="129"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_progressdialog.h" line="114"/>
-        <location filename="../../cmake-build-release/MPax_autogen/include/ui_progressdialog.h" line="114"/>
         <location filename="../../src/gui/progressdialog.cpp" line="94"/>
         <source>Cancel</source>
         <translation>取消</translation>

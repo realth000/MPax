@@ -44,7 +44,8 @@ typedef QList<Token> TokenList;
 class Tokenizer {
  public:
   explicit Tokenizer();
-  TokenList tokenize(const QString &rawString, bool *ok, QString *errString);
+  static TokenList tokenize(const QString &rawString, bool *ok,
+                            QString *errString);
 
  private:
   QString m_rawString;

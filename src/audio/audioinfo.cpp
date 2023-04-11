@@ -26,13 +26,15 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
 #endif
   TagLib::ID3v2::Tag pf(f.file(), 0);
   if (infoOption != InfoOption::NoAlbumCover && !pf.isEmpty()) {
-    const auto frameListMap = pf.frameListMap();
+    const auto &frameListMap = pf.frameListMap();
     if (!frameListMap["APIC"].isEmpty()) {
       for (auto pic : frameListMap["APIC"]) {
-        auto cover = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(pic);
-        const auto vec = cover->picture().toBase64();
+        auto cover =
+            reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(pic);
+        const auto &vec = cover->picture().toBase64();
         auto img = new QImage();
-        img->loadFromData(QByteArray::fromBase64(QByteArray::fromRawData(vec.data(), vec.size())));
+        img->loadFromData(QByteArray::fromBase64(
+            QByteArray::fromRawData(vec.data(), int(vec.size()))));
         playContent->coverList.append(new Cover{
             CoverType(cover->type()),
             cover->mimeType().toCString(true),
@@ -43,13 +45,12 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
 
     for (auto i : pf.frameList()) {
       if (QString(i->toString().toCString(true)).contains("[image/")) {
-        auto p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);
-        if (p != nullptr) {
-          const TagLib::ByteVector vector = p->picture().toBase64();
-          QByteArray arr = QByteArray::fromBase64(
-              QByteArray::fromRawData(vector.data(), vector.size()));
-          playContent->albumCover.loadFromData(arr);
-        }
+        const auto &p =
+            reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);
+        const auto &vector = p->picture().toBase64();
+        const auto &arr = QByteArray::fromBase64(
+            QByteArray::fromRawData(vector.data(), int(vector.size())));
+        playContent->albumCover.loadFromData(arr);
       }
     }
   }
@@ -62,7 +63,7 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
     qDebug() << "audio info not readable:" << audioPath;
     return false;
   }
-  TagLib::Tag *tag = f.tag();
+  auto *tag = f.tag();
 
   playContent->title = tag->title().toCString(true);
   playContent->artist = tag->artist().toCString(true);
@@ -77,15 +78,15 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
     playContent->title = playContent->contentName;
   }
 
-  TagLib::PropertyMap tags = f.file()->properties();
+  const auto &tags = f.file()->properties();
   playContent->albumArtist = tags["ALBUMARTIST"].toString().toCString(true);
 
   playContent->trackNumber = 0;
   playContent->albumTrackCount = 0;
-  const QString trackNumberString =
-      tags["TRACKNUMBER"].toString().toCString(true);
+  const auto &trackNumberString =
+      QString(tags["TRACKNUMBER"].toString().toCString(true));
   if (!trackNumberString.isEmpty()) {
-    const QStringList trackNumberStringList = trackNumberString.split('/');
+    const auto &trackNumberStringList = trackNumberString.split('/');
     if (trackNumberStringList.length() == 2) {
       playContent->trackNumber = trackNumberStringList[0].toInt();
       playContent->albumTrackCount = trackNumberStringList[1].toInt();
@@ -98,7 +99,7 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
   if (f.isNull() || !f.audioProperties()) {
     return false;
   }
-  TagLib::AudioProperties *properties = f.audioProperties();
+  const auto *properties = f.audioProperties();
   playContent->bitRate = properties->bitrate();
   playContent->sampleRate = properties->sampleRate();
   playContent->channels = properties->channels();
@@ -138,7 +139,7 @@ bool AudioInfo::writeAudioInfo(const QString &audioPath,
   f.ID3v2Tag()->setGenre(TAGLIB_STR(playContent->genre));
   f.ID3v2Tag()->setComment(TAGLIB_STR(playContent->comment));
 
-  TagLib::PropertyMap map = f.properties();
+  auto map = f.properties();
   map.replace("ALBUMARTIST",
               TagLib::StringList{TAGLIB_STR(playContent->albumArtist)});
   if (playContent->trackNumber > 0) {
@@ -149,38 +150,10 @@ bool AudioInfo::writeAudioInfo(const QString &audioPath,
                       QString::number(playContent->albumTrackCount)))});
     } else {
       map.replace("TRACKNUMBER", TagLib::StringList{TAGLIB_STR(QString::number(
-          playContent->trackNumber))});
+                                     playContent->trackNumber))});
     }
   }
   f.setProperties(map);
   f.save(TagLib::MPEG::File::ID3v2);
   return true;
 }
-
-#if 0
-bool AudioInfo::readAudioInfoList(PlayContentList* playContentList,
-                                  AudioInfo::InfoOption infoOption) {
-  QFutureWatcher<void>* watcher = new QFutureWatcher<void>;
-  QTimer* timer = new QTimer;
-  QElapsedTimer* t = new QElapsedTimer;
-  connect(timer, &QTimer::timeout, this, [this, watcher, t, timer]() {
-    emit this->reloadInfoStatusChanged(watcher->isFinished(),
-                                       watcher->progressValue(), t->elapsed());
-    if (watcher->isFinished()) {
-      timer->stop();
-      timer->deleteLater();
-      t->invalidate();
-      delete t;
-      watcher->deleteLater();
-    }
-  });
-  timer->start(100);
-  t->start();
-  watcher->setFuture(QtConcurrent::map(
-      *playContentList, [&](PlayContent* content) -> PlayContent* {
-        readAudioInfo(content->contentPath, content, infoOption);
-        return content;
-      }));
-  return true;
-}
-#endif

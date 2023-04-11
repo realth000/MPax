@@ -32,12 +32,12 @@ bool Parser::init(const QString &rawString, bool *ok, QString *errString) {
   }
 
   Tokenizer tokenizer;
-  TokenList tokenList = tokenizer.tokenize(rawString, ok, errString);
+  const auto &tokenList = tokenizer.tokenize(rawString, ok, errString);
   if (!*ok) {
     return false;
   }
   Analyzer analyzer;
-  AST *ast = analyzer.analyze(tokenList, ok, errString);
+  auto *ast = analyzer.analyze(tokenList, ok, errString);
   if (!*ok) {
     return false;
   }

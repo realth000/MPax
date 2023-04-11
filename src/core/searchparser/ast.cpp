@@ -6,9 +6,8 @@ namespace SearchParser {
 
 AST::AST() : m_rootNode(nullptr) {}
 
-AST::~AST() {
-  // TODO: Delete all AST node
-}
+// TODO: Delete all AST node
+AST::~AST() = default;
 
 bool AST::parse(const PlayContent *playContent,
                 Qt::CaseSensitivity caseSensitivity) const {
@@ -43,8 +42,8 @@ bool ASTNode::parse(const PlayContent *content,
       }
       for (auto &w : word) {
         if (content->value(metaKeyword)
-            .toString()
-            .contains(w, caseSensitivity)) {
+                .toString()
+                .contains(w, caseSensitivity)) {
           continue;
         }
         return false;
@@ -58,16 +57,18 @@ bool ASTNode::parse(const PlayContent *content,
       switch (opeKeyword) {
         case ASTOpe::And:
           return leftChild->parse(content, caseSensitivity) &&
-              rightChild->parse(content, caseSensitivity);
+                 rightChild->parse(content, caseSensitivity);
         case ASTOpe::Or:
           return leftChild->parse(content, caseSensitivity) ||
-              rightChild->parse(content, caseSensitivity);
+                 rightChild->parse(content, caseSensitivity);
         case ASTOpe::None:
-        default:return false;
+        default:
+          return false;
       }
     }
     case ASTType::Unknown:
-    default:return false;
+    default:
+      return false;
   }
 }
 }  // namespace SearchParser

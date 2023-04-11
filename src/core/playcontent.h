@@ -73,19 +73,19 @@ class PlayContent {
   qint64 contentSize;
   QString artist;
   QString title;
-  int trackNumber;
-  int bitRate;
+  int trackNumber{};
+  int bitRate{};
   QString albumArtist;
   QString albumTitle;
   QImage albumCover;
   QList<Cover *> coverList;
-  int albumYear;
-  int albumTrackCount;
+  int albumYear{};
+  int albumTrackCount{};
   QString genre;
   QString comment;
-  int sampleRate;
-  int channels;
-  int length;
+  int sampleRate{};
+  int channels{};
+  int length{};
   //  QMap<QString, QString> otherProperty;
 
   // private:

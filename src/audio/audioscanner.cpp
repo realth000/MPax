@@ -13,7 +13,7 @@ void AudioScanner::scanDir(const QString &dirPath,
   connect(&m_timer, &QTimer::timeout, this, [this]() {
     emit this->scanStatusChanged(false, m_audioList.length());
   });
-  QFutureWatcher<void> *watcher = new QFutureWatcher<void>;
+  auto *watcher = new QFutureWatcher<void>;
   watcher->setFuture(QtConcurrent::run(this, &AudioScanner::scanDirPrivate,
                                        dirPath, audioFormat));
   connect(watcher, &QFutureWatcher<void>::finished, this, [this, watcher]() {

@@ -5,10 +5,9 @@
 #include <QtCore/QTimer>
 
 class AudioScanner : public QObject {
- Q_OBJECT
-
+  Q_OBJECT
  public:
-  QStringList audioFileList() const;
+  [[nodiscard]] QStringList audioFileList() const;
 
  public slots:
   void scanDir(const QString &dirPath, const QStringList &audioFormat);

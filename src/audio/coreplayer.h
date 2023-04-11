@@ -8,12 +8,12 @@
 #include <QtMultimedia/QMediaPlaylist>
 
 class CorePlayer : public QObject {
- Q_OBJECT
+  Q_OBJECT
  public:
   explicit CorePlayer(QObject *parent = nullptr);
-  virtual ~CorePlayer();
-  QMediaPlayer::State playState() const;
-  QMediaPlayer::MediaStatus mediaStatus() const;
+  ~CorePlayer() override;
+  [[nodiscard]] QMediaPlayer::State playState() const;
+  [[nodiscard]] QMediaPlayer::MediaStatus mediaStatus() const;
 
  signals:
   void playStateChanged(QMediaPlayer::State);

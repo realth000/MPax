@@ -32,10 +32,7 @@ PlayContent::PlayContent(const QString &filePath)
 
 PlayContent::~PlayContent() {
   for (auto cover : coverList) {
-    if (cover->image != nullptr) {
-      delete cover->image;
-      cover->image == nullptr;
-    }
+    delete cover->image;
   }
 }
 

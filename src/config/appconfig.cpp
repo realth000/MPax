@@ -6,6 +6,8 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QtDebug>
 
+#include "util/util.h"
+
 #define TYPE_STRING_LIST "QStringList"
 #define TYPE_STRING "QString"
 #define TYPE_INT "int"
@@ -30,24 +32,22 @@
   }
 
 #define LOAD_CONFIG(CONFIG, CONFIG_NAME)                  \
-  const QVariant v = CONFIG->value("/" + CONFIG_NAME);    \
-  bool isZero = true;                                     \
+  const auto &v = CONFIG.value("/" + CONFIG_NAME);        \
+  auto isZero = true;                                     \
   COMPARE_ZERO(v, m_configMap[CONFIG_NAME].type, isZero); \
   if (!isZero) {                                          \
     m_configMap[CONFIG_NAME].value = v;                   \
   }
 
 #define SAVE_CONFIG(CONFIG, CONFIG_NAME) \
-  CONFIG->setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
+  CONFIG.setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
 
 Config::AppConfig *Config::AppConfig::getInstance() {
   static AppConfig ac;
   return &ac;
 }
 
-const Config::ConfigPairMap Config::AppConfig::config() const {
-  return m_configMap;
-}
+Config::ConfigPairMap Config::AppConfig::config() const { return m_configMap; }
 
 void Config::AppConfig::setConfig(const QString &name, const QVariant &value) {
   if (!m_configMap.contains(name)) {
@@ -60,29 +60,22 @@ void Config::AppConfig::setConfig(const QString &name, const QVariant &value) {
 
 void Config::AppConfig::printConfig() {
   qDebug() << "AppConfig:";
-  ConfigPairMap::const_iterator it = m_configMap.constBegin();
-  while (it != m_configMap.constEnd()) {
-    qDebug() << it.key() << it.value().value;
-    it++;
+  for (const auto &[key, value] : ContainerAdapt(m_configMap)) {
+    qDebug() << key << value.value;
   }
 }
 
 void Config::AppConfig::loadConfig() {
   makeConfigDir();
-  QSettings *config = new QSettings(
+  auto config = QSettings(
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
           "/MPax/mpax.conf",
       QSettings::IniFormat);
-  if (config == nullptr) {
-    qDebug() << "can not load config";
-    return;
-  }
-  ConfigPairMap::iterator it = m_configMap.begin();
+  auto it = m_configMap.begin();
   while (it != m_configMap.end()) {
     LOAD_CONFIG(config, it.key());
     it++;
   }
-  delete config;
 }
 
 Config::AppConfig::AppConfig()
@@ -110,7 +103,7 @@ Config::AppConfig::AppConfig()
           &AppConfig::saveConfig);
 }
 
-Config::AppConfig::~AppConfig() {}
+Config::AppConfig::~AppConfig() = default;
 
 void Config::AppConfig::addConfig(const QString &name, const QVariant &value,
                                   const QString &type) {
@@ -123,7 +116,7 @@ void Config::AppConfig::addConfig(const QString &name, const QVariant &value,
 
 void Config::AppConfig::makeConfigDir() {
 #ifdef Q_OS_LINUX
-  const QString configPath =
+  const auto &configPath =
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
   if (configPath.isEmpty()) {
     qDebug() << "config location not writable";
@@ -145,24 +138,18 @@ void Config::AppConfig::saveConfigSoon() {
 
 void Config::AppConfig::saveConfigDefer() { m_saveConfigDeferTimer->start(); }
 
-const Config::ConfigPair Config::AppConfig::config(
-    const QString &configName) const {
+Config::ConfigPair Config::AppConfig::config(const QString &configName) const {
   return m_configMap[configName];
 }
 
 void Config::AppConfig::saveConfig() {
-  QSettings *config = new QSettings(
+  auto config = QSettings(
       QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
           "/MPax/mpax.conf",
       QSettings::IniFormat);
-  if (config == nullptr) {
-    qDebug() << "can not save config";
-    return;
-  }
-  ConfigPairMap::const_iterator it = m_configMap.constBegin();
+  auto it = m_configMap.constBegin();
   while (it != m_configMap.constEnd()) {
     SAVE_CONFIG(config, it.key());
     it++;
   }
-  delete config;
 }

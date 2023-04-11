@@ -29,14 +29,14 @@ struct ConfigPair {
 typedef QMap<QString, ConfigPair> ConfigPairMap;
 
 class AppConfig : public QObject {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   static AppConfig *getInstance();
   AppConfig(const AppConfig &) = delete;
   AppConfig &operator=(const AppConfig &) = delete;
-  const ConfigPairMap config() const;
-  const ConfigPair config(const QString &configName) const;
+  ConfigPairMap config() const;
+  ConfigPair config(const QString &configName) const;
   void setConfig(const QString &name, const QVariant &value);
   void printConfig();
 

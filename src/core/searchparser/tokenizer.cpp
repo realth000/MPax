@@ -12,7 +12,7 @@ bool isOpeKeyword(const QString &s) { return operatorKeywords.contains(s); }
 bool isMetaKeyword(const QString &s) { return metaKeywords.contains(s); }
 }  // namespace
 
-Tokenizer::Tokenizer() {}
+Tokenizer::Tokenizer() = default;
 
 TokenList Tokenizer::tokenize(const QString &rawString, bool *ok,
                               QString *errString) {
@@ -48,13 +48,13 @@ TokenList Tokenizer::tokenize(const QString &rawString, bool *ok,
     }
     // Record '('.
     if (rawString[i] == '(') {
-      Token t = Token(TokenType::LeftParentheses, i);
+      auto t = Token(TokenType::LeftParentheses, i);
       tokenList.append(t);
       continue;
     }
     // Record ')'.
     if (rawString[i] == ')') {
-      Token t = Token(TokenType::RightParentheses, i);
+      auto t = Token(TokenType::RightParentheses, i);
       tokenList.append(t);
       continue;
     }

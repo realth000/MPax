@@ -15,7 +15,7 @@ class Analyzer {
 
  private:
   bool validate(const AST *a, bool *ok, QString *errString);
-  bool isValidASTNode(const ASTNode *node, bool *ok, QString *errString) const;
+  static bool isValidASTNode(const ASTNode *node, bool *ok, QString *errString);
 };
 
 }  // namespace SearchParser
