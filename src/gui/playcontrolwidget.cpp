@@ -30,6 +30,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
       m_corePlayerState(QMediaPlayer::StoppedState),
       m_volMute(false),
       m_vol(50),
+      m_globalShortcutInited(false),
       m_playMode(PlayMode::ListRepeat),
       m_playPauseKey(nullptr),
       m_playPreKey(nullptr),
@@ -43,7 +44,11 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   this->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
-  InitShortcut();
+  const auto envXdgSessionType = qgetenv("XDG_SESSION_TYPE");
+  if (envXdgSessionType == "x11") {
+    InitShortcut();
+    m_globalShortcutInited = true;
+  }
   InitConnections();
 }
 
@@ -420,18 +425,20 @@ void PlayControlWidget::updateConfig() {
   ui->volumeSlider->setValue(map[CONFIG_VOLUME].value.toInt());
   m_volMute = map[CONFIG_VOLUME_MUTE].value.toBool();
   updateMuteWithValue(m_volMute);
-  m_playPauseKey->setShortcut(Config::AppConfig::getInstance()
-                                  ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
+  if (m_globalShortcutInited) {
+    m_playPauseKey->setShortcut(Config::AppConfig::getInstance()
+                                    ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
+                                    .value.toString(),
+                                true);
+    m_playPreKey->setShortcut(Config::AppConfig::getInstance()
+                                  ->config(CONFIG_SHORTCUT_PLAY_PRE)
                                   .value.toString(),
                               true);
-  m_playPreKey->setShortcut(Config::AppConfig::getInstance()
-                                ->config(CONFIG_SHORTCUT_PLAY_PRE)
-                                .value.toString(),
-                            true);
-  m_playNextKey->setShortcut(Config::AppConfig::getInstance()
-                                 ->config(CONFIG_SHORTCUT_PLAY_NEXT)
-                                 .value.toString(),
-                             true);
+    m_playNextKey->setShortcut(Config::AppConfig::getInstance()
+                                   ->config(CONFIG_SHORTCUT_PLAY_NEXT)
+                                   .value.toString(),
+                               true);
+  }
 }
 
 void PlayControlWidget::updatePlayContentInfo(PlayContent *playContent) {

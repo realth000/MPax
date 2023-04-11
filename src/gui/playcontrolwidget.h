@@ -50,6 +50,7 @@ class PlayControlWidget : public QWidget {
   // Volume control
   bool m_volMute;
   int m_vol;
+  bool m_globalShortcutInited;
 
   PlayMode m_playMode;
 
