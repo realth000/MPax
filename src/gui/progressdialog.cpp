@@ -87,7 +87,7 @@ void ProgressDialog::successAndQuit() {
   ui->cancelButton->setEnabled(false);
   emit succeed();
   Util::zawarudo(300);
-  this->close();
+  // this->close();
 }
 
 void ProgressDialog::quitCheck() {
