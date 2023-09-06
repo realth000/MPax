@@ -46,16 +46,21 @@ qint64 toFileSize(const qint64 &fileSize, FileSizeLevel sizeLevel) {
   while (size >= 1024 && level < FileSizeLevel::TB) {
     size /= 1024;
     switch (level) {
-      case FileSizeLevel::B:level = FileSizeLevel::KB;
+      case FileSizeLevel::B:
+        level = FileSizeLevel::KB;
         break;
-      case FileSizeLevel::KB:level = FileSizeLevel::MB;
+      case FileSizeLevel::KB:
+        level = FileSizeLevel::MB;
         break;
-      case FileSizeLevel::MB:level = FileSizeLevel::GB;
+      case FileSizeLevel::MB:
+        level = FileSizeLevel::GB;
         break;
-      case FileSizeLevel::GB:level = FileSizeLevel::TB;
+      case FileSizeLevel::GB:
+        level = FileSizeLevel::TB;
         break;
       case FileSizeLevel::TB:
-      default:break;
+      default:
+        break;
     }
   }
   return size;

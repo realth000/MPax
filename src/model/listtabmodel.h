@@ -10,7 +10,7 @@
 #define DEFAULT_PLAYLIST_NAME "default"
 
 class ListTabModel : public QStringListModel {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   ListTabModel();

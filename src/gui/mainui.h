@@ -12,12 +12,12 @@
 #include "model/playlistmodel.h"
 
 QT_BEGIN_NAMESPACE namespace Ui {
-class MainUI;
-typedef QPair<int, PlayContent *> PlayContentPair;
+  class MainUI;
+  typedef QPair<int, PlayContent *> PlayContentPair;
 }  // namespace Ui
 QT_END_NAMESPACE
 class MainUI : public QMainWindow {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   MainUI(QWidget *parent = nullptr);

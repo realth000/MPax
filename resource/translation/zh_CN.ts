@@ -322,7 +322,7 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="140"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="176"/>
-        <location filename="../../src/gui/mainui.cpp" line="219"/>
+        <location filename="../../src/gui/mainui.cpp" line="221"/>
         <source>Open audio</source>
         <translation>打开音频</translation>
     </message>
@@ -341,7 +341,7 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="155"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="179"/>
-        <location filename="../../src/gui/mainui.cpp" line="398"/>
+        <location filename="../../src/gui/mainui.cpp" line="400"/>
         <source>Save playlist</source>
         <translation>保存播放列表</translation>
     </message>
@@ -380,51 +380,51 @@
     <message>
         <location filename="../../src/gui/mainui.ui" line="190"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="186"/>
-        <location filename="../../src/gui/mainui.cpp" line="459"/>
+        <location filename="../../src/gui/mainui.cpp" line="461"/>
         <source>About MPax</source>
         <translation>关于MPax</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="195"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="187"/>
-        <location filename="../../src/gui/mainui.cpp" line="463"/>
+        <location filename="../../src/gui/mainui.cpp" line="465"/>
         <source>About Qt</source>
         <translation>关于Qt</translation>
     </message>
     <message>
         <location filename="../../src/gui/mainui.ui" line="200"/>
         <location filename="../../cmake-build-debug/MPax_autogen/include/ui_mainui.h" line="188"/>
-        <location filename="../../src/gui/mainui.cpp" line="388"/>
+        <location filename="../../src/gui/mainui.cpp" line="390"/>
         <source>Import playlist</source>
         <translation>导入播放列表</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="220"/>
+        <location filename="../../src/gui/mainui.cpp" line="222"/>
         <source>Audio files</source>
         <translation>音频文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="284"/>
+        <location filename="../../src/gui/mainui.cpp" line="286"/>
         <source>Scan directory</source>
         <translation>扫描文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="305"/>
+        <location filename="../../src/gui/mainui.cpp" line="307"/>
         <source>Loading audio info</source>
         <translation>正在加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="389"/>
+        <location filename="../../src/gui/mainui.cpp" line="391"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="469"/>
+        <location filename="../../src/gui/mainui.cpp" line="471"/>
         <source>reloading audio info</source>
         <translation>正在重新加载音频信息</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainui.cpp" line="473"/>
+        <location filename="../../src/gui/mainui.cpp" line="475"/>
         <source>reloaded audio info</source>
         <translation>已重新加载音频信息</translation>
     </message>
@@ -589,22 +589,22 @@
         <translation>播放列表中搜索</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="156"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="159"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="159"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="162"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="162"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="165"/>
         <source>Open in folder</source>
         <translation>在文件夹中打开</translation>
     </message>
     <message>
-        <location filename="../../src/gui/playlistsearchdialog.cpp" line="165"/>
+        <location filename="../../src/gui/playlistsearchdialog.cpp" line="168"/>
         <source>Property</source>
         <translation>属性</translation>
     </message>

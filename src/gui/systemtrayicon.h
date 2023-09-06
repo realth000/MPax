@@ -5,7 +5,7 @@
 #include <QtWidgets/QSystemTrayIcon>
 
 class SystemTrayIcon : public QSystemTrayIcon {
- Q_OBJECT
+  Q_OBJECT
 
  public:
   explicit SystemTrayIcon(QWidget *parent = nullptr);

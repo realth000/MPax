@@ -19,7 +19,7 @@ struct PlayContentPos {
 
 class PlaylistModel : public QAbstractItemModel {
   // Translation need this marco!!!
- Q_OBJECT
+  Q_OBJECT
  public:
   explicit PlaylistModel(const QString &playlistName,
                          QObject *parent = nullptr);

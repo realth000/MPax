@@ -111,16 +111,16 @@ void PlayControlWidget::InitConnections() {
 
 QString PlayControlWidget::MiliSecondToString(const qint64 &ms) {
   int hh = std::chrono::duration_cast<std::chrono::hours>(
-      std::chrono::milliseconds(ms))
-      .count();
+               std::chrono::milliseconds(ms))
+               .count();
   int mm = std::chrono::duration_cast<std::chrono::minutes>(
-      std::chrono::milliseconds(ms))
-      .count() %
-      60;
+               std::chrono::milliseconds(ms))
+               .count() %
+           60;
   int ss = std::chrono::duration_cast<std::chrono::seconds>(
-      std::chrono::milliseconds(ms))
-      .count() %
-      60;
+               std::chrono::milliseconds(ms))
+               .count() %
+           60;
   return QString("%1:%2:%3")
       .arg(hh, 2, 10, QLatin1Char('0'))
       .arg(mm, 2, 10, QLatin1Char('0'))
@@ -143,11 +143,13 @@ void PlayControlWidget::DisableFocus() {
 
 void PlayControlWidget::updatePlay() {
   switch (m_corePlayer->playState()) {
-    case QMediaPlayer::PlayingState:m_corePlayer->pause();
+    case QMediaPlayer::PlayingState:
+      m_corePlayer->pause();
       ui->playButton->setText(ICON_PLAY);
       ui->playPosSlider->setEnabled(false);
       break;
-    case QMediaPlayer::PausedState:m_corePlayer->play();
+    case QMediaPlayer::PausedState:
+      m_corePlayer->play();
       ui->playButton->setText(ICON_PAUSE);
       ui->playPosSlider->setEnabled(true);
       break;
@@ -160,15 +162,16 @@ void PlayControlWidget::updatePlay() {
       ui->playButton->setText(ICON_PAUSE);
       ui->playPosSlider->setEnabled(true);
       break;
-    default:break;
+    default:
+      break;
   }
 }
 
 void PlayControlWidget::updatePlaySeekForward(const int &msec) {
   setPlayPosition(ui->playPosSlider->value() + msec >
-      ui->playPosSlider->maximum()
-                  ? ui->playPosSlider->maximum()
-                  : ui->playPosSlider->value() + msec);
+                          ui->playPosSlider->maximum()
+                      ? ui->playPosSlider->maximum()
+                      : ui->playPosSlider->value() + msec);
 }
 
 void PlayControlWidget::updatePlaySeekBackward(const int &msec) {
@@ -234,7 +237,7 @@ void PlayControlWidget::setPlayPosition(const int &msec) {
 void PlayControlWidget::InitIconFont() {
   m_awesome6Font =
       QFont(QFontDatabase::applicationFontFamilies(
-          QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf"))
+                QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf"))
                 .at(0));
   ui->coverLabel->setFont(m_awesome6Font);
   ui->coverLabel->setText(ICON_COVER);
@@ -266,24 +269,31 @@ void PlayControlWidget::updateMuteButtonIcon() {
 
 void PlayControlWidget::updatePlayModeButtonIcon() {
   switch (m_playMode) {
-    case PlayMode::ListRepeat:ui->playModeButton->setText(ICON_PLAY_MODE_LIST_REPEAT);
+    case PlayMode::ListRepeat:
+      ui->playModeButton->setText(ICON_PLAY_MODE_LIST_REPEAT);
       break;
-    case PlayMode::SingleRepeat:ui->playModeButton->setText(ICON_PLAY_MODE_SING_REPEAT);
+    case PlayMode::SingleRepeat:
+      ui->playModeButton->setText(ICON_PLAY_MODE_SING_REPEAT);
       break;
-    case PlayMode::Random:ui->playModeButton->setText(ICON_PLAY_MODE_LIST_RANDOM);
+    case PlayMode::Random:
+      ui->playModeButton->setText(ICON_PLAY_MODE_LIST_RANDOM);
       break;
   }
 }
 
 void PlayControlWidget::updatePlayMode() {
   switch (m_playMode) {
-    case PlayMode::ListRepeat:m_playMode = PlayMode::SingleRepeat;
+    case PlayMode::ListRepeat:
+      m_playMode = PlayMode::SingleRepeat;
       break;
-    case PlayMode::SingleRepeat:m_playMode = PlayMode::Random;
+    case PlayMode::SingleRepeat:
+      m_playMode = PlayMode::Random;
       break;
-    case PlayMode::Random:m_playMode = PlayMode::ListRepeat;
+    case PlayMode::Random:
+      m_playMode = PlayMode::ListRepeat;
       break;
-    default:return;
+    default:
+      return;
   }
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAY_MODE,
                                               static_cast<int>(m_playMode));
@@ -295,8 +305,10 @@ void PlayControlWidget::updatePlayMode(const int &playMode) {
   switch (m) {
     case PlayMode::ListRepeat:
     case PlayMode::SingleRepeat:
-    case PlayMode::Random:break;
-    default:m_playMode = PlayMode::ListRepeat;
+    case PlayMode::Random:
+      break;
+    default:
+      m_playMode = PlayMode::ListRepeat;
       updatePlayModeButtonIcon();
       return;
   }
@@ -314,11 +326,14 @@ void PlayControlWidget::handleMediaStatusChanged(
   switch (status) {
     case QMediaPlayer::EndOfMedia:
       switch (m_playMode) {
-        case PlayMode::ListRepeat:emit playNext();
+        case PlayMode::ListRepeat:
+          emit playNext();
           break;
-        case PlayMode::SingleRepeat:m_corePlayer->play();
+        case PlayMode::SingleRepeat:
+          m_corePlayer->play();
           break;
-        case PlayMode::Random:emit playNext();
+        case PlayMode::Random:
+          emit playNext();
           break;
       }
     case QMediaPlayer::InvalidMedia: {
@@ -335,9 +350,9 @@ void PlayControlWidget::handleMediaStatusChanged(
         emit playNext();
       }
       emit currentPlayContentChanged(m_currentContentUrl);
-    }
-      break;
-    case QMediaPlayer::UnknownMediaStatus:qDebug() << "UnknownMediaStatus" << m_currentContentUrl;
+    } break;
+    case QMediaPlayer::UnknownMediaStatus:
+      qDebug() << "UnknownMediaStatus" << m_currentContentUrl;
       QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
       emit playInvalid();
       m_waitEventLoop.exec();

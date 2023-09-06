@@ -161,7 +161,7 @@ void ListTabModel::savePlaylist(Playlist *playlist) {
 Qt::ItemFlags ListTabModel::flags(const QModelIndex &index) const {
   if (index.isValid()) {
     return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
-        QAbstractItemModel::flags(index);
+           QAbstractItemModel::flags(index);
   }
   return QAbstractItemModel::flags(index);
 }

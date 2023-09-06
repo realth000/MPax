@@ -64,15 +64,15 @@ PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
   // TODO: This should in somewhere else.
   //  PlaylistSql::getInstance();
   QMap<QString, QVariant> configHeader = Config::AppConfig::getInstance()
-      ->config(CONFIG_PLAYLIST_HEADER)
-      .value.toMap();
+                                             ->config(CONFIG_PLAYLIST_HEADER)
+                                             .value.toMap();
   QMap<QString, QVariant> configHeaderSort =
       Config::AppConfig::getInstance()
           ->config(CONFIG_PLAYLIST_HEADER_SORT)
           .value.toMap();
   auto configHeaderUsed = Config::AppConfig::getInstance()
-      ->config(CONFIG_PLAYLIST_HEADER_USED)
-      .value.toMap();
+                              ->config(CONFIG_PLAYLIST_HEADER_USED)
+                              .value.toMap();
 
   if (configHeaderSort.isEmpty() || configHeader.isEmpty() ||
       configHeaderSort.count() != configHeader.count()) {
@@ -119,12 +119,12 @@ void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
     if (i == logicalIndex) {
       m_visibleHeaderVector[i]->index = newVisualIndex;
     } else if (oldVisualIndex < newVisualIndex &&
-        oldVisualIndex < m_visibleHeaderVector[i]->index &&
-        m_visibleHeaderVector[i]->index <= newVisualIndex) {
+               oldVisualIndex < m_visibleHeaderVector[i]->index &&
+               m_visibleHeaderVector[i]->index <= newVisualIndex) {
       m_visibleHeaderVector[i]->index--;
     } else if (newVisualIndex < oldVisualIndex &&
-        newVisualIndex <= m_visibleHeaderVector[i]->index &&
-        m_visibleHeaderVector[i]->index < oldVisualIndex) {
+               newVisualIndex <= m_visibleHeaderVector[i]->index &&
+               m_visibleHeaderVector[i]->index < oldVisualIndex) {
       m_visibleHeaderVector[i]->index++;
     }
   }

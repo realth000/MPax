@@ -183,9 +183,9 @@ void PlaylistWidget::InitConnections() {
   });
   connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
           this, [this]() {
-        ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
-        m_indicatorVisibleTimer.start(5000);
-      });
+            ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
+            m_indicatorVisibleTimer.start(5000);
+          });
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
