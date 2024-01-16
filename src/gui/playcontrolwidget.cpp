@@ -45,7 +45,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
       Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
   const auto envXdgSessionType = qgetenv("XDG_SESSION_TYPE");
-  if (envXdgSessionType == "x11") {
+  if (envXdgSessionType == "x11" || envXdgSessionType == "tty") {
     InitShortcut();
     m_globalShortcutInited = true;
   }
@@ -441,6 +441,13 @@ void PlayControlWidget::updateConfig() {
   m_volMute = map[CONFIG_VOLUME_MUTE].value.toBool();
   updateMuteWithValue(m_volMute);
   if (m_globalShortcutInited) {
+    qDebug() << "settings config" << Config::AppConfig::getInstance()
+                                    ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
+                                    .value.toString() << Config::AppConfig::getInstance()
+                                    ->config(CONFIG_SHORTCUT_PLAY_PRE)
+                                    .value.toString() << Config::AppConfig::getInstance()
+                                    ->config(CONFIG_SHORTCUT_PLAY_NEXT)
+                                    .value.toString();
     m_playPauseKey->setShortcut(Config::AppConfig::getInstance()
                                     ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
                                     .value.toString(),
