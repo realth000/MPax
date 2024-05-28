@@ -19,12 +19,10 @@ class PlaylistSearchFilterModel : public PlaylistFilterModel {
   void rowCountChanged(const int &rowCount);
 
  public slots:
-  void setFilterExp(const QRegExp &filter,
-                    const Model::PlaylistSearchFilterModel::FilterMode &mode);
+  void setFilterExp(const QRegExp &filter, const Model::PlaylistSearchFilterModel::FilterMode &mode);
 
  protected:
-  bool filterAcceptsRow(int sourceRow,
-                        const QModelIndex &sourceParent) const override;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
  private:
   QRegExp m_filterExp;

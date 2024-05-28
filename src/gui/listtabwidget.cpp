@@ -23,31 +23,21 @@ ListTabWidget::ListTabWidget(QWidget *parent)
   ui->listView->setDragDropOverwriteMode(false);
   ui->listView->setDropIndicatorShown(true);
   InitConnections();
-  this->setStyleSheet(
-      Util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/base.css", ":/css/listtabwidget.css"}));
 }
 
 ListTabWidget::~ListTabWidget() { delete ui; }
 
-void ListTabWidget::addPlaylist(PlaylistModel *playlistModel) {
-  m_listTabModel->addPlaylist(playlistModel);
-}
+void ListTabWidget::addPlaylist(PlaylistModel *playlistModel) { m_listTabModel->addPlaylist(playlistModel); }
 
-void ListTabWidget::addContent(PlayContent *playContent) {
-  m_listTabModel->addContent(playContent);
-}
+void ListTabWidget::addContent(PlayContent *playContent) { m_listTabModel->addContent(playContent); }
 
 void ListTabWidget::InitConnections() {
-  connect(m_listTabModel, &ListTabModel::currentPlaylistChanged, this,
-          &ListTabWidget::currentPlaylistChanged);
-  connect(ui->listView, &QListView::clicked, this,
-          &ListTabWidget::updateCurrentPlaylist);
-  connect(ui->listView, &QListView::customContextMenuRequested, this,
-          &ListTabWidget::openListViewContextMenu);
-  connect(m_listTabModel, &ListTabModel::reloadInfoStatusChanged, this,
-          &ListTabWidget::reloadInfoStatusChanged);
-  connect(m_listTabModel, &ListTabModel::currentPlayContentUpdated, this,
-          &ListTabWidget::currentPlayContentUpdated);
+  connect(m_listTabModel, &ListTabModel::currentPlaylistChanged, this, &ListTabWidget::currentPlaylistChanged);
+  connect(ui->listView, &QListView::clicked, this, &ListTabWidget::updateCurrentPlaylist);
+  connect(ui->listView, &QListView::customContextMenuRequested, this, &ListTabWidget::openListViewContextMenu);
+  connect(m_listTabModel, &ListTabModel::reloadInfoStatusChanged, this, &ListTabWidget::reloadInfoStatusChanged);
+  connect(m_listTabModel, &ListTabModel::currentPlayContentUpdated, this, &ListTabWidget::currentPlayContentUpdated);
 }
 
 void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
@@ -55,19 +45,15 @@ void ListTabWidget::updateCurrentPlaylist(const QModelIndex &index) {
   emit currentPlaylistIndexChanged(index.row());
 }
 
-void ListTabWidget::openListViewContextMenu() {
-  m_listViewContextMenu->popup(QCursor::pos());
-}
+void ListTabWidget::openListViewContextMenu() { m_listViewContextMenu->popup(QCursor::pos()); }
 
 QMenu *ListTabWidget::InitListViewContextMenu() {
   QMenu *m = new QMenu(this);
   m->setMinimumWidth(150);
   QAction *actionDelete = new QAction(tr("Delete"));
-  connect(actionDelete, &QAction::triggered, this,
-          &ListTabWidget::removePlaylist);
+  connect(actionDelete, &QAction::triggered, this, &ListTabWidget::removePlaylist);
   QAction *actionRename = new QAction(tr("Rename"));
-  connect(actionRename, &QAction::triggered, this,
-          &ListTabWidget::openRenameDialog);
+  connect(actionRename, &QAction::triggered, this, &ListTabWidget::openRenameDialog);
   m->addAction(actionRename);
   m->addSeparator();
   m->addAction(actionDelete);
@@ -81,8 +67,7 @@ void ListTabWidget::removePlaylist() {
 
 void ListTabWidget::openRenameDialog() {
   const int index = ui->listView->currentIndex().row();
-  RenameWidget *renameWidget =
-      new RenameWidget(m_listTabModel->index(index)->playlistName());
+  RenameWidget *renameWidget = new RenameWidget(m_listTabModel->index(index)->playlistName());
   connect(renameWidget, &RenameWidget::renamed, this,
           [this, index](const QString &name) { renamePlaylist(index, name); });
   renameWidget->exec();
@@ -118,17 +103,11 @@ void ListTabWidget::importPlaylist(const QStringList &fileList) {
   m_listTabModel->saveAllPlaylist();
 }
 
-void ListTabWidget::saveAllPlaylist(const QString &dirPath) {
-  m_listTabModel->saveAllPlaylist(dirPath);
-}
+void ListTabWidget::saveAllPlaylist(const QString &dirPath) { m_listTabModel->saveAllPlaylist(dirPath); }
 
-void ListTabWidget::setCurrentPlaylist(const int &index) {
-  m_listTabModel->setCurrentPlaylist(index);
-}
+void ListTabWidget::setCurrentPlaylist(const int &index) { m_listTabModel->setCurrentPlaylist(index); }
 
-PlaylistModel *ListTabWidget::CurrentPlaylist() const {
-  return m_listTabModel->currentPlaylist();
-}
+PlaylistModel *ListTabWidget::CurrentPlaylist() const { return m_listTabModel->currentPlaylist(); }
 
 void ListTabWidget::addPlaylist(const QList<Playlist> &playlistList) {
   for (const auto &playlist : playlistList) {
@@ -136,17 +115,11 @@ void ListTabWidget::addPlaylist(const QList<Playlist> &playlistList) {
   }
 }
 
-void ListTabWidget::saveDefaultPlaylist() {
-  m_listTabModel->saveDefaultPlaylist();
-}
+void ListTabWidget::saveDefaultPlaylist() { m_listTabModel->saveDefaultPlaylist(); }
 
-int ListTabWidget::indexOf(PlaylistModel *playlistModel) const {
-  return m_listTabModel->indexOf(playlistModel);
-}
+int ListTabWidget::indexOf(PlaylistModel *playlistModel) const { return m_listTabModel->indexOf(playlistModel); }
 
-void ListTabWidget::saveCurrentPlaylist() {
-  m_listTabModel->saveCurrentPlaylist();
-}
+void ListTabWidget::saveCurrentPlaylist() { m_listTabModel->saveCurrentPlaylist(); }
 
 void ListTabWidget::renamePlaylist(int index, const QString &name) {
   m_listTabModel->renamePlaylist(index, name);
@@ -160,8 +133,7 @@ PlaylistModel *ListTabModel::index(int index) const {
   return m_playlistList[index];
 }
 
-RenameWidget::RenameWidget(const QString &currentName, QDialog *parent)
-    : QDialog(parent) {
+RenameWidget::RenameWidget(const QString &currentName, QDialog *parent) : QDialog(parent) {
   this->setWindowTitle(tr("Rename Playlist"));
   QLineEdit *lineEdit = new QLineEdit(this);
   lineEdit->setText(currentName);

@@ -8,20 +8,14 @@
 #include "util/zawarudor.h"
 
 ProgressDialog::ProgressDialog(const QString &workName, QWidget *parent)
-    : QDialog(parent),
-      ui(new Ui::ProgressDialog),
-      m_cancelable(true),
-      m_infinite(false),
-      m_max(100) {
+    : QDialog(parent), ui(new Ui::ProgressDialog), m_cancelable(true), m_infinite(false), m_max(100) {
   ui->setupUi(this);
-  this->setStyleSheet(Util::loadCssFromFile(
-      {":/css/external/MaterialDark.css", ":/css/base.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/external/MaterialDark.css", ":/css/base.css"}));
   ui->progressBar->setMaximum(m_max);
   ui->cancelButton->setFocusPolicy(Qt::NoFocus);
   this->setWindowTitle(tr("Processing"));
   ui->workLabel->setText(workName);
-  connect(ui->cancelButton, &QPushButton::clicked, this,
-          &ProgressDialog::quitCheck);
+  connect(ui->cancelButton, &QPushButton::clicked, this, &ProgressDialog::quitCheck);
 }
 
 ProgressDialog::~ProgressDialog() { delete ui; }
@@ -57,9 +51,7 @@ void ProgressDialog::setFinish() {
   successAndQuit();
 }
 
-void ProgressDialog::setWorkName(const QString &workName) {
-  ui->workLabel->setText(workName);
-}
+void ProgressDialog::setWorkName(const QString &workName) { ui->workLabel->setText(workName); }
 
 void ProgressDialog::updateProgress(const int &finishedCount) {
   if (m_infinite || m_max == 0) {
@@ -67,8 +59,7 @@ void ProgressDialog::updateProgress(const int &finishedCount) {
     return;
   }
   ui->progressBar->setValue(100 * finishedCount / m_max);
-  ui->progressLabel->setText(QString::number(finishedCount) + "/" +
-                             QString::number(m_max));
+  ui->progressLabel->setText(QString::number(finishedCount) + "/" + QString::number(m_max));
   if (finishedCount >= m_max) {
     successAndQuit();
   }
@@ -91,9 +82,7 @@ void ProgressDialog::successAndQuit() {
 }
 
 void ProgressDialog::quitCheck() {
-  const int choose = QMessageBox::warning(this, tr("Cancel"),
-                                          tr("Sure to cancel this progress?"),
-                                          tr("No"), tr("Yes"));
+  const int choose = QMessageBox::warning(this, tr("Cancel"), tr("Sure to cancel this progress?"), tr("No"), tr("Yes"));
   if (choose == 1) {
     emit canceled();
     this->close();

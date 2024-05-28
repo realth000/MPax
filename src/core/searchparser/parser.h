@@ -13,8 +13,7 @@ class Parser {
  public:
   explicit Parser();
   bool init(const QString &rawString, bool *ok, QString *errString);
-  bool parse(const PlayContent *playContent,
-             Qt::CaseSensitivity caseSensitivity) const;
+  bool parse(const PlayContent *playContent, Qt::CaseSensitivity caseSensitivity) const;
 
  private:
   AST *m_ast;

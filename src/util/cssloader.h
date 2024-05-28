@@ -26,9 +26,7 @@ static QString loadCssFromFile(const QStringList &filePathList) {
   return cssStr;
 }
 
-static QString loadCssFromFile(const QString &filePath) {
-  return Util::loadCssFromFile(QStringList{filePath});
-}
+static QString loadCssFromFile(const QString &filePath) { return Util::loadCssFromFile(QStringList{filePath}); }
 }  // namespace Util
 
 #endif  // MPAX_CSSLOADER_H

@@ -20,16 +20,13 @@ int main(int argc, char *argv[]) {
   switch (locale.script()) {
     case QLocale::SimplifiedChineseScript:
 #if 1
-      appTranslator.load(QCoreApplication::applicationDirPath() +
-                         "/translation/zh_CN.qm");
+      appTranslator.load(QCoreApplication::applicationDirPath() + "/translation/zh_CN.qm");
 #else
-      appTranslator.load(QCoreApplication::applicationDirPath() +
-                         "/translation/en.qm");
+      appTranslator.load(QCoreApplication::applicationDirPath() + "/translation/en.qm");
 #endif
       break;
     default:
-      appTranslator.load(QCoreApplication::applicationDirPath() +
-                         "/translation/en.qm");
+      appTranslator.load(QCoreApplication::applicationDirPath() + "/translation/en.qm");
   }
   Config::AppConfig::getInstance()->loadConfig();
   QCoreApplication::installTranslator(&appTranslator);

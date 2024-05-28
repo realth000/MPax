@@ -41,8 +41,7 @@ PlayControlWidget::PlayControlWidget(QWidget *parent)
   ui->playPosSlider->setEnabled(false);
   ui->coverLabel->setScaledContents(true);
   DisableFocus();
-  this->setStyleSheet(
-      Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/base.css", ":/css/playcontrolwidget.css"}));
   InitIconFont();
   const auto envXdgSessionType = qgetenv("XDG_SESSION_TYPE");
   if (envXdgSessionType == "x11" || envXdgSessionType == "tty") {
@@ -78,49 +77,29 @@ void PlayControlWidget::InitConfig() {
 }
 
 void PlayControlWidget::InitConnections() {
-  connect(ui->preButton, &QPushButton::clicked, this,
-          &PlayControlWidget::playPre);
+  connect(ui->preButton, &QPushButton::clicked, this, &PlayControlWidget::playPre);
   connect(ui->preButton, &QPushButton::clicked, this,
           [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
-  connect(ui->playButton, &QPushButton::clicked, this,
-          &PlayControlWidget::updatePlay);
-  connect(ui->nextButton, &QPushButton::clicked, this,
-          &PlayControlWidget::playNext);
+  connect(ui->playButton, &QPushButton::clicked, this, &PlayControlWidget::updatePlay);
+  connect(ui->nextButton, &QPushButton::clicked, this, &PlayControlWidget::playNext);
   connect(ui->nextButton, &QPushButton::clicked, this,
           [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
-  connect(ui->stopButton, &QPushButton::clicked, this,
-          &PlayControlWidget::stopPlay);
-  connect(ui->playModeButton, &QPushButton::clicked, this,
-          QOverload<>::of(&PlayControlWidget::updatePlayMode));
-  connect(ui->muteButton, &QPushButton::clicked, this,
-          &PlayControlWidget::updateMute);
-  connect(ui->volumeSlider, &QSlider::valueChanged, this,
-          &PlayControlWidget::updateVolume);
-  connect(ui->playPosSlider, &QSlider::sliderReleased, this,
-          QOverload<>::of(&PlayControlWidget::setPlayPosition));
+  connect(ui->stopButton, &QPushButton::clicked, this, &PlayControlWidget::stopPlay);
+  connect(ui->playModeButton, &QPushButton::clicked, this, QOverload<>::of(&PlayControlWidget::updatePlayMode));
+  connect(ui->muteButton, &QPushButton::clicked, this, &PlayControlWidget::updateMute);
+  connect(ui->volumeSlider, &QSlider::valueChanged, this, &PlayControlWidget::updateVolume);
+  connect(ui->playPosSlider, &QSlider::sliderReleased, this, QOverload<>::of(&PlayControlWidget::setPlayPosition));
 
-  connect(m_corePlayer, &CorePlayer::playStateChanged, this,
-          &PlayControlWidget::updatePlayerState);
-  connect(m_corePlayer, &CorePlayer::playPositionChanged, this,
-          &PlayControlWidget::updatePlayPosition);
-  connect(m_corePlayer, &CorePlayer::playDurationChanged, this,
-          &PlayControlWidget::setPlayDuration);
-  connect(m_corePlayer, &CorePlayer::playMediaStatusChanged, this,
-          &PlayControlWidget::handleMediaStatusChanged);
+  connect(m_corePlayer, &CorePlayer::playStateChanged, this, &PlayControlWidget::updatePlayerState);
+  connect(m_corePlayer, &CorePlayer::playPositionChanged, this, &PlayControlWidget::updatePlayPosition);
+  connect(m_corePlayer, &CorePlayer::playDurationChanged, this, &PlayControlWidget::setPlayDuration);
+  connect(m_corePlayer, &CorePlayer::playMediaStatusChanged, this, &PlayControlWidget::handleMediaStatusChanged);
 }
 
 QString PlayControlWidget::MiliSecondToString(const qint64 &ms) {
-  int hh = std::chrono::duration_cast<std::chrono::hours>(
-               std::chrono::milliseconds(ms))
-               .count();
-  int mm = std::chrono::duration_cast<std::chrono::minutes>(
-               std::chrono::milliseconds(ms))
-               .count() %
-           60;
-  int ss = std::chrono::duration_cast<std::chrono::seconds>(
-               std::chrono::milliseconds(ms))
-               .count() %
-           60;
+  int hh = std::chrono::duration_cast<std::chrono::hours>(std::chrono::milliseconds(ms)).count();
+  int mm = std::chrono::duration_cast<std::chrono::minutes>(std::chrono::milliseconds(ms)).count() % 60;
+  int ss = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::milliseconds(ms)).count() % 60;
   return QString("%1:%2:%3")
       .arg(hh, 2, 10, QLatin1Char('0'))
       .arg(mm, 2, 10, QLatin1Char('0'))
@@ -168,19 +147,13 @@ void PlayControlWidget::updatePlay() {
 }
 
 void PlayControlWidget::updatePlaySeekForward(const int &msec) {
-  setPlayPosition(ui->playPosSlider->value() + msec >
-                          ui->playPosSlider->maximum()
-                      ? ui->playPosSlider->maximum()
-                      : ui->playPosSlider->value() + msec);
+  setPlayPosition(ui->playPosSlider->value() + msec > ui->playPosSlider->maximum() ? ui->playPosSlider->maximum()
+                                                                                   : ui->playPosSlider->value() + msec);
 }
 
-void PlayControlWidget::updatePlaySeekBackward(const int &msec) {
-  setPlayPosition(ui->playPosSlider->value() - msec);
-}
+void PlayControlWidget::updatePlaySeekBackward(const int &msec) { setPlayPosition(ui->playPosSlider->value() - msec); }
 
-void PlayControlWidget::updatePlayerState(const QMediaPlayer::State &state) {
-  m_corePlayerState = state;
-}
+void PlayControlWidget::updatePlayerState(const QMediaPlayer::State &state) { m_corePlayerState = state; }
 
 void PlayControlWidget::stopPlay() {
   m_corePlayer->stop();
@@ -235,10 +208,8 @@ void PlayControlWidget::setPlayPosition(const int &msec) {
 }
 
 void PlayControlWidget::InitIconFont() {
-  m_awesome6Font =
-      QFont(QFontDatabase::applicationFontFamilies(
-                QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf"))
-                .at(0));
+  m_awesome6Font = QFont(
+      QFontDatabase::applicationFontFamilies(QFontDatabase::addApplicationFont(":/font/fa-regular-400.ttf")).at(0));
   ui->coverLabel->setFont(m_awesome6Font);
   ui->coverLabel->setText(ICON_COVER);
   ui->preButton->setFont(m_awesome6Font);
@@ -295,8 +266,7 @@ void PlayControlWidget::updatePlayMode() {
     default:
       return;
   }
-  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAY_MODE,
-                                              static_cast<int>(m_playMode));
+  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAY_MODE, static_cast<int>(m_playMode));
   updatePlayModeButtonIcon();
 }
 
@@ -321,8 +291,7 @@ void PlayControlWidget::setPlayDuration(const qint64 &duration) {
   ui->timeTotalLabel->setText(MiliSecondToString(duration));
 }
 
-void PlayControlWidget::handleMediaStatusChanged(
-    QMediaPlayer::MediaStatus status) {
+void PlayControlWidget::handleMediaStatusChanged(QMediaPlayer::MediaStatus status) {
   switch (status) {
     case QMediaPlayer::EndOfMedia:
       switch (m_playMode) {
@@ -343,8 +312,7 @@ void PlayControlWidget::handleMediaStatusChanged(
       QTimer::singleShot(300, &m_waitEventLoop, &QEventLoop::quit);
       m_waitEventLoop.exec();
       const QMediaPlayer::MediaStatus m = m_corePlayer->mediaStatus();
-      if (m == QMediaPlayer::InvalidMedia || m == QMediaPlayer::NoMedia ||
-          m == QMediaPlayer::UnknownMediaStatus) {
+      if (m == QMediaPlayer::InvalidMedia || m == QMediaPlayer::NoMedia || m == QMediaPlayer::UnknownMediaStatus) {
         qDebug() << "can not play invalid media" << m_currentContentUrl;
         emit playInvalid();
         emit playNext();
@@ -364,26 +332,18 @@ void PlayControlWidget::InitShortcut() {
   m_playPauseKey = new QHotkey(QKeySequence("Ctrl+Meta+B"), true, this);
   m_playPreKey = new QHotkey(QKeySequence("Ctrl+Meta+Left"), true, this);
   m_playNextKey = new QHotkey(QKeySequence("Ctrl+Meta+Right"), true, this);
-  connect(m_playPauseKey, &QHotkey::activated, this,
-          &PlayControlWidget::updatePlay);
+  connect(m_playPauseKey, &QHotkey::activated, this, &PlayControlWidget::updatePlay);
   connect(m_playPreKey, &QHotkey::activated, this, &PlayControlWidget::playPre);
   connect(m_playPreKey, &QHotkey::activated, this, [this]() {
-    QTimer::singleShot(50, this, [this]() {
-      emit currentPlayContentChanged(m_currentContentUrl);
-    });
+    QTimer::singleShot(50, this, [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   });
-  connect(m_playNextKey, &QHotkey::activated, this,
-          &PlayControlWidget::playNext);
+  connect(m_playNextKey, &QHotkey::activated, this, &PlayControlWidget::playNext);
   connect(m_playNextKey, &QHotkey::activated, this, [this]() {
-    QTimer::singleShot(50, this, [this]() {
-      emit currentPlayContentChanged(m_currentContentUrl);
-    });
+    QTimer::singleShot(50, this, [this]() { emit currentPlayContentChanged(m_currentContentUrl); });
   });
 }
 
-PlayControlWidget::PlayMode PlayControlWidget::playMode() const {
-  return m_playMode;
-}
+PlayControlWidget::PlayMode PlayControlWidget::playMode() const { return m_playMode; }
 
 void PlayControlWidget::updatePlayInfo(PlayContent *content) {
   if (content == nullptr) {
@@ -401,8 +361,7 @@ void PlayControlWidget::updatePlayInfoToUI(PlayContent *content) {
   } else if (nameInfo.length() == 2) {
     ui->titleButton->setText(QFileInfo(nameInfo[1]).completeBaseName());
   } else {
-    ui->titleButton->setText(
-        QFileInfo(content->contentName).completeBaseName());
+    ui->titleButton->setText(QFileInfo(content->contentName).completeBaseName());
   }
   if (!content->artist.isEmpty()) {
     ui->artistButton->setText(content->artist);
@@ -425,8 +384,7 @@ void PlayControlWidget::updatePlayInfoToUI(PlayContent *content) {
   }
   if (!content->albumCover.isNull()) {
     ui->coverLabel->setPixmap(
-        QPixmap::fromImage(content->albumCover)
-            .scaled(60, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QPixmap::fromImage(content->albumCover).scaled(60, 60, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     // Delete album cover?
     content->albumCover = QImage();
   } else {
@@ -441,28 +399,17 @@ void PlayControlWidget::updateConfig() {
   m_volMute = map[CONFIG_VOLUME_MUTE].value.toBool();
   updateMuteWithValue(m_volMute);
   if (m_globalShortcutInited) {
-    qDebug() << "settings config" << Config::AppConfig::getInstance()
-                                    ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
-                                    .value.toString() << Config::AppConfig::getInstance()
-                                    ->config(CONFIG_SHORTCUT_PLAY_PRE)
-                                    .value.toString() << Config::AppConfig::getInstance()
-                                    ->config(CONFIG_SHORTCUT_PLAY_NEXT)
-                                    .value.toString();
-    m_playPauseKey->setShortcut(Config::AppConfig::getInstance()
-                                    ->config(CONFIG_SHORTCUT_PLAY_PAUSE)
-                                    .value.toString(),
+    qDebug() << "settings config"
+             << Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_PAUSE).value.toString()
+             << Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_PRE).value.toString()
+             << Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_NEXT).value.toString();
+    m_playPauseKey->setShortcut(Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_PAUSE).value.toString(),
                                 true);
-    m_playPreKey->setShortcut(Config::AppConfig::getInstance()
-                                  ->config(CONFIG_SHORTCUT_PLAY_PRE)
-                                  .value.toString(),
+    m_playPreKey->setShortcut(Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_PRE).value.toString(),
                               true);
-    m_playNextKey->setShortcut(Config::AppConfig::getInstance()
-                                   ->config(CONFIG_SHORTCUT_PLAY_NEXT)
-                                   .value.toString(),
+    m_playNextKey->setShortcut(Config::AppConfig::getInstance()->config(CONFIG_SHORTCUT_PLAY_NEXT).value.toString(),
                                true);
   }
 }
 
-void PlayControlWidget::updatePlayContentInfo(PlayContent *playContent) {
-  updatePlayInfoToUI(playContent);
-}
+void PlayControlWidget::updatePlayContentInfo(PlayContent *playContent) { updatePlayInfoToUI(playContent); }

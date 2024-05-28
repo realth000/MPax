@@ -19,11 +19,8 @@ static const QStringList operatorKeywords = {"AND", "OR"
 #endif
 };
 
-static const QMap<QString, QString> metaKeywords =
-    QMap<QString, QString>{{"title", "Title"},
-                           {"artist", "Artist"},
-                           {"album", "AlbumTitle"},
-                           {"album_artist", "AlbumArtist"}
+static const QMap<QString, QString> metaKeywords = QMap<QString, QString>{
+    {"title", "Title"}, {"artist", "Artist"}, {"album", "AlbumTitle"}, {"album_artist", "AlbumArtist"}
 #if 0
         ,
         {"date", "date"},
@@ -40,6 +37,6 @@ static const QMap<QString, QString> metaKeywords =
         {"bitrate", "Bitrate"},
         {"samplerate", "Samplerate"}
 #endif
-    };
+};
 
 #endif  // MPAX_TOKENS_H

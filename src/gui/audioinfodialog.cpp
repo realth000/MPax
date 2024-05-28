@@ -63,10 +63,8 @@ void AudioInfoDialog::initConnections() {
     this->saveAudioInfo();
     this->close();
   });
-  connect(ui->cancelButton, &QPushButton::clicked, this,
-          [this]() { this->close(); });
-  connect(ui->applyButton, &QPushButton::clicked, this,
-          &AudioInfoDialog::saveAudioInfo);
+  connect(ui->cancelButton, &QPushButton::clicked, this, [this]() { this->close(); });
+  connect(ui->applyButton, &QPushButton::clicked, this, &AudioInfoDialog::saveAudioInfo);
 }
 
 void AudioInfoDialog::initMetadataTable() {
@@ -91,36 +89,24 @@ void AudioInfoDialog::initMetadataTable() {
   ui->metadataTable->setItem(3, 0, new QTableWidgetItem(tr("Album artist")));
   ui->metadataTable->setItem(4, 0, new QTableWidgetItem(tr("Album year")));
   ui->metadataTable->setItem(5, 0, new QTableWidgetItem(tr("Track number")));
-  ui->metadataTable->setItem(6, 0,
-                             new QTableWidgetItem(tr("Album total tracks")));
+  ui->metadataTable->setItem(6, 0, new QTableWidgetItem(tr("Album total tracks")));
   ui->metadataTable->setItem(7, 0, new QTableWidgetItem(tr("Genre")));
   ui->metadataTable->setItem(8, 0, new QTableWidgetItem(tr("Comment")));
 
   for (int i = 0; i < ui->metadataTable->rowCount(); i++) {
-    ui->metadataTable->item(i, 0)->setFlags(
-        ui->metadataTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
+    ui->metadataTable->item(i, 0)->setFlags(ui->metadataTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
   }
 
   ui->metadataTable->setItem(0, 1, new QTableWidgetItem(m_content->title));
   ui->metadataTable->setItem(1, 1, new QTableWidgetItem(m_content->artist));
   ui->metadataTable->setItem(2, 1, new QTableWidgetItem(m_content->albumTitle));
-  ui->metadataTable->setItem(3, 1,
-                             new QTableWidgetItem(m_content->albumArtist));
+  ui->metadataTable->setItem(3, 1, new QTableWidgetItem(m_content->albumArtist));
   ui->metadataTable->setItem(
-      4, 1,
-      new QTableWidgetItem(m_content->albumYear > 0
-                               ? QString::number(m_content->albumYear)
-                               : ""));
+      4, 1, new QTableWidgetItem(m_content->albumYear > 0 ? QString::number(m_content->albumYear) : ""));
   ui->metadataTable->setItem(
-      5, 1,
-      new QTableWidgetItem(m_content->trackNumber > 0
-                               ? QString::number(m_content->trackNumber)
-                               : ""));
+      5, 1, new QTableWidgetItem(m_content->trackNumber > 0 ? QString::number(m_content->trackNumber) : ""));
   ui->metadataTable->setItem(
-      6, 1,
-      new QTableWidgetItem(m_content->albumTrackCount > 0
-                               ? QString::number(m_content->albumTrackCount)
-                               : ""));
+      6, 1, new QTableWidgetItem(m_content->albumTrackCount > 0 ? QString::number(m_content->albumTrackCount) : ""));
 
   ui->metadataTable->setItem(7, 1, new QTableWidgetItem(m_content->genre));
   ui->metadataTable->setItem(8, 1, new QTableWidgetItem(m_content->comment));
@@ -156,41 +142,26 @@ void AudioInfoDialog::initDetailTable() {
 
   QFileInfo info(m_content->contentPath);
   ui->detailTable->setItem(0, 1, new QTableWidgetItem(m_content->contentName));
-  ui->detailTable->setItem(1, 1,
-                           new QTableWidgetItem(info.dir().absolutePath()));
+  ui->detailTable->setItem(1, 1, new QTableWidgetItem(info.dir().absolutePath()));
   ui->detailTable->setItem(2, 1, new QTableWidgetItem(m_content->contentPath));
   // TODO: What's this index.
   ui->detailTable->setItem(3, 1, new QTableWidgetItem(QString::number(0)));
   ui->detailTable->setItem(
       4, 1,
-      new QTableWidgetItem(
-          QString::number(Util::toFileSize(m_content->contentSize,
-                                           Util::FileSizeLevel::MB)) +
-          QString("MB (%1 %2)")
-              .arg(QString::number(m_content->contentSize), tr("bytes"))));
-  ui->detailTable->setItem(5, 1,
-                           new QTableWidgetItem(info.lastModified().toString(
-                               "yyyy-MM-dd hh:mm:ss")));
+      new QTableWidgetItem(QString::number(Util::toFileSize(m_content->contentSize, Util::FileSizeLevel::MB)) +
+                           QString("MB (%1 %2)").arg(QString::number(m_content->contentSize), tr("bytes"))));
+  ui->detailTable->setItem(5, 1, new QTableWidgetItem(info.lastModified().toString("yyyy-MM-dd hh:mm:ss")));
   // TODO: need record duration in state.
   ui->detailTable->setItem(
       6, 1,
-      new QTableWidgetItem(
-          Util::toFormatTime(m_content->length) +
-          QString(" (%1 %2)")
-              .arg(QString::number(m_content->length), tr("seconds"))));
-  ui->detailTable->setItem(
-      7, 1,
-      new QTableWidgetItem(QString::number(m_content->sampleRate) + " Hz"));
-  ui->detailTable->setItem(
-      8, 1, new QTableWidgetItem(QString::number(m_content->channels)));
-  ui->detailTable->setItem(
-      9, 1,
-      new QTableWidgetItem(QString::number(m_content->bitRate) + " kbps"));
+      new QTableWidgetItem(Util::toFormatTime(m_content->length) +
+                           QString(" (%1 %2)").arg(QString::number(m_content->length), tr("seconds"))));
+  ui->detailTable->setItem(7, 1, new QTableWidgetItem(QString::number(m_content->sampleRate) + " Hz"));
+  ui->detailTable->setItem(8, 1, new QTableWidgetItem(QString::number(m_content->channels)));
+  ui->detailTable->setItem(9, 1, new QTableWidgetItem(QString::number(m_content->bitRate) + " kbps"));
   for (int i = 0; i < ui->detailTable->rowCount(); i++) {
-    ui->detailTable->item(i, 0)->setFlags(ui->detailTable->item(i, 0)->flags() &
-                                          ~Qt::ItemIsEditable);
-    ui->detailTable->item(i, 1)->setFlags(ui->detailTable->item(i, 1)->flags() &
-                                          ~Qt::ItemIsEditable);
+    ui->detailTable->item(i, 0)->setFlags(ui->detailTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
+    ui->detailTable->item(i, 1)->setFlags(ui->detailTable->item(i, 1)->flags() & ~Qt::ItemIsEditable);
   }
 }
 
@@ -215,8 +186,7 @@ void AudioInfoDialog::initCoverTable() {
   ui->coverTable->setItem(4, 0, new QTableWidgetItem(tr("Icon")));
   for (int i = 0; i < ui->coverTable->rowCount(); i++) {
     ui->coverTable->setRowHeight(i, 100);
-    ui->coverTable->item(i, 0)->setFlags(ui->coverTable->item(i, 0)->flags() &
-                                         ~Qt::ItemIsEditable);
+    ui->coverTable->item(i, 0)->setFlags(ui->coverTable->item(i, 0)->flags() & ~Qt::ItemIsEditable);
   }
 
   for (auto cover : m_content->coverList) {
@@ -225,8 +195,7 @@ void AudioInfoDialog::initCoverTable() {
     }
     auto img = *cover->image;
     auto coverLabel = new QLabel();
-    coverLabel->setPixmap(QPixmap::fromImage(img).scaled(
-        100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    coverLabel->setPixmap(QPixmap::fromImage(img).scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     auto infoString = QString("%1 B\n").arg(img.sizeInBytes());
     infoString.append(QString("%1 x %2\n").arg(img.width()).arg(img.height()));
@@ -268,11 +237,9 @@ void AudioInfoDialog::initCoverTable() {
     if (ui->coverTable->item(i, 2) == nullptr) {
       ui->coverTable->setItem(i, 1, new QTableWidgetItem(tr("")));
       ui->coverTable->setItem(i, 2, new QTableWidgetItem(tr("")));
-      ui->coverTable->item(i, 1)->setFlags(ui->coverTable->item(i, 1)->flags() &
-                                           ~Qt::ItemIsEditable);
+      ui->coverTable->item(i, 1)->setFlags(ui->coverTable->item(i, 1)->flags() & ~Qt::ItemIsEditable);
     }
-    ui->coverTable->item(i, 2)->setFlags(ui->coverTable->item(i, 2)->flags() &
-                                         ~Qt::ItemIsEditable);
+    ui->coverTable->item(i, 2)->setFlags(ui->coverTable->item(i, 2)->flags() & ~Qt::ItemIsEditable);
   }
 }
 

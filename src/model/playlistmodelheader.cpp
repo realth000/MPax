@@ -12,9 +12,7 @@ PlaylistModelHeader *PlaylistModelHeader::getInstance() {
 
 int PlaylistModelHeader::headerCount() const { return m_headerVector.count(); }
 
-int PlaylistModelHeader::usedHeaderCount() const {
-  return m_visibleHeaderVector.count();
-}
+int PlaylistModelHeader::usedHeaderCount() const { return m_visibleHeaderVector.count(); }
 
 void PlaylistModelHeader::setUsedHeader(const QString &header, bool used) {
   const QString name = m_headerTrans.key(header);
@@ -46,8 +44,7 @@ QString PlaylistModelHeader::usedHeader(const int &index) const {
   return m_visibleHeaderVector[index]->name;
 }
 
-PlaylistHeaderItem PlaylistModelHeader::usedHeader(
-    const QString &header) const {
+PlaylistHeaderItem PlaylistModelHeader::usedHeader(const QString &header) const {
   const auto t = m_headerTrans.key(header);
   if (t.isEmpty()) {
     return {};
@@ -63,23 +60,15 @@ PlaylistHeaderItem PlaylistModelHeader::usedHeader(
 PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
   // TODO: This should in somewhere else.
   //  PlaylistSql::getInstance();
-  QMap<QString, QVariant> configHeader = Config::AppConfig::getInstance()
-                                             ->config(CONFIG_PLAYLIST_HEADER)
-                                             .value.toMap();
+  QMap<QString, QVariant> configHeader = Config::AppConfig::getInstance()->config(CONFIG_PLAYLIST_HEADER).value.toMap();
   QMap<QString, QVariant> configHeaderSort =
-      Config::AppConfig::getInstance()
-          ->config(CONFIG_PLAYLIST_HEADER_SORT)
-          .value.toMap();
-  auto configHeaderUsed = Config::AppConfig::getInstance()
-                              ->config(CONFIG_PLAYLIST_HEADER_USED)
-                              .value.toMap();
+      Config::AppConfig::getInstance()->config(CONFIG_PLAYLIST_HEADER_SORT).value.toMap();
+  auto configHeaderUsed = Config::AppConfig::getInstance()->config(CONFIG_PLAYLIST_HEADER_USED).value.toMap();
 
-  if (configHeaderSort.isEmpty() || configHeader.isEmpty() ||
-      configHeaderSort.count() != configHeader.count()) {
+  if (configHeaderSort.isEmpty() || configHeader.isEmpty() || configHeaderSort.count() != configHeader.count()) {
     m_headerVector = defaultHeaderVector();
   } else {
-    for (auto i = configHeader.constBegin(); i != configHeader.constEnd();
-         i++) {
+    for (auto i = configHeader.constBegin(); i != configHeader.constEnd(); i++) {
       m_headerVector.push_back(PlaylistHeaderItem());
       m_headerVector.last().name = i.key();
       m_headerVector.last().width = i.value().toInt();
@@ -93,9 +82,7 @@ PlaylistModelHeader::PlaylistModelHeader() : m_headerTrans(MODEL_ALL_HEADER) {
     }
   }
   std::stable_sort(m_visibleHeaderVector.begin(), m_visibleHeaderVector.end(),
-                   [](PlaylistHeaderItem *i, PlaylistHeaderItem *j) -> bool {
-                     return i->index < j->index;
-                   });
+                   [](PlaylistHeaderItem *i, PlaylistHeaderItem *j) -> bool { return i->index < j->index; });
 }
 
 PlaylistModelHeader::~PlaylistModelHeader() {}
@@ -113,17 +100,14 @@ QVector<HeaderItem> PlaylistModelHeader::defaultHeaderVector() {
       HeaderItem{"Length", 100, 8, false},
   };
 }
-void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
-                                     int newVisualIndex) {
+void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex, int newVisualIndex) {
   for (int i = 0; i < m_visibleHeaderVector.length(); i++) {
     if (i == logicalIndex) {
       m_visibleHeaderVector[i]->index = newVisualIndex;
-    } else if (oldVisualIndex < newVisualIndex &&
-               oldVisualIndex < m_visibleHeaderVector[i]->index &&
+    } else if (oldVisualIndex < newVisualIndex && oldVisualIndex < m_visibleHeaderVector[i]->index &&
                m_visibleHeaderVector[i]->index <= newVisualIndex) {
       m_visibleHeaderVector[i]->index--;
-    } else if (newVisualIndex < oldVisualIndex &&
-               newVisualIndex <= m_visibleHeaderVector[i]->index &&
+    } else if (newVisualIndex < oldVisualIndex && newVisualIndex <= m_visibleHeaderVector[i]->index &&
                m_visibleHeaderVector[i]->index < oldVisualIndex) {
       m_visibleHeaderVector[i]->index++;
     }
@@ -131,8 +115,7 @@ void PlaylistModelHeader::updateSort(int logicalIndex, int oldVisualIndex,
   saveConfig();
 }
 
-void PlaylistModelHeader::updateWidth(int logicalIndex, int oldSize,
-                                      int newSize) {
+void PlaylistModelHeader::updateWidth(int logicalIndex, int oldSize, int newSize) {
   for (auto &h : m_headerVector) {
     if (h.index == logicalIndex) {
       h.width = newSize;
@@ -141,9 +124,7 @@ void PlaylistModelHeader::updateWidth(int logicalIndex, int oldSize,
   saveConfig();
 }
 
-QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const {
-  return m_headerVector;
-}
+QVector<PlaylistHeaderItem> PlaylistModelHeader::headerVector() const { return m_headerVector; }
 
 void PlaylistModelHeader::saveConfig() {
   QMap<QString, QVariant> toSave;
@@ -156,10 +137,8 @@ void PlaylistModelHeader::saveConfig() {
   }
 
   Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER, toSave);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_SORT,
-                                              toSaveSort);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_USED,
-                                              toSaveUsed);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_SORT, toSaveSort);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_PLAYLIST_HEADER_USED, toSaveUsed);
   Config::AppConfig::getInstance()->saveConfigDefer();
 }
 }  // namespace PLModel

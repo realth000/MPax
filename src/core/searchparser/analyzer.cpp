@@ -68,8 +68,7 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
         qDebug() << "analyzing: [metaKeyword] =" << t.content << currentNode;
         if (currentNode->type != ASTType::Unknown) {
           // ERROR: type should not set yet.
-          *errString =
-              "analyze error: error setting mete keyword, type already set";
+          *errString = "analyze error: error setting mete keyword, type already set";
           goto failed;
         }
         currentNode->type = ASTType::Statement;
@@ -107,8 +106,7 @@ AST *Analyzer::analyze(const TokenList &tf, bool *ok, QString *errString) {
           *errString = "analyze error: error parsing ')', null parent";
           goto failed;
         }
-        if (currentNode != currentNode->parent->leftChild &&
-            currentNode->parent->leftChild == nullptr) {
+        if (currentNode != currentNode->parent->leftChild && currentNode->parent->leftChild == nullptr) {
           // ERROR: children should not be null.
           *errString = "analyze error: error parsing ')', null left child";
           goto failed;
@@ -184,8 +182,7 @@ failed:
   return false;
 }
 
-bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok,
-                              QString *errString) {
+bool Analyzer::isValidASTNode(const ASTNode *node, bool *ok, QString *errString) {
   switch (node->type) {
     case ASTType::Statement: {
       if (node->leftChild != nullptr || node->rightChild != nullptr) {

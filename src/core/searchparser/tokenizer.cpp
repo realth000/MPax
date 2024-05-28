@@ -14,8 +14,7 @@ bool isMetaKeyword(const QString &s) { return metaKeywords.contains(s); }
 
 Tokenizer::Tokenizer() = default;
 
-TokenList Tokenizer::tokenize(const QString &rawString, bool *ok,
-                              QString *errString) {
+TokenList Tokenizer::tokenize(const QString &rawString, bool *ok, QString *errString) {
   if (ok == nullptr || errString == nullptr) {
     qDebug() << "tokenize error: null feedback not allowed in this step";
     return TokenList{};
@@ -84,19 +83,16 @@ TokenList Tokenizer::tokenize(const QString &rawString, bool *ok,
           t.end = i - 1;
           if (!isMetaKeyword(t.content)) {
             *ok = false;
-            *errString =
-                QString("invalid metaKeyword '%1' at pos %2").arg(t.content, i);
+            *errString = QString("invalid metaKeyword '%1' at pos %2").arg(t.content, i);
             return {};
           }
           tokenList.append(t);
           i++;
           break;
         }
-        if (rawString[i] == '\\' || rawString[i] == ')' ||
-            rawString[i] == ')') {
+        if (rawString[i] == '\\' || rawString[i] == ')' || rawString[i] == ')') {
           *ok = false;
-          *errString =
-              QString("unexpected '%1' at pos %2").arg(rawString[i], i);
+          *errString = QString("unexpected '%1' at pos %2").arg(rawString[i], i);
           return {};
         }
         if (i == end - 1) {

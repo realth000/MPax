@@ -6,50 +6,38 @@
 #include "ui_aboutdialog.h"
 #include "util/cssloader.h"
 
-AboutDialog::AboutDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::AboutDialog) {
+AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
-  this->setStyleSheet(
-      Util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
   ui->infoTextBrowser->verticalScrollBar()->setStyleSheet(
       Util::loadCssFromFile({":/css/base.css", ":/css/aboutdialog.css"}));
   QString aboutText;
   const QString name = QString(
       "<h1><a href=\"https://github.com/realth000/MPax\">"
       "<font color=#007b50>MPax</font></a></h1>");
-  const QString introduction =
-      QString(tr("MPax is a simple and easy-to-use music player.") + "<br>");
-  const QString license =
-      QString(tr("MPax is licensed under the term of GPL v3 license."));
+  const QString introduction = QString(tr("MPax is a simple and easy-to-use music player.") + "<br>");
+  const QString license = QString(tr("MPax is licensed under the term of GPL v3 license."));
   const QString infoHeader = QString("<h2>" + tr("Version info") + "</h2>");
-  const QString versionTagUrl =
-      QString(
-          tr("Version: ") +
-          "<a "
-          "href=\"https://github.com/realth000/MPax/releases/tag/v%1\"><font "
-          "color=#007b50>%1</font></a><br>")
-          .arg(QString(APP_VERSION_TAG).replace("v", ""));
-  const QString commitUrl =
-      QString(tr("Build: ") +
-              "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
-              "<font color=#007b50>%2%3</font></a><br>")
-          .arg(APP_COMMIT_LONG, APP_COMMIT,
-               QString(APP_RELEASE_COUNT) != "1"
-                   ? "-release" + QString(APP_RELEASE_COUNT)
-                   : "");
-  const QString commitTime =
-      QString(tr("Build time: ") + "%1").arg(APP_COMMIT_TIME);
-  const QString depHead =
-      QString("<h2>" + tr("MPax uses the libraries bellow:") + "</h2>");
-  const QString depQt =
-      QString(
-          "<h3><a href=\"https://www.qt.io\">"
-          "<font color=#007b50>Qt" +
-          tr(": ") +
-          "%1</font></a></h3>Qt is the fastest and "
-          "smartest way to produce industry-leading "
-          "software that users love.<br>Qt is licensed under GNU (L)GPL.")
-          .arg(QT_VERSION_STR);
+  const QString versionTagUrl = QString(tr("Version: ") +
+                                        "<a "
+                                        "href=\"https://github.com/realth000/MPax/releases/tag/v%1\"><font "
+                                        "color=#007b50>%1</font></a><br>")
+                                    .arg(QString(APP_VERSION_TAG).replace("v", ""));
+  const QString commitUrl = QString(tr("Build: ") +
+                                    "<a href=\"https://github.com/realth000/MPax/commit/%1\">"
+                                    "<font color=#007b50>%2%3</font></a><br>")
+                                .arg(APP_COMMIT_LONG, APP_COMMIT,
+                                     QString(APP_RELEASE_COUNT) != "1" ? "-release" + QString(APP_RELEASE_COUNT) : "");
+  const QString commitTime = QString(tr("Build time: ") + "%1").arg(APP_COMMIT_TIME);
+  const QString depHead = QString("<h2>" + tr("MPax uses the libraries bellow:") + "</h2>");
+  const QString depQt = QString(
+                            "<h3><a href=\"https://www.qt.io\">"
+                            "<font color=#007b50>Qt" +
+                            tr(": ") +
+                            "%1</font></a></h3>Qt is the fastest and "
+                            "smartest way to produce industry-leading "
+                            "software that users love.<br>Qt is licensed under GNU (L)GPL.")
+                            .arg(QT_VERSION_STR);
   const QString depQHotKey = QString(
       "<h3><a href=\"https://github.com/Skycoder42/QHotkey\">"
       "<font color=#007b50>Skycoder42/QHotkey</font></a></h3> A global "

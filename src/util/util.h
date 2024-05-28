@@ -6,12 +6,8 @@ template <class Container>
 class ContainerAdapt {
  public:
   explicit ContainerAdapt(const Container& container) : c(container) {}
-  typename Container::const_key_value_iterator begin() const {
-    return c.keyValueBegin();
-  }
-  typename Container::const_key_value_iterator end() const {
-    return c.keyValueEnd();
-  }
+  typename Container::const_key_value_iterator begin() const { return c.keyValueBegin(); }
+  typename Container::const_key_value_iterator end() const { return c.keyValueEnd(); }
 
  private:
   const Container& c;

@@ -33,8 +33,7 @@ MainUI::MainUI(QWidget *parent)
   this->setWindowIcon(QIcon(":/pic/logo/MPax.svg"));
   this->setMinimumSize(800, 600);
   this->setWindowTitle(QStringLiteral("MPax"));
-  this->setStyleSheet(Util::loadCssFromFile(
-      {":/css/external/MaterialDark.css", ":/css/base.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/external/MaterialDark.css", ":/css/base.css"}));
   InitStatusBar();
   m_trayIcon->show();
 
@@ -47,9 +46,7 @@ MainUI::MainUI(QWidget *parent)
   // Load default playlist from ./mpax.list.conf.
   ui->listTabWidget->addPlaylist(playlistList);
   // Set current Playlist from config.
-  const int playlist = Config::AppConfig::getInstance()
-                           ->config(CONFIG_CUR_PLAYLIST)
-                           .value.toInt();
+  const int playlist = Config::AppConfig::getInstance()->config(CONFIG_CUR_PLAYLIST).value.toInt();
   if (playlist < 0) {
     qDebug() << "current playlist pos <0";
     return;
@@ -62,9 +59,7 @@ MainUI::MainUI(QWidget *parent)
   }
   ui->playlistWidget->setModel(model);
   ui->playlistWidget->updatePlayingModel();
-  const QString playContent = Config::AppConfig::getInstance()
-                                  ->config(CONFIG_CUR_PLAYCONTENT)
-                                  .value.toString();
+  const QString playContent = Config::AppConfig::getInstance()->config(CONFIG_CUR_PLAYCONTENT).value.toString();
   if (playContent.isEmpty()) {
     qDebug() << "empty current playContent";
     return;
@@ -89,96 +84,68 @@ MainUI::~MainUI() {
 
 void MainUI::InitConnections() {
   connect(ui->openAudioAction, &QAction::triggered, this, &MainUI::openAudio);
-  connect(ui->playControlWidget, &PlayControlWidget::playPre, this,
-          &MainUI::playPre);
-  connect(ui->playControlWidget, &PlayControlWidget::playNext, this,
-          &MainUI::playNext);
-  connect(ui->playControlWidget, &PlayControlWidget::playInvalid, this,
-          &MainUI::removeLastHistory);
-  connect(ui->playlistAddAction, &QAction::triggered, this,
-          &MainUI::addPlaylist);
-  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
-          ui->playlistWidget, &PlaylistWidget::setModel);
-  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this,
-          &MainUI::savePlayingListIndex);
-  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this,
-          [this]() {
-            // Clear play history when playlist changed.
-            this->m_history->clear();
-            this->m_historyPos = 0;
-          });
+  connect(ui->playControlWidget, &PlayControlWidget::playPre, this, &MainUI::playPre);
+  connect(ui->playControlWidget, &PlayControlWidget::playNext, this, &MainUI::playNext);
+  connect(ui->playControlWidget, &PlayControlWidget::playInvalid, this, &MainUI::removeLastHistory);
+  connect(ui->playlistAddAction, &QAction::triggered, this, &MainUI::addPlaylist);
+  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, ui->playlistWidget, &PlaylistWidget::setModel);
+  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this, &MainUI::savePlayingListIndex);
+  connect(ui->playlistWidget, &PlaylistWidget::playingListChanged, this, [this]() {
+    // Clear play history when playlist changed.
+    this->m_history->clear();
+    this->m_historyPos = 0;
+  });
   connect(ui->scanDirAction, &QAction::triggered, this, &MainUI::scanAudioDir);
-  connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this,
-          &MainUI::handleDoubleClickPlay);
-  connect(ui->playlistWidget, &PlaylistWidget::playlistChanged,
-          ui->listTabWidget, &ListTabWidget::saveDefaultPlaylist);
-  connect(ui->saveAllPlaylistAction, &QAction::triggered, this,
-          &MainUI::saveAllPlaylist);
-  connect(this, &MainUI::updateConfig, ui->playlistWidget,
-          &PlaylistWidget::updateConfig);
-  connect(this, &MainUI::updateConfig, ui->playControlWidget,
-          &PlayControlWidget::updateConfig);
-  connect(ui->saveSettingsAction, &QAction::triggered, this,
-          &MainUI::saveConfig);
-  connect(ui->searchPlaylistAction, &QAction::triggered, this,
-          &MainUI::openSearchWindow);
-  connect(m_searchDialog, &PlaylistSearchDialog::playContentChanged, this,
-          [this](const int &index) {
-            ui->playlistWidget->updatePlayingModel();
-            ui->playlistWidget->setCurrentContent(index);
-            PlayContent *content =
-                ui->playlistWidget->currentPlayContent().content;
-            if (content == nullptr) {
-              return;
-            }
-            ui->playControlWidget->updatePlayInfo(content);
-            ui->playControlWidget->setContentPath(content->contentPath);
-            ui->playlistWidget->setShowingListCurrentContent(content);
-            appendHistory(PlayContentPos{index, content});
-            playAudioInShowingList(index, content);
-          });
-  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged,
-          m_searchDialog, &PlaylistSearchDialog::setModel);
+  connect(ui->playlistWidget, &PlaylistWidget::playContentChanged, this, &MainUI::handleDoubleClickPlay);
+  connect(ui->playlistWidget, &PlaylistWidget::playlistChanged, ui->listTabWidget, &ListTabWidget::saveDefaultPlaylist);
+  connect(ui->saveAllPlaylistAction, &QAction::triggered, this, &MainUI::saveAllPlaylist);
+  connect(this, &MainUI::updateConfig, ui->playlistWidget, &PlaylistWidget::updateConfig);
+  connect(this, &MainUI::updateConfig, ui->playControlWidget, &PlayControlWidget::updateConfig);
+  connect(ui->saveSettingsAction, &QAction::triggered, this, &MainUI::saveConfig);
+  connect(ui->searchPlaylistAction, &QAction::triggered, this, &MainUI::openSearchWindow);
+  connect(m_searchDialog, &PlaylistSearchDialog::playContentChanged, this, [this](const int &index) {
+    ui->playlistWidget->updatePlayingModel();
+    ui->playlistWidget->setCurrentContent(index);
+    PlayContent *content = ui->playlistWidget->currentPlayContent().content;
+    if (content == nullptr) {
+      return;
+    }
+    ui->playControlWidget->updatePlayInfo(content);
+    ui->playControlWidget->setContentPath(content->contentPath);
+    ui->playlistWidget->setShowingListCurrentContent(content);
+    appendHistory(PlayContentPos{index, content});
+    playAudioInShowingList(index, content);
+  });
+  connect(ui->listTabWidget, &ListTabWidget::currentPlaylistChanged, m_searchDialog, &PlaylistSearchDialog::setModel);
   connect(ui->aboutAction, &QAction::triggered, this, &MainUI::showAboutInfo);
-  connect(ui->aboutQtAction, &QAction::triggered, this,
-          &MainUI::showAboutQtInfo);
-  connect(ui->listTabWidget, &ListTabWidget::reloadInfoStatusChanged, this,
-          &MainUI::updateReloadInfoStatus);
-  connect(ui->playlistWidget, &PlaylistWidget::playlistOrderChanged,
-          ui->listTabWidget, &ListTabWidget::saveCurrentPlaylist);
-  connect(m_searchDialog, &PlaylistSearchDialog::deleteTriggered,
-          ui->playlistWidget, &PlaylistWidget::removeContents);
-  connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered,
-          ui->playlistWidget, &PlaylistWidget::openFileInDir);
-  connect(m_searchDialog, &PlaylistSearchDialog::playContentInfoChanged,
-          ui->playControlWidget, &PlayControlWidget::updatePlayContentInfo);
-  connect(
-      ui->listTabWidget, &ListTabWidget::currentPlayContentUpdated, this,
-      QOverload<PlayContentPos>::of(&MainUI::handleCurrentPlayContentChanged));
-  connect(
-      ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged,
-      this,
-      QOverload<const QUrl &>::of(&MainUI::handleCurrentPlayContentChanged));
-  connect(this, &MainUI::scrollToContent, ui->playlistWidget,
-          &PlaylistWidget::scrollToContent);
+  connect(ui->aboutQtAction, &QAction::triggered, this, &MainUI::showAboutQtInfo);
+  connect(ui->listTabWidget, &ListTabWidget::reloadInfoStatusChanged, this, &MainUI::updateReloadInfoStatus);
+  connect(ui->playlistWidget, &PlaylistWidget::playlistOrderChanged, ui->listTabWidget,
+          &ListTabWidget::saveCurrentPlaylist);
+  connect(m_searchDialog, &PlaylistSearchDialog::deleteTriggered, ui->playlistWidget, &PlaylistWidget::removeContents);
+  connect(m_searchDialog, &PlaylistSearchDialog::openFileInDirTriggered, ui->playlistWidget,
+          &PlaylistWidget::openFileInDir);
+  connect(m_searchDialog, &PlaylistSearchDialog::playContentInfoChanged, ui->playControlWidget,
+          &PlayControlWidget::updatePlayContentInfo);
+  connect(ui->listTabWidget, &ListTabWidget::currentPlayContentUpdated, this,
+          QOverload<PlayContentPos>::of(&MainUI::handleCurrentPlayContentChanged));
+  connect(ui->playControlWidget, &PlayControlWidget::currentPlayContentChanged, this,
+          QOverload<const QUrl &>::of(&MainUI::handleCurrentPlayContentChanged));
+  connect(this, &MainUI::scrollToContent, ui->playlistWidget, &PlaylistWidget::scrollToContent);
 
-  connect(ui->playlistWidget, &PlaylistWidget::playContentInfoChanged,
-          ui->playControlWidget, &PlayControlWidget::updatePlayContentInfo);
+  connect(ui->playlistWidget, &PlaylistWidget::playContentInfoChanged, ui->playControlWidget,
+          &PlayControlWidget::updatePlayContentInfo);
   // Connect system tray icon signals.
-  connect(m_trayIcon, &SystemTrayIcon::mainWindowVisibleRequested, this,
-          &MainUI::updateMainWindowVisible);
-  connect(m_trayIcon, &SystemTrayIcon::appExitRequested, this,
-          &MainUI::exitApp);
-  connect(m_trayIcon, &SystemTrayIcon::appRestartRequested, this,
-          &MainUI::restartApp);
+  connect(m_trayIcon, &SystemTrayIcon::mainWindowVisibleRequested, this, &MainUI::updateMainWindowVisible);
+  connect(m_trayIcon, &SystemTrayIcon::appExitRequested, this, &MainUI::exitApp);
+  connect(m_trayIcon, &SystemTrayIcon::appRestartRequested, this, &MainUI::restartApp);
   //  connect(qApp, &QGuiApplication::applicationStateChanged,
   //          [this](Qt::ApplicationState state) {
   //            state == Qt::ApplicationActive
   //                ? m_trayIcon->updateMainWindowActiveState(true)
   //                : m_trayIcon->updateMainWindowActiveState(false);
   //          });
-  connect(ui->importPlaylistAction, &QAction::triggered, this,
-          &MainUI::importPlaylist);
+  connect(ui->importPlaylistAction, &QAction::triggered, this, &MainUI::importPlaylist);
 }
 
 void MainUI::keyPressEvent(QKeyEvent *event) {
@@ -197,16 +164,12 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
         return;
       case Qt::Key_Left:
         ui->playControlWidget->updatePlaySeekBackward(
-            Config::AppConfig::getInstance()
-                ->config(CONFIG_PLAY_SEEK_STEP)
-                .value.toInt());
+            Config::AppConfig::getInstance()->config(CONFIG_PLAY_SEEK_STEP).value.toInt());
         event->accept();
         return;
       case Qt::Key_Right:
         ui->playControlWidget->updatePlaySeekForward(
-            Config::AppConfig::getInstance()
-                ->config(CONFIG_PLAY_SEEK_STEP)
-                .value.toInt());
+            Config::AppConfig::getInstance()->config(CONFIG_PLAY_SEEK_STEP).value.toInt());
         event->accept();
         return;
       default:
@@ -217,15 +180,13 @@ void MainUI::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainUI::openAudio() {
-  const QString filePath = QFileDialog::getOpenFileName(
-      this, tr("Open audio"), getFileDialogOpenPath(),
-      tr("Audio files") + "(*.mp3 *.flac *.wav);;");
+  const QString filePath = QFileDialog::getOpenFileName(this, tr("Open audio"), getFileDialogOpenPath(),
+                                                        tr("Audio files") + "(*.mp3 *.flac *.wav);;");
   if (filePath.isEmpty()) {
     return;
   }
   m_lastOpenPath = QFileInfo(filePath).dir().path();
-  playAudioInShowingList(ui->playlistWidget->countShowing() - 1,
-                         addAudioFile(filePath));
+  playAudioInShowingList(ui->playlistWidget->countShowing() - 1, addAudioFile(filePath));
   ui->listTabWidget->saveDefaultPlaylist();
 }
 
@@ -238,8 +199,7 @@ void MainUI::addPlaylist() {
 
 void MainUI::playPre() {
   PlayContentPos cp;
-  if (ui->playControlWidget->playMode() ==
-      PlayControlWidget::PlayMode::Random) {
+  if (ui->playControlWidget->playMode() == PlayControlWidget::PlayMode::Random) {
     if (m_history->count() > 0 && m_historyPos > 0) {
       m_historyPos--;
       cp.index = (*m_history)[m_historyPos].first;
@@ -260,8 +220,7 @@ void MainUI::playPre() {
 
 void MainUI::playNext() {
   PlayContentPos cp = PlayContentPos{-1, nullptr};
-  if (ui->playControlWidget->playMode() ==
-      PlayControlWidget::PlayMode::Random) {
+  if (ui->playControlWidget->playMode() == PlayControlWidget::PlayMode::Random) {
     if (m_history->count() > 0 && m_historyPos + 1 < m_history->count()) {
       m_historyPos++;
       cp.index = (*m_history)[m_historyPos].first;
@@ -282,8 +241,7 @@ void MainUI::playNext() {
 }
 
 void MainUI::scanAudioDir() {
-  const QString dirPath = QFileDialog::getExistingDirectory(
-      this, tr("Scan directory"), getFileDialogOpenPath());
+  const QString dirPath = QFileDialog::getExistingDirectory(this, tr("Scan directory"), getFileDialogOpenPath());
   if (dirPath.isEmpty()) {
     return;
   }
@@ -292,55 +250,48 @@ void MainUI::scanAudioDir() {
   ProgressDialog *dialog = new ProgressDialog("Scanning directory");
   dialog->setInfinite(true);
   // Scan files.
-  connect(
-      scanner, &AudioScanner::scanStatusChanged, this,
-      [this, dialog, scanner](bool finished, const qint64 &count) {
-        if (dialog->infinite()) {
-          dialog->updateProgress(count);
+  connect(scanner, &AudioScanner::scanStatusChanged, this, [this, dialog, scanner](bool finished, const qint64 &count) {
+    if (dialog->infinite()) {
+      dialog->updateProgress(count);
+    }
+    if (!finished) {
+      return;
+    }
+    // Load audio info.
+    dialog->setMax(scanner->audioFileList().length());
+    dialog->setInfinite(false);
+    dialog->setWorkName(tr("Loading audio info"));
+    QFutureWatcher<void> watcher;
+    QTimer timer;
+    QEventLoop waitLoop;
+    int loadFinishCount;
+    connect(&timer, &QTimer::timeout, this, [dialog, &loadFinishCount]() { dialog->updateProgress(loadFinishCount); });
+    connect(&watcher, &QFutureWatcher<void>::finished, this, [scanner, dialog, &timer, &waitLoop]() {
+      dialog->deleteLater();
+      scanner->deleteLater();
+      timer.stop();
+      waitLoop.quit();
+    });
+    timer.start(100);
+    QStringList scannedPathList = scanner->audioFileList();
+    if (ui->listTabWidget->CurrentPlaylist() != nullptr) {
+      const PlayContentList currentContentList = ui->listTabWidget->CurrentPlaylist()->list().content();
+      QStringList contentPathList;
+      for (const auto content : currentContentList) {
+        contentPathList.append(content->contentPath);
+      }
+      for (const auto &contentPath : contentPathList) {
+        if (scannedPathList.contains(contentPath)) {
+          scannedPathList.removeAll(contentPath);
         }
-        if (!finished) {
-          return;
-        }
-        // Load audio info.
-        dialog->setMax(scanner->audioFileList().length());
-        dialog->setInfinite(false);
-        dialog->setWorkName(tr("Loading audio info"));
-        QFutureWatcher<void> watcher;
-        QTimer timer;
-        QEventLoop waitLoop;
-        int loadFinishCount;
-        connect(&timer, &QTimer::timeout, this, [dialog, &loadFinishCount]() {
-          dialog->updateProgress(loadFinishCount);
-        });
-        connect(&watcher, &QFutureWatcher<void>::finished, this,
-                [scanner, dialog, &timer, &waitLoop]() {
-                  dialog->deleteLater();
-                  scanner->deleteLater();
-                  timer.stop();
-                  waitLoop.quit();
-                });
-        timer.start(100);
-        QStringList scannedPathList = scanner->audioFileList();
-        if (ui->listTabWidget->CurrentPlaylist() != nullptr) {
-          const PlayContentList currentContentList =
-              ui->listTabWidget->CurrentPlaylist()->list().content();
-          QStringList contentPathList;
-          for (const auto content : currentContentList) {
-            contentPathList.append(content->contentPath);
-          }
-          for (const auto &contentPath : contentPathList) {
-            if (scannedPathList.contains(contentPath)) {
-              scannedPathList.removeAll(contentPath);
-            }
-          }
-        } else {
-          addPlaylist();
-        }
-        watcher.setFuture(QtConcurrent::run(this, &MainUI::addAudioFileList,
-                                            scannedPathList, &loadFinishCount));
-        waitLoop.exec();
-        ui->listTabWidget->saveDefaultPlaylist();
-      });
+      }
+    } else {
+      addPlaylist();
+    }
+    watcher.setFuture(QtConcurrent::run(this, &MainUI::addAudioFileList, scannedPathList, &loadFinishCount));
+    waitLoop.exec();
+    ui->listTabWidget->saveDefaultPlaylist();
+  });
   const QStringList formatList = QStringList{"mp3", "flac", "wav"};
   scanner->scanDir(dirPath, formatList);
   dialog->exec();
@@ -373,22 +324,19 @@ void MainUI::playAudioInShowingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setShowingListCurrentContent(content);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT,
-                                              content->contentPath);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, content->contentPath);
 }
 
 void MainUI::playAudioInPlayingList(const int &index, PlayContent *content) {
   ui->playControlWidget->updatePlayInfo(content);
   ui->playControlWidget->setContentPath(content->contentPath);
   ui->playlistWidget->setPlayingListCurrentContent(content);
-  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT,
-                                              content->contentPath);
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYCONTENT, content->contentPath);
 }
 
 void MainUI::importPlaylist() {
-  const QStringList files = QFileDialog::getOpenFileNames(
-      this, tr("Import playlist"), "",
-      "*.m3u8(*.m3u8);;" + tr("All files") + "(*)");
+  const QStringList files =
+      QFileDialog::getOpenFileNames(this, tr("Import playlist"), "", "*.m3u8(*.m3u8);;" + tr("All files") + "(*)");
   if (files.isEmpty()) {
     return;
   }
@@ -396,21 +344,17 @@ void MainUI::importPlaylist() {
 }
 
 void MainUI::saveAllPlaylist() {
-  const QString dirPath =
-      QFileDialog::getExistingDirectory(this, tr("Save playlist"));
+  const QString dirPath = QFileDialog::getExistingDirectory(this, tr("Save playlist"));
   if (dirPath.isEmpty()) {
     return;
   }
   ui->listTabWidget->saveAllPlaylist(dirPath);
 }
 
-void MainUI::saveConfig() {
-  Config::AppConfig::getInstance()->saveConfigSoon();
-}
+void MainUI::saveConfig() { Config::AppConfig::getInstance()->saveConfigSoon(); }
 
 void MainUI::savePlayingListIndex(PlaylistModel *playlistModel) {
-  Config::AppConfig::getInstance()->setConfig(
-      CONFIG_CUR_PLAYLIST, ui->listTabWidget->indexOf(playlistModel));
+  Config::AppConfig::getInstance()->setConfig(CONFIG_CUR_PLAYLIST, ui->listTabWidget->indexOf(playlistModel));
 }
 
 void MainUI::removeLastHistory() {
@@ -425,18 +369,14 @@ void MainUI::handleDoubleClickPlay(const int &index, PlayContent *content) {
   playAudioInShowingList(index, content);
 }
 
-void MainUI::InitStatusBar() {
-  ui->statusbar->addPermanentWidget(m_statusLabel);
-}
+void MainUI::InitStatusBar() { ui->statusbar->addPermanentWidget(m_statusLabel); }
 
 QString MainUI::getFileDialogOpenPath() const {
   if (!m_lastOpenPath.isEmpty() && QFileInfo::exists(m_lastOpenPath)) {
     return m_lastOpenPath;
   }
-  if (QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
-          .length() > 0) {
-    return QStandardPaths::standardLocations(QStandardPaths::MusicLocation)
-        .first();
+  if (QStandardPaths::standardLocations(QStandardPaths::MusicLocation).length() > 0) {
+    return QStandardPaths::standardLocations(QStandardPaths::MusicLocation).first();
   }
   return QCoreApplication::applicationFilePath();
 }
@@ -464,16 +404,13 @@ void MainUI::showAboutInfo() {
 
 void MainUI::showAboutQtInfo() { QMessageBox::aboutQt(this, tr("About Qt")); }
 
-void MainUI::updateReloadInfoStatus(const QString &playlistName, bool finished,
-                                    int count, qint64 time) {
+void MainUI::updateReloadInfoStatus(const QString &playlistName, bool finished, int count, qint64 time) {
   if (!finished) {
     m_statusLabel->setText(
-        QString(tr("reloading audio info") + " %1/%2ms")
-            .arg(QString::number(count), QString::number(time)));
+        QString(tr("reloading audio info") + " %1/%2ms").arg(QString::number(count), QString::number(time)));
   } else {
     m_statusLabel->setText(
-        QString(tr("reloaded audio info") + " %1/%2ms")
-            .arg(QString::number(count), QString::number(time)));
+        QString(tr("reloaded audio info") + " %1/%2ms").arg(QString::number(count), QString::number(time)));
   }
 }
 
@@ -494,8 +431,7 @@ void MainUI::updateMainWindowVisible(bool toShow) {
   // Use isMinimized() as actual adjust.
   if (this->isMinimized()) {
     qApp->activeWindow();
-    this->setWindowState((this->windowState() & ~Qt::WindowMinimized) |
-                         Qt::WindowActive);
+    this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     this->raise();
   } else {
     this->showMinimized();

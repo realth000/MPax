@@ -41,8 +41,7 @@ class MainUI : public QMainWindow {
   QString m_lastOpenPath;
 
   PlayContent *addAudioFile(const QString &filePath);
-  void addAudioFileList(const QStringList &filePathList,
-                        int *counter = nullptr);
+  void addAudioFileList(const QStringList &filePathList, int *counter = nullptr);
   void appendHistory(const PlayContentPos &cp);
   void prependHistory(const PlayContentPos &cp);
   void InitStatusBar();
@@ -65,8 +64,7 @@ class MainUI : public QMainWindow {
   void openSearchWindow();
   void showAboutInfo();
   void showAboutQtInfo();
-  void updateReloadInfoStatus(const QString &playlistName, bool finished,
-                              int count, qint64 time);
+  void updateReloadInfoStatus(const QString &playlistName, bool finished, int count, qint64 time);
   void handleCurrentPlayContentChanged(const QUrl &contentUrl);
   void handleCurrentPlayContentChanged(PlayContentPos pos);
   void updateMainWindowVisible(bool toShow);

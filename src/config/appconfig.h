@@ -6,7 +6,7 @@
 #include <QtCore/QVariant>
 
 // #define CONFIG_ALL_PLAYLIST "AllPlaylist"
-#define CONFIG_PLAYLIST_HEADER "PlaylistHeader"  // Header name and width
+#define CONFIG_PLAYLIST_HEADER "PlaylistHeader"           // Header name and width
 #define CONFIG_PLAYLIST_HEADER_SORT "PlaylistHeaderSort"  // Header sort
 #define CONFIG_PLAYLIST_HEADER_USED "PlaylistHeaderUsed"
 #define CONFIG_CUR_PLAYLIST "CurrentPlaylist"
@@ -51,8 +51,7 @@ class AppConfig : public QObject {
 
   AppConfig();
   ~AppConfig();
-  void addConfig(const QString &name, const QVariant &value,
-                 const QString &type);
+  void addConfig(const QString &name, const QVariant &value, const QString &type);
   static void makeConfigDir();
 
  private slots:

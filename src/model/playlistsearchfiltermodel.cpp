@@ -7,9 +7,8 @@
 Model::PlaylistSearchFilterModel::PlaylistSearchFilterModel(QObject *parent)
     : PlaylistFilterModel(parent), m_validSyntax(false) {}
 
-void Model::PlaylistSearchFilterModel::setFilterExp(
-    const QRegExp &filter,
-    const Model::PlaylistSearchFilterModel::FilterMode &mode) {
+void Model::PlaylistSearchFilterModel::setFilterExp(const QRegExp &filter,
+                                                    const Model::PlaylistSearchFilterModel::FilterMode &mode) {
   // Check format;
   bool ok = false;
   QString errString;
@@ -21,8 +20,7 @@ void Model::PlaylistSearchFilterModel::setFilterExp(
   emit rowCountChanged(QSortFilterProxyModel::rowCount(QModelIndex()));
 }
 
-bool Model::PlaylistSearchFilterModel::filterAcceptsRow(
-    int sourceRow, const QModelIndex &sourceParent) const {
+bool Model::PlaylistSearchFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
   if (m_filterExp.isEmpty()) {
     return false;
   }

@@ -46,10 +46,8 @@ PlaylistWidget::PlaylistWidget(QWidget *parent)
   // Turn off to default.
   ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
   ui->tableView->horizontalHeader()->setSectionsMovable(true);
-  ui->tableView->horizontalHeader()->setContextMenuPolicy(
-      Qt::CustomContextMenu);
-  this->setStyleSheet(
-      Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
+  ui->tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+  this->setStyleSheet(Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   InitConnections();
   // When this timer timeout, hide sort indicator. The sort indicator only used
   // to indicate the just changed sort for a short time.
@@ -82,25 +80,18 @@ PlayContentPos PlaylistWidget::preContent() const {
   if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
-  const QModelIndex filterIndex =
-      m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
+  const QModelIndex filterIndex = m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
   return m_playingModel->content(
-      m_playingFilterModel
-          ->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex),
-                          -1)
-          .row());
+      m_playingFilterModel->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex), -1).row());
 }
 
 PlayContentPos PlaylistWidget::nextContent() const {
   if (m_playingModel == nullptr) {
     return PlayContentPos{-1, nullptr};
   }
-  const QModelIndex filterIndex =
-      m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
+  const QModelIndex filterIndex = m_playingModel->index(m_playingModel->currentPlayContent().index, 0);
   return m_playingModel->content(
-      m_playingFilterModel
-          ->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex), 1)
-          .row());
+      m_playingFilterModel->seekSourceRow(m_playingFilterModel->fromSourceIndex(filterIndex), 1).row());
 }
 
 void PlaylistWidget::setShowingListCurrentContent(PlayContent *content) {
@@ -109,8 +100,7 @@ void PlaylistWidget::setShowingListCurrentContent(PlayContent *content) {
     return;
   }
   if (!m_showingModel->contains(content)) {
-    qDebug()
-        << "the current content you want to set not exists in current playlist";
+    qDebug() << "the current content you want to set not exists in current playlist";
     return;
   }
   m_showingModel->setCurrentPlayContent(m_showingModel->indexOf(content));
@@ -122,8 +112,7 @@ void PlaylistWidget::setPlayingListCurrentContent(PlayContent *content) {
     return;
   }
   if (!m_playingModel->contains(content)) {
-    qDebug()
-        << "the current content you want to set not exists in current playlist";
+    qDebug() << "the current content you want to set not exists in current playlist";
     return;
   }
   m_playingModel->setCurrentPlayContent(m_playingModel->indexOf(content));
@@ -135,8 +124,7 @@ void PlaylistWidget::setCurrentContent(const int &index) {
     return;
   }
   if (m_showingModel->count() <= index) {
-    qDebug() << "set current content out of index" << m_showingModel->count()
-             << "to" << index;
+    qDebug() << "set current content out of index" << m_showingModel->count() << "to" << index;
     return;
   }
   m_showingModel->setCurrentPlayContent(index);
@@ -160,50 +148,40 @@ void PlaylistWidget::setCurrentContent(const QString &playContent) {
 }
 
 void PlaylistWidget::InitConnections() {
-  connect(ui->tableView, &QTableView::doubleClicked, this,
-          &PlaylistWidget::updatePlayContent);
-  connect(ui->tableView, &QTableView::customContextMenuRequested, this,
-          &PlaylistWidget::openTableViewContextMenu);
+  connect(ui->tableView, &QTableView::doubleClicked, this, &PlaylistWidget::updatePlayContent);
+  connect(ui->tableView, &QTableView::customContextMenuRequested, this, &PlaylistWidget::openTableViewContextMenu);
   // Save current playlist if needed.
   //  connect(ui->tableView->horizontalHeader(),
   //  &QHeaderView::sortIndicatorChanged,
   //          this, &PlaylistWidget::playlistOrderChanged);
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved,
-          PLModel::PlaylistModelHeader::getInstance(),
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionMoved, PLModel::PlaylistModelHeader::getInstance(),
           &PLModel::PlaylistModelHeader::updateSort);
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized,
-          m_header, &PLModel::PlaylistModelHeader::updateWidth);
-  connect(ui->tableView->horizontalHeader(),
-          &QHeaderView::customContextMenuRequested, this,
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sectionResized, m_header,
+          &PLModel::PlaylistModelHeader::updateWidth);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::customContextMenuRequested, this,
           &PlaylistWidget::openTableHeaderContextMenu);
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-          m_showingFilterModel, &PlaylistFilterModel::reloadPlaylistByOrder);
-  connect(&m_indicatorVisibleTimer, &QTimer::timeout, this, [this]() {
-    ui->tableView->horizontalHeader()->setSortIndicatorShown(false);
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged, m_showingFilterModel,
+          &PlaylistFilterModel::reloadPlaylistByOrder);
+  connect(&m_indicatorVisibleTimer, &QTimer::timeout, this,
+          [this]() { ui->tableView->horizontalHeader()->setSortIndicatorShown(false); });
+  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, [this]() {
+    ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
+    m_indicatorVisibleTimer.start(5000);
   });
-  connect(ui->tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-          this, [this]() {
-            ui->tableView->horizontalHeader()->setSortIndicatorShown(true);
-            m_indicatorVisibleTimer.start(5000);
-          });
 }
 
 QMenu *PlaylistWidget::InitTableViewContextMenu() {
   QMenu *m = new QMenu(this);
   QAction *actionDelete = new QAction(tr("Delete"));
-  connect(actionDelete, &QAction::triggered, this,
-          &PlaylistWidget::actionDelete);
+  connect(actionDelete, &QAction::triggered, this, &PlaylistWidget::actionDelete);
   QAction *actionPlay = new QAction(tr("Play"));
   connect(actionPlay, &QAction::triggered, this, &PlaylistWidget::actionPlay);
   QAction *actionOpen = new QAction(tr("Open in folder"));
-  connect(actionOpen, &QAction::triggered, this,
-          &PlaylistWidget::actionOpenInFolder);
+  connect(actionOpen, &QAction::triggered, this, &PlaylistWidget::actionOpenInFolder);
   QAction *actionProperty = new QAction(tr("Property"));
-  connect(actionProperty, &QAction::triggered, this,
-          &PlaylistWidget::actionShowPropertyDialog);
+  connect(actionProperty, &QAction::triggered, this, &PlaylistWidget::actionShowPropertyDialog);
   QAction *actionCopyToClipBoard = new QAction(tr("Copy to clipboard"));
-  connect(actionCopyToClipBoard, &QAction::triggered, this,
-          &PlaylistWidget::actionCopyToClipBoard);
+  connect(actionCopyToClipBoard, &QAction::triggered, this, &PlaylistWidget::actionCopyToClipBoard);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
@@ -263,9 +241,7 @@ void PlaylistWidget::actionOpenInFolder() {
     return;
   }
   const QModelIndex i = m_tableViewSelectedRows[0];
-  const QString path =
-      m_showingModel->content(m_showingFilterModel->mapToSource(i).row())
-          .content->contentPath;
+  const QString path = m_showingModel->content(m_showingFilterModel->mapToSource(i).row()).content->contentPath;
   Util::openFileInDir(path);
 }
 
@@ -276,8 +252,7 @@ void PlaylistWidget::actionPlay() {
   if (m_tableViewSelectedRows.count() < 0) {
     return;
   }
-  PlayContentPos pc = m_showingModel->content(
-      m_showingFilterModel->mapToSource(m_tableViewSelectedRows[0]).row());
+  PlayContentPos pc = m_showingModel->content(m_showingFilterModel->mapToSource(m_tableViewSelectedRows[0]).row());
   // Click event on current showing model, update m_playingModel.
   updatePlayingModel();
   emit playContentChanged(pc.index, pc.content);
@@ -292,8 +267,7 @@ void PlaylistWidget::actionCopyToClipBoard() {
   }
   QList<QUrl> urlList;
   for (auto &r : m_tableViewSelectedRows) {
-    PlayContentPos pc =
-        m_showingModel->content(m_showingFilterModel->mapToSource(r).row());
+    PlayContentPos pc = m_showingModel->content(m_showingFilterModel->mapToSource(r).row());
     if (pc.index < 0 || pc.content == nullptr) {
       continue;
     }
@@ -331,9 +305,7 @@ void PlaylistWidget::updatePlayContent(const QModelIndex &index) {
 
 void PlaylistWidget::updateConfig() {
   const QMap<QString, QVariant> playlistHeader =
-      Config::AppConfig::getInstance()
-          ->config(CONFIG_PLAYLIST_HEADER)
-          .value.toMap();
+      Config::AppConfig::getInstance()->config(CONFIG_PLAYLIST_HEADER).value.toMap();
   QList<PlaylistHeaderItem> list;
   QMap<QString, QVariant>::const_iterator it = playlistHeader.constBegin();
   bool noHeader = true;
@@ -351,8 +323,7 @@ PlayContentPos PlaylistWidget::randomContent() const {
     return PlayContentPos{-1, nullptr};
   }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-  return m_playingModel->content(
-      QRandomGenerator::securelySeeded().bounded(0, m_playingModel->count()));
+  return m_playingModel->content(QRandomGenerator::securelySeeded().bounded(0, m_playingModel->count()));
 #else
   const QTime t = QTime::currentTime();
   qsrand(t.msec() + t.second() * 1000);
@@ -382,9 +353,7 @@ void PlaylistWidget::openTableViewContextMenu(const QPoint &pos) {
   m_tableViewContextMenu->popup(QCursor::pos());
 }
 
-void PlaylistWidget::openTableHeaderContextMenu(const QPoint &pos) {
-  m_tableHeaderContextMenu->popup(QCursor::pos());
-}
+void PlaylistWidget::openTableHeaderContextMenu(const QPoint &pos) { m_tableHeaderContextMenu->popup(QCursor::pos()); }
 
 void PlaylistWidget::updateColumns(bool checked) {
   auto *action = dynamic_cast<QAction *>(sender());
@@ -403,9 +372,7 @@ void PlaylistWidget::updateColumns(bool checked) {
   m_showingModel->setUsedHeader(action->text(), checked);
 }
 
-void PlaylistWidget::removeContents(const QList<int> &indexes) {
-  m_showingModel->removeContent(indexes);
-}
+void PlaylistWidget::removeContents(const QList<int> &indexes) { m_showingModel->removeContent(indexes); }
 
 void PlaylistWidget::openFileInDir(const int &row) {
   Util::openFileInDir(m_showingModel->content(row).content->contentPath);
@@ -426,8 +393,7 @@ void PlaylistWidget::scrollToContent(const QString &contentPath) {
   if (m_showingModel != m_playingModel) {
     return;
   }
-  const QModelIndex showIndex =
-      m_showingFilterModel->mapFromSource(m_showingModel->find(contentPath));
+  const QModelIndex showIndex = m_showingFilterModel->mapFromSource(m_showingModel->find(contentPath));
   if (!showIndex.isValid()) {
     return;
   }
@@ -441,22 +407,18 @@ void PlaylistWidget::actionShowPropertyDialog() {
     return;
   }
   const QModelIndex i = m_tableViewSelectedRows[0];
-  PlayContentPos c =
-      m_showingModel->content(m_showingFilterModel->mapToSource(i).row());
+  PlayContentPos c = m_showingModel->content(m_showingFilterModel->mapToSource(i).row());
   if (c.index < 0 || c.content == nullptr) {
     return;
   }
   AudioInfoDialog *dialog = new AudioInfoDialog(c.content, this);
-  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
-          [this](PlayContent *playContent) {
-            this->m_showingModel->updatePlayContent(playContent);
-            if (m_playingModel != nullptr &&
-                m_playingModel->currentPlayContent().index >= 0 &&
-                m_playingModel->currentPlayContent().content != nullptr &&
-                playContent->contentPath ==
-                    m_playingModel->currentPlayContent().content->contentPath) {
-              emit this->playContentInfoChanged(playContent);
-            }
-          });
+  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this, [this](PlayContent *playContent) {
+    this->m_showingModel->updatePlayContent(playContent);
+    if (m_playingModel != nullptr && m_playingModel->currentPlayContent().index >= 0 &&
+        m_playingModel->currentPlayContent().content != nullptr &&
+        playContent->contentPath == m_playingModel->currentPlayContent().content->contentPath) {
+      emit this->playContentInfoChanged(playContent);
+    }
+  });
   dialog->exec();
 }

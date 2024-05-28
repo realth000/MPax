@@ -28,8 +28,7 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
   ui->searchTableView->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->searchTableView->setFocusPolicy(Qt::NoFocus);
   ui->searchTableView->setAlternatingRowColors(true);
-  this->setStyleSheet(
-      Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
+  this->setStyleSheet(Util::loadCssFromFile({":/css/base.css", ":/css/playlistwidget.css"}));
   //  m_model->setSourceModel(model);
   ui->caseCheckBox->setFocusPolicy(Qt::NoFocus);
   ui->searchLineEdit->setFocus();
@@ -43,13 +42,11 @@ PlaylistSearchDialog::PlaylistSearchDialog(QWidget *parent)
     }
   }
 
-  connect(ui->searchLineEdit, &QLineEdit::textEdited, this,
-          &PlaylistSearchDialog::updateSearchFilter);
+  connect(ui->searchLineEdit, &QLineEdit::textEdited, this, &PlaylistSearchDialog::updateSearchFilter);
   connect(ui->caseCheckBox, &QCheckBox::stateChanged, this,
           [this]() { updateSearchFilter(ui->searchLineEdit->text()); });
   connect(ui->searchTableView, &QTableView::doubleClicked, this,
-          QOverload<const QModelIndex &>::of(
-              &PlaylistSearchDialog::updatePlayContent));
+          QOverload<const QModelIndex &>::of(&PlaylistSearchDialog::updatePlayContent));
   connect(m_model, &Model::PlaylistSearchFilterModel::rowCountChanged, this,
           &PlaylistSearchDialog::updateRowCountAfterFilter);
   connect(ui->searchTableView, &QTableView::pressed, this,
@@ -86,8 +83,7 @@ void PlaylistSearchDialog::keyPressEvent(QKeyEvent *event) {
         return;
     }
   }
-  if (event->modifiers() == Qt::KeypadModifier &&
-      event->key() == Qt::Key_Enter) {
+  if (event->modifiers() == Qt::KeypadModifier && event->key() == Qt::Key_Enter) {
     updatePlayContent(m_rowPos);
     return;
   }
@@ -95,8 +91,7 @@ void PlaylistSearchDialog::keyPressEvent(QKeyEvent *event) {
 }
 
 Qt::CaseSensitivity PlaylistSearchDialog::caseSensitivity() {
-  return ui->caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                       : Qt::CaseInsensitive;
+  return ui->caseCheckBox->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 }
 
 void PlaylistSearchDialog::selectPre() {
@@ -132,8 +127,7 @@ void PlaylistSearchDialog::updateRowCountAfterFilter(const int newCount) {
 }
 
 void PlaylistSearchDialog::updateSearchFilter(const QString &filterString) {
-  m_model->setFilterExp(QRegExp(filterString, caseSensitivity()),
-                        Model::PlaylistSearchFilterModel::FilterMode::Text);
+  m_model->setFilterExp(QRegExp(filterString, caseSensitivity()), Model::PlaylistSearchFilterModel::FilterMode::Text);
 }
 
 void PlaylistSearchDialog::updatePlayContent(const QModelIndex &index) {
@@ -141,13 +135,10 @@ void PlaylistSearchDialog::updatePlayContent(const QModelIndex &index) {
   emit playContentChanged(row);
 }
 
-void PlaylistSearchDialog::updatePlayContent(const int &row) {
-  updatePlayContent(m_model->index(row, 0));
-}
+void PlaylistSearchDialog::updatePlayContent(const int &row) { updatePlayContent(m_model->index(row, 0)); }
 
 void PlaylistSearchDialog::openTableViewContextMenu(const QPoint &pos) {
-  m_tableViewSelectedRows =
-      ui->searchTableView->selectionModel()->selectedRows();
+  m_tableViewSelectedRows = ui->searchTableView->selectionModel()->selectedRows();
   if (m_tableViewSelectedRows.isEmpty()) {
     return;
   }
@@ -157,17 +148,13 @@ void PlaylistSearchDialog::openTableViewContextMenu(const QPoint &pos) {
 QMenu *PlaylistSearchDialog::initTableViewContextMenu() {
   QMenu *m = new QMenu(this);
   QAction *actionDelete = new QAction(tr("Delete"));
-  connect(actionDelete, &QAction::triggered, this,
-          &PlaylistSearchDialog::actionDelete);
+  connect(actionDelete, &QAction::triggered, this, &PlaylistSearchDialog::actionDelete);
   QAction *actionPlay = new QAction(tr("Play"));
-  connect(actionPlay, &QAction::triggered, this,
-          &PlaylistSearchDialog::actionPlay);
+  connect(actionPlay, &QAction::triggered, this, &PlaylistSearchDialog::actionPlay);
   QAction *actionOpen = new QAction(tr("Open in folder"));
-  connect(actionOpen, &QAction::triggered, this,
-          &PlaylistSearchDialog::actionOpenInFolder);
+  connect(actionOpen, &QAction::triggered, this, &PlaylistSearchDialog::actionOpenInFolder);
   QAction *actionProperty = new QAction(tr("Property"));
-  connect(actionProperty, &QAction::triggered, this,
-          &PlaylistSearchDialog::actionShowPropertyDialog);
+  connect(actionProperty, &QAction::triggered, this, &PlaylistSearchDialog::actionShowPropertyDialog);
   m->addAction(actionDelete);
   m->addSeparator();
   m->addAction(actionOpen);
@@ -208,8 +195,7 @@ void PlaylistSearchDialog::actionOpenInFolder() {
   if (m_tableViewSelectedRows.count() <= 0) {
     return;
   }
-  emit openFileInDirTriggered(
-      m_model->mapToSource(m_tableViewSelectedRows[0]).row());
+  emit openFileInDirTriggered(m_model->mapToSource(m_tableViewSelectedRows[0]).row());
 }
 
 void PlaylistSearchDialog::actionShowPropertyDialog() {
@@ -227,16 +213,13 @@ void PlaylistSearchDialog::actionShowPropertyDialog() {
   }
   AudioInfoDialog *dialog = new AudioInfoDialog(c.content, this);
 
-  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this,
-          [this, sourceModel](PlayContent *playContent) {
-            sourceModel->updatePlayContent(playContent);
-            if (sourceModel != nullptr &&
-                sourceModel->currentPlayContent().index >= 0 &&
-                sourceModel->currentPlayContent().content != nullptr &&
-                playContent->contentPath ==
-                    sourceModel->currentPlayContent().content->contentPath) {
-              emit this->playContentInfoChanged(playContent);
-            }
-          });
+  connect(dialog, &AudioInfoDialog::updatePlayContentRequested, this, [this, sourceModel](PlayContent *playContent) {
+    sourceModel->updatePlayContent(playContent);
+    if (sourceModel != nullptr && sourceModel->currentPlayContent().index >= 0 &&
+        sourceModel->currentPlayContent().content != nullptr &&
+        playContent->contentPath == sourceModel->currentPlayContent().content->contentPath) {
+      emit this->playContentInfoChanged(playContent);
+    }
+  });
   dialog->exec();
 }

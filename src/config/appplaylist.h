@@ -6,8 +6,7 @@
 
 #include "core/playlistjson.h"
 
-#define CONFIG_PLAYLIST_FILE_PATH \
-  QCoreApplication::applicationDirPath() + "/mpax.list.conf"
+#define CONFIG_PLAYLIST_FILE_PATH QCoreApplication::applicationDirPath() + "/mpax.list.conf"
 
 namespace Config {
 

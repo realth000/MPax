@@ -7,15 +7,7 @@
 
 namespace SearchParser {
 
-enum TokenType : int {
-  Word,
-  Keyword,
-  OpeKeyword,
-  MetaKeyword,
-  LeftParentheses,
-  RightParentheses,
-  Unknown = -1
-};
+enum TokenType : int { Word, Keyword, OpeKeyword, MetaKeyword, LeftParentheses, RightParentheses, Unknown = -1 };
 
 class Token {
  public:
@@ -30,9 +22,7 @@ class Token {
     start = pos;
     end = pos;
   };
-  int length() const {
-    return (start < 0 || end < 0 || end < start) ? -1 : end - start + 1;
-  };
+  int length() const { return (start < 0 || end < 0 || end < start) ? -1 : end - start + 1; };
   TokenType type;
   QString content;
   int start;
@@ -44,8 +34,7 @@ typedef QList<Token> TokenList;
 class Tokenizer {
  public:
   explicit Tokenizer();
-  static TokenList tokenize(const QString &rawString, bool *ok,
-                            QString *errString);
+  static TokenList tokenize(const QString &rawString, bool *ok, QString *errString);
 
  private:
   QString m_rawString;

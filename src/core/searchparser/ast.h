@@ -26,8 +26,7 @@ enum class ASTKeyword : int {
   Unknown = -1
 };
 
-static const QMap<QString, ASTOpe> ASTOpeMap = {{"AND", ASTOpe::And},
-                                                {"OR", ASTOpe::Or}};
+static const QMap<QString, ASTOpe> ASTOpeMap = {{"AND", ASTOpe::And}, {"OR", ASTOpe::Or}};
 
 // clang-format off
 static const QMap<QString, ASTKeyword> ASTKeywordMap = {
@@ -50,8 +49,7 @@ struct ASTNode {
     leftChild = nullptr;
     rightChild = nullptr;
   }
-  bool parse(const PlayContent *content,
-             Qt::CaseSensitivity caseSensitivity) const;
+  bool parse(const PlayContent *content, Qt::CaseSensitivity caseSensitivity) const;
   ASTType type;
   ASTOpe opeKeyword;
   QString metaKeyword;
@@ -66,8 +64,7 @@ class AST {
  public:
   explicit AST();
   ~AST();
-  bool parse(const PlayContent *playContent,
-             Qt::CaseSensitivity caseSensitivity) const;
+  bool parse(const PlayContent *playContent, Qt::CaseSensitivity caseSensitivity) const;
   void setRootNode(ASTNode *node);
   ASTNode *rootNode() const;
 

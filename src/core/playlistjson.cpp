@@ -53,9 +53,7 @@
 #define KEY_PLAYLIST_INFO "play_list_info"
 #define KEY_PLAYLIST_DATA "play_list_data"
 
-QString PlaylistJson::toJsonString(const Playlist &playlist) {
-  return toJsonString(QList<Playlist>{playlist});
-}
+QString PlaylistJson::toJsonString(const Playlist &playlist) { return toJsonString(QList<Playlist>{playlist}); }
 
 QString PlaylistJson::toJsonString(const QList<Playlist> &playlist) {
   QJsonDocument doc;
@@ -71,10 +69,8 @@ QString PlaylistJson::toJsonString(const QList<Playlist> &playlist) {
     QJsonObject playlistObj;
     // Read info.
     QJsonObject playlistInfoObj;
-    playlistInfoObj.insert(PLAYLIST_INFO_NAME,
-                           it.i->t().info().info(PLAYLIST_INFO_NAME));
-    playlistInfoObj.insert(PLAYLIST_INFO_COUNT,
-                           it.i->t().info().info(PLAYLIST_INFO_COUNT));
+    playlistInfoObj.insert(PLAYLIST_INFO_NAME, it.i->t().info().info(PLAYLIST_INFO_NAME));
+    playlistInfoObj.insert(PLAYLIST_INFO_COUNT, it.i->t().info().info(PLAYLIST_INFO_COUNT));
     // Read content.
     PlayContentList::const_iterator itt = it.i->t().content().constBegin();
     QJsonArray arr;
@@ -121,16 +117,12 @@ QList<Playlist> PlaylistJson::fromJsonString(const QString &filePath) {
     PlaylistInfo *info = new PlaylistInfo;
     PlayContentList *list = new PlayContentList;
     // Read info.
-    const QJsonObject playlistInfoObj =
-        dataObj.value(key).toObject().value(KEY_PLAYLIST_INFO).toObject();
-    info->setInfo(PLAYLIST_INFO_NAME,
-                  playlistInfoObj.value(PLAYLIST_INFO_NAME).toString());
-    info->setInfo(PLAYLIST_INFO_COUNT,
-                  playlistInfoObj.value(PLAYLIST_INFO_COUNT).toString());
+    const QJsonObject playlistInfoObj = dataObj.value(key).toObject().value(KEY_PLAYLIST_INFO).toObject();
+    info->setInfo(PLAYLIST_INFO_NAME, playlistInfoObj.value(PLAYLIST_INFO_NAME).toString());
+    info->setInfo(PLAYLIST_INFO_COUNT, playlistInfoObj.value(PLAYLIST_INFO_COUNT).toString());
 
     // Read content.
-    const QJsonArray arr =
-        dataObj.value(key).toObject().value(KEY_PLAYLIST_DATA).toArray();
+    const QJsonArray arr = dataObj.value(key).toObject().value(KEY_PLAYLIST_DATA).toArray();
     for (const auto &a : arr) {
       list->append(new PlayContent(a.toString()));
     }

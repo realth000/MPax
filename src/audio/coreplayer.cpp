@@ -2,10 +2,7 @@
 
 #include <QtCore/QtDebug>
 
-CorePlayer::CorePlayer(QObject *parent)
-    : QObject{parent},
-      m_player(new QMediaPlayer),
-      m_playlist(new QMediaPlaylist) {
+CorePlayer::CorePlayer(QObject *parent) : QObject{parent}, m_player(new QMediaPlayer), m_playlist(new QMediaPlaylist) {
   InitConnections();
   m_player->setPlaylist(m_playlist);
 }
@@ -16,14 +13,10 @@ CorePlayer::~CorePlayer() {
 }
 
 void CorePlayer::InitConnections() {
-  connect(m_player, &QMediaPlayer::stateChanged, this,
-          &CorePlayer::updatePlayState);
-  connect(m_player, &QMediaPlayer::positionChanged, this,
-          &CorePlayer::playPositionChanged);
-  connect(m_player, &QMediaPlayer::durationChanged, this,
-          &CorePlayer::playDurationChanged);
-  connect(m_player, &QMediaPlayer::mediaStatusChanged, this,
-          &CorePlayer::playMediaStatusChanged);
+  connect(m_player, &QMediaPlayer::stateChanged, this, &CorePlayer::updatePlayState);
+  connect(m_player, &QMediaPlayer::positionChanged, this, &CorePlayer::playPositionChanged);
+  connect(m_player, &QMediaPlayer::durationChanged, this, &CorePlayer::playDurationChanged);
+  connect(m_player, &QMediaPlayer::mediaStatusChanged, this, &CorePlayer::playMediaStatusChanged);
 }
 
 void CorePlayer::UpdateCurrentContent(const QUrl &contentUrl) {
@@ -45,9 +38,7 @@ void CorePlayer::updatePlayState(const QMediaPlayer::State &state) {
 
 QMediaPlayer::State CorePlayer::playState() const { return m_player->state(); }
 
-QMediaPlayer::MediaStatus CorePlayer::mediaStatus() const {
-  return m_player->mediaStatus();
-}
+QMediaPlayer::MediaStatus CorePlayer::mediaStatus() const { return m_player->mediaStatus(); }
 
 void CorePlayer::play(const QUrl &contentUrl) {
   if (contentUrl.isEmpty()) {
@@ -66,6 +57,4 @@ void CorePlayer::setVolMute(const bool &muted) { m_player->setMuted(muted); }
 
 void CorePlayer::setVol(const int &vol) { m_player->setVolume(vol); }
 
-void CorePlayer::setPlayPosition(const qint64 &position) {
-  m_player->setPosition(position);
-}
+void CorePlayer::setPlayPosition(const qint64 &position) { m_player->setPosition(position); }

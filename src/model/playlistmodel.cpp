@@ -14,9 +14,8 @@
 PlaylistModel::PlaylistModel(const QString &playlistName, QObject *parent)
     : QAbstractItemModel{parent},
       m_playlistName(playlistName),
-      m_playlist(new Playlist(PlaylistInfo(QMap<QString, QString>{
-                                  {PLAYLIST_INFO_NAME, m_playlistName}}),
-                              PlayContentList())),
+      m_playlist(
+          new Playlist(PlaylistInfo(QMap<QString, QString>{{PLAYLIST_INFO_NAME, m_playlistName}}), PlayContentList())),
       m_currentPlayContent(nullptr),
       m_headerTrans(MODEL_ALL_HEADER) {}
 
@@ -32,19 +31,15 @@ QModelIndex PlaylistModel::parent(const QModelIndex &index) const {
   return QModelIndex();
 }
 
-QModelIndex PlaylistModel::index(int row, int column,
-                                 const QModelIndex &parent) const {
-  if (row < 0 || column < 0 || row >= rowCount(parent) ||
-      column >= columnCount(parent)) {
+QModelIndex PlaylistModel::index(int row, int column, const QModelIndex &parent) const {
+  if (row < 0 || column < 0 || row >= rowCount(parent) || column >= columnCount(parent)) {
     return QModelIndex();
   }
   // TODO: Check if incorrent.
   return createIndex(row, column);
 }
 
-int PlaylistModel::rowCount(const QModelIndex &parent) const {
-  return m_playlist->content().length();
-}
+int PlaylistModel::rowCount(const QModelIndex &parent) const { return m_playlist->content().length(); }
 
 int PlaylistModel::columnCount(const QModelIndex &parent) const {
   // Only shows used column
@@ -60,14 +55,12 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const {
   }
   if (role == Qt::DisplayRole) {
     return QVariant(m_playlist->content()[index.row()]->value(
-        PLModel::PlaylistModelHeader::getInstance()->usedHeader(
-            index.column())));
+        PLModel::PlaylistModelHeader::getInstance()->usedHeader(index.column())));
   }
   return QVariant();
 }
 
-QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
-                                   int role) const {
+QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int role) const {
   switch (role) {
     case Qt::DecorationRole:
       //      if (section == 0) {
@@ -83,8 +76,7 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation,
   if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
     return QAbstractItemModel::headerData(section, orientation, role);
   }
-  return m_headerTrans[PLModel::PlaylistModelHeader::getInstance()->usedHeader(
-      section)];
+  return m_headerTrans[PLModel::PlaylistModelHeader::getInstance()->usedHeader(section)];
 }
 
 int PlaylistModel::count() const { return m_playlist->content().length(); }
@@ -97,10 +89,7 @@ void PlaylistModel::addContent(PlayContent *content) {
   beginResetModel();
   m_playlist->appendContent(content);
   endResetModel();
-  m_playlist->setInfo(
-      PLAYLIST_INFO_COUNT,
-      QString::number(m_playlist->info().info(PLAYLIST_INFO_COUNT).toInt() +
-                      1));
+  m_playlist->setInfo(PLAYLIST_INFO_COUNT, QString::number(m_playlist->info().info(PLAYLIST_INFO_COUNT).toInt() + 1));
 }
 
 bool PlaylistModel::removeContent(QList<int> indexes) {
@@ -108,8 +97,7 @@ bool PlaylistModel::removeContent(QList<int> indexes) {
   QList<int>::const_reverse_iterator it = indexes.crbegin();
   while (it != indexes.crend()) {
     if (m_playlist->content().size() <= *it) {
-      qDebug() << "remove content out of index" << m_playlist->content().size()
-               << *it;
+      qDebug() << "remove content out of index" << m_playlist->content().size() << *it;
       return false;
     }
     beginResetModel();
@@ -160,20 +148,15 @@ PlayContentPos PlaylistModel::findPreContent() const {
   }
   const int i = m_playlist->content().indexOf(m_currentPlayContent);
   if (i == 0) {
-    return PlayContentPos{
-        m_playlist->content().length() - 1,
-        m_playlist->content()[m_playlist->content().length() - 1]};
+    return PlayContentPos{m_playlist->content().length() - 1,
+                          m_playlist->content()[m_playlist->content().length() - 1]};
   }
   return PlayContentPos{i - 1, m_playlist->content()[i - 1]};
 }
 
-bool PlaylistModel::contains(PlayContent *content) const {
-  return m_playlist->content().contains(content);
-}
+bool PlaylistModel::contains(PlayContent *content) const { return m_playlist->content().contains(content); }
 
-int PlaylistModel::indexOf(PlayContent *content) const {
-  return m_playlist->content().indexOf(content);
-}
+int PlaylistModel::indexOf(PlayContent *content) const { return m_playlist->content().indexOf(content); }
 
 PlayContentPos PlaylistModel::content(const int &index) const {
   if (m_playlist->content().length() <= index) {
@@ -201,58 +184,46 @@ void PlaylistModel::reloadPlayContentInfo() {
   QFutureWatcher<void> *reloadWatcher = new QFutureWatcher<void>;
   QTimer *progressTimer = new QTimer;
   QElapsedTimer *t = new QElapsedTimer;
-  connect(progressTimer, &QTimer::timeout, this,
-          [this, reloadWatcher, t, progressTimer]() {
-            emit this->reloadInfoStatusChanged(
-                m_playlist->info().info(PLAYLIST_INFO_NAME),
-                reloadWatcher->isFinished(), reloadWatcher->progressValue(),
-                t->elapsed());
-            if (reloadWatcher->isFinished()) {
-              progressTimer->stop();
-              progressTimer->deleteLater();
-              t->invalidate();
-              delete t;
-              reloadWatcher->deleteLater();
-            }
-          });
+  connect(progressTimer, &QTimer::timeout, this, [this, reloadWatcher, t, progressTimer]() {
+    emit this->reloadInfoStatusChanged(m_playlist->info().info(PLAYLIST_INFO_NAME), reloadWatcher->isFinished(),
+                                       reloadWatcher->progressValue(), t->elapsed());
+    if (reloadWatcher->isFinished()) {
+      progressTimer->stop();
+      progressTimer->deleteLater();
+      t->invalidate();
+      delete t;
+      reloadWatcher->deleteLater();
+    }
+  });
   progressTimer->start(100);
   t->start();
   PlayContentList contentList = m_playlist->content();
-  QFuture<void> reloadFuture = QtConcurrent::map(
-      contentList, [&](PlayContent *content) -> PlayContent * {
-        AudioInfo::readAudioInfo(content->contentPath, content,
-                                 AudioInfo::InfoOption::NoAlbumCover);
-        return content;
-      });
+  QFuture<void> reloadFuture = QtConcurrent::map(contentList, [&](PlayContent *content) -> PlayContent * {
+    AudioInfo::readAudioInfo(content->contentPath, content, AudioInfo::InfoOption::NoAlbumCover);
+    return content;
+  });
   reloadWatcher->setFuture(reloadFuture);
   m_playlist->setContent(&contentList);
 #else
   AudioInfo *reloader = new AudioInfo;
-  connect(reloader, &AudioInfo::reloadInfoStatusChanged, this,
-          [this, reloader](bool finished, int count, qint64 time) {
-            emit this->reloadInfoStatusChanged(
-                m_listInfo.info(PLAYLIST_INFO_NAME), finished, count, time);
-            if (finished) {
-              reloader->deleteLater();
-            }
-          });
-  reloader->readAudioInfoList(&m_contentList,
-                              AudioInfo::InfoOption::NoAlbumCover);
+  connect(reloader, &AudioInfo::reloadInfoStatusChanged, this, [this, reloader](bool finished, int count, qint64 time) {
+    emit this->reloadInfoStatusChanged(m_listInfo.info(PLAYLIST_INFO_NAME), finished, count, time);
+    if (finished) {
+      reloader->deleteLater();
+    }
+  });
+  reloader->readAudioInfoList(&m_contentList, AudioInfo::InfoOption::NoAlbumCover);
 #endif
 }
 
 void PlaylistModel::reloadPlayContentInfo(PlayContent *content) {
-  AudioInfo::readAudioInfo(content->contentPath, content,
-                           AudioInfo::InfoOption::NoAlbumCover);
+  AudioInfo::readAudioInfo(content->contentPath, content, AudioInfo::InfoOption::NoAlbumCover);
 }
 
-void PlaylistModel::reloadPlaylistWithOrder(const int &column,
-                                            Qt::SortOrder order) {
+void PlaylistModel::reloadPlaylistWithOrder(const int &column, Qt::SortOrder order) {
   beginResetModel();
   if (!PlaylistSql::getInstance()->loadPlaylistWithOrder(
-          m_playlist,
-          PLModel::PlaylistModelHeader::getInstance()->usedHeader(column),
-          order)) {
+          m_playlist, PLModel::PlaylistModelHeader::getInstance()->usedHeader(column), order)) {
     qDebug() << "failed to reload playlist with order";
     return;
   }
@@ -284,8 +255,7 @@ void PlaylistModel::setUsedHeader(const QString &header, bool used) {
 void PlaylistModel::updatePlaylistState() {
   PlayContentList playContentList = m_playlist->content();
   for (int i = 0; i < playContentList.length(); i++) {
-    if (m_currentPlayContent != nullptr &&
-        playContentList[i]->contentPath == m_currentPlayContent->contentPath) {
+    if (m_currentPlayContent != nullptr && playContentList[i]->contentPath == m_currentPlayContent->contentPath) {
       m_currentPlayContent = playContentList[i];
       emit currentPlayContentUpdated(PlayContentPos{i, m_currentPlayContent});
       break;
@@ -295,8 +265,7 @@ void PlaylistModel::updatePlaylistState() {
 
 Qt::ItemFlags PlaylistModel::flags(const QModelIndex &index) const {
   if (index.isValid()) {
-    return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled |
-           QAbstractItemModel::flags(index);
+    return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | QAbstractItemModel::flags(index);
   }
   return QAbstractItemModel::flags(index);
 }
@@ -314,36 +283,30 @@ QMimeData *PlaylistModel::mimeData(const QModelIndexList &indexList) const {
   QList<QUrl> urlList;
   for (auto &index : indexList) {
     PlayContentPos pc = this->content(index.row());
-    if (pc.index != -1 && pc.content != nullptr &&
-        !oldRowsList.contains(QString::number(pc.index))) {
+    if (pc.index != -1 && pc.content != nullptr && !oldRowsList.contains(QString::number(pc.index))) {
       oldRowsList.append(QString::number(pc.index));
       urlList.append(QUrl("file://" + pc.content->contentPath));
     }
   }
-  data->setData("PlaylistTableName",
-                m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME).toUtf8());
+  data->setData("PlaylistTableName", m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME).toUtf8());
   data->setData("OldRows", oldRowsList.join(',').toUtf8());
   data->setUrls(urlList);
   return data;
 }
 
-bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                 int row, int column,
+bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column,
                                  const QModelIndex &parent) {
-  if (data == nullptr ||
-      (action != Qt::MoveAction && action != Qt::CopyAction)) {
+  if (data == nullptr || (action != Qt::MoveAction && action != Qt::CopyAction)) {
     return false;
   }
 
-  const QString oldPlaylistName =
-      QString::fromUtf8(data->data("PlaylistTableName"));
-  const QStringList oldRowsStrList =
-      QString::fromUtf8(data->data("OldRows")).split(',');
+  const QString oldPlaylistName = QString::fromUtf8(data->data("PlaylistTableName"));
+  const QStringList oldRowsStrList = QString::fromUtf8(data->data("OldRows")).split(',');
   const QList<QUrl> urlList = data->urls();
 
   // Probably not happen but check to ensure.
-  if (oldPlaylistName.isEmpty() || oldRowsStrList.isEmpty() ||
-      urlList.isEmpty() || oldRowsStrList.count() != urlList.count()) {
+  if (oldPlaylistName.isEmpty() || oldRowsStrList.isEmpty() || urlList.isEmpty() ||
+      oldRowsStrList.count() != urlList.count()) {
     return false;
   };
 
@@ -351,8 +314,7 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   for (auto &t : oldRowsStrList) {
     oldRows.append(t.toInt());
   }
-  std::sort(oldRows.begin(), oldRows.end(),
-            [](int a, int b) -> bool { return a > b; });
+  std::sort(oldRows.begin(), oldRows.end(), [](int a, int b) -> bool { return a > b; });
 
   if (oldPlaylistName == m_playlist->info().info(PLAYLIST_INFO_TABLE_NAME)) {
     // Move and resort

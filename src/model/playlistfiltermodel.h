@@ -9,18 +9,15 @@ class PlaylistFilterModel : public QSortFilterProxyModel {
   explicit PlaylistFilterModel(QObject *parent = nullptr);
   QModelIndex sourceIndex(const QModelIndex &proxyIndex) const;
   QModelIndex fromSourceIndex(const QModelIndex &sourceIndex) const;
-  QModelIndex seekSourceRow(const QModelIndex &proxyIndex,
-                            const int &offset) const;
+  QModelIndex seekSourceRow(const QModelIndex &proxyIndex, const int &offset) const;
   virtual void setSourceModel(QAbstractItemModel *sourceModel) override;
 
  public slots:
   void reloadPlaylistByOrder(int column, Qt::SortOrder order);
 
  protected:
-  bool filterAcceptsRow(int sourceRow,
-                        const QModelIndex &sourceParent) const override;
-  bool lessThan(const QModelIndex &left,
-                const QModelIndex &right) const override;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+  bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 
 #endif  // MPAX_PLAYLISTFILTERMODEL_H

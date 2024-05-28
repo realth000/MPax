@@ -16,7 +16,5 @@ void AppPlaylist::savePlaylist(const QString &filePath, const QString &data) {
   file.close();
 }
 
-QList<Playlist> AppPlaylist::loadPlaylist(const QString &filePath) {
-  return PlaylistJson::fromJsonString(filePath);
-}
+QList<Playlist> AppPlaylist::loadPlaylist(const QString &filePath) { return PlaylistJson::fromJsonString(filePath); }
 }  // namespace Config

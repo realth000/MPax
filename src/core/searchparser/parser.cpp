@@ -45,8 +45,7 @@ bool Parser::init(const QString &rawString, bool *ok, QString *errString) {
   return true;
 }
 
-bool Parser::parse(const PlayContent *playContent,
-                   Qt::CaseSensitivity caseSensitivity) const {
+bool Parser::parse(const PlayContent *playContent, Qt::CaseSensitivity caseSensitivity) const {
   return m_ast->parse(playContent, caseSensitivity);
 }
 }  // namespace SearchParser

@@ -14,11 +14,9 @@
 #include "taglib/tag.h"
 #include "tpropertymap.h"
 
-#define TAGLIB_STR(QSTR) \
-  TagLib::String((QSTR).toUtf8().data(), TagLib::String::UTF8)
+#define TAGLIB_STR(QSTR) TagLib::String((QSTR).toUtf8().data(), TagLib::String::UTF8)
 
-bool AudioInfo::readAudioInfo(const QString &audioPath,
-                              PlayContent *playContent, InfoOption infoOption) {
+bool AudioInfo::readAudioInfo(const QString &audioPath, PlayContent *playContent, InfoOption infoOption) {
 #if defined(Q_OS_WIN) || defined(Q_OS_WINDOWS)
   TagLib::FileRef f(reinterpret_cast<const wchar_t *>(audioPath.constData()));
 #else
@@ -29,12 +27,10 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
     const auto &frameListMap = pf.frameListMap();
     if (!frameListMap["APIC"].isEmpty()) {
       for (auto pic : frameListMap["APIC"]) {
-        auto cover =
-            reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(pic);
+        auto cover = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(pic);
         const auto &vec = cover->picture().toBase64();
         auto img = new QImage();
-        img->loadFromData(QByteArray::fromBase64(
-            QByteArray::fromRawData(vec.data(), int(vec.size()))));
+        img->loadFromData(QByteArray::fromBase64(QByteArray::fromRawData(vec.data(), int(vec.size()))));
         playContent->coverList.append(new Cover{
             CoverType(cover->type()),
             cover->mimeType().toCString(true),
@@ -45,11 +41,9 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
 
     for (auto i : pf.frameList()) {
       if (QString(i->toString().toCString(true)).contains("[image/")) {
-        const auto &p =
-            reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);
+        const auto &p = reinterpret_cast<TagLib::ID3v2::AttachedPictureFrame *>(i);
         const auto &vector = p->picture().toBase64();
-        const auto &arr = QByteArray::fromBase64(
-            QByteArray::fromRawData(vector.data(), int(vector.size())));
+        const auto &arr = QByteArray::fromBase64(QByteArray::fromRawData(vector.data(), int(vector.size())));
         playContent->albumCover.loadFromData(arr);
       }
     }
@@ -83,8 +77,7 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
 
   playContent->trackNumber = 0;
   playContent->albumTrackCount = 0;
-  const auto &trackNumberString =
-      QString(tags["TRACKNUMBER"].toString().toCString(true));
+  const auto &trackNumberString = QString(tags["TRACKNUMBER"].toString().toCString(true));
   if (!trackNumberString.isEmpty()) {
     const auto &trackNumberStringList = trackNumberString.split('/');
     if (trackNumberStringList.length() == 2) {
@@ -107,11 +100,9 @@ bool AudioInfo::readAudioInfo(const QString &audioPath,
   return true;
 }
 
-bool AudioInfo::writeAudioInfo(const QString &audioPath,
-                               const PlayContent *playContent) {
+bool AudioInfo::writeAudioInfo(const QString &audioPath, const PlayContent *playContent) {
   if (audioPath.isEmpty()) {
-    qDebug()
-        << "error writing audio info: intend to save audio info in empty path";
+    qDebug() << "error writing audio info: intend to save audio info in empty path";
     return false;
   }
   if (playContent == nullptr) {
@@ -120,14 +111,12 @@ bool AudioInfo::writeAudioInfo(const QString &audioPath,
     return false;
   }
 
-  TagLib::ID3v2::FrameFactory::instance()->setDefaultTextEncoding(
-      TagLib::String::UTF8);
+  TagLib::ID3v2::FrameFactory::instance()->setDefaultTextEncoding(TagLib::String::UTF8);
 
   TagLib::MPEG::File f(audioPath.toUtf8().constData());
 
   if (!f.tag()) {
-    qDebug() << "error writing audio info: audio file not readable:"
-             << audioPath;
+    qDebug() << "error writing audio info: audio file not readable:" << audioPath;
     return false;
   }
   f.ID3v2Tag()->setTitle(TAGLIB_STR(playContent->title));
@@ -140,17 +129,14 @@ bool AudioInfo::writeAudioInfo(const QString &audioPath,
   f.ID3v2Tag()->setComment(TAGLIB_STR(playContent->comment));
 
   auto map = f.properties();
-  map.replace("ALBUMARTIST",
-              TagLib::StringList{TAGLIB_STR(playContent->albumArtist)});
+  map.replace("ALBUMARTIST", TagLib::StringList{TAGLIB_STR(playContent->albumArtist)});
   if (playContent->trackNumber > 0) {
     if (playContent->albumTrackCount > 0) {
       map.replace("TRACKNUMBER",
-                  TagLib::StringList{TAGLIB_STR(QString("%1/%2").arg(
-                      QString::number(playContent->trackNumber),
-                      QString::number(playContent->albumTrackCount)))});
+                  TagLib::StringList{TAGLIB_STR(QString("%1/%2").arg(QString::number(playContent->trackNumber),
+                                                                     QString::number(playContent->albumTrackCount)))});
     } else {
-      map.replace("TRACKNUMBER", TagLib::StringList{TAGLIB_STR(QString::number(
-                                     playContent->trackNumber))});
+      map.replace("TRACKNUMBER", TagLib::StringList{TAGLIB_STR(QString::number(playContent->trackNumber))});
     }
   }
   f.setProperties(map);

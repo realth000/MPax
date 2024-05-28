@@ -15,18 +15,15 @@ void openFileInDir(const QString &filePath) {
   p.waitForFinished();
   const QString fileManagerType = p.readLine().simplified();
   // KDE
-  if (fileManagerType == "org.kde.dolphin.desktop" &&
-      QProcess::startDetached("dolphin", {"--select", filePath})) {
+  if (fileManagerType == "org.kde.dolphin.desktop" && QProcess::startDetached("dolphin", {"--select", filePath})) {
     return;
   }
   // GNOME
-  if (fileManagerType == "org.gnome.Nautilus.desktop" &&
-      QProcess::startDetached("nautilus", {filePath})) {
+  if (fileManagerType == "org.gnome.Nautilus.desktop" && QProcess::startDetached("nautilus", {filePath})) {
     return;
   }
   // UKUI
-  if (fileManagerType == "peony.desktop" &&
-      QProcess::startDetached("peony", {filePath})) {
+  if (fileManagerType == "peony.desktop" && QProcess::startDetached("peony", {filePath})) {
     return;
   }
   // DDE
@@ -36,8 +33,7 @@ void openFileInDir(const QString &filePath) {
   }
 #endif
   // Default, can not select file.
-  QDesktopServices::openUrl(
-      QUrl("file://" + QFileInfo(filePath).absoluteDir().absolutePath()));
+  QDesktopServices::openUrl(QUrl("file://" + QFileInfo(filePath).absoluteDir().absolutePath()));
 }
 
 qint64 toFileSize(const qint64 &fileSize, FileSizeLevel sizeLevel) {
@@ -71,9 +67,7 @@ QString toFormatTime(const qint64 &seconds) {
     return QString("00:00:%1").arg(seconds, 2, 10, QLatin1Char('0'));
   }
   if (seconds < 3600) {
-    return QString("00:%1:%2")
-        .arg(seconds / 60, 2, 10, QLatin1Char('0'))
-        .arg(seconds % 60, 2, 10, QLatin1Char('0'));
+    return QString("00:%1:%2").arg(seconds / 60, 2, 10, QLatin1Char('0')).arg(seconds % 60, 2, 10, QLatin1Char('0'));
   }
   return QString("%1:%2:%3")
       .arg(seconds / 3600, 2, 10, QLatin1Char('0'))

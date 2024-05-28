@@ -15,23 +15,20 @@ class ListTabModel : public QStringListModel {
  public:
   ListTabModel();
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex &index,
-                int role = Qt::DisplayRole) const override;
-  bool setData(const QModelIndex &index, const QVariant &value,
-               int role = Qt::EditRole) override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
   Qt::DropActions supportedDropActions() const override;
   QMimeData *mimeData(const QModelIndexList &indexList) const override;
-  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row,
-                    int column, const QModelIndex &parent) override;
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column,
+                    const QModelIndex &parent) override;
   void renamePlaylist(int index, const QString &name);
   PlaylistModel *index(int index) const;
 
  signals:
   void currentPlaylistChanged(PlaylistModel *playlistModel);
   void dataChanged();
-  void reloadInfoStatusChanged(QString playlistName, bool finished, int count,
-                               qint64 time);
+  void reloadInfoStatusChanged(QString playlistName, bool finished, int count, qint64 time);
   void currentPlayContentUpdated(PlayContentPos pos);
   void reloadPlaylist();
 

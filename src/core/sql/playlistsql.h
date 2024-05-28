@@ -10,9 +10,7 @@
 #if defined(Q_OS_WINDOWS) || defined(Q_OS_WIN)
 #define SQL_DB_NAME QCoreApplication::applicationDirPath() + "/playlist.db"
 #else
-#define SQL_DB_NAME                                                         \
-  QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + \
-      "/MPax/playlist.db"
+#define SQL_DB_NAME QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + "/MPax/playlist.db"
 #endif
 
 class PlaylistSql : public QObject {
@@ -27,10 +25,8 @@ class PlaylistSql : public QObject {
   void removePlaylist(const Playlist &playlist);
   void updatePlaylist(Playlist *playlist);
   QList<Playlist> loadPlaylist();
-  bool loadPlaylistWithOrder(Playlist *playlist, const QString &columnName,
-                             Qt::SortOrder order);
-  void updatePlayContent(const Playlist *playlist,
-                         const PlayContent *playContent);
+  bool loadPlaylistWithOrder(Playlist *playlist, const QString &columnName, Qt::SortOrder order);
+  void updatePlayContent(const Playlist *playlist, const PlayContent *playContent);
 
  private:
   enum SqlAction : int { Create = 0, Insert, Update };
@@ -48,8 +44,7 @@ class PlaylistSql : public QObject {
   ~PlaylistSql();
   bool tryOpenDatabase();
   void tryCloseDatabase();
-  bool prepareSql(QSqlQuery *query, const PlayContent *playContent,
-                  const QString &tableName, SqlAction action,
+  bool prepareSql(QSqlQuery *query, const PlayContent *playContent, const QString &tableName, SqlAction action,
                   const QStringList &columnList, int id = -1);
 };
 

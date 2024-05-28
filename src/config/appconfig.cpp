@@ -39,8 +39,7 @@
     m_configMap[CONFIG_NAME].value = v;                   \
   }
 
-#define SAVE_CONFIG(CONFIG, CONFIG_NAME) \
-  CONFIG.setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
+#define SAVE_CONFIG(CONFIG, CONFIG_NAME) CONFIG.setValue("/" + CONFIG_NAME, m_configMap[CONFIG_NAME].value)
 
 Config::AppConfig *Config::AppConfig::getInstance() {
   static AppConfig ac;
@@ -67,10 +66,8 @@ void Config::AppConfig::printConfig() {
 
 void Config::AppConfig::loadConfig() {
   makeConfigDir();
-  auto config = QSettings(
-      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-          "/MPax/mpax.conf",
-      QSettings::IniFormat);
+  auto config = QSettings(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + "/MPax/mpax.conf",
+                          QSettings::IniFormat);
   auto it = m_configMap.begin();
   while (it != m_configMap.end()) {
     LOAD_CONFIG(config, it.key());
@@ -78,15 +75,10 @@ void Config::AppConfig::loadConfig() {
   }
 }
 
-Config::AppConfig::AppConfig()
-    : m_configMap(QMap<QString, ConfigPair>()),
-      m_saveConfigDeferTimer(new QTimer) {
-  addConfig(CONFIG_PLAYLIST_HEADER, QMap<QString, QVariant>(),
-            TYPE_MAP_STRING_INT);
-  addConfig(CONFIG_PLAYLIST_HEADER_SORT, QMap<QString, QVariant>(),
-            TYPE_MAP_STRING_INT);
-  addConfig(CONFIG_PLAYLIST_HEADER_USED, QMap<QString, QVariant>(),
-            TYPE_MAP_STRING_BOOL);
+Config::AppConfig::AppConfig() : m_configMap(QMap<QString, ConfigPair>()), m_saveConfigDeferTimer(new QTimer) {
+  addConfig(CONFIG_PLAYLIST_HEADER, QMap<QString, QVariant>(), TYPE_MAP_STRING_INT);
+  addConfig(CONFIG_PLAYLIST_HEADER_SORT, QMap<QString, QVariant>(), TYPE_MAP_STRING_INT);
+  addConfig(CONFIG_PLAYLIST_HEADER_USED, QMap<QString, QVariant>(), TYPE_MAP_STRING_BOOL);
   addConfig(CONFIG_CUR_PLAYLIST, 0, TYPE_INT);
   addConfig(CONFIG_CUR_PLAYCONTENT, 0, TYPE_STRING);
   addConfig(CONFIG_PLAY_MODE, 0, TYPE_INT);
@@ -99,14 +91,12 @@ Config::AppConfig::AppConfig()
   // Auto save has a delay.
   m_saveConfigDeferTimer->setInterval(300);
   m_saveConfigDeferTimer->setSingleShot(true);
-  connect(m_saveConfigDeferTimer, &QTimer::timeout, this,
-          &AppConfig::saveConfig);
+  connect(m_saveConfigDeferTimer, &QTimer::timeout, this, &AppConfig::saveConfig);
 }
 
 Config::AppConfig::~AppConfig() = default;
 
-void Config::AppConfig::addConfig(const QString &name, const QVariant &value,
-                                  const QString &type) {
+void Config::AppConfig::addConfig(const QString &name, const QVariant &value, const QString &type) {
   ConfigPair config;
   config.name = name;
   config.value = value;
@@ -116,8 +106,7 @@ void Config::AppConfig::addConfig(const QString &name, const QVariant &value,
 
 void Config::AppConfig::makeConfigDir() {
 #ifdef Q_OS_LINUX
-  const auto &configPath =
-      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+  const auto &configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
   if (configPath.isEmpty()) {
     qDebug() << "config location not writable";
     return;
@@ -138,15 +127,11 @@ void Config::AppConfig::saveConfigSoon() {
 
 void Config::AppConfig::saveConfigDefer() { m_saveConfigDeferTimer->start(); }
 
-Config::ConfigPair Config::AppConfig::config(const QString &configName) const {
-  return m_configMap[configName];
-}
+Config::ConfigPair Config::AppConfig::config(const QString &configName) const { return m_configMap[configName]; }
 
 void Config::AppConfig::saveConfig() {
-  auto config = QSettings(
-      QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-          "/MPax/mpax.conf",
-      QSettings::IniFormat);
+  auto config = QSettings(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + "/MPax/mpax.conf",
+                          QSettings::IniFormat);
   auto it = m_configMap.constBegin();
   while (it != m_configMap.constEnd()) {
     SAVE_CONFIG(config, it.key());
